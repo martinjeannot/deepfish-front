@@ -1,98 +1,48 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-      fixed
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      v-model="drawer"
-      app
-    >
+    <v-navigation-drawer app fixed temporary v-model="showSideNav">
       <v-list>
-        <v-list-tile 
-          value="true"
-          v-for="(item, i) in items"
-          :key="i"
-        >
+        <v-list-tile v-for="menuItem in menuItems" :key="menuItem.title" router :to="menuItem.route" exact>
           <v-list-tile-action>
-            <v-icon v-html="item.icon"></v-icon>
+            <v-icon>{{ menuItem.icon }}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title v-text="item.title"></v-list-tile-title>
+            <v-list-tile-title>{{ menuItem.title }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar fixed app :clipped-left="clipped">
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>web</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>remove</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+    <v-toolbar app>
+      <v-toolbar-side-icon @click="showSideNav = !showSideNav" class="hidden-sm-and-up"></v-toolbar-side-icon>
+      <v-toolbar-title>
+        <router-link to="/">
+          <img src="static/header_logo.png" alt="Deepfish"/>
+        </router-link>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>menu</v-icon>
-      </v-btn>
+      <v-toolbar-items class="hidden-xs-only">
+        <v-btn flat v-for="menuItem in menuItems" :key="menuItem.title" router :to="menuItem.route" exact>
+          <v-icon left>{{ menuItem.icon }}</v-icon>
+          {{ menuItem.title }}
+        </v-btn>
+      </v-toolbar-items>
     </v-toolbar>
     <v-content>
       <v-container fluid>
-        <v-slide-y-transition mode="out-in">
-          <v-layout column align-center>
-            <img src="/static/v.png" alt="Vuetify.js" class="mb-5" />
-            <blockquote>
-              &#8220;First, solve the problem. Then, write the code.&#8221;
-              <footer>
-                <small>
-                  <em>&mdash;John Johnson</em>
-                </small>
-              </footer>
-            </blockquote>
-          </v-layout>
-        </v-slide-y-transition>
+        <router-view></router-view>
       </v-container>
     </v-content>
-    <v-navigation-drawer
-      temporary
-      :right="right"
-      v-model="rightDrawer"
-      fixed
-    >
-      <v-list>
-        <v-list-tile @click.native="right = !right">
-          <v-list-tile-action>
-            <v-icon>compare_arrows</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer :fixed="fixed" app>
-      <span>&copy; 2017</span>
-    </v-footer>
   </v-app>
 </template>
 
 <script>
   export default {
-    data() {
-      return {
-        clipped: false,
-        drawer: true,
-        fixed: false,
-        items: [{
-          icon: 'bubble_chart',
-          title: 'Inspire',
-        }],
-        miniVariant: false,
-        right: true,
-        rightDrawer: false,
-        title: 'Vuetify.js',
-      };
-    },
+    data: () => ({
+      showSideNav: false,
+      menuItems: [
+        { icon: 'power_settings_new', title: 'Sign in', route: '/' },
+        { icon: 'exit_to_app', title: 'Sign up', route: '/sign-up' },
+      ],
+    }),
   };
 </script>
