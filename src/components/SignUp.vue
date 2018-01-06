@@ -1,8 +1,8 @@
 <template>
   <v-container>
-    <v-layout row v-if="error">
+    <v-layout row v-if="alertComponent">
       <v-flex xs12 sm6 offset-sm3>
-        <base-alert @dismissed="onDismissed" :text="error.message"></base-alert>
+        <base-alert :type="alertComponent.type" :message="alertComponent.message" @dismissed="onDismissed"></base-alert>
       </v-flex>
     </v-layout>
     <v-layout row>
@@ -10,7 +10,7 @@
         <v-card>
           <v-card-text>
             <v-container>
-              <v-form v-model="valid" ref="form" @submit.prevent="signup">
+              <v-form v-model="valid" ref="form" @submit.prevent="signUp">
                 <v-layout row>
                   <v-flex xs12>
                     <v-text-field label="First name" v-model="firstName" :rules="[rules.required]" type="text"
@@ -82,11 +82,12 @@
     computed: {
       ...mapGetters([
         'error',
+        'alertComponent',
         'loading',
       ]),
     },
     methods: {
-      signup() {
+      signUp() {
         if (this.$refs.form.validate()) {
           this.$store.dispatch('signUp', {
             firstName: this.firstName,
@@ -94,6 +95,14 @@
             email: this.email,
             phoneNumber: this.phoneNumber,
             companyName: this.companyName,
+          }).then(() => {
+            if (!this.error) {
+              this.$router.push('/');
+              this.$store.dispatch('setAlertComponent', {
+                type: 'success',
+                message: 'Enregistrement réalisé avec succès !',
+              });
+            }
           });
         }
       },

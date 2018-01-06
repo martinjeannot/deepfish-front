@@ -24,4 +24,10 @@ new Vue({
   store,
   template: '<App/>',
   components: { App },
+  created() {
+    const authToken = localStorage.getItem('auth_token');
+    if (authToken) {
+      this.$store.dispatch('autoSignIn', JSON.parse(authToken));
+    }
+  },
 });

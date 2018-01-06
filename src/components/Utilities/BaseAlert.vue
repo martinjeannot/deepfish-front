@@ -1,13 +1,13 @@
 <template>
-  <v-alert color="error" icon="warning" dismissible value="true" @input="onDismiss">
-    {{ text }}
+  <v-alert :type="type" transition="scale-transition" value="true" dismissible @input="onDismiss">
+    {{ message }}
   </v-alert>
 </template>
 
 <script>
   export default {
     name: 'base-alert',
-    props: ['text'],
+    props: ['type', 'message'],
     methods: {
       onDismiss() {
         this.$emit('dismissed');
