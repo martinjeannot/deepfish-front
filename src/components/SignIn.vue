@@ -10,6 +10,13 @@
         <v-card>
           <v-card-text>
             <v-container>
+              <v-layout row>
+                <v-flex xs12 text-xs-center>
+                  <v-btn class="linkedin-button" :href="linkedInAuthEndpoint" :disabled="linkedInLoading"
+                         :loading="linkedInLoading" @click="linkedInLoading = true">Se connecter avec LinkedIn
+                  </v-btn>
+                </v-flex>
+              </v-layout>
               <v-form v-model="valid" ref="form" @submit.prevent="signIn">
                 <v-layout row>
                   <v-flex xs12>
@@ -19,13 +26,13 @@
                 </v-layout>
                 <v-layout row>
                   <v-flex xs12>
-                    <v-text-field label="Password" v-model="password" :rules="[rules.required]" type="password"
+                    <v-text-field label="Mot de passe" v-model="password" :rules="[rules.required]" type="password"
                                   required></v-text-field>
                   </v-flex>
                 </v-layout>
                 <v-layout row>
                   <v-flex xs12 text-xs-center>
-                    <v-btn type="submit" :disabled="!valid || loading" :loading="loading">Sign in</v-btn>
+                    <v-btn type="submit" :disabled="!valid || loading" :loading="loading">Se connecter</v-btn>
                   </v-flex>
                 </v-layout>
               </v-form>
@@ -42,12 +49,13 @@
 
   const EMAILREGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const rules = {
-    required: value => !!value || 'This field is required',
-    email: value => EMAILREGEX.test(value) || 'E-mail must be valid',
+    required: value => !!value || 'Ce champ est obligatoire',
+    email: value => EMAILREGEX.test(value) || 'E-mail invalide',
   };
   export default {
     name: 'sign-in',
     data: () => ({
+      linkedInLoading: false,
       valid: false,
       rules,
       email: '',
@@ -60,6 +68,18 @@
         'loading',
         'user',
       ]),
+      linkedInAuthEndpoint() {
+        const queryParams = {
+          response_type: 'code',
+          client_id: '77w79kdr6gql2h',
+          redirect_uri: 'http://localhost:8080/auth/linkedin/sign-in',
+          // eslint-disable-next-line no-bitwise
+          state: ([1e7] + 1e3 + 4e3 + 8e3 + 1e11).replace(/[018]/g, c => (((c ^ crypto.getRandomValues(new Uint8Array(1))[0]) & 15) >> c / 4).toString(16)),
+          scope: 'r_basicprofile r_emailaddress',
+        };
+        const queryString = Object.keys(queryParams).map(k => `${k}=${encodeURIComponent(queryParams[k])}`).join('&');
+        return `https://www.linkedin.com/oauth/v2/authorization?${queryString}`;
+      },
     },
     watch: {
       user(user) {
@@ -85,5 +105,7 @@
 </script>
 
 <style scoped>
-
+  .linkedin-button {
+    color: #0077B5;
+  }
 </style>

@@ -10,16 +10,40 @@
         <v-card>
           <v-card-text>
             <v-container>
+              <v-layout row>
+                <v-flex xs12 text-xs-center>
+                  <v-btn class="linkedin-button" :href="linkedInAuthEndpoint" :disabled="linkedInLoading"
+                         :loading="linkedInLoading" @click="linkedInLoading = true">S'inscrire avec LinkedIn
+                  </v-btn>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
+    <v-layout row mt10 mt-10 m10>
+      <v-flex xs12 sm6 offset-sm3>
+        <v-card>
+          <v-card-text>
+            <v-container>
+              <v-layout row>
+                <v-flex xs12 text-xs-center>
+                  <v-btn class="linkedin-button" :href="linkedInAuthEndpoint" :disabled="linkedInLoading"
+                         :loading="linkedInLoading" @click="linkedInLoading = true">S'inscrire avec LinkedIn
+                  </v-btn>
+                </v-flex>
+              </v-layout>
               <v-form v-model="valid" ref="form" @submit.prevent="signUp">
                 <v-layout row>
                   <v-flex xs12>
-                    <v-text-field label="First name" v-model="firstName" :rules="[rules.required]" type="text"
+                    <v-text-field label="Prénom" v-model="firstName" :rules="[rules.required]" type="text"
                                   required></v-text-field>
                   </v-flex>
                 </v-layout>
                 <v-layout row>
                   <v-flex xs12>
-                    <v-text-field label="Last name" v-model="lastName" :rules="[rules.required]" type="text"
+                    <v-text-field label="Nom" v-model="lastName" :rules="[rules.required]" type="text"
                                   required></v-text-field>
                   </v-flex>
                 </v-layout>
@@ -31,19 +55,19 @@
                 </v-layout>
                 <v-layout row>
                   <v-flex xs12>
-                    <v-text-field label="Phone number" v-model="phoneNumber" :rules="[rules.required]" type="text"
+                    <v-text-field label="Mobile" v-model="phoneNumber" :rules="[rules.required]" type="text"
                                   required></v-text-field>
                   </v-flex>
                 </v-layout>
                 <v-layout row>
                   <v-flex xs12>
-                    <v-text-field label="Company" v-model="companyName" :rules="[rules.required]" type="text"
+                    <v-text-field label="Société" v-model="companyName" :rules="[rules.required]" type="text"
                                   required></v-text-field>
                   </v-flex>
                 </v-layout>
                 <v-layout row>
                   <v-flex xs12 text-xs-center>
-                    <v-btn type="submit" :disabled="!valid || loading" :loading="loading">Sign up</v-btn>
+                    <v-btn type="submit" :disabled="!valid || loading" :loading="loading">S'inscrire</v-btn>
                   </v-flex>
                 </v-layout>
               </v-form>
@@ -60,12 +84,13 @@
 
   const EMAILREGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const rules = {
-    required: value => !!value || 'This field is required',
-    email: value => EMAILREGEX.test(value) || 'E-mail must be valid',
+    required: value => !!value || 'Ce champ est obligatoire',
+    email: value => EMAILREGEX.test(value) || 'E-mail invalide',
   };
   export default {
     name: 'sign-up',
     data: () => ({
+      linkedInLoading: false,
       valid: false,
       rules,
       firstName: '',
@@ -85,6 +110,18 @@
         'alertComponent',
         'loading',
       ]),
+      linkedInAuthEndpoint() {
+        const queryParams = {
+          response_type: 'code',
+          client_id: '77w79kdr6gql2h',
+          redirect_uri: 'http://localhost:8080/auth/linkedin/sign-up',
+          // eslint-disable-next-line no-bitwise
+          state: ([1e7] + 1e3 + 4e3 + 8e3 + 1e11).replace(/[018]/g, c => (((c ^ crypto.getRandomValues(new Uint8Array(1))[0]) & 15) >> c / 4).toString(16)),
+          scope: 'r_basicprofile r_emailaddress',
+        };
+        const queryString = Object.keys(queryParams).map(k => `${k}=${encodeURIComponent(queryParams[k])}`).join('&');
+        return `https://www.linkedin.com/oauth/v2/authorization?${queryString}`;
+      },
     },
     methods: {
       signUp() {
@@ -114,5 +151,7 @@
 </script>
 
 <style scoped>
-
+  .linkedin-button {
+    color: #0077B5;
+  }
 </style>
