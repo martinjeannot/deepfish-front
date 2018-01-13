@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app v-if="appCreated">
     <v-navigation-drawer app fixed temporary v-model="showSideNav">
       <v-list>
         <v-list-tile v-for="menuItem in menuItems" :key="menuItem.title" router :to="menuItem.route" exact>
@@ -10,7 +10,7 @@
             <v-list-tile-title>{{ menuItem.title }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile v-if="isUserAuthenticated" @click="logout">
+        <v-list-tile v-if="userIsAuthenticated" @click="logout">
           <v-list-tile-action>
             <v-icon>power_settings_new</v-icon>
           </v-list-tile-action>
@@ -33,7 +33,7 @@
           <v-icon left>{{ menuItem.icon }}</v-icon>
           {{ menuItem.title }}
         </v-btn>
-        <v-btn flat v-if="isUserAuthenticated" @click="logout">
+        <v-btn flat v-if="userIsAuthenticated" @click="logout">
           <v-icon left>power_settings_new</v-icon>
           Sign out
         </v-btn>
@@ -48,23 +48,38 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+
   export default {
     data: () => ({
       showSideNav: false,
     }),
     computed: {
-      isUserAuthenticated() {
+      ...mapGetters([
+        'appCreated',
+        'user',
+      ]),
+      userIsAuthenticated() {
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined;
+      },
+      userIsTalent() {
+        // const encodedAccessToken = this.$store.getters.user.authToken.access_token.split('.')
+        // [1].replace('-', '+').replace('_', '/');
+        // const accessToken = JSON.parse(window.atob(encodedAccessToken));
+        // return accessToken.authorities.includes('ROLE_TALENT');
+        return true;
       },
       menuItems() {
         let menuItems = [
           { icon: 'power_settings_new', title: 'Sign in', route: '/' },
           { icon: 'exit_to_app', title: 'Sign up', route: '/sign-up' },
         ];
-        if (this.isUserAuthenticated) {
-          menuItems = [
-            { icon: 'dashboard', title: 'Dashboard', route: '/employer' },
-          ];
+        if (this.userIsAuthenticated) {
+          if (this.userIsTalent) {
+            menuItems = [
+              { icon: 'account_circle', title: 'Profile', route: '/talent/profile' },
+            ];
+          }
         }
         return menuItems;
       },

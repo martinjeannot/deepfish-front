@@ -50,5 +50,11 @@ module.exports = {
         'state', // for vuex mutations, see https://stackoverflow.com/questions/44657142,
       ]
     }],
+    // no-underscore-dangle override
+    'no-underscore-dangle': ['error', {
+      allow: [
+        '_links', // for HATEOAS/HAL links
+      ],
+    }],
   }
 }

@@ -27,7 +27,23 @@ new Vue({
   created() {
     const authToken = localStorage.getItem('auth_token');
     if (authToken) {
-      this.$store.dispatch('autoSignIn', JSON.parse(authToken));
+      try {
+        this.$store.dispatch('autoSignIn', JSON.parse(authToken))
+          .then(() => {
+            this.$store.dispatch('setAppCreated', true);
+            if (!this.$store.getters.error) {
+              this.$router.push('/authentication-success-handler');
+            } else {
+              this.$router.push('/');
+            }
+          });
+      } catch (error) {
+        this.$store.dispatch('setAppCreated', true);
+        this.$store.dispatch('setErrorAfterApiConsumption');
+        this.$router.push('/');
+      }
+    } else {
+      this.$store.dispatch('setAppCreated', true);
     }
   },
 });

@@ -3,6 +3,8 @@ import Router from 'vue-router';
 import SignIn from '@/components/SignIn';
 import SignUp from '@/components/SignUp';
 import Dashboard from '@/components/Employer/Dashboard';
+import TalentProfile from '@/components/Talent/Profile';
+import store from '../store';
 import NavGuards from './nav-guards';
 
 Vue.use(Router);
@@ -17,6 +19,17 @@ const router = new Router({
       path: '/',
       name: 'SignIn',
       component: SignIn,
+    },
+    {
+      path: '/authentication-success-handler',
+      name: 'AuthenticationSuccessHandler',
+      beforeEnter: (to, from, next) => {
+        if (store.getters.user.isEmployer) {
+          next('/');
+        } else {
+          next('/talent/profile');
+        }
+      },
     },
     {
       path: '/sign-up',
@@ -43,10 +56,9 @@ const router = new Router({
       },
     },
     {
-      path: '/talent',
-      name: 'TalentDashboard',
-      component: Dashboard,
-      beforeEnter: NavGuards.authenticatedGuard,
+      path: '/talent/profile',
+      name: 'TalentProfile',
+      component: TalentProfile,
     },
   ],
 });

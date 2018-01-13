@@ -87,6 +87,7 @@
     required: value => !!value || 'Ce champ est obligatoire',
     email: value => EMAILREGEX.test(value) || 'E-mail invalide',
   };
+
   export default {
     name: 'sign-up',
     data: () => ({

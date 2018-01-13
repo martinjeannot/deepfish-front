@@ -7,19 +7,28 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    authAxios: axios.create({
+    appCreated: false,
+    api: axios.create({
       baseURL: 'http://localhost:8080',
-      auth: {
+      /* auth: {
         username: '67e43464e9c0483faaf7b773018b2b60',
         password: '9c7d7778e0534031aa0ed684bba16546',
-      },
+      }, */
     }),
+    authToken: null,
+    user: null,
     loading: false,
     error: null,
-    user: null,
     alertComponent: null,
   },
   mutations: {
+    [types.SET_APP_CREATED](state, appCreated) {
+      state.appCreated = appCreated;
+    },
+    [types.SET_AUTH_TOKEN](state, authToken) {
+      state.authToken = authToken;
+      state.api.defaults.headers.common.Authorization = `Bearer ${authToken.access_token}`;
+    },
     [types.SET_LOADING](state, status) {
       state.loading = status;
     },
@@ -40,9 +49,16 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    setAppCreated({ commit }) {
+      commit(types.SET_APP_CREATED, true);
+    },
+    clearLoading({ commit }) {
+      commit(types.SET_LOADING, false);
+    },
     setError({ commit }, error) {
-      commit(types.SET_ERROR, error);
-      commit(types.SET_ALERT_COMPONENT, { type: 'error', message: error.message });
+      const errorObject = error || { message: 'Une erreur est survenue :(' };
+      commit(types.SET_ERROR, errorObject);
+      commit(types.SET_ALERT_COMPONENT, { type: 'error', message: errorObject.message });
     },
     clearError({ commit }) {
       commit(types.CLEAR_ERROR);
@@ -54,9 +70,17 @@ export default new Vuex.Store({
     clearAlertComponent({ commit }) {
       commit(types.CLEAR_ALERT_COMPONENT);
     },
-    signUp({ commit, dispatch }, signUpForm) {
-      commit(types.SET_LOADING, true);
+    prepareForApiConsumption({ commit }) {
       commit(types.CLEAR_ERROR);
+      commit(types.SET_LOADING, true);
+    },
+    setErrorAfterApiConsumption({ commit, dispatch }, error) {
+      commit(types.SET_LOADING, false);
+      dispatch('setError', error);
+    },
+    signUp({ commit, dispatch }, signUpForm) {
+      commit(types.CLEAR_ERROR);
+      commit(types.SET_LOADING, true);
       return axios
         .post('http://localhost:8080/employers/sign-up', signUpForm, {
           auth: { username: '67e43464e9c0483faaf7b773018b2b60', password: '9c7d7778e0534031aa0ed684bba16546' },
@@ -70,8 +94,8 @@ export default new Vuex.Store({
         });
     },
     signIn({ commit, dispatch }, signInForm) {
-      commit(types.SET_LOADING, true);
       commit(types.CLEAR_ERROR);
+      commit(types.SET_LOADING, true);
       // axios does not support x-www-form-urlencoded as content-type out of the box yet
       const payload = new URLSearchParams();
       payload.append('grant_type', 'password');
@@ -93,11 +117,25 @@ export default new Vuex.Store({
           dispatch('setError', { message: 'Un problème est survenu lors de la connexion' });
         });
     },
-    autoSignIn({ commit }, authToken) {
-      const user = {
-        authToken,
-      };
-      commit(types.SET_USER, user);
+    autoSignIn({ commit, state, dispatch }, authToken) {
+      commit(types.SET_AUTH_TOKEN, authToken);
+      // get authenticated user
+      const encodedAccessToken = authToken.access_token.split('.')[1].replace('-', '+').replace('_', '/');
+      const accessToken = JSON.parse(window.atob(encodedAccessToken));
+      const userIsEmployer = accessToken.authorities.includes('ROLE_EMPLOYER');
+      dispatch('prepareForApiConsumption');
+      if (userIsEmployer) {
+        return 1 + 2;
+      }
+      return state.api
+        .get(`/talents/${accessToken.user_id}`)
+        .then((response) => {
+          dispatch('clearLoading');
+          commit(types.SET_USER, response.data);
+        })
+        .catch((/* error */) => {
+          dispatch('setErrorAfterApiConsumption');
+        });
     },
     logout({ commit }) {
       localStorage.removeItem('auth_token');
@@ -105,6 +143,12 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    appCreated(state) {
+      return state.appCreated;
+    },
+    api(state) {
+      return state.api;
+    },
     loading(state) {
       return state.loading;
     },
