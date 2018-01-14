@@ -18,15 +18,15 @@
             <v-card>
               <v-card-text>
                 <v-container>
-                  <v-form v-model="valid" ref="form" @submit.prevent="signIn">
-                    <v-layout row>
+                  <v-form v-model="valid" ref="form" @submit.prevent="saveProfile">
+                    <v-layout row class="mb-3">
                       <v-flex xs12>
                         <h3>{{ talent.firstName }} {{ talent.lastName }}</h3>
                       </v-flex>
                     </v-layout>
                     <v-layout row>
                       <v-flex xs12>
-                        <v-text-field label="Email" v-model="talent.username" :rules="[rules.required, rules.email]"
+                        <v-text-field label="Email" v-model="talent.email" :rules="[rules.required, rules.email]"
                                       type="email" required></v-text-field>
                       </v-flex>
                     </v-layout>
@@ -38,9 +38,10 @@
                     </v-layout>
                     <v-layout row>
                       <v-flex xs12>
-                        <v-radio-group v-model="toto" row>
-                          <v-radio label="Option 1" value="radio-1"></v-radio>
-                          <v-radio label="Option 2" value="radio-2"></v-radio>
+                        <v-radio-group v-model="talent.maturityLevel" row>
+                          <v-radio label="Open water" value="OPEN_WATER"></v-radio>
+                          <v-radio label="Clear water" value="CLEAR_WATER"></v-radio>
+                          <v-radio label="Deep water" value="DEEP_WATER"></v-radio>
                         </v-radio-group>
                       </v-flex>
                     </v-layout>
@@ -89,6 +90,19 @@
       onDismissed() {
         this.$store.dispatch('clearError');
       },
+      saveProfile() {
+        if (this.$refs.form.validate()) {
+          this.$store.dispatch('prepareForApiConsumption');
+          this.$store.getters.api
+            .patch(this.talent._links.self.href, this.talent)
+            .then((/* response */) => {
+              this.$store.dispatch('clearLoading');
+            })
+            .catch((/* error */) => {
+              this.$store.dispatch('setErrorAfterApiConsumption');
+            });
+        }
+      },
     },
     created() {
       this.$store.dispatch('prepareForApiConsumption');
@@ -96,6 +110,9 @@
         .get(this.$store.getters.user._links.self.href)
         .then((response) => {
           this.$store.dispatch('clearLoading');
+          if (response.data.phoneNumber === 'null') {
+            response.data.phoneNumber = '';
+          }
           this.talent = response.data;
         })
         .catch((/* error */) => {

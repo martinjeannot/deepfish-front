@@ -4,6 +4,7 @@ import SignIn from '@/components/SignIn';
 import SignUp from '@/components/SignUp';
 import Dashboard from '@/components/Employer/Dashboard';
 import TalentProfile from '@/components/Talent/Profile';
+import TalentConditions from '@/components/Talent/Conditions';
 import store from '../store';
 import NavGuards from './nav-guards';
 
@@ -59,6 +60,11 @@ const router = new Router({
       path: '/talent/profile',
       name: 'TalentProfile',
       component: TalentProfile,
+    },
+    {
+      path: '/talent/conditions',
+      name: 'TalentConditions',
+      component: TalentConditions,
     },
   ],
 });

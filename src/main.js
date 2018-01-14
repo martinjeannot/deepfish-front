@@ -44,6 +44,7 @@ new Vue({
       }
     } else {
       this.$store.dispatch('setAppCreated', true);
+      this.$router.push('/');
     }
   },
 });

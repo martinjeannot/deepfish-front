@@ -63,11 +63,7 @@
         return this.$store.getters.user !== null && this.$store.getters.user !== undefined;
       },
       userIsTalent() {
-        // const encodedAccessToken = this.$store.getters.user.authToken.access_token.split('.')
-        // [1].replace('-', '+').replace('_', '/');
-        // const accessToken = JSON.parse(window.atob(encodedAccessToken));
-        // return accessToken.authorities.includes('ROLE_TALENT');
-        return true;
+        return this.user.authorities.some(authority => authority.authority === 'ROLE_USER');
       },
       menuItems() {
         let menuItems = [
@@ -77,7 +73,8 @@
         if (this.userIsAuthenticated) {
           if (this.userIsTalent) {
             menuItems = [
-              { icon: 'account_circle', title: 'Profile', route: '/talent/profile' },
+              { icon: 'speaker_notes', title: 'Conditions', route: '/talent/conditions' },
+              { icon: 'account_circle', title: 'Profil', route: '/talent/profile' },
             ];
           }
         }
