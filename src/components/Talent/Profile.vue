@@ -38,10 +38,35 @@
                     </v-layout>
                     <v-layout row>
                       <v-flex xs12>
+                        <h4>Niveau de maturité</h4>
                         <v-radio-group v-model="talent.maturityLevel" row>
-                          <v-radio label="Open water" value="OPEN_WATER"></v-radio>
-                          <v-radio label="Clear water" value="CLEAR_WATER"></v-radio>
-                          <v-radio label="Deep water" value="DEEP_WATER"></v-radio>
+                          <v-tooltip bottom class="bugfix-vuetify-2171">
+                            <v-radio label="Clear water" value="CLEAR_WATER" slot="activator"></v-radio>
+                            <div>
+                              S’adresse à vous si vous souhaitez quitter rapidement<br>
+                              ou dans un futur proche votre entreprise, idéalement<br>
+                              à conditions meilleures ou égales
+                            </div>
+                          </v-tooltip>
+                          <v-tooltip bottom class="bugfix-vuetify-2171">
+                            <v-radio label="Open water" value="OPEN_WATER" slot="activator"></v-radio>
+                            <div>
+                              S’adresse à vous si vous êtes relativement bien<br>
+                              dans votre entreprise mais restez à l’affut d’une<br>
+                              opportunité plus intéressante et que vous répondez<br>
+                              aux sollicitations des recruteurs
+                            </div>
+                          </v-tooltip>
+                          <v-tooltip bottom class="bugfix-vuetify-2171">
+                            <v-radio label="Deep water" value="DEEP_WATER" slot="activator"></v-radio>
+                            <div>
+                              S’adresse aux profils qui se sentent bien dans<br>
+                              leur entreprise actuelle et qui n’ont pas le temps<br>
+                              ou l’envie de faire de la veille mais qui ont des<br>
+                              conditions très précises pour lesquelles ils seraient<br>
+                              prêts à changer d’entreprise
+                            </div>
+                          </v-tooltip>
                         </v-radio-group>
                       </v-flex>
                     </v-layout>
@@ -123,5 +148,7 @@
 </script>
 
 <style scoped>
-
+  .bugfix-vuetify-2171 {
+    flex: 1 1 auto;
+  }
 </style>
