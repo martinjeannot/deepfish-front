@@ -48,13 +48,14 @@ module.exports = {
         'response', // for Express responses
         '$scope', // for Angular 1 scopes
         'state', // for vuex mutations, see https://stackoverflow.com/questions/44657142,
-      ]
+      ],
     }],
     // no-underscore-dangle override
     'no-underscore-dangle': ['error', {
       allow: [
         '_links', // for HATEOAS/HAL links
+        '_embedded', // for HATEOAS/HAL embedded resources
       ],
     }],
   }
-}
+};
