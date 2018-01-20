@@ -7,10 +7,34 @@
     </v-layout>
     <v-layout v-else>
       <v-flex xs12>
-        <conditions-company-maturity-levels
-          :companyMaturityLevels="companyMaturityLevels"
+        <synchronized-checkbox-list
           :conditions="conditions"
-        ></conditions-company-maturity-levels>
+          title="Type d'entreprises acceptés"
+          :referenceDomainObjects="companyMaturityLevels"
+          associationResourceName="companyMaturityLevels"
+          class="mb-5"
+        ></synchronized-checkbox-list>
+        <synchronized-checkbox-list
+          :conditions="conditions"
+          title="Type de postes acceptés"
+          :referenceDomainObjects="jobs"
+          associationResourceName="jobs"
+          class="mb-5"
+        ></synchronized-checkbox-list>
+        <synchronized-checkbox-list
+          :conditions="conditions"
+          title="Type de ventes acceptés"
+          :referenceDomainObjects="commodityTypes"
+          associationResourceName="commodityTypes"
+          class="mb-5"
+        ></synchronized-checkbox-list>
+        <synchronized-checkbox-list
+          :conditions="conditions"
+          title="Missions acceptées"
+          :referenceDomainObjects="taskTypes"
+          associationResourceName="taskTypes"
+          class="mb-5"
+        ></synchronized-checkbox-list>
         <v-btn color="primary" @click.native="currentStep = 2">Continue</v-btn>
         <v-btn flat>Cancel</v-btn>
       </v-flex>
@@ -20,18 +44,24 @@
 
 <script>
   import { mapActions, mapGetters } from 'vuex';
-  import ConditionsCompanyMaturityLevels from './CompanyMaturityLevels';
+  import SynchronizedCheckboxList from './SynchronizedCheckboxList';
 
   export default {
-    components: { ConditionsCompanyMaturityLevels },
+    components: {
+      SynchronizedCheckboxList,
+    },
     name: 'conditions-position',
     data: () => ({
       valid: false,
       conditions: null,
       companyMaturityLevels: [],
+      jobs: [],
+      commodityTypes: [],
+      taskTypes: [],
     }),
     computed: {
       ...mapGetters([
+        'api',
         'error',
         'alertComponent',
         'loading',
@@ -49,12 +79,25 @@
       this.$store.dispatch('prepareForApiConsumption');
       Promise
         .all([
-          this.$store.getters.api.get(`${this.user._links.conditions.href}?projection=default`),
-          this.$store.getters.api.get('/companyMaturityLevels')])
-        .then(([conditionsResponse, companyMaturityLevelsResponse]) => {
+          this.api(`${this.user._links.conditions.href}?projection=default`),
+          this.api('/companyMaturityLevels'),
+          this.api('/jobs'),
+          this.api('/commodityTypes'),
+          this.api('taskTypes'),
+        ])
+        .then(([
+                 conditionsResponse,
+                 companyMaturityLevelsResponse,
+                 jobsResponse,
+                 commodityTypesResponse,
+                 taskTypesResponse,
+               ]) => {
           this.conditions = conditionsResponse.data;
           this.companyMaturityLevels =
             companyMaturityLevelsResponse.data._embedded.companyMaturityLevels;
+          this.jobs = jobsResponse.data._embedded.jobs;
+          this.commodityTypes = commodityTypesResponse.data._embedded.commodityTypes;
+          this.taskTypes = taskTypesResponse.data._embedded.taskTypes;
           this.$store.dispatch('clearLoading');
         })
         .catch((/* error */) => {
