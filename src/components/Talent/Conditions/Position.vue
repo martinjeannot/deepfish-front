@@ -35,8 +35,6 @@
           associationResourceName="taskTypes"
           class="mb-5"
         ></synchronized-checkbox-list>
-        <v-btn color="primary" @click.native="currentStep = 2">Continue</v-btn>
-        <v-btn flat>Cancel</v-btn>
       </v-flex>
     </v-layout>
   </div>

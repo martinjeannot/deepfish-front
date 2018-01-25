@@ -44,6 +44,10 @@
         <router-view></router-view>
       </v-container>
     </v-content>
+    <v-footer app class="pa-3">
+      <v-spacer></v-spacer>
+      <div>Copyright &copy; {{ new Date().getFullYear() }} Deepfish</div>
+    </v-footer>
   </v-app>
 </template>
 
