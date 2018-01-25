@@ -23,7 +23,7 @@
         <span class="subheading">Date de démarrage idéale</span>
       </v-flex>
       <v-flex xs12 class="mb-2">
-        <v-date-picker v-model="conditions.startDate" locale="fr-fr" :first-day-of-week="1"
+        <v-date-picker v-model="conditions.startingDate" locale="fr-fr" :first-day-of-week="1"
                        @input="saveConditions" :readonly="subLoading"></v-date-picker>
       </v-flex>
       <v-flex xs12 class="mb-2">
@@ -117,7 +117,7 @@
           }
           const selectedLocations = selectedLocationIds
             .map(id => this.fixedLocations.find(fixedLocation => fixedLocation.id === id));
-          this.prepareForApiConsumption(false);
+          this.prepareForApiConsumption();
           this
             .api({
               method: 'put',
@@ -134,7 +134,7 @@
       },
     },
     methods: {
-      prepareForApiConsumption(onCreated = true) {
+      prepareForApiConsumption(onCreated = false) {
         this.loading = onCreated;
         this.subLoading = true;
       },
@@ -149,14 +149,14 @@
             delete conditions[key];
           }
         });
-        this.prepareForApiConsumption(false);
+        this.prepareForApiConsumption();
         this.api
           .patch(this.conditions._links.self.href, conditions)
           .finally(() => this.clearLoading());
       },
     },
     created() {
-      this.prepareForApiConsumption();
+      this.prepareForApiConsumption(true);
       Promise
         .all([
           this.api(`${this.user._links.conditions.href}?projection=default`),

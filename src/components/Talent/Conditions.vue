@@ -19,9 +19,8 @@
           <v-btn color="primary" @click.native="currentStep++">Suivant</v-btn>
         </v-stepper-content>
         <v-stepper-content step="3">
-          <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
+          <conditions-self-pitch></conditions-self-pitch>
           <v-btn flat @click.native="currentStep--">Précédent</v-btn>
-          <v-btn color="primary" @click.native="currentStep = 1">Terminer</v-btn>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -31,12 +30,14 @@
 <script>
   import ConditionsPosition from './Conditions/Position';
   import ConditionsWishes from './Conditions/Wishes';
+  import ConditionsSelfPitch from './Conditions/SelfPitch';
 
   export default {
     name: 'talent-conditions',
     components: {
-      ConditionsWishes,
       ConditionsPosition,
+      ConditionsWishes,
+      ConditionsSelfPitch,
     },
     data: () => ({
       currentStep: 0,

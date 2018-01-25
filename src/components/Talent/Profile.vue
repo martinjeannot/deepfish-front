@@ -101,7 +101,6 @@
       valid: false,
       rules,
       talent: null,
-      toto: null,
     }),
     computed: {
       ...mapGetters([
