@@ -45,7 +45,7 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
 
   const EMAILREGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const rules = {
@@ -64,10 +64,11 @@
     }),
     computed: {
       ...mapGetters([
+        'api',
+        'user',
+        'loading',
         'error',
         'alertComponent',
-        'loading',
-        'user',
       ]),
       linkedInAuthEndpoint() {
         const queryParams = {
@@ -90,7 +91,39 @@
       },
     },
     methods: {
+      ...mapActions([
+        'prepareForApiConsumption',
+        'clearLoading',
+        'setError',
+        'autoSignIn',
+      ]),
       signIn() {
+        if (this.$refs.form.validate()) {
+          // axios does not support x-www-form-urlencoded as content-type out of the box yet
+          const payload = new URLSearchParams();
+          payload.append('grant_type', 'password');
+          payload.append('username', this.email);
+          payload.append('password', this.password);
+          this.prepareForApiConsumption();
+          this.api
+            .post('/oauth/token', payload, {
+              auth: { username: '67e43464e9c0483faaf7b773018b2b60', password: '9c7d7778e0534031aa0ed684bba16546' },
+            })
+            .then((response) => {
+              localStorage.setItem('auth_token', JSON.stringify(response.data));
+              this.autoSignIn(response.data);
+            })
+            .catch((error) => {
+              let customError = { message: 'Un problème est survenu lors de la connexion' };
+              if (error.response) {
+                customError = { message: error.response.data.error_description };
+              }
+              this.setError(customError);
+            })
+            .finally(() => this.clearLoading());
+        }
+      },
+      signIn2() {
         if (this.$refs.form.validate()) {
           this.$store.dispatch('signIn', {
             email: this.email,

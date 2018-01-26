@@ -25,10 +25,10 @@ const router = new Router({
       path: '/authentication-success-handler',
       name: 'AuthenticationSuccessHandler',
       beforeEnter: (to, from, next) => {
-        if (store.getters.user.isEmployer) {
-          next('/');
-        } else {
+        if (store.getters.user.authorities.some(authority => authority.authority === 'ROLE_TALENT')) {
           next('/talent/profile');
+        } else {
+          next('/employer');
         }
       },
     },

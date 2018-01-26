@@ -64,10 +64,10 @@
         'user',
       ]),
       userIsAuthenticated() {
-        return this.$store.getters.user !== null && this.$store.getters.user !== undefined;
+        return this.user !== null && this.user !== undefined;
       },
       userIsTalent() {
-        return this.user.authorities.some(authority => authority.authority === 'ROLE_USER');
+        return this.user.authorities.some(authority => authority.authority === 'ROLE_TALENT');
       },
       menuItems() {
         let menuItems = [
@@ -79,6 +79,10 @@
             menuItems = [
               { icon: 'speaker_notes', title: 'Conditions', route: '/talent/conditions' },
               { icon: 'account_circle', title: 'Profil', route: '/talent/profile' },
+            ];
+          } else {
+            menuItems = [
+              { icon: 'dashboard', title: 'Dashboard', route: '/employer' },
             ];
           }
         }

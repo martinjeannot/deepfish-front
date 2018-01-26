@@ -10,10 +10,6 @@ export default new Vuex.Store({
     appCreated: false,
     api: axios.create({
       baseURL: 'http://localhost:8080',
-      /* auth: {
-        username: '67e43464e9c0483faaf7b773018b2b60',
-        password: '9c7d7778e0534031aa0ed684bba16546',
-      }, */
     }),
     authToken: null,
     user: null,
@@ -93,49 +89,27 @@ export default new Vuex.Store({
           dispatch('setError', { message: 'Un problème est survenu lors de l\'inscription' });
         });
     },
-    signIn({ commit, dispatch }, signInForm) {
-      commit(types.CLEAR_ERROR);
-      commit(types.SET_LOADING, true);
-      // axios does not support x-www-form-urlencoded as content-type out of the box yet
-      const payload = new URLSearchParams();
-      payload.append('grant_type', 'password');
-      payload.append('username', signInForm.email);
-      payload.append('password', signInForm.password);
-      axios.post('http://localhost:8080/oauth/token', payload, {
-        auth: { username: '67e43464e9c0483faaf7b773018b2b60', password: '9c7d7778e0534031aa0ed684bba16546' },
-      })
-        .then((response) => {
-          commit(types.SET_LOADING, false);
-          const user = {
-            authToken: response.data,
-          };
-          localStorage.setItem('auth_token', JSON.stringify(user.authToken));
-          commit(types.SET_USER, user);
-        })
-        .catch((/* error */) => {
-          commit(types.SET_LOADING, false);
-          dispatch('setError', { message: 'Un problème est survenu lors de la connexion' });
-        });
-    },
-    autoSignIn({ commit, state, dispatch }, authToken) {
+    autoSignIn({ commit, dispatch, getters }, authToken) {
       commit(types.SET_AUTH_TOKEN, authToken);
       // get authenticated user
       const encodedAccessToken = authToken.access_token.split('.')[1].replace('-', '+').replace('_', '/');
       const accessToken = JSON.parse(window.atob(encodedAccessToken));
-      const userIsEmployer = accessToken.authorities.includes('ROLE_EMPLOYER');
-      dispatch('prepareForApiConsumption');
-      if (userIsEmployer) {
-        return 1 + 2;
+      let userUrl = null;
+      if (accessToken.authorities.includes('ROLE_EMPLOYER')) {
+        userUrl = `/employers/${accessToken.user_id}`;
+      } else {
+        userUrl = `/talents/${accessToken.user_id}`;
       }
-      return state.api
-        .get(`/talents/${accessToken.user_id}`)
+      dispatch('prepareForApiConsumption');
+      return getters
+        .api(userUrl)
         .then((response) => {
-          dispatch('clearLoading');
           commit(types.SET_USER, response.data);
         })
         .catch((/* error */) => {
-          dispatch('setErrorAfterApiConsumption');
-        });
+          dispatch('setError', { message: 'Un problème est survenu lors de la connexion' });
+        })
+        .finally(() => dispatch('clearLoading'));
     },
     logout({ commit }) {
       localStorage.removeItem('auth_token');
