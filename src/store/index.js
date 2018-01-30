@@ -74,6 +74,9 @@ export default new Vuex.Store({
       commit(types.SET_LOADING, false);
       dispatch('setError', error);
     },
+    onAlertComponentDismissed({ dispatch }) {
+      dispatch('clearError');
+    },
     signUp({ commit, dispatch }, signUpForm) {
       commit(types.CLEAR_ERROR);
       commit(types.SET_LOADING, true);

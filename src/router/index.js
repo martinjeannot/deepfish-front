@@ -2,7 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import SignIn from '@/components/SignIn';
 import SignUp from '@/components/SignUp';
-import Dashboard from '@/components/Employer/Dashboard';
+import EmployerDashboard from '@/components/Employer/Dashboard';
+import EmployerRequirements from '@/components/Employer/Requirements';
 import TalentProfile from '@/components/Talent/Profile';
 import TalentConditions from '@/components/Talent/Conditions';
 import store from '../store';
@@ -37,12 +38,20 @@ const router = new Router({
       name: 'SignUp',
       component: SignUp,
     },
+    // EMPLOYER ====================================================================================
     {
       path: '/employer',
       name: 'EmployerDashboard',
-      component: Dashboard,
+      component: EmployerDashboard,
       beforeEnter: NavGuards.authenticatedGuard,
     },
+    {
+      path: '/employer/requirements',
+      name: 'EmployerRequirements',
+      component: EmployerRequirements,
+      beforeEnter: NavGuards.authenticatedGuard,
+    },
+    // TALENT ======================================================================================
     {
       path: '/talent/auth-callback',
       name: 'TalentAuthCallback',

@@ -64,7 +64,6 @@
         'alertComponent',
         'loading',
         'user',
-        'api',
       ]),
     },
     methods: {
