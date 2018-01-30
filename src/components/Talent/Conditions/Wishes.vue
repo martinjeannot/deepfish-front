@@ -23,7 +23,7 @@
         <span class="subheading">Date de démarrage idéale</span>
       </v-flex>
       <v-flex xs12 class="mb-2">
-        <v-date-picker v-model="conditions.startingDate" locale="fr-fr" :first-day-of-week="1"
+        <v-date-picker v-model="conditions.canStartOn" locale="fr-fr" :first-day-of-week="1"
                        @input="saveConditions" :readonly="subLoading"></v-date-picker>
       </v-flex>
       <v-flex xs12 class="mb-2">
