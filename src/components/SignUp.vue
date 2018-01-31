@@ -99,11 +99,6 @@
       email: '',
       phoneNumber: '',
       companyName: '',
-      /* password: '',
-      passwordRules: [
-        v => !!v || 'Password is required',
-        v => (v && v.length >= 6) || 'Password must be at least 6 characters',
-      ], */
     }),
     computed: {
       ...mapGetters([

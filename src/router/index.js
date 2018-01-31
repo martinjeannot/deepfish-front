@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import SignIn from '@/components/SignIn';
 import SignUp from '@/components/SignUp';
 import EmployerDashboard from '@/components/Employer/Dashboard';
+import EmployerProfile from '@/components/Employer/Profile';
 import EmployerRequirements from '@/components/Employer/Requirements';
 import TalentProfile from '@/components/Talent/Profile';
 import TalentConditions from '@/components/Talent/Conditions';
@@ -43,6 +44,12 @@ const router = new Router({
       path: '/employer',
       name: 'EmployerDashboard',
       component: EmployerDashboard,
+      beforeEnter: NavGuards.authenticatedGuard,
+    },
+    {
+      path: '/employer/profile',
+      name: 'EmployerProfile',
+      component: EmployerProfile,
       beforeEnter: NavGuards.authenticatedGuard,
     },
     {

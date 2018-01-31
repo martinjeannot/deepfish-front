@@ -84,6 +84,7 @@
             menuItems = [
               { icon: 'dashboard', title: 'Dashboard', route: '/employer' },
               { icon: 'dashboard', title: 'Mes besoins', route: '/employer/requirements' },
+              { icon: 'account_circle', title: 'Profil', route: '/employer/profile' },
             ];
           }
         }
