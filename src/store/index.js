@@ -99,7 +99,7 @@ export default new Vuex.Store({
       const accessToken = JSON.parse(window.atob(encodedAccessToken));
       let userUrl = null;
       if (accessToken.authorities.includes('ROLE_EMPLOYER')) {
-        userUrl = `/employers/${accessToken.user_id}`;
+        userUrl = `/employers/${accessToken.user_id}?projection=default`;
       } else {
         userUrl = `/talents/${accessToken.user_id}`;
       }

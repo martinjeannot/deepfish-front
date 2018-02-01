@@ -5,6 +5,7 @@ import SignUp from '@/components/SignUp';
 import EmployerDashboard from '@/components/Employer/Dashboard';
 import EmployerProfile from '@/components/Employer/Profile';
 import EmployerRequirements from '@/components/Employer/Requirements';
+import EmployerRequirement from '@/components/Employer/Requirements/Requirement';
 import TalentProfile from '@/components/Talent/Profile';
 import TalentConditions from '@/components/Talent/Conditions';
 import store from '../store';
@@ -56,6 +57,12 @@ const router = new Router({
       path: '/employer/requirements',
       name: 'EmployerRequirements',
       component: EmployerRequirements,
+      beforeEnter: NavGuards.authenticatedGuard,
+    },
+    {
+      path: '/employer/requirements/new',
+      name: 'EmployerRequirement',
+      component: EmployerRequirement,
       beforeEnter: NavGuards.authenticatedGuard,
     },
     // TALENT ======================================================================================
