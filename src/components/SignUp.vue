@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <v-layout row v-if="alertComponent">
       <v-flex xs12 sm6 offset-sm3>
         <base-alert :type="alertComponent.type" :message="alertComponent.message" @dismissed="onDismissed"></base-alert>
@@ -9,74 +9,71 @@
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
           <v-card-text>
-            <v-container>
-              <v-layout row>
-                <v-flex xs12 text-xs-center>
-                  <v-btn class="linkedin-button" :href="linkedInAuthEndpoint" :disabled="linkedInLoading"
-                         :loading="linkedInLoading" @click="linkedInLoading = true">S'inscrire avec LinkedIn
-                  </v-btn>
-                </v-flex>
-              </v-layout>
-            </v-container>
+            <v-layout wrap>
+              <v-flex xs12 text-xs-center>
+                <h2>TALENTS</h2>
+              </v-flex>
+              <v-flex xs12 text-xs-center>
+                <v-btn class="linkedin-button" :href="linkedInAuthEndpoint" :disabled="linkedInLoading"
+                       :loading="linkedInLoading" @click="linkedInLoading = true">S'inscrire avec LinkedIn
+                </v-btn>
+              </v-flex>
+            </v-layout>
           </v-card-text>
         </v-card>
       </v-flex>
     </v-layout>
-    <v-layout row mt10 mt-10 m10>
+    <v-layout class="mt-3">
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
           <v-card-text>
-            <v-container>
+            <v-layout row>
+              <v-flex xs12 text-xs-center>
+                <h2>RECRUTEURS</h2>
+              </v-flex>
+            </v-layout>
+            <v-form v-model="valid" ref="form" @submit.prevent="signUp">
               <v-layout row>
-                <v-flex xs12 text-xs-center>
-                  <v-btn class="linkedin-button" :href="linkedInAuthEndpoint" :disabled="linkedInLoading"
-                         :loading="linkedInLoading" @click="linkedInLoading = true">S'inscrire avec LinkedIn
-                  </v-btn>
+                <v-flex xs12>
+                  <v-text-field label="Prénom" v-model="firstName" :rules="[rules.required]" type="text"
+                                required></v-text-field>
                 </v-flex>
               </v-layout>
-              <v-form v-model="valid" ref="form" @submit.prevent="signUp">
-                <v-layout row>
-                  <v-flex xs12>
-                    <v-text-field label="Prénom" v-model="firstName" :rules="[rules.required]" type="text"
-                                  required></v-text-field>
-                  </v-flex>
-                </v-layout>
-                <v-layout row>
-                  <v-flex xs12>
-                    <v-text-field label="Nom" v-model="lastName" :rules="[rules.required]" type="text"
-                                  required></v-text-field>
-                  </v-flex>
-                </v-layout>
-                <v-layout row>
-                  <v-flex xs12>
-                    <v-text-field label="Email" v-model="email" :rules="[rules.required, rules.email]" type="email"
-                                  required></v-text-field>
-                  </v-flex>
-                </v-layout>
-                <v-layout row>
-                  <v-flex xs12>
-                    <v-text-field label="Mobile" v-model="phoneNumber" :rules="[rules.required]" type="text"
-                                  required></v-text-field>
-                  </v-flex>
-                </v-layout>
-                <v-layout row>
-                  <v-flex xs12>
-                    <v-text-field label="Société" v-model="companyName" :rules="[rules.required]" type="text"
-                                  required></v-text-field>
-                  </v-flex>
-                </v-layout>
-                <v-layout row>
-                  <v-flex xs12 text-xs-center>
-                    <v-btn type="submit" :disabled="!valid || loading" :loading="loading">S'inscrire</v-btn>
-                  </v-flex>
-                </v-layout>
-              </v-form>
-            </v-container>
+              <v-layout row>
+                <v-flex xs12>
+                  <v-text-field label="Nom" v-model="lastName" :rules="[rules.required]" type="text"
+                                required></v-text-field>
+                </v-flex>
+              </v-layout>
+              <v-layout row>
+                <v-flex xs12>
+                  <v-text-field label="Email" v-model="email" :rules="[rules.required, rules.email]" type="email"
+                                required></v-text-field>
+                </v-flex>
+              </v-layout>
+              <v-layout row>
+                <v-flex xs12>
+                  <v-text-field label="Mobile" v-model="phoneNumber" :rules="[rules.required]" type="text"
+                                required></v-text-field>
+                </v-flex>
+              </v-layout>
+              <v-layout row>
+                <v-flex xs12>
+                  <v-text-field label="Société" v-model="companyName" :rules="[rules.required]" type="text"
+                                required></v-text-field>
+                </v-flex>
+              </v-layout>
+              <v-layout row>
+                <v-flex xs12 text-xs-center>
+                  <v-btn type="submit" :disabled="!valid || loading" :loading="loading">S'inscrire</v-btn>
+                </v-flex>
+              </v-layout>
+            </v-form>
           </v-card-text>
         </v-card>
       </v-flex>
     </v-layout>
-  </v-container>
+  </div>
 </template>
 
 <script>

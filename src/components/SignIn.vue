@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <v-layout row v-if="alertComponent">
       <v-flex xs12 sm6 offset-sm3>
         <base-alert :type="alertComponent.type" :message="alertComponent.message" @dismissed="onDismissed"></base-alert>
@@ -9,39 +9,42 @@
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
           <v-card-text>
-            <v-container>
-              <v-layout row>
+            <v-layout wrap>
+              <v-flex xs12 text-xs-center>
+                <h2>TALENTS</h2>
+              </v-flex>
+              <v-flex xs12 text-xs-center>
+                <v-btn class="linkedin-button" :href="linkedInAuthEndpoint" :disabled="linkedInLoading"
+                       :loading="linkedInLoading" @click="linkedInLoading = true">Se connecter avec LinkedIn
+                </v-btn>
+              </v-flex>
+            </v-layout>
+            <v-divider class="mt-4 mb-4"></v-divider>
+            <v-form v-model="valid" ref="form" @submit.prevent="signIn">
+              <v-layout wrap>
                 <v-flex xs12 text-xs-center>
-                  <v-btn class="linkedin-button" :href="linkedInAuthEndpoint" :disabled="linkedInLoading"
-                         :loading="linkedInLoading" @click="linkedInLoading = true">Se connecter avec LinkedIn
-                  </v-btn>
+                  <h2>RECRUTEURS</h2>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field type="email" label="Email" v-model="email" :rules="[rules.required, rules.email]"
+                                validate-on-blur required></v-text-field>
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field label="Mot de passe" v-model="password" :rules="[rules.required]" type="password"
+                                required :type="passwordShown ? 'text' : 'password'"
+                                :append-icon="passwordShown ? 'visibility' : 'visibility_off'"
+                                :append-icon-cb="() => (passwordShown = !passwordShown)"></v-text-field>
+                </v-flex>
+                <v-flex xs12 text-xs-center>
+                  <v-btn type="submit" :disabled="!valid || loading" :loading="loading">Se connecter</v-btn>
                 </v-flex>
               </v-layout>
-              <v-form v-model="valid" ref="form" @submit.prevent="signIn">
-                <v-layout row>
-                  <v-flex xs12>
-                    <v-text-field label="Email" v-model="email" :rules="[rules.required, rules.email]" type="email"
-                                  required></v-text-field>
-                  </v-flex>
-                </v-layout>
-                <v-layout row>
-                  <v-flex xs12>
-                    <v-text-field label="Mot de passe" v-model="password" :rules="[rules.required]" type="password"
-                                  required></v-text-field>
-                  </v-flex>
-                </v-layout>
-                <v-layout row>
-                  <v-flex xs12 text-xs-center>
-                    <v-btn type="submit" :disabled="!valid || loading" :loading="loading">Se connecter</v-btn>
-                  </v-flex>
-                </v-layout>
-              </v-form>
-            </v-container>
+            </v-form>
           </v-card-text>
         </v-card>
       </v-flex>
     </v-layout>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -61,6 +64,7 @@
       rules,
       email: '',
       password: '',
+      passwordShown: false,
     }),
     computed: {
       ...mapGetters([
