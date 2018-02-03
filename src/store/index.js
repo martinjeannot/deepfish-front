@@ -98,7 +98,9 @@ export default new Vuex.Store({
       const encodedAccessToken = authToken.access_token.split('.')[1].replace('-', '+').replace('_', '/');
       const accessToken = JSON.parse(window.atob(encodedAccessToken));
       let userUrl = null;
-      if (accessToken.authorities.includes('ROLE_EMPLOYER')) {
+      if (accessToken.authorities.includes('ROLE_ADMIN')) {
+        userUrl = `/users/${accessToken.user_id}`;
+      } else if (accessToken.authorities.includes('ROLE_EMPLOYER')) {
         userUrl = `/employers/${accessToken.user_id}?projection=default`;
       } else {
         userUrl = `/talents/${accessToken.user_id}`;
@@ -132,11 +134,23 @@ export default new Vuex.Store({
     error(state) {
       return state.error;
     },
+    alertComponent(state) {
+      return state.alertComponent;
+    },
     user(state) {
       return state.user;
     },
-    alertComponent(state) {
-      return state.alertComponent;
+    isUserAuthenticated(state, getters) {
+      return getters.user !== null && getters.user !== undefined;
+    },
+    isUserAdmin(state, getters) {
+      return getters.isUserAuthenticated ? getters.user.authorities.some(authority => authority.authority === 'ROLE_ADMIN') : false;
+    },
+    isUserEmployer(state, getters) {
+      return getters.isUserAuthenticated ? getters.user.authorities.some(authority => authority.authority === 'ROLE_EMPLOYER') : false;
+    },
+    isUserTalent(state, getters) {
+      return getters.isUserAuthenticated ? getters.user.authorities.some(authority => authority.authority === 'ROLE_TALENT') : false;
     },
   },
 });

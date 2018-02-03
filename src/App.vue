@@ -10,7 +10,7 @@
             <v-list-tile-title>{{ menuItem.title }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile v-if="userIsAuthenticated" @click="logout">
+        <v-list-tile v-if="isUserAuthenticated" @click="logout">
           <v-list-tile-action>
             <v-icon>power_settings_new</v-icon>
           </v-list-tile-action>
@@ -33,7 +33,7 @@
           <v-icon left>{{ menuItem.icon }}</v-icon>
           {{ menuItem.title }}
         </v-btn>
-        <v-btn flat v-if="userIsAuthenticated" @click="logout">
+        <v-btn flat v-if="isUserAuthenticated" @click="logout">
           <v-icon left>power_settings_new</v-icon>
           Sign out
         </v-btn>
@@ -62,29 +62,30 @@
       ...mapGetters([
         'appCreated',
         'user',
+        'isUserAuthenticated',
+        'isUserAdmin',
+        'isUserEmployer',
       ]),
-      userIsAuthenticated() {
-        return this.user !== null && this.user !== undefined;
-      },
-      userIsTalent() {
-        return this.user.authorities.some(authority => authority.authority === 'ROLE_TALENT');
-      },
       menuItems() {
         let menuItems = [
           { icon: 'power_settings_new', title: 'Sign in', route: '/' },
           { icon: 'exit_to_app', title: 'Sign up', route: '/sign-up' },
         ];
-        if (this.userIsAuthenticated) {
-          if (this.userIsTalent) {
+        if (this.isUserAuthenticated) {
+          if (this.isUserAdmin) {
             menuItems = [
-              { icon: 'speaker_notes', title: 'Conditions', route: '/talent/conditions' },
-              { icon: 'account_circle', title: 'Profil', route: '/talent/profile' },
+              { icon: 'dashboard', title: 'Dashboard', route: '/admin' },
             ];
-          } else {
+          } else if (this.isUserEmployer) {
             menuItems = [
               { icon: 'dashboard', title: 'Dashboard', route: '/employer' },
               { icon: 'dashboard', title: 'Mes besoins', route: '/employer/requirements' },
               { icon: 'account_circle', title: 'Profil', route: '/employer/profile' },
+            ];
+          } else {
+            menuItems = [
+              { icon: 'speaker_notes', title: 'Conditions', route: '/talent/conditions' },
+              { icon: 'account_circle', title: 'Profil', route: '/talent/profile' },
             ];
           }
         }

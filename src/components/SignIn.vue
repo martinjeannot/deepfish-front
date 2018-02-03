@@ -69,10 +69,10 @@
     computed: {
       ...mapGetters([
         'api',
-        'user',
         'loading',
         'error',
         'alertComponent',
+        'isUserAuthenticated',
       ]),
       linkedInAuthEndpoint() {
         const queryParams = {
@@ -88,9 +88,9 @@
       },
     },
     watch: {
-      user(user) {
-        if (user !== null && user !== undefined) {
-          this.$router.push('/employer');
+      isUserAuthenticated() {
+        if (this.isUserAuthenticated) {
+          this.$router.push('/authentication-success-handler');
         }
       },
     },
@@ -115,7 +115,7 @@
             })
             .then((response) => {
               localStorage.setItem('auth_token', JSON.stringify(response.data));
-              this.autoSignIn(response.data);
+              this.autoSignIn(response.data); // should set user => watcher
             })
             .catch((error) => {
               let customError = { message: 'Un problème est survenu lors de la connexion' };
@@ -125,14 +125,6 @@
               this.setError(customError);
             })
             .finally(() => this.clearLoading());
-        }
-      },
-      signIn2() {
-        if (this.$refs.form.validate()) {
-          this.$store.dispatch('signIn', {
-            email: this.email,
-            password: this.password,
-          });
         }
       },
       onDismissed() {

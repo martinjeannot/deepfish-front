@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import SignIn from '@/components/SignIn';
 import SignUp from '@/components/SignUp';
+import AdminDashboard from '@/components/Admin/Dashboard';
 import EmployerDashboard from '@/components/Employer/Dashboard';
 import EmployerProfile from '@/components/Employer/Profile';
 import EmployerRequirements from '@/components/Employer/Requirements';
@@ -28,10 +29,12 @@ const router = new Router({
       path: '/authentication-success-handler',
       name: 'AuthenticationSuccessHandler',
       beforeEnter: (to, from, next) => {
-        if (store.getters.user.authorities.some(authority => authority.authority === 'ROLE_TALENT')) {
-          next('/talent/profile');
-        } else {
+        if (store.getters.isUserAdmin) {
+          next('/admin');
+        } else if (store.getters.isUserEmployer) {
           next('/employer');
+        } else {
+          next('/talent/profile');
         }
       },
     },
@@ -39,6 +42,13 @@ const router = new Router({
       path: '/sign-up',
       name: 'SignUp',
       component: SignUp,
+    },
+    // ADMIN =======================================================================================
+    {
+      path: '/admin',
+      name: 'AdminDashboard',
+      component: AdminDashboard,
+      beforeEnter: NavGuards.authenticatedGuard,
     },
     // EMPLOYER ====================================================================================
     {
