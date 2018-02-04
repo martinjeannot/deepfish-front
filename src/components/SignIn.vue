@@ -19,7 +19,14 @@
                 </v-btn>
               </v-flex>
             </v-layout>
-            <v-divider class="mt-4 mb-4"></v-divider>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
+    <v-layout class="mt-3">
+      <v-flex xs12 sm6 offset-sm3>
+        <v-card>
+          <v-card-text>
             <v-form v-model="valid" ref="form" @submit.prevent="signIn">
               <v-layout wrap>
                 <v-flex xs12 text-xs-center>
