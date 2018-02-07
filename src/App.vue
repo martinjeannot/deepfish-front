@@ -75,6 +75,7 @@
           if (this.isUserAdmin) {
             menuItems = [
               { icon: 'dashboard', title: 'Dashboard', route: '/admin' },
+              { icon: 'list', title: 'Data Management', route: '/admin/data-management/master/talents' },
             ];
           } else if (this.isUserEmployer) {
             menuItems = [

@@ -3,6 +3,8 @@ import Router from 'vue-router';
 import SignIn from '@/components/SignIn';
 import SignUp from '@/components/SignUp';
 import AdminDashboard from '@/components/Admin/Dashboard';
+import AdminTalentDataManagement from '@/components/Admin/DataManagement/MasterData/TalentDataManagement';
+import AdminCompanyMaturityLevelDataManagement from '@/components/Admin/DataManagement/ReferenceData/CompanyMaturityLevelDataManagement';
 import EmployerDashboard from '@/components/Employer/Dashboard';
 import EmployerProfile from '@/components/Employer/Profile';
 import EmployerRequirements from '@/components/Employer/Requirements';
@@ -48,6 +50,20 @@ const router = new Router({
       path: '/admin',
       name: 'AdminDashboard',
       component: AdminDashboard,
+      beforeEnter: NavGuards.authenticatedGuard,
+    },
+    // Master data
+    {
+      path: '/admin/data-management/master/talents',
+      name: 'AdminTalentDataManagement',
+      component: AdminTalentDataManagement,
+      beforeEnter: NavGuards.authenticatedGuard,
+    },
+    // Reference data
+    {
+      path: '/admin/data-management/reference/company-maturity-levels',
+      name: 'AdminCompanyMaturityLevelDataManagement',
+      component: AdminCompanyMaturityLevelDataManagement,
       beforeEnter: NavGuards.authenticatedGuard,
     },
     // EMPLOYER ====================================================================================
