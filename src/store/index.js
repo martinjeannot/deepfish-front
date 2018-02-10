@@ -120,6 +120,9 @@ export default new Vuex.Store({
       localStorage.removeItem('auth_token');
       commit(types.SET_USER, null);
     },
+    signInAs({ commit }, username) {
+      console.log(username);
+    },
   },
   getters: {
     appCreated(state) {

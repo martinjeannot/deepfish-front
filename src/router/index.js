@@ -3,7 +3,9 @@ import Router from 'vue-router';
 import SignIn from '@/components/SignIn';
 import SignUp from '@/components/SignUp';
 import AdminDashboard from '@/components/Admin/Dashboard';
-import AdminTalentDataManagement from '@/components/Admin/DataManagement/MasterData/TalentDataManagement';
+import AdminSearch from '@/components/Admin/Search';
+import AdminTalents from '@/components/Admin/DataManagement/Master/Talents';
+import AdminTalent from '@/components/Admin/DataManagement/Master/Talent';
 import AdminCompanyMaturityLevelDataManagement from '@/components/Admin/DataManagement/ReferenceData/CompanyMaturityLevelDataManagement';
 import EmployerDashboard from '@/components/Employer/Dashboard';
 import EmployerProfile from '@/components/Employer/Profile';
@@ -52,12 +54,24 @@ const router = new Router({
       component: AdminDashboard,
       beforeEnter: NavGuards.authenticatedGuard,
     },
+    {
+      path: '/admin/search',
+      name: 'AdminSearch',
+      component: AdminSearch,
+      beforeEnter: NavGuards.authenticatedGuard,
+    },
     // Master data
     {
       path: '/admin/data-management/master/talents',
-      name: 'AdminTalentDataManagement',
-      component: AdminTalentDataManagement,
+      name: 'AdminTalents',
+      component: AdminTalents,
       beforeEnter: NavGuards.authenticatedGuard,
+    },
+    {
+      path: '/admin/data-management/master/talents/:id',
+      name: 'AdminTalent',
+      component: AdminTalent,
+      props: true,
     },
     // Reference data
     {
