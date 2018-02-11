@@ -30,8 +30,26 @@ const router = new Router({
       component: SignIn,
     },
     {
-      path: '/authentication-success-handler',
-      name: 'AuthenticationSuccessHandler',
+      path: '/sign-up',
+      name: 'SignUp',
+      component: SignUp,
+    },
+    {
+      path: '/auth/callback',
+      name: 'AuthCallback',
+      beforeEnter: (to, from, next) => {
+        const queryParams = new URLSearchParams(location.search);
+        if (queryParams.has('auth_token')) {
+          localStorage.setItem('auth_token', queryParams.get('auth_token'));
+          location.href = location.origin;
+        } else {
+          next('/');
+        }
+      },
+    },
+    {
+      path: '/auth/success',
+      name: 'AuthSuccessHandler',
       beforeEnter: (to, from, next) => {
         if (store.getters.isUserAdmin) {
           next('/admin');
@@ -41,11 +59,6 @@ const router = new Router({
           next('/talent/profile');
         }
       },
-    },
-    {
-      path: '/sign-up',
-      name: 'SignUp',
-      component: SignUp,
     },
     // ADMIN =======================================================================================
     {
@@ -106,19 +119,6 @@ const router = new Router({
       beforeEnter: NavGuards.authenticatedGuard,
     },
     // TALENT ======================================================================================
-    {
-      path: '/talent/auth-callback',
-      name: 'TalentAuthCallback',
-      beforeEnter: (to, from, next) => {
-        const queryParams = new URLSearchParams(location.search);
-        if (queryParams.has('auth_token')) {
-          localStorage.setItem('auth_token', queryParams.get('auth_token'));
-          location.href = location.origin;
-        } else {
-          next('/');
-        }
-      },
-    },
     {
       path: '/talent/profile',
       name: 'TalentProfile',

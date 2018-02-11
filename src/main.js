@@ -32,7 +32,7 @@ new Vue({
           .then(() => {
             this.$store.dispatch('setAppCreated', true);
             if (!this.$store.getters.error) {
-              this.$router.push('/authentication-success-handler');
+              this.$router.push('/auth/success');
             } else {
               this.$router.push('/');
             }

@@ -120,8 +120,16 @@ export default new Vuex.Store({
       localStorage.removeItem('auth_token');
       commit(types.SET_USER, null);
     },
-    signInAs({ commit }, username) {
-      console.log(username);
+    signInAs({ dispatch, getters }, username) {
+      dispatch('prepareForApiConsumption');
+      getters.api
+        .post('http://localhost:8080/auth/sign-in-as', { username })
+        .then((response) => {
+          dispatch('logout');
+          localStorage.setItem('auth_token', JSON.stringify(response.data));
+          location.href = location.origin;
+        })
+        .finally(() => dispatch('clearLoading'));
     },
   },
   getters: {

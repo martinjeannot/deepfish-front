@@ -97,7 +97,7 @@
     watch: {
       isUserAuthenticated() {
         if (this.isUserAuthenticated) {
-          this.$router.push('/authentication-success-handler');
+          this.$router.push('/auth/success');
         }
       },
     },
