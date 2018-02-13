@@ -23,7 +23,7 @@
                 <v-layout wrap>
                   <v-flex xs12 class="text-xs-center">
                     <v-avatar size="140">
-                      <img :src="talent.profile.originalPictureUrl" alt="avatar"/>
+                      <img :src="talent.profile.pictureUrls.values[0]" alt="picture"/>
                     </v-avatar>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
@@ -110,17 +110,13 @@
         .then((response) => {
           this.talent = response.data;
           return Promise.all([
-            this.api(this.talent._links.profile.href),
             this.api(this.talent._links.conditions.href),
           ]);
         })
         .then(([
-                 profileResponse,
                  conditionsResponse,
                ]) => {
-          this.talent.profile = profileResponse.data;
           this.talent.conditions = conditionsResponse.data;
-          console.log(this.talent);
         })
         .catch(() => this.setErrorAfterApiConsumption())
         .finally(() => this.clearLoading());

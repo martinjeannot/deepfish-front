@@ -1,15 +1,18 @@
 <template>
   <v-layout>
-    <v-flex xs2>
-      <v-layout wrap>
-        <v-flex xs6>
-          <v-text-field type="number" label="Min salary"></v-text-field>
-        </v-flex>
-        <v-flex xs6>
-          <v-text-field type="number" label="Max salary"></v-text-field>
+    <v-flex xs2 class="pa-2" style="padding-top: 12px!important;">
+      <v-layout wrap class="elevation-1 pa-2" style="background-color: white">
+        <div class="pt-1"></div>
+        <v-flex xs12>
+          <v-checkbox v-for="talentMaturityLevel in talentMaturityLevels"
+                      :key="talentMaturityLevel.key"
+                      :value="talentMaturityLevel.key"
+                      :label="talentMaturityLevel.label"
+                      v-model="talentMaturityLevelsCriterion"
+          ></v-checkbox>
         </v-flex>
         <v-flex xs12 class="text-xs-right">
-          <v-btn fab small color="primary">
+          <v-btn @click="search" fab small color="primary">
             <v-icon>search</v-icon>
           </v-btn>
         </v-flex>
@@ -17,40 +20,32 @@
     </v-flex>
     <v-flex xs10>
       <v-container fluid grid-list-md>
-        <v-data-iterator content-tag="v-layout" row wrap :items="items" :rows-per-page-items="rowsPerPageItems"
+        <v-data-iterator content-tag="v-layout" row wrap :items="talents" :rows-per-page-items="rowsPerPageItems"
                          :pagination.sync="pagination">
           <v-flex slot="item" slot-scope="props" xs12 sm6 md4 lg3>
             <v-card>
-              <v-card-title><h4>{{ props.item.name }}</h4></v-card-title>
+              <v-card-title>
+                <v-avatar size="50" class="mr-2">
+                  <img :src="props.item.profile.pictureUrl" alt="picture"/>
+                </v-avatar>
+                <h4>{{ props.item.lastName.toUpperCase() }} {{ props.item.firstName }}</h4>
+                <v-btn fab small color="primary" @click.native.stop="opportunityDialog = true">
+                  <v-icon>send</v-icon>
+                </v-btn>
+              </v-card-title>
               <v-divider></v-divider>
               <v-list dense>
                 <v-list-tile>
-                  <v-list-tile-content>Calories:</v-list-tile-content>
-                  <v-list-tile-content class="align-end">{{ props.item.calories }}</v-list-tile-content>
+                  <v-list-tile-content>Lorem:</v-list-tile-content>
+                  <v-list-tile-content class="align-end">4/5</v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
-                  <v-list-tile-content>Fat:</v-list-tile-content>
-                  <v-list-tile-content class="align-end">{{ props.item.fat }}</v-list-tile-content>
+                  <v-list-tile-content>Ipsum:</v-list-tile-content>
+                  <v-list-tile-content class="align-end">3/5</v-list-tile-content>
                 </v-list-tile>
                 <v-list-tile>
-                  <v-list-tile-content>Carbs:</v-list-tile-content>
-                  <v-list-tile-content class="align-end">{{ props.item.carbs }}</v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-content>Protein:</v-list-tile-content>
-                  <v-list-tile-content class="align-end">{{ props.item.protein }}</v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-content>Sodium:</v-list-tile-content>
-                  <v-list-tile-content class="align-end">{{ props.item.sodium }}</v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-content>Calcium:</v-list-tile-content>
-                  <v-list-tile-content class="align-end">{{ props.item.calcium }}</v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-content>Iron:</v-list-tile-content>
-                  <v-list-tile-content class="align-end">{{ props.item.iron }}</v-list-tile-content>
+                  <v-list-tile-content>Dolor:</v-list-tile-content>
+                  <v-list-tile-content class="align-end">4/5</v-list-tile-content>
                 </v-list-tile>
               </v-list>
             </v-card>
@@ -58,13 +53,33 @@
         </v-data-iterator>
       </v-container>
     </v-flex>
+    <v-dialog v-model="opportunityDialog" max-width="40%">
+      <v-container style="background-color: white">
+        <v-layout>
+          <v-flex xs12>
+            SELECT REQUIREMENT
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-dialog>
   </v-layout>
 </template>
 
 <script>
+  import { mapGetters, mapActions } from 'vuex';
+
+  const talentMaturityLevels = [
+    { key: 'CLEAR_WATER', label: 'Clear water' },
+    { key: 'OPEN_WATER', label: 'Open water' },
+    { key: 'DEEP_WATER', label: 'Deep water' },
+  ];
+
   export default {
     name: 'admin-search',
     data: () => ({
+      talents: [],
+      talentMaturityLevels,
+      talentMaturityLevelsCriterion: [],
       rowsPerPageItems: [4, 8, 12],
       pagination: {
         rowsPerPage: 4,
@@ -181,7 +196,38 @@
           iron: '6%',
         },
       ],
+      opportunityDialog: false,
     }),
+    computed: {
+      ...mapGetters([
+        'api',
+        'loading',
+      ]),
+    },
+    methods: {
+      ...mapActions([
+        'prepareForApiConsumption',
+        'clearLoading',
+      ]),
+      search() {
+        this.prepareForApiConsumption();
+        // talentMaturityLevels
+        let talentMaturityLevelsQueryString = '';
+        if (this.talentMaturityLevelsCriterion.length) {
+          this.talentMaturityLevelsCriterion.forEach((talentMaturityLevel, index) => {
+            talentMaturityLevelsQueryString += index ? '&' : '';
+            talentMaturityLevelsQueryString += `maturityLevel=${talentMaturityLevel}`;
+          });
+        }
+        // API consumption
+        this
+          .api(`/talents?${talentMaturityLevelsQueryString}`)
+          .then((response) => {
+            this.talents = response.data._embedded.talents;
+          })
+          .finally(() => this.clearLoading());
+      },
+    },
   };
 </script>
 

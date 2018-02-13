@@ -8,7 +8,7 @@
         <template slot="items" slot-scope="props">
           <td>
             <v-avatar size="46">
-              <img :src="props.item.pictureUrl" alt="avatar"/>
+              <img :src="props.item.profile.pictureUrl" alt="picture"/>
             </v-avatar>
           </td>
           <td>{{ props.item.lastName }}</td>
