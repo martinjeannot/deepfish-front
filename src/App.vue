@@ -44,6 +44,9 @@
         <router-view></router-view>
       </v-container>
     </v-content>
+    <v-snackbar v-model="snackbar.show" :timeout="3500">
+      {{ snackbar.text }}
+    </v-snackbar>
     <v-footer app class="pa-3">
       <v-spacer></v-spacer>
       <div>Copyright &copy; {{ new Date().getFullYear() }} Deepfish</div>
@@ -61,6 +64,7 @@
     computed: {
       ...mapGetters([
         'appCreated',
+        'snackbar',
         'user',
         'isUserAuthenticated',
         'isUserAdmin',

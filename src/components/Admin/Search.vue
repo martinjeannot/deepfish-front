@@ -25,13 +25,22 @@
           <v-flex slot="item" slot-scope="props" xs12 sm6 md4 lg3>
             <v-card>
               <v-card-title>
-                <v-avatar size="50" class="mr-2">
-                  <img :src="props.item.profile.pictureUrl" alt="picture"/>
-                </v-avatar>
-                <h4>{{ props.item.lastName.toUpperCase() }} {{ props.item.firstName }}</h4>
-                <v-btn fab small color="primary" @click.native.stop="opportunityDialog = true">
-                  <v-icon>send</v-icon>
-                </v-btn>
+                <v-layout>
+                  <v-flex xs2>
+                    <v-avatar size="50">
+                      <img :src="props.item.profile.pictureUrl" alt="picture"/>
+                    </v-avatar>
+                  </v-flex>
+                  <v-flex xs8 style="margin: auto">
+                    <h4>{{ props.item.lastName.toUpperCase() }} {{ props.item.firstName }}</h4>
+                  </v-flex>
+                  <v-flex xs2 class="text-xs-right">
+                    <v-btn fab small color="primary"
+                           @click.native.stop="selectedTalent = props.item; opportunityDialog = true">
+                      <v-icon>send</v-icon>
+                    </v-btn>
+                  </v-flex>
+                </v-layout>
               </v-card-title>
               <v-divider></v-divider>
               <v-list dense>
@@ -53,13 +62,41 @@
         </v-data-iterator>
       </v-container>
     </v-flex>
-    <v-dialog v-model="opportunityDialog" max-width="40%">
+    <v-dialog v-model="opportunityDialog" v-if="selectedTalent" max-width="40%">
       <v-container style="background-color: white">
-        <v-layout>
-          <v-flex xs12>
-            SELECT REQUIREMENT
-          </v-flex>
-        </v-layout>
+        <v-form v-model="opportunityValid" @submit.prevent="sendOpportunity">
+          <v-layout>
+            <v-flex xs12>
+              <v-layout>
+                <v-flex xs10 style="margin: auto">
+                  <h2>Send an opportunity to {{ selectedTalent.firstName }}</h2>
+                </v-flex>
+                <v-flex xs2 class="text-xs-right">
+                  <v-btn type="submit" fab small color="success" :disabled="!opportunityValid">
+                    <v-icon>send</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
+              <v-select label="Requirement" :items="requirements" v-model="selectedRequirement" item-text="company.name"
+                        :rules="[rules.required]">
+                <template slot="item" slot-scope="data">
+                  <v-list-tile>
+                    <v-list-tile-content>
+                      <v-list-tile-title><span style="font-weight: bold">{{ data.item.company.name }}</span>
+                        : {{ data.item.name }}
+                      </v-list-tile-title>
+                      <v-list-tile-sub-title>{{ data.item.job.l10nKey }} {{ data.item.seniority.l10nKey
+                        }} {{ data.item.fixedSalary / 1000 }}K€ {{ data.item.location }}
+                      </v-list-tile-sub-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </template>
+              </v-select>
+              <v-text-field label="Opportunity pitch" v-model="opportunityPitch" multi-line rows="7"
+                            :rules="[rules.required]"></v-text-field>
+            </v-flex>
+          </v-layout>
+        </v-form>
       </v-container>
     </v-dialog>
   </v-layout>
@@ -67,6 +104,10 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
+
+  const rules = {
+    required: value => !!value || 'This field is required',
+  };
 
   const talentMaturityLevels = [
     { key: 'CLEAR_WATER', label: 'Clear water' },
@@ -78,136 +119,32 @@
     name: 'admin-search',
     data: () => ({
       talents: [],
+      selectedTalent: null,
+      opportunityDialog: false,
+      requirements: [],
+      selectedRequirement: null,
+      opportunityPitch: '',
+      rules,
+      opportunityValid: false,
       talentMaturityLevels,
       talentMaturityLevelsCriterion: [],
       rowsPerPageItems: [4, 8, 12],
       pagination: {
         rowsPerPage: 4,
       },
-      items: [
-        {
-          value: false,
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          sodium: 87,
-          calcium: '14%',
-          iron: '1%',
-        },
-        {
-          value: false,
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          sodium: 129,
-          calcium: '8%',
-          iron: '1%',
-        },
-        {
-          value: false,
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          sodium: 337,
-          calcium: '6%',
-          iron: '7%',
-        },
-        {
-          value: false,
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          sodium: 413,
-          calcium: '3%',
-          iron: '8%',
-        },
-        {
-          value: false,
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          sodium: 327,
-          calcium: '7%',
-          iron: '16%',
-        },
-        {
-          value: false,
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          sodium: 50,
-          calcium: '0%',
-          iron: '0%',
-        },
-        {
-          value: false,
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          sodium: 38,
-          calcium: '0%',
-          iron: '2%',
-        },
-        {
-          value: false,
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          sodium: 562,
-          calcium: '0%',
-          iron: '45%',
-        },
-        {
-          value: false,
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          sodium: 326,
-          calcium: '2%',
-          iron: '22%',
-        },
-        {
-          value: false,
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          sodium: 54,
-          calcium: '12%',
-          iron: '6%',
-        },
-      ],
-      opportunityDialog: false,
     }),
     computed: {
       ...mapGetters([
         'api',
         'loading',
+        'user',
       ]),
     },
     methods: {
       ...mapActions([
         'prepareForApiConsumption',
         'clearLoading',
+        'showSnackbar',
       ]),
       search() {
         this.prepareForApiConsumption();
@@ -227,6 +164,33 @@
           })
           .finally(() => this.clearLoading());
       },
+      newOpportunity() {
+        return {
+          creator: this.user._links.self.href,
+          talent: this.selectedTalent._links.self.href,
+          requirement: this.selectedRequirement._links.self.href,
+          pitch: this.opportunityPitch,
+        };
+      },
+      sendOpportunity() {
+        this.prepareForApiConsumption();
+        this.api
+          .post('/opportunities', this.newOpportunity())
+          .then((/* response */) => {
+            this.opportunityDialog = false;
+            this.showSnackbar('Opportunity sent');
+          })
+          .finally(() => this.clearLoading());
+      },
+    },
+    created() {
+      this.prepareForApiConsumption();
+      this
+        .api('/requirements?projection=default')
+        .then((response) => {
+          this.requirements = response.data._embedded.requirements;
+        })
+        .finally(() => this.clearLoading());
     },
   };
 </script>

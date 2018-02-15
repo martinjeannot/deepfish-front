@@ -8,12 +8,13 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     appCreated: false,
+    authToken: null,
+    user: null,
     api: axios.create({
       baseURL: 'http://localhost:8080',
     }),
-    authToken: null,
-    user: null,
     loading: false,
+    snackbar: { show: false, text: '' },
     error: null,
     alertComponent: null,
   },
@@ -25,17 +26,20 @@ export default new Vuex.Store({
       state.authToken = authToken;
       state.api.defaults.headers.common.Authorization = `Bearer ${authToken.access_token}`;
     },
+    [types.SET_USER](state, user) {
+      state.user = user;
+    },
     [types.SET_LOADING](state, status) {
       state.loading = status;
+    },
+    [types.SET_SNACKBAR](state, snackbar) {
+      state.snackbar = snackbar;
     },
     [types.SET_ERROR](state, error) {
       state.error = error;
     },
     [types.CLEAR_ERROR](state) {
       state.error = null;
-    },
-    [types.SET_USER](state, user) {
-      state.user = user;
     },
     [types.SET_ALERT_COMPONENT](state, alertComponent) {
       state.alertComponent = alertComponent;
@@ -48,8 +52,15 @@ export default new Vuex.Store({
     setAppCreated({ commit }) {
       commit(types.SET_APP_CREATED, true);
     },
+    prepareForApiConsumption({ commit }) {
+      commit(types.CLEAR_ERROR);
+      commit(types.SET_LOADING, true);
+    },
     clearLoading({ commit }) {
       commit(types.SET_LOADING, false);
+    },
+    showSnackbar({ commit }, text) {
+      commit(types.SET_SNACKBAR, { show: true, text });
     },
     setError({ commit }, error) {
       const errorObject = error || { message: 'Une erreur est survenue :(' };
@@ -65,10 +76,6 @@ export default new Vuex.Store({
     },
     clearAlertComponent({ commit }) {
       commit(types.CLEAR_ALERT_COMPONENT);
-    },
-    prepareForApiConsumption({ commit }) {
-      commit(types.CLEAR_ERROR);
-      commit(types.SET_LOADING, true);
     },
     setErrorAfterApiConsumption({ commit, dispatch }, error) {
       commit(types.SET_LOADING, false);
@@ -141,6 +148,9 @@ export default new Vuex.Store({
     },
     loading(state) {
       return state.loading;
+    },
+    snackbar(state) {
+      return state.snackbar;
     },
     error(state) {
       return state.error;
