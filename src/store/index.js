@@ -13,6 +13,7 @@ export default new Vuex.Store({
     api: axios.create({
       baseURL: 'http://localhost:8080',
     }),
+    menuBadges: {},
     loading: false,
     snackbar: { show: false, text: '' },
     error: null,
@@ -117,6 +118,16 @@ export default new Vuex.Store({
         .api(userUrl)
         .then((response) => {
           commit(types.SET_USER, response.data);
+          if (getters.isUserTalent) {
+            // get pending opportunities for menu badge
+            getters
+              .api(`/opportunities?talent=${accessToken.user_id}&status=PENDING`)
+              .then((pendingOpportunitiesResponse) => {
+                // eslint-disable-next-line no-param-reassign
+                getters.menuBadges.opportunities =
+                  pendingOpportunitiesResponse.data._embedded.opportunities.length;
+              });
+          }
         })
         .catch((/* error */) => {
           dispatch('setError', { message: 'Un problème est survenu lors de la connexion' });
@@ -145,6 +156,9 @@ export default new Vuex.Store({
     },
     api(state) {
       return state.api;
+    },
+    menuBadges(state) {
+      return state.menuBadges;
     },
     loading(state) {
       return state.loading;

@@ -13,6 +13,7 @@ import EmployerRequirements from '@/components/Employer/Requirements';
 import EmployerRequirement from '@/components/Employer/Requirements/Requirement';
 import TalentProfile from '@/components/Talent/Profile';
 import TalentConditions from '@/components/Talent/Conditions';
+import TalentOpportunities from '@/components/Talent/Opportunity/Opportunities';
 import store from '../store';
 import NavGuards from './nav-guards';
 
@@ -123,11 +124,19 @@ const router = new Router({
       path: '/talent/profile',
       name: 'TalentProfile',
       component: TalentProfile,
+      beforeEnter: NavGuards.authenticatedGuard,
     },
     {
       path: '/talent/conditions',
       name: 'TalentConditions',
       component: TalentConditions,
+      beforeEnter: NavGuards.authenticatedGuard,
+    },
+    {
+      path: '/talent/opportunities',
+      name: 'TalentOpportunities',
+      component: TalentOpportunities,
+      beforeEnter: NavGuards.authenticatedGuard,
     },
   ],
 });

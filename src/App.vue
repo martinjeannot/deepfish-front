@@ -29,9 +29,12 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-xs-only">
-        <v-btn flat v-for="menuItem in menuItems" :key="menuItem.title" router :to="menuItem.route" exact>
-          <v-icon left>{{ menuItem.icon }}</v-icon>
-          {{ menuItem.title }}
+        <v-btn flat v-for="menuItem in menuItems" :key="menuItem.key" router :to="menuItem.route" exact>
+          <v-badge color="red">
+            <v-icon left>{{ menuItem.icon }}</v-icon>
+            <span slot="badge" v-if="menuBadges[menuItem.key]">{{ menuBadges[menuItem.key] }}</span>
+            {{ menuItem.title }}
+          </v-badge>
         </v-btn>
         <v-btn flat v-if="isUserAuthenticated" @click="logout">
           <v-icon left>power_settings_new</v-icon>
@@ -64,6 +67,7 @@
     computed: {
       ...mapGetters([
         'appCreated',
+        'menuBadges',
         'snackbar',
         'user',
         'isUserAuthenticated',
@@ -72,26 +76,33 @@
       ]),
       menuItems() {
         let menuItems = [
-          { icon: 'power_settings_new', title: 'Sign in', route: '/' },
-          { icon: 'exit_to_app', title: 'Sign up', route: '/sign-up' },
+          { key: 'sign-in', icon: 'power_settings_new', title: 'Sign in', route: '/' },
+          { key: 'sign-up', icon: 'exit_to_app', title: 'Sign up', route: '/sign-up' },
         ];
         if (this.isUserAuthenticated) {
           if (this.isUserAdmin) {
             menuItems = [
-              { icon: 'dashboard', title: 'Dashboard', route: '/admin' },
-              { title: 'Search', icon: 'search', route: '/admin/search' },
-              { icon: 'list', title: 'Data Management', route: '/admin/data-management/master/talents' },
+              { key: 'dashboard', icon: 'dashboard', title: 'Dashboard', route: '/admin' },
+              { key: 'search', icon: 'search', title: 'Search', route: '/admin/search' },
+              {
+                key: 'data-management',
+                icon: 'list',
+                title: 'Data Management',
+                route: '/admin/data-management/master/talents',
+              },
             ];
           } else if (this.isUserEmployer) {
             menuItems = [
-              { icon: 'dashboard', title: 'Dashboard', route: '/employer' },
-              { icon: 'dashboard', title: 'Mes besoins', route: '/employer/requirements' },
-              { icon: 'account_circle', title: 'Profil', route: '/employer/profile' },
+              { key: 'dashboard', icon: 'dashboard', title: 'Dashboard', route: '/employer' },
+              { key: 'requirements', icon: 'assignment', title: 'Mes besoins', route: '/employer/requirements' },
+              { key: 'talents', icon: 'assignment_ind', title: 'Mes talents', route: '/employer/requirements' },
+              { key: 'profile', icon: 'account_circle', title: 'Profil', route: '/employer/profile' },
             ];
           } else {
             menuItems = [
-              { icon: 'speaker_notes', title: 'Conditions', route: '/talent/conditions' },
-              { icon: 'account_circle', title: 'Profil', route: '/talent/profile' },
+              { key: 'conditions', icon: 'speaker_notes', title: 'Mes conditions', route: '/talent/conditions' },
+              { key: 'opportunities', icon: 'assignment', title: 'Mes opportunités', route: '/talent/opportunities' },
+              { key: 'profile', icon: 'account_circle', title: 'Profil', route: '/talent/profile' },
             ];
           }
         }
