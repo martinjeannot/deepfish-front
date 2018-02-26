@@ -64,9 +64,36 @@
               </v-container>
             </v-flex>
             <v-flex xs8 class="elevation-1">
-              <v-tabs>
+              <v-tabs grow>
                 <v-tab>Profile</v-tab>
-                <v-tab-item>Lorem ipsum</v-tab-item>
+                <v-tab>Conditions</v-tab>
+                <v-tab>Qualification</v-tab>
+                <v-tab>Opportunities</v-tab>
+                <v-tab-item>le profile</v-tab-item>
+                <v-tab-item>les conditions du profil</v-tab-item>
+                <v-tab-item>la qualif du profile</v-tab-item>
+                <v-tab-item>
+                  <v-container>
+                    <h3>Accepted opportunities</h3>
+                    <v-data-table :headers="acceptedOpportunitiesHeaders" :items="acceptedOpportunities"
+                                  class="elevation-1">
+                      <template slot="items" slot-scope="props">
+                        <td>{{ props.item.companyName }}</td>
+                        <td>{{ props.item.companyName }}</td>
+                        <td>
+                          <v-btn v-if="props.item.forwarded"
+                                 icon @click="retrieveTalent(props.item)" color="error">
+                            <v-icon>arrow_back</v-icon>
+                          </v-btn>
+                          <v-btn v-else
+                                 icon @click="forwardTalent(props.item)" color="success">
+                            <v-icon>arrow_forward</v-icon>
+                          </v-btn>
+                        </td>
+                      </template>
+                    </v-data-table>
+                  </v-container>
+                </v-tab-item>
               </v-tabs>
             </v-flex>
           </v-layout>
@@ -85,6 +112,11 @@
     components: { DataManagementNavigation },
     data: () => ({
       talent: null,
+      acceptedOpportunitiesHeaders: [
+        { text: 'Date', value: 'companyName' },
+        { text: 'Company', value: 'companyName' },
+        { text: 'Actions', value: 'name', sortable: false },
+      ],
     }),
     props: ['id'],
     computed: {
@@ -93,15 +125,44 @@
         'loading',
         'alertComponent',
       ]),
+      acceptedOpportunities() {
+        return this.talent.opportunities.filter(opportunity => opportunity.status === 'ACCEPTED');
+      },
+      pendingOpportunities() {
+        return this.talent.opportunities.filter(opportunity => opportunity.status === 'PENDING');
+      },
     },
     methods: {
       ...mapActions([
         'prepareForApiConsumption',
         'clearLoading',
+        'showSnackbar',
         'setErrorAfterApiConsumption',
         'onAlertComponentDismissed',
         'signInAs',
       ]),
+      forwardTalent(opportunity) {
+        // eslint-disable-next-line no-param-reassign
+        opportunity.forwarded = true;
+        this.saveOpportunity(opportunity);
+      },
+      retrieveTalent(opportunity) {
+        // eslint-disable-next-line no-param-reassign
+        opportunity.forwarded = false;
+        this.saveOpportunity(opportunity);
+      },
+      saveOpportunity(opportunity) {
+        this.api
+          .patch(opportunity._links.self.href, opportunity)
+          .then(() => {
+            this.showSnackbar('Success');
+            this.$forceUpdate();
+          })
+          .catch(() => {
+            this.fetchData();
+            this.showSnackbar('Error');
+          });
+      },
     },
     created() {
       this.prepareForApiConsumption();
@@ -111,12 +172,15 @@
           this.talent = response.data;
           return Promise.all([
             this.api(this.talent._links.conditions.href),
+            this.api(`${this.talent._links.opportunities.href}?projection=full`),
           ]);
         })
         .then(([
                  conditionsResponse,
+                 opportunitiesResponse,
                ]) => {
           this.talent.conditions = conditionsResponse.data;
+          this.talent.opportunities = opportunitiesResponse.data._embedded.opportunities;
         })
         .catch(() => this.setErrorAfterApiConsumption())
         .finally(() => this.clearLoading());
