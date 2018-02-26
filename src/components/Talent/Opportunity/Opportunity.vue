@@ -90,6 +90,7 @@
         'api',
         'loading',
         'user',
+        'menuBadges',
       ]),
     },
     methods: {
@@ -108,15 +109,23 @@
       },
       accept() {
         this.opportunity.status = 'ACCEPTED';
-        this.saveOpportunity();
+        this
+          .saveOpportunity()
+          .then(() => {
+            this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
+          });
       },
       decline() {
         this.opportunity.status = 'REFUSED';
         this.declinationDialog = false;
-        this.saveOpportunity();
+        this
+          .saveOpportunity()
+          .then(() => {
+            this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
+          });
       },
       saveOpportunity() {
-        this.api
+        return this.api
           .patch(this.opportunity._links.self.href, this.opportunity)
           .then(() => this.showSnackbar('Opération terminée avec succès'))
           .catch(() => {
@@ -128,6 +137,7 @@
         this.bulkRefusalDialog = false;
         this.api.post(`/talents/${this.user.id}/opportunities/bulk-refusal`)
           .then(() => {
+            this.menuBadges.opportunities = 0;
             this.$router.push('/talent/opportunities');
             this.showSnackbar('Opération terminée avec succès');
           })

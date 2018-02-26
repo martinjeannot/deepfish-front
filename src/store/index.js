@@ -13,8 +13,8 @@ export default new Vuex.Store({
     api: axios.create({
       baseURL: 'http://localhost:8080',
     }),
-    menuBadges: {},
     loading: false,
+    menuBadges: {},
     snackbar: { show: false, text: '' },
     error: null,
     alertComponent: null,
@@ -32,6 +32,9 @@ export default new Vuex.Store({
     },
     [types.SET_LOADING](state, status) {
       state.loading = status;
+    },
+    [types.SET_MENU_BADGES](state, menuBadges) {
+      state.menuBadges = menuBadges;
     },
     [types.SET_SNACKBAR](state, snackbar) {
       state.snackbar = snackbar;
@@ -59,6 +62,9 @@ export default new Vuex.Store({
     },
     clearLoading({ commit }) {
       commit(types.SET_LOADING, false);
+    },
+    setMenuBadges({ commit }, menuBadges) {
+      commit(types.SET_MENU_BADGES, menuBadges);
     },
     showSnackbar({ commit }, text) {
       commit(types.SET_SNACKBAR, { show: true, text });
@@ -123,9 +129,7 @@ export default new Vuex.Store({
             getters
               .api(`/opportunities?talent=${accessToken.user_id}&status=PENDING`)
               .then((pendingOpportunitiesResponse) => {
-                // eslint-disable-next-line no-param-reassign
-                getters.menuBadges.opportunities =
-                  pendingOpportunitiesResponse.data._embedded.opportunities.length;
+                dispatch('setMenuBadges', { opportunities: pendingOpportunitiesResponse.data._embedded.opportunities.length });
               });
           }
         })
@@ -157,11 +161,11 @@ export default new Vuex.Store({
     api(state) {
       return state.api;
     },
-    menuBadges(state) {
-      return state.menuBadges;
-    },
     loading(state) {
       return state.loading;
+    },
+    menuBadges(state) {
+      return state.menuBadges;
     },
     snackbar(state) {
       return state.snackbar;

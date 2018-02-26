@@ -62,6 +62,7 @@
         'api',
         'loading',
         'user',
+        'menuBadges',
       ]),
     },
     methods: {
@@ -76,6 +77,7 @@
         .api(`/opportunities?projection=partial&talent=${this.user.id}&status=PENDING&status=ACCEPTED`)
         .then((response) => {
           this.pendingOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.status === 'PENDING');
+          this.menuBadges.opportunities = this.pendingOpportunities.length;
           this.acceptedOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.status === 'ACCEPTED');
         })
         .finally(() => this.clearLoading());
