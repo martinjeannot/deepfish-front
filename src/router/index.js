@@ -11,6 +11,7 @@ import EmployerDashboard from '@/components/Employer/Dashboard';
 import EmployerProfile from '@/components/Employer/Profile';
 import EmployerRequirements from '@/components/Employer/Requirements';
 import EmployerRequirement from '@/components/Employer/Requirements/Requirement';
+import EmployerTalents from '@/components/Employer/Talents/Talents';
 import TalentProfile from '@/components/Talent/Profile';
 import TalentConditions from '@/components/Talent/Conditions';
 import TalentOpportunities from '@/components/Talent/Opportunity/Opportunities';
@@ -119,6 +120,12 @@ const router = new Router({
       path: '/employer/requirements/new',
       name: 'EmployerRequirement',
       component: EmployerRequirement,
+      beforeEnter: NavGuards.authenticatedGuard,
+    },
+    {
+      path: '/employer/talents',
+      name: 'EmployerTalents',
+      component: EmployerTalents,
       beforeEnter: NavGuards.authenticatedGuard,
     },
     // TALENT ======================================================================================
