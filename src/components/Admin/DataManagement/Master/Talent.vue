@@ -58,7 +58,8 @@
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
                     <v-btn @click="signInAs(talent.username)" dark>Sign in as</v-btn>
-                    <v-btn>Enable</v-btn>
+                    <v-btn v-if="talent.active" @click="deactivateProfile" color="error">Deactivate</v-btn>
+                    <v-btn v-else @click="activateProfile" color="success">Activate</v-btn>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -71,7 +72,36 @@
                 <v-tab>Opportunities</v-tab>
                 <v-tab-item>le profile</v-tab-item>
                 <v-tab-item>les conditions du profil</v-tab-item>
-                <v-tab-item>la qualif du profile</v-tab-item>
+                <v-tab-item>
+                  <v-container>
+                    <v-layout>
+                      <v-flex xs4 class="pr-3">
+                        <v-select
+                          :items="Array(5).fill().map((_, i) => i + 1)"
+                          v-model="talent.qualification.complexSellingSkillsRating"
+                          label="Complex selling skills rating"
+                          @input="saveQualification"
+                        ></v-select>
+                      </v-flex>
+                      <v-flex xs4 class="pr-3">
+                        <v-select
+                          :items="Array(5).fill().map((_, i) => i + 1)"
+                          v-model="talent.qualification.huntingSkillsRating"
+                          label="Hunting skills rating"
+                          @input="saveQualification"
+                        ></v-select>
+                      </v-flex>
+                      <v-flex xs4>
+                        <v-select
+                          :items="Array(5).fill().map((_, i) => i + 1)"
+                          v-model="talent.qualification.technicalSkillsRating"
+                          label="Technical skills rating"
+                          @input="saveQualification"
+                        ></v-select>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-tab-item>
                 <v-tab-item>
                   <v-container>
                     <h3>Accepted opportunities</h3>
@@ -141,6 +171,33 @@
         'onAlertComponentDismissed',
         'signInAs',
       ]),
+      activateProfile() {
+        this.talent.active = true;
+        this.saveProfile();
+      },
+      deactivateProfile() {
+        this.talent.active = false;
+        this.saveProfile();
+      },
+      saveProfile() {
+        const profile = Object.assign({}, this.talent);
+        delete profile.conditions;
+        delete profile.qualification;
+        delete profile.opportunities;
+        this.api
+          .patch(this.talent._links.self.href, profile)
+          .then(() => this.showSnackbar('Success'))
+          .catch(() => {
+            this.showSnackbar('Error');
+            this.fetchInitialData();
+          });
+      },
+      saveQualification() {
+        this.api
+          .patch(this.talent.qualification._links.self.href, this.talent.qualification)
+          .then(() => this.showSnackbar('Success'))
+          .catch(() => this.showSnackbar('Error'));
+      },
       forwardTalent(opportunity) {
         // eslint-disable-next-line no-param-reassign
         opportunity.forwarded = true;
@@ -163,27 +220,33 @@
             this.showSnackbar('Error');
           });
       },
+      fetchInitialData() {
+        this.prepareForApiConsumption();
+        this
+          .api(`/talents/${this.id}`)
+          .then((response) => {
+            this.talent = response.data;
+            return Promise.all([
+              this.api(this.talent._links.conditions.href),
+              this.api(this.talent._links.qualification.href),
+              this.api(`${this.talent._links.opportunities.href}?projection=full`),
+            ]);
+          })
+          .then(([
+                   conditionsResponse,
+                   qualificationResponse,
+                   opportunitiesResponse,
+                 ]) => {
+            this.talent.conditions = conditionsResponse.data;
+            this.talent.qualification = qualificationResponse.data;
+            this.talent.opportunities = opportunitiesResponse.data._embedded.opportunities;
+          })
+          .catch(() => this.setErrorAfterApiConsumption())
+          .finally(() => this.clearLoading());
+      },
     },
     created() {
-      this.prepareForApiConsumption();
-      this
-        .api(`/talents/${this.id}`)
-        .then((response) => {
-          this.talent = response.data;
-          return Promise.all([
-            this.api(this.talent._links.conditions.href),
-            this.api(`${this.talent._links.opportunities.href}?projection=full`),
-          ]);
-        })
-        .then(([
-                 conditionsResponse,
-                 opportunitiesResponse,
-               ]) => {
-          this.talent.conditions = conditionsResponse.data;
-          this.talent.opportunities = opportunitiesResponse.data._embedded.opportunities;
-        })
-        .catch(() => this.setErrorAfterApiConsumption())
-        .finally(() => this.clearLoading());
+      this.fetchInitialData();
     },
   };
 </script>
