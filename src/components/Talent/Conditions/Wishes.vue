@@ -29,15 +29,15 @@
       <v-flex xs12 class="mb-2">
         <span class="subheading">Lieux de travail</span>
       </v-flex>
-      <v-flex xs12>
-        <div v-for="citiesByCountry in fixedLocationsByCountry" :key="citiesByCountry.country.id">
+      <v-layout row wrap>
+        <v-flex xs12 sm3 md2 lg1 v-for="citiesByCountry in fixedLocationsByCountry" :key="citiesByCountry.country.id">
           <v-checkbox :value="citiesByCountry.country.id" :label="citiesByCountry.country.l10nKey"
                       v-model="selectedLocationIds" :disabled="subLoading" style="font-weight: bold"></v-checkbox>
           <v-checkbox v-for="cities in citiesByCountry.cities" :key="cities.id" :value="cities.id"
                       :label="cities.l10nKey" v-model="selectedLocationIds" :disabled="subLoading"
                       class="ml-3"></v-checkbox>
-        </div>
-      </v-flex>
+        </v-flex>
+      </v-layout>
     </v-layout>
   </div>
 </template>

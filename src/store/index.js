@@ -69,6 +69,9 @@ export default new Vuex.Store({
     showSnackbar({ commit }, text) {
       commit(types.SET_SNACKBAR, { show: true, text });
     },
+    showSuccessSnackbar({ dispatch }) {
+      dispatch('showSnackbar', 'OK');
+    },
     setError({ commit }, error) {
       const errorObject = error || { message: 'Une erreur est survenue :(' };
       commit(types.SET_ERROR, errorObject);
