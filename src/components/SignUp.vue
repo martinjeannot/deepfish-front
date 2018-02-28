@@ -102,19 +102,8 @@
         'error',
         'alertComponent',
         'loading',
+        'linkedInAuthEndpoint',
       ]),
-      linkedInAuthEndpoint() {
-        const queryParams = {
-          response_type: 'code',
-          client_id: '77w79kdr6gql2h',
-          redirect_uri: 'http://localhost:8080/auth/linkedin/sign-up',
-          // eslint-disable-next-line no-bitwise
-          state: ([1e7] + 1e3 + 4e3 + 8e3 + 1e11).replace(/[018]/g, c => (((c ^ crypto.getRandomValues(new Uint8Array(1))[0]) & 15) >> c / 4).toString(16)),
-          scope: 'r_basicprofile r_emailaddress',
-        };
-        const queryString = Object.keys(queryParams).map(k => `${k}=${encodeURIComponent(queryParams[k])}`).join('&');
-        return `https://www.linkedin.com/oauth/v2/authorization?${queryString}`;
-      },
     },
     methods: {
       signUp() {
