@@ -11,7 +11,7 @@ export default new Vuex.Store({
     authToken: null,
     user: null,
     api: axios.create({
-      baseURL: 'http://localhost:8080',
+      baseURL: process.env.DEEPFISH_BACK_BASE_URL,
     }),
     loading: false,
     menuBadges: {},
@@ -98,7 +98,7 @@ export default new Vuex.Store({
       commit(types.CLEAR_ERROR);
       commit(types.SET_LOADING, true);
       return axios
-        .post('http://localhost:8080/employers/sign-up', signUpForm, {
+        .post(`${process.env.DEEPFISH_BACK_BASE_URL}/employers/sign-up`, signUpForm, {
           auth: { username: '67e43464e9c0483faaf7b773018b2b60', password: '9c7d7778e0534031aa0ed684bba16546' },
         })
         .then((/* response */) => {
@@ -148,7 +148,7 @@ export default new Vuex.Store({
     signInAs({ dispatch, getters }, username) {
       dispatch('prepareForApiConsumption');
       getters.api
-        .post('http://localhost:8080/auth/sign-in-as', { username })
+        .post(`${process.env.DEEPFISH_BACK_BASE_URL}/auth/sign-in-as`, { username })
         .then((response) => {
           dispatch('logout');
           localStorage.setItem('auth_token', JSON.stringify(response.data));
@@ -182,8 +182,8 @@ export default new Vuex.Store({
     linkedInAuthEndpoint() {
       const queryParams = {
         response_type: 'code',
-        client_id: '77w79kdr6gql2h',
-        redirect_uri: 'http://localhost:8080/auth/linkedin/callback',
+        client_id: `${process.env.LINKEDIN_CLIENT_ID}`,
+        redirect_uri: `${process.env.DEEPFISH_BACK_BASE_URL}/auth/linkedin/callback`,
         // eslint-disable-next-line no-bitwise
         state: ([1e7] + 1e3 + 4e3 + 8e3 + 1e11).replace(/[018]/g, c => (((c ^ crypto.getRandomValues(new Uint8Array(1))[0]) & 15) >> c / 4).toString(16)),
         scope: 'r_basicprofile r_emailaddress',
