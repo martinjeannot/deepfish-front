@@ -23,7 +23,7 @@
                 <v-layout wrap>
                   <v-flex xs12 class="text-xs-center">
                     <v-avatar size="140">
-                      <img :src="talent.profile.pictureUrls.values[0]" alt="picture"/>
+                      <img :src="talent.profile.pictureUrl" alt="picture"/>
                     </v-avatar>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
@@ -31,6 +31,18 @@
                   </v-flex>
                   <v-flex xs12 class="text-xs-center mb-3">
                     <h4>{{ talent.profile.headline }}</h4>
+                  </v-flex>
+                  <v-flex xs12>
+                    <p>
+                      <span style="font-weight: bold">Registration</span> : {{ talent.registeredAt | formatDate('LLL')
+                      }}
+                    </p>
+                  </v-flex>
+                  <v-flex xs12>
+                    <p>
+                      <span style="font-weight: bold">Last Sign-in</span> : {{ talent.lastSignedInAt | formatDate('LLL')
+                      }}
+                    </p>
                   </v-flex>
                   <v-flex xs12>
                     <p>
@@ -50,11 +62,23 @@
                     </p>
                   </v-flex>
                   <v-flex xs12>
-                    <p><span style="font-weight: bold">LinkedIn</span> :
-                      <v-btn flat icon :href="talent.profile.publicProfileUrl" target="_blank">
+                    <p>
+                      <span style="font-weight: bold">LinkedIn</span> :
+                      <v-btn flat icon :href="talent.profile.publicProfileUrl" target="_blank"
+                             color="light-blue darken-3">
                         <v-icon>open_in_new</v-icon>
                       </v-btn>
+                      {{ talent.profile.numConnections }}{{ talent.profile.numConnectionsCapped ? '+' : ''
+                      }} connections
                     </p>
+                  </v-flex>
+                  <v-flex xs12>
+                    <div class="mb-3">
+                      <span style="font-weight: bold">Profile completion</span> : {{ profileCompletion.value }}%
+                      <ul class="pl-4">
+                        <li v-for="item in profileCompletion.items">{{ item }}</li>
+                      </ul>
+                    </div>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
                     <v-btn @click="signInAs(talent.username)" dark>Sign in as</v-btn>
@@ -64,14 +88,89 @@
                 </v-layout>
               </v-container>
             </v-flex>
-            <v-flex xs8 class="elevation-1">
+            <v-flex xs8 class="elevation-1" style="background-color: white">
               <v-tabs grow>
                 <v-tab>Profile</v-tab>
                 <v-tab>Conditions</v-tab>
                 <v-tab>Qualification</v-tab>
                 <v-tab>Opportunities</v-tab>
-                <v-tab-item>le profile</v-tab-item>
-                <v-tab-item>les conditions du profil</v-tab-item>
+                <v-tab-item>
+                  <v-container>
+                    <v-layout row wrap>
+                      <v-flex xs12 text-xs-center class="pb-3">
+                        <h3>{{ talent.profile.lastName }} {{ talent.profile.firstName }}</h3>
+                        <h4>{{ talent.profile.headline }}</h4>
+                        {{ talent.profile.location.name }} | {{ talent.profile.industry }}
+                      </v-flex>
+                      <v-flex xs12 class="pb-3">
+                        {{ talent.profile.summary }}
+                      </v-flex>
+                      <v-flex xs12 class="pb-2">
+                        <h4>Experience</h4>
+                      </v-flex>
+                      <v-flex xs12>
+                        {{ talent.profile.positions.values[0].title }}
+                      </v-flex>
+                      <v-flex xs12>
+                        {{ talent.profile.positions.values[0].company.name }}
+                        ({{ talent.profile.positions.values[0].company.industry }} /
+                        {{ talent.profile.positions.values[0].company.size }} employees)
+                      </v-flex>
+                      <v-flex v-if="talent.profile.positions.values[0].startDate">
+                        {{ talent.profile.positions.values[0].startDate.year }} -
+                        <span v-if="talent.profile.positions.values[0].isCurrent">Present</span>
+                        <span v-else>DATE ICI</span> |
+                        {{ talent.profile.positions.values[0].location.name }}
+                      </v-flex>
+                      <v-flex xs12 v-if="talent.selfPitch" class="pt-3">
+                        <h4>Self pitch</h4>
+                        <div style="white-space: pre-wrap">{{ talent.selfPitch }}</div>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-tab-item>
+                <v-tab-item>
+                  <v-container>
+                    <v-layout row wrap>
+                      <v-flex xs6>
+                        <h3>Fixed salary</h3>
+                        {{ talent.conditions.fixedSalary }} €
+                      </v-flex>
+                      <v-flex xs6>
+                        <h3>Can start on</h3>
+                        {{ talent.conditions.canStartOn | formatDate('LL') }}
+                      </v-flex>
+                      <v-flex xs12>
+                        <h3>Company maturity levels</h3>
+                        <v-chip v-for="companyMaturityLevel in talent.conditions.companyMaturityLevels"
+                                :key="companyMaturityLevel.id">{{ companyMaturityLevel.l10nKey }}
+                        </v-chip>
+                      </v-flex>
+                      <v-flex xs12>
+                        <h3>Jobs</h3>
+                        <v-chip v-for="job in talent.conditions.jobs" :key="job.id">{{ job.l10nKey }}</v-chip>
+                      </v-flex>
+                      <v-flex xs12>
+                        <h3>Commodity types</h3>
+                        <v-chip v-for="commodityType in talent.conditions.commodityTypes" :key="commodityType.id">
+                          {{ commodityType.l10nKey }}
+                        </v-chip>
+                      </v-flex>
+                      <v-flex xs12>
+                        <h3>Task types</h3>
+                        <v-chip v-for="taskType in talent.conditions.taskTypes" :key="taskType.id">{{ taskType.l10nKey
+                          }}
+                        </v-chip>
+                      </v-flex>
+                      <v-flex xs12>
+                        <h3>Locations</h3>
+                        <v-chip v-for="fixedLocation in talent.conditions.fixedLocations" :key="fixedLocation.id">
+                          {{ fixedLocation.l10nKey }}
+                        </v-chip>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-tab-item>
                 <v-tab-item>
                   <v-container>
                     <v-layout>
@@ -155,6 +254,45 @@
         'loading',
         'alertComponent',
       ]),
+      profileCompletion() {
+        const profileCompletion = { value: 100, items: [] };
+        let profileItemCounter = 0;
+        if (this.talent.phoneNumber === 'null') {
+          profileCompletion.items.push('Phone number');
+        }
+        profileItemCounter += 1;
+        if (!this.talent.selfPitch) {
+          profileCompletion.items.push('Self pitch');
+        }
+        profileItemCounter += 1;
+        if (!this.talent.conditions.fixedSalary) {
+          profileCompletion.items.push('Fixed salary');
+        }
+        profileItemCounter += 1;
+        if (!this.talent.conditions.companyMaturityLevels.length) {
+          profileCompletion.items.push('Company maturity levels');
+        }
+        profileItemCounter += 1;
+        if (!this.talent.conditions.jobs.length) {
+          profileCompletion.items.push('Jobs');
+        }
+        profileItemCounter += 1;
+        if (!this.talent.conditions.commodityTypes.length) {
+          profileCompletion.items.push('Commodity types');
+        }
+        profileItemCounter += 1;
+        if (!this.talent.conditions.taskTypes.length) {
+          profileCompletion.items.push('Task types');
+        }
+        profileItemCounter += 1;
+        if (!this.talent.conditions.fixedLocations.length) {
+          profileCompletion.items.push('Locations');
+        }
+        profileItemCounter += 1;
+        profileCompletion.value -=
+          Math.floor(profileCompletion.items.length * (100 / profileItemCounter));
+        return profileCompletion;
+      },
       acceptedOpportunities() {
         return this.talent.opportunities.filter(opportunity => opportunity.status === 'ACCEPTED');
       },
@@ -227,7 +365,7 @@
           .then((response) => {
             this.talent = response.data;
             return Promise.all([
-              this.api(this.talent._links.conditions.href),
+              this.api(`${this.talent._links.conditions.href}?projection=default`),
               this.api(this.talent._links.qualification.href),
               this.api(`${this.talent._links.opportunities.href}?projection=full`),
             ]);

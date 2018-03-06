@@ -8,10 +8,12 @@ import 'vuetify/dist/vuetify.css';
 import App from './App';
 import router from './router';
 import store from './store';
+import filters from './filters';
 
 import BaseAlert from './components/Utilities/BaseAlert';
 
 Vue.use(Vuetify);
+Vue.use(filters);
 
 Vue.config.productionTip = false;
 
