@@ -173,7 +173,7 @@
                 </v-tab-item>
                 <v-tab-item>
                   <v-container>
-                    <v-layout>
+                    <v-layout row wrap>
                       <v-flex xs4 class="pr-3">
                         <v-select
                           :items="Array(5).fill().map((_, i) => i + 1)"
@@ -197,6 +197,16 @@
                           label="Technical skills rating"
                           @input="saveQualification"
                         ></v-select>
+                      </v-flex>
+                      <v-flex>
+                        <h4>Recommendation</h4>
+                        <v-text-field v-model="talent.qualification.recommendation" multi-line rows="9">
+                        </v-text-field>
+                        <div class="text-xs-right">
+                          <v-btn icon fab small color="primary" @click="saveQualification">
+                            <v-icon>done</v-icon>
+                          </v-btn>
+                        </div>
                       </v-flex>
                     </v-layout>
                   </v-container>
@@ -305,6 +315,7 @@
         'prepareForApiConsumption',
         'clearLoading',
         'showSnackbar',
+        'showSuccessSnackbar',
         'setErrorAfterApiConsumption',
         'onAlertComponentDismissed',
         'signInAs',
@@ -333,7 +344,7 @@
       saveQualification() {
         this.api
           .patch(this.talent.qualification._links.self.href, this.talent.qualification)
-          .then(() => this.showSnackbar('Success'))
+          .then(() => this.showSuccessSnackbar())
           .catch(() => this.showSnackbar('Error'));
       },
       forwardTalent(opportunity) {

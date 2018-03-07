@@ -29,6 +29,10 @@ const router = new Router({
   routes: [
     {
       path: '/',
+      redirect: { name: 'SignIn' },
+    },
+    {
+      path: '/sign-in',
       name: 'SignIn',
       component: SignIn,
     },

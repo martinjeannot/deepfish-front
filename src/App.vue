@@ -76,8 +76,8 @@
       ]),
       menuItems() {
         let menuItems = [
-          { key: 'sign-in', icon: 'power_settings_new', title: 'Sign in', route: '/' },
-          { key: 'sign-up', icon: 'exit_to_app', title: 'Sign up', route: '/sign-up' },
+          { key: 'sign-in', icon: 'power_settings_new', title: 'Connexion', route: '/sign-in' },
+          { key: 'sign-up', icon: 'exit_to_app', title: 'Inscription', route: '/sign-up' },
         ];
         if (this.isUserAuthenticated) {
           if (this.isUserAdmin) {

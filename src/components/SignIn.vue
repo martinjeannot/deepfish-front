@@ -11,7 +11,7 @@
           <v-card-text>
             <v-layout wrap>
               <v-flex xs12 text-xs-center>
-                <h2>TALENTS</h2>
+                <h2>CONNEXION TALENTS</h2>
               </v-flex>
               <v-flex xs12 text-xs-center>
                 <v-btn class="linkedin-button" :href="linkedInAuthEndpoint" :disabled="linkedInLoading"
@@ -30,7 +30,7 @@
             <v-form v-model="valid" ref="form" @submit.prevent="signIn">
               <v-layout wrap>
                 <v-flex xs12 text-xs-center>
-                  <h2>RECRUTEURS</h2>
+                  <h2>CONNEXION RECRUTEURS</h2>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field type="email" label="Email" v-model="email" :rules="[rules.required, rules.email]"
