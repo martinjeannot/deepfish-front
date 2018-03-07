@@ -90,6 +90,7 @@
                 title: 'Data Management',
                 route: '/admin/data-management/master/talents',
               },
+              { key: 'profile', icon: 'account_circle', title: 'Profile', route: '/admin/profile' },
             ];
           } else if (this.isUserEmployer) {
             menuItems = [

@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import SignIn from '@/components/SignIn';
 import SignUp from '@/components/SignUp';
 import AdminDashboard from '@/components/Admin/Dashboard';
+import AdminProfile from '@/components/Admin/Profile';
 import AdminSearch from '@/components/Admin/Search';
 import AdminTalents from '@/components/Admin/DataManagement/Master/Talents';
 import AdminTalent from '@/components/Admin/DataManagement/Master/Talent';
@@ -72,6 +73,12 @@ const router = new Router({
       path: '/admin',
       name: 'AdminDashboard',
       component: AdminDashboard,
+      beforeEnter: NavGuards.authenticatedGuard,
+    },
+    {
+      path: '/admin/profile',
+      name: 'AdminProfile',
+      component: AdminProfile,
       beforeEnter: NavGuards.authenticatedGuard,
     },
     {

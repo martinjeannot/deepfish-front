@@ -3,6 +3,7 @@ export const SET_APP_CREATED = 'SET_APP_CREATED';
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
 export const SET_USER = 'SET_USER';
 export const SET_LOADING = 'SET_LOADING';
+export const SET_INITIAL_LOADING = 'SET_INITIAL_LOADING';
 export const SET_MENU_BADGES = 'SET_MENU_BADGES';
 export const SET_SNACKBAR = 'SET_SNACKBAR';
 export const SET_ERROR = 'SET_ERROR';

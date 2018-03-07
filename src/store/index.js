@@ -14,6 +14,7 @@ export default new Vuex.Store({
       baseURL: process.env.DEEPFISH_BACK_BASE_URL,
     }),
     loading: false,
+    initialLoading: false,
     menuBadges: {},
     snackbar: { show: false, text: '' },
     error: null,
@@ -32,6 +33,9 @@ export default new Vuex.Store({
     },
     [types.SET_LOADING](state, status) {
       state.loading = status;
+    },
+    [types.SET_INITIAL_LOADING](state, status) {
+      state.initialLoading = status;
     },
     [types.SET_MENU_BADGES](state, menuBadges) {
       state.menuBadges = menuBadges;
@@ -56,12 +60,20 @@ export default new Vuex.Store({
     setAppCreated({ commit }) {
       commit(types.SET_APP_CREATED, true);
     },
-    prepareForApiConsumption({ commit }) {
+    prepareForApiConsumption({ commit }, initial = false) {
       commit(types.CLEAR_ERROR);
-      commit(types.SET_LOADING, true);
+      if (initial) {
+        commit(types.SET_INITIAL_LOADING, true);
+      } else {
+        commit(types.SET_LOADING, true);
+      }
     },
-    clearLoading({ commit }) {
-      commit(types.SET_LOADING, false);
+    clearLoading({ commit }, initial = false) {
+      if (initial) {
+        commit(types.SET_INITIAL_LOADING, false);
+      } else {
+        commit(types.SET_LOADING, false);
+      }
     },
     setMenuBadges({ commit }, menuBadges) {
       commit(types.SET_MENU_BADGES, menuBadges);
@@ -166,6 +178,9 @@ export default new Vuex.Store({
     },
     loading(state) {
       return state.loading;
+    },
+    initialLoading(state) {
+      return state.initialLoading;
     },
     menuBadges(state) {
       return state.menuBadges;
