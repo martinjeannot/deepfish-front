@@ -49,6 +49,7 @@
     data: () => ({
       masterDataItems: [
         { title: 'Talents', icon: 'dashboard', route: '/admin/data-management/master/talents' },
+        { title: 'Admins', icon: 'dashboard', route: '/admin/data-management/master/users' },
       ],
       referenceDataItems: [
         {

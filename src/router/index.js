@@ -5,8 +5,10 @@ import SignUp from '@/components/SignUp';
 import AdminDashboard from '@/components/Admin/Dashboard';
 import AdminProfile from '@/components/Admin/Profile';
 import AdminSearch from '@/components/Admin/Search';
-import AdminTalents from '@/components/Admin/DataManagement/Master/Talents';
-import AdminTalent from '@/components/Admin/DataManagement/Master/Talent';
+import AdminDMTalents from '@/components/Admin/DataManagement/Master/Talents';
+import AdminDMTalent from '@/components/Admin/DataManagement/Master/Talent';
+import AdminDMUsers from '@/components/Admin/DataManagement/Master/Users';
+import AdminDMNewUser from '@/components/Admin/DataManagement/Master/NewUser';
 import AdminCompanyMaturityLevelDataManagement from '@/components/Admin/DataManagement/ReferenceData/CompanyMaturityLevelDataManagement';
 import EmployerDashboard from '@/components/Employer/Dashboard';
 import EmployerProfile from '@/components/Employer/Profile';
@@ -90,15 +92,27 @@ const router = new Router({
     // Master data
     {
       path: '/admin/data-management/master/talents',
-      name: 'AdminTalents',
-      component: AdminTalents,
+      name: 'AdminDMTalents',
+      component: AdminDMTalents,
       beforeEnter: NavGuards.authenticatedGuard,
     },
     {
       path: '/admin/data-management/master/talents/:id',
-      name: 'AdminTalent',
-      component: AdminTalent,
+      name: 'AdminDMTalent',
+      component: AdminDMTalent,
       props: true,
+      beforeEnter: NavGuards.authenticatedGuard,
+    },
+    {
+      path: '/admin/data-management/master/users',
+      name: 'AdminDMUsers',
+      component: AdminDMUsers,
+      beforeEnter: NavGuards.authenticatedGuard,
+    },
+    {
+      path: '/admin/data-management/master/new-user',
+      name: 'AdminDMNewUser',
+      component: AdminDMNewUser,
       beforeEnter: NavGuards.authenticatedGuard,
     },
     // Reference data

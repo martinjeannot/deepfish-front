@@ -1,21 +1,19 @@
 <template>
-  <v-layout>
+  <v-layout row wrap>
     <v-flex xs2 class="pr-3">
       <data-management-navigation></data-management-navigation>
     </v-flex>
     <v-flex xs10>
-      <v-data-table :headers="headers" :items="talents" :loading="loading" class="elevation-1">
+      <v-flex xs12 class="text-xs-right">
+        <v-btn color="primary" class="mr-0" :to="{ name: 'AdminDMNewUser' }">New admin</v-btn>
+      </v-flex>
+      <v-data-table :headers="headers" :items="users" :loading="loading" class="elevation-1">
         <template slot="items" slot-scope="props">
-          <td>
-            <v-avatar size="46">
-              <img :src="props.item.profile.pictureUrl" alt="picture"/>
-            </v-avatar>
-          </td>
           <td>{{ props.item.lastName }}</td>
           <td>{{ props.item.firstName }}</td>
           <td class="justify-center layout">
-            <v-btn icon color="primary" :to="{ name: 'AdminDMTalent', params: {id: props.item.id} }">
-              <v-icon>edit</v-icon>
+            <v-btn icon color="error" disabled>
+              <v-icon>delete</v-icon>
             </v-btn>
           </td>
         </template>
@@ -29,12 +27,11 @@
   import DataManagementNavigation from '../Navigation';
 
   export default {
-    name: 'data-management-talents',
+    name: 'data-management-users',
     components: { DataManagementNavigation },
     data: () => ({
-      talents: [],
+      users: [],
       headers: [
-        { text: '', value: 'pictureUrl', sortable: false },
         { text: 'Last name', value: 'lastName' },
         { text: 'First name', value: 'firstName' },
         { text: 'Actions', value: 'name', sortable: false },
@@ -56,9 +53,9 @@
     created() {
       this.prepareForApiConsumption();
       this
-        .api('/talents')
+        .api('/users')
         .then((response) => {
-          this.talents = response.data._embedded.talents;
+          this.users = response.data._embedded.users;
         })
         .catch(() => this.showSnackbar('Error'))
         .finally(() => this.clearLoading());
