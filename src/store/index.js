@@ -215,6 +215,9 @@ export default new Vuex.Store({
     isUserAdmin(state, getters) {
       return getters.isUserAuthenticated ? getters.user.authorities.some(authority => authority.authority === 'ROLE_ADMIN') : false;
     },
+    isUserSuperAdmin(state, getters) {
+      return getters.isUserAuthenticated ? getters.user.authorities.some(authority => authority.authority === 'ROLE_SUPER_ADMIN') : false;
+    },
     isUserEmployer(state, getters) {
       return getters.isUserAuthenticated ? getters.user.authorities.some(authority => authority.authority === 'ROLE_EMPLOYER') : false;
     },

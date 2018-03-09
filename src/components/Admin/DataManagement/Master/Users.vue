@@ -4,13 +4,14 @@
       <data-management-navigation></data-management-navigation>
     </v-flex>
     <v-flex xs10>
-      <v-flex xs12 class="text-xs-right">
+      <v-flex xs12 class="text-xs-right" v-if="isUserSuperAdmin">
         <v-btn color="primary" class="mr-0" :to="{ name: 'AdminDMNewUser' }">New admin</v-btn>
       </v-flex>
       <v-data-table :headers="headers" :items="users" :loading="loading" class="elevation-1">
         <template slot="items" slot-scope="props">
           <td>{{ props.item.lastName }}</td>
           <td>{{ props.item.firstName }}</td>
+          <td>{{ props.item.username }}</td>
           <td class="justify-center layout">
             <v-btn icon color="error" disabled>
               <v-icon>delete</v-icon>
@@ -34,6 +35,7 @@
       headers: [
         { text: 'Last name', value: 'lastName' },
         { text: 'First name', value: 'firstName' },
+        { text: 'Email', value: 'username' },
         { text: 'Actions', value: 'name', sortable: false },
       ],
     }),
@@ -41,6 +43,7 @@
       ...mapGetters([
         'api',
         'loading',
+        'isUserSuperAdmin',
       ]),
     },
     methods: {
