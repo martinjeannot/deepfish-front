@@ -34,7 +34,7 @@
                   </v-flex>
                   <v-flex xs12>
                     <p>
-                      <span style="font-weight: bold">Registration</span> : {{ talent.registeredAt | formatDate('LLL')
+                      <span style="font-weight: bold">Registration</span> : {{ talent.createdAt | formatDate('LLL')
                       }}
                     </p>
                   </v-flex>

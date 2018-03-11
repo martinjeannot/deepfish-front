@@ -81,7 +81,6 @@
           accountNonLocked: true,
           credentialsNonExpired: true,
           enabled: true,
-          createdAt: new Date(),
         };
       },
       saveNewUser() {
