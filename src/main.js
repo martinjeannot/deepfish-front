@@ -11,6 +11,7 @@ import store from './store';
 import filters from './filters';
 
 import BaseAlert from './components/Utilities/BaseAlert';
+import TernaryCheckbox from './components/Utilities/TernaryCheckbox';
 
 Vue.use(Vuetify);
 Vue.use(filters);
@@ -18,6 +19,7 @@ Vue.use(filters);
 Vue.config.productionTip = false;
 
 Vue.component('base-alert', BaseAlert);
+Vue.component('ternary-checkbox', TernaryCheckbox);
 
 /* eslint-disable no-new */
 new Vue({

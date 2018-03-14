@@ -80,7 +80,7 @@
           this.api('/companyMaturityLevels'),
           this.api('/jobs'),
           this.api('/commodityTypes'),
-          this.api('taskTypes'),
+          this.api('/taskTypes'),
         ])
         .then(([
                  conditionsResponse,

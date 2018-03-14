@@ -1,22 +1,111 @@
 <template>
-  <v-layout>
-    <v-flex xs2 class="pa-2" style="padding-top: 12px!important;">
-      <v-layout wrap class="elevation-1 pa-2" style="background-color: white">
-        <div class="pt-1"></div>
-        <v-flex xs12>
-          <v-checkbox v-for="talentMaturityLevel in talentMaturityLevels"
-                      :key="talentMaturityLevel.key"
-                      :value="talentMaturityLevel.key"
-                      :label="talentMaturityLevel.label"
-                      v-model="talentMaturityLevelsCriterion"
-          ></v-checkbox>
-        </v-flex>
-        <v-flex xs12 class="text-xs-right">
-          <v-btn @click="search" fab small color="primary">
-            <v-icon>search</v-icon>
-          </v-btn>
-        </v-flex>
-      </v-layout>
+  <v-layout row wrap v-if="initialLoading">
+    <v-flex xs12 class="text-xs-center">
+      <v-progress-circular indeterminate color="primary" :size="70"></v-progress-circular>
+    </v-flex>
+  </v-layout>
+  <v-layout row wrap v-else>
+    <v-flex xs2>
+      <v-flex xs12 class="text-xs-center">
+        <v-btn block color="primary" @click="search" :disabled="loading" :loading="loading">
+          <v-icon>search</v-icon>
+        </v-btn>
+      </v-flex>
+      <v-expansion-panel>
+        <v-expansion-panel-content>
+          <div slot="header">Company maturity level</div>
+          <v-card>
+            <v-card-text>
+              <ternary-checkbox v-for="companyMaturityLevel in companyMaturityLevels"
+                                :key="companyMaturityLevel.id"
+                                :value="companyMaturityLevel.id"
+                                :label="companyMaturityLevel.l10nKey"
+                                :checked-state-model.sync="criteria.companyMaturityLevelsIn"
+                                :indeterminate-state-model.sync="criteria.companyMaturityLevelsNotIn"
+              ></ternary-checkbox>
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+        <v-expansion-panel-content>
+          <div slot="header">Jobs</div>
+          <v-card>
+            <v-card-text>
+              <v-checkbox v-for="job in jobs"
+                          :key="job.id"
+                          :value="job.id"
+                          :label="job.l10nKey"
+                          v-model="criteria.jobs"
+              ></v-checkbox>
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+        <v-expansion-panel-content>
+          <div slot="header">Commodity types</div>
+          <v-card>
+            <v-card-text>
+              <v-checkbox v-for="commodityType in commodityTypes"
+                          :key="commodityType.id"
+                          :value="commodityType.id"
+                          :label="commodityType.l10nKey"
+                          v-model="criteria.commodityTypes"
+              ></v-checkbox>
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+        <v-expansion-panel-content>
+          <div slot="header">Task types</div>
+          <v-card>
+            <v-card-text>
+              <v-checkbox v-for="taskType in taskTypes"
+                          :key="taskType.id"
+                          :value="taskType.id"
+                          :label="taskType.l10nKey"
+                          v-model="criteria.taskTypes"
+              ></v-checkbox>
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+        <v-expansion-panel-content>
+          <div slot="header">Locations</div>
+          <v-card>
+            <v-card-text>
+              <v-checkbox v-for="fixedLocation in fixedLocations"
+                          :key="fixedLocation.id"
+                          :value="fixedLocation.id"
+                          :label="fixedLocation.l10nKey"
+                          v-model="criteria.fixedLocations"
+              ></v-checkbox>
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+        <v-expansion-panel-content>
+          <div slot="header">Fixed salary</div>
+          <v-card>
+            <v-card-text>
+              <v-text-field type="number" label="Minimum" suffix="K€" v-model="criteria.minFixedSalary"></v-text-field>
+              <v-text-field type="number" label="Maximum" suffix="K€" v-model="criteria.maxFixedSalary"></v-text-field>
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+        <v-expansion-panel-content>
+          <div slot="header">Talent maturity level</div>
+          <v-card>
+            <v-card-text>
+              <v-checkbox v-for="talentMaturityLevel in talentMaturityLevels"
+                          :key="talentMaturityLevel.key"
+                          :value="talentMaturityLevel.key"
+                          :label="talentMaturityLevel.label"
+                          v-model="criteria.talentMaturityLevels"
+              ></v-checkbox>
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      <v-flex xs12 class="text-xs-center">
+        <v-btn block color="primary" @click="search" :disabled="loading" :loading="loading">
+          <v-icon>search</v-icon>
+        </v-btn>
+      </v-flex>
     </v-flex>
     <v-flex xs10>
       <v-container fluid grid-list-md>
@@ -118,16 +207,33 @@
   export default {
     name: 'admin-search',
     data: () => ({
+      rules,
       talents: [],
       selectedTalent: null,
-      opportunityDialog: false,
       requirements: [],
       selectedRequirement: null,
+      opportunityDialog: false,
       opportunityPitch: '',
-      rules,
       opportunityValid: false,
+      // REFERENCE DATA
+      companyMaturityLevels: [],
+      jobs: [],
+      commodityTypes: [],
+      taskTypes: [],
+      fixedLocations: [],
       talentMaturityLevels,
-      talentMaturityLevelsCriterion: [],
+      // CRITERIA
+      criteria: {
+        companyMaturityLevelsIn: [],
+        companyMaturityLevelsNotIn: [],
+        jobs: [],
+        commodityTypes: [],
+        taskTypes: [],
+        fixedLocations: [],
+        minFixedSalary: null,
+        maxFixedSalary: null,
+        talentMaturityLevels: [],
+      },
       rowsPerPageItems: [4, 8, 12],
       pagination: {
         rowsPerPage: 4,
@@ -137,6 +243,7 @@
       ...mapGetters([
         'api',
         'loading',
+        'initialLoading',
         'user',
       ]),
     },
@@ -148,19 +255,46 @@
       ]),
       search() {
         this.prepareForApiConsumption();
-        // talentMaturityLevels
-        let talentMaturityLevelsQueryString = '';
-        if (this.talentMaturityLevelsCriterion.length) {
-          this.talentMaturityLevelsCriterion.forEach((talentMaturityLevel, index) => {
-            talentMaturityLevelsQueryString += index ? '&' : '';
-            talentMaturityLevelsQueryString += `maturityLevel=${talentMaturityLevel}`;
+        let talentQueryString = '';
+        // Company maturity levels criterion
+        if (this.criteria.companyMaturityLevelsIn.length) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += 'companyMaturityLevelsIn=';
+          this.criteria.companyMaturityLevelsIn.forEach((companyMaturityLevel, index) => {
+            talentQueryString += index ? ',' : '';
+            talentQueryString += `${companyMaturityLevel}`;
+          });
+        }
+        if (this.criteria.companyMaturityLevelsNotIn.length) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += 'companyMaturityLevelsNotIn=';
+          this.criteria.companyMaturityLevelsNotIn.forEach((companyMaturityLevel, index) => {
+            talentQueryString += index ? ',' : '';
+            talentQueryString += `${companyMaturityLevel}`;
+          });
+        }
+        // Fixed salary criterion
+        if (this.criteria.minFixedSalary) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += `minFixedSalary=${this.criteria.minFixedSalary * 1000}`;
+        }
+        if (this.criteria.maxFixedSalary) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += `maxFixedSalary=${this.criteria.maxFixedSalary * 1000}`;
+        }
+        // Talent maturity levels criterion
+        if (this.criteria.talentMaturityLevels.length) {
+          talentQueryString += talentQueryString ? '&' : '';
+          this.criteria.talentMaturityLevels.forEach((talentMaturityLevel, index) => {
+            talentQueryString += index ? '&' : '';
+            talentQueryString += `maturityLevel=${talentMaturityLevel}`;
           });
         }
         // API consumption
         this
-          .api(`/talents?${talentMaturityLevelsQueryString}`)
+          .api(`/queryableTalents?${talentQueryString}`)
           .then((response) => {
-            this.talents = response.data._embedded.talents;
+            this.talents = response.data._embedded.queryableTalents;
           })
           .finally(() => this.clearLoading());
       },
@@ -184,13 +318,33 @@
       },
     },
     created() {
-      this.prepareForApiConsumption();
-      this
-        .api('/requirements?projection=default')
-        .then((response) => {
-          this.requirements = response.data._embedded.requirements;
+      this.prepareForApiConsumption(true);
+      Promise.all([
+        this.api('/requirements?projection=default'),
+        this.api('/companyMaturityLevels'),
+        this.api('/jobs'),
+        this.api('/commodityTypes'),
+        this.api('/taskTypes'),
+        this.api('/fixedLocations'),
+      ])
+        .then(([
+                 requirementsResponse,
+                 companyMaturityLevelsResponse,
+                 jobsResponse,
+                 commodityTypesResponse,
+                 taskTypesResponse,
+                 fixedLocationsResponse,
+               ]) => {
+          this.requirements = requirementsResponse.data._embedded.requirements;
+          // reference data
+          this.companyMaturityLevels =
+            companyMaturityLevelsResponse.data._embedded.companyMaturityLevels;
+          this.jobs = jobsResponse.data._embedded.jobs;
+          this.commodityTypes = commodityTypesResponse.data._embedded.commodityTypes;
+          this.taskTypes = taskTypesResponse.data._embedded.taskTypes;
+          this.fixedLocations = fixedLocationsResponse.data._embedded.fixedLocations;
         })
-        .finally(() => this.clearLoading());
+        .finally(() => this.clearLoading(true));
     },
   };
 </script>
