@@ -20,7 +20,7 @@
                                 :key="companyMaturityLevel.id"
                                 :value="companyMaturityLevel.id"
                                 :label="companyMaturityLevel.l10nKey"
-                                :checked-state-model.sync="criteria.companyMaturityLevelsIn"
+                                :checked-state-model.sync="criteria.companyMaturityLevels"
                                 :indeterminate-state-model.sync="criteria.companyMaturityLevelsNotIn"
               ></ternary-checkbox>
             </v-card-text>
@@ -224,7 +224,7 @@
       talentMaturityLevels,
       // CRITERIA
       criteria: {
-        companyMaturityLevelsIn: [],
+        companyMaturityLevels: [],
         companyMaturityLevelsNotIn: [],
         jobs: [],
         commodityTypes: [],
@@ -257,10 +257,10 @@
         this.prepareForApiConsumption();
         let talentQueryString = '';
         // Company maturity levels criterion
-        if (this.criteria.companyMaturityLevelsIn.length) {
+        if (this.criteria.companyMaturityLevels.length) {
           talentQueryString += talentQueryString ? '&' : '';
-          talentQueryString += 'companyMaturityLevelsIn=';
-          this.criteria.companyMaturityLevelsIn.forEach((companyMaturityLevel, index) => {
+          talentQueryString += 'conditions.companyMaturityLevels=';
+          this.criteria.companyMaturityLevels.forEach((companyMaturityLevel, index) => {
             talentQueryString += index ? ',' : '';
             talentQueryString += `${companyMaturityLevel}`;
           });
@@ -271,6 +271,42 @@
           this.criteria.companyMaturityLevelsNotIn.forEach((companyMaturityLevel, index) => {
             talentQueryString += index ? ',' : '';
             talentQueryString += `${companyMaturityLevel}`;
+          });
+        }
+        // Jobs criterion
+        if (this.criteria.jobs.length) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += 'conditions.jobs=';
+          this.criteria.jobs.forEach((job, index) => {
+            talentQueryString += index ? ',' : '';
+            talentQueryString += `${job}`;
+          });
+        }
+        // Commodity types criterion
+        if (this.criteria.commodityTypes.length) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += 'conditions.commodityTypes=';
+          this.criteria.commodityTypes.forEach((commodityType, index) => {
+            talentQueryString += index ? ',' : '';
+            talentQueryString += `${commodityType}`;
+          });
+        }
+        // Task types
+        if (this.criteria.taskTypes.length) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += 'conditions.taskTypes=';
+          this.criteria.taskTypes.forEach((taskType, index) => {
+            talentQueryString += index ? ',' : '';
+            talentQueryString += `${taskType}`;
+          });
+        }
+        // Fixed locations
+        if (this.criteria.fixedLocations.length) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += 'conditions.fixedLocations=';
+          this.criteria.fixedLocations.forEach((fixedLocation, index) => {
+            talentQueryString += index ? ',' : '';
+            talentQueryString += `${fixedLocation}`;
           });
         }
         // Fixed salary criterion
