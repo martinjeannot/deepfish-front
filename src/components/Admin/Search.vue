@@ -113,39 +113,89 @@
                          :pagination.sync="pagination">
           <v-flex slot="item" slot-scope="props" xs12 sm6 md4 lg3>
             <v-card>
-              <v-card-title>
-                <v-layout>
-                  <v-flex xs2>
-                    <v-avatar size="50">
-                      <img :src="props.item.profile.pictureUrl" alt="picture"/>
-                    </v-avatar>
+              <v-layout row wrap class="px-2">
+                <v-flex xs3 class="text-xs-center">
+                  <v-avatar size="50">
+                    <img :src="props.item.profile.pictureUrl" alt="picture"/>
+                  </v-avatar>
+                </v-flex>
+                <v-flex xs6 style="margin: auto">
+                  <h4>
+                    <router-link :to="{ name: 'AdminDMTalent', params: {id: props.item.id} }" target="_blank">
+                      {{ props.item.lastName.toUpperCase() }} {{ props.item.firstName }}
+                    </router-link>
+                  </h4>
+                  {{ props.item.profile.headline }}
+                </v-flex>
+                <v-flex xs3 class="text-xs-right">
+                  <v-btn fab small color="primary"
+                         @click.native.stop="selectedTalent = props.item; opportunityDialog = true">
+                    <v-icon>send</v-icon>
+                  </v-btn>
+                </v-flex>
+                <v-flex xs12>
+                  <v-divider></v-divider>
+                </v-flex>
+                <v-flex xs9>
+                  Member since {{ props.item.createdAt | formatDate('ll') }}
+                </v-flex>
+                <v-flex xs3 class="text-xs-right">
+                  {{ props.item.maturityLevel.split('_')[0] }}
+                </v-flex>
+                <v-flex xs12>
+                  <v-divider></v-divider>
+                </v-flex>
+                <v-flex xs12 justify-center>
+                  <v-btn flat icon :href="props.item.profile.publicProfileUrl" target="_blank"
+                         color="light-blue darken-3">
+                    <v-icon>fab fa-linkedin</v-icon>
+                  </v-btn>
+                  {{ props.item.profile.positions.values[0].title }}
+                  at {{ props.item.profile.positions.values[0].company.name }}
+                </v-flex>
+                <v-flex xs12>
+                  <v-divider></v-divider>
+                </v-flex>
+                <v-flex xs12>
+                  <v-icon small>euro_symbol</v-icon>
+                  {{ props.item.conditions.fixedSalary.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') }}
+                </v-flex>
+                <v-flex xs12>
+                  <v-chip v-for="taskType in props.item.conditions.taskTypes" :key="taskType.id" small>
+                    {{ taskType.l10nKey }}
+                  </v-chip>
+                </v-flex>
+                <v-flex xs12>
+                  <v-divider></v-divider>
+                </v-flex>
+                <v-flex xs12 d-inline-flex>
+                  <v-flex xs6>
+                    Complex selling
                   </v-flex>
-                  <v-flex xs8 style="margin: auto">
-                    <h4>{{ props.item.lastName.toUpperCase() }} {{ props.item.firstName }}</h4>
+                  <v-flex xs6 class="text-xs-right">
+                    <star-rating :rating="props.item.qualification.complexSellingSkillsRating"></star-rating>
                   </v-flex>
-                  <v-flex xs2 class="text-xs-right">
-                    <v-btn fab small color="primary"
-                           @click.native.stop="selectedTalent = props.item; opportunityDialog = true">
-                      <v-icon>send</v-icon>
-                    </v-btn>
+                </v-flex>
+                <v-flex xs12 d-inline-flex>
+                  <v-flex xs6>
+                    Hunting
                   </v-flex>
-                </v-layout>
-              </v-card-title>
-              <v-divider></v-divider>
-              <v-list dense>
-                <v-list-tile>
-                  <v-list-tile-content>Lorem:</v-list-tile-content>
-                  <v-list-tile-content class="align-end">4/5</v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-content>Ipsum:</v-list-tile-content>
-                  <v-list-tile-content class="align-end">3/5</v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-content>Dolor:</v-list-tile-content>
-                  <v-list-tile-content class="align-end">4/5</v-list-tile-content>
-                </v-list-tile>
-              </v-list>
+                  <v-flex xs6 class="text-xs-right">
+                    <star-rating :rating="props.item.qualification.huntingSkillsRating"></star-rating>
+                  </v-flex>
+                </v-flex>
+                <v-flex xs12 d-inline-flex>
+                  <v-flex xs6>
+                    Technical
+                  </v-flex>
+                  <v-flex xs6 class="text-xs-right">
+                    <star-rating :rating="props.item.qualification.technicalSkillsRating"></star-rating>
+                  </v-flex>
+                </v-flex>
+                <v-flex xs12 v-if="props.item.qualification.recommendation">
+                  <div style="white-space: pre-wrap">{{ props.item.qualification.recommendation.substr(0, 120) }}</div>
+                </v-flex>
+              </v-layout>
             </v-card>
           </v-flex>
         </v-data-iterator>
@@ -328,7 +378,7 @@
         }
         // API consumption
         this
-          .api(`/queryableTalents?${talentQueryString}`)
+          .api(`/queryableTalents?projection=default&${talentQueryString}`)
           .then((response) => {
             this.talents = response.data._embedded.queryableTalents;
           })
