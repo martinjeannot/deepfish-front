@@ -7,7 +7,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    appCreated: false,
+    appCreated: true, // still useful ?
     authToken: null,
     user: null,
     api: axios.create({

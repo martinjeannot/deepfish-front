@@ -84,10 +84,9 @@
       ]),
     },
     watch: {
-      isUserAuthenticated() {
-        if (this.isUserAuthenticated) {
-          this.$router.push('/auth/success');
-        }
+      isUserAuthenticated: {
+        handler: 'redirectOnAuthentication',
+        immediate: true,
       },
     },
     methods: {
@@ -97,6 +96,11 @@
         'setError',
         'autoSignIn',
       ]),
+      redirectOnAuthentication() {
+        if (this.isUserAuthenticated) {
+          this.$router.push('/auth/success');
+        }
+      },
       signIn() {
         if (this.$refs.form.validate()) {
           // axios does not support x-www-form-urlencoded as content-type out of the box yet

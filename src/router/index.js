@@ -31,6 +31,10 @@ Vue.use(Router);
 const router = new Router({
   routes: [
     {
+      path: '*',
+      redirect: '/',
+    },
+    {
       path: '/',
       redirect: { name: 'SignIn' },
     },
@@ -75,113 +79,115 @@ const router = new Router({
       path: '/admin',
       name: 'AdminDashboard',
       component: AdminDashboard,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
     {
       path: '/admin/profile',
       name: 'AdminProfile',
       component: AdminProfile,
-      beforeEnter: NavGuards.authenticatedGuard,
+
+      meta: { authRequired: true },
     },
     {
       path: '/admin/search',
       name: 'AdminSearch',
       component: AdminSearch,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
     // Master data
     {
       path: '/admin/data-management/master/talents',
       name: 'AdminDMTalents',
       component: AdminDMTalents,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
     {
       path: '/admin/data-management/master/talents/:id',
       name: 'AdminDMTalent',
       component: AdminDMTalent,
       props: true,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
     {
       path: '/admin/data-management/master/users',
       name: 'AdminDMUsers',
       component: AdminDMUsers,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
     {
       path: '/admin/data-management/master/new-user',
       name: 'AdminDMNewUser',
       component: AdminDMNewUser,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
     // Reference data
     {
       path: '/admin/data-management/reference/company-maturity-levels',
       name: 'AdminCompanyMaturityLevelDataManagement',
       component: AdminCompanyMaturityLevelDataManagement,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
     // EMPLOYER ====================================================================================
     {
       path: '/employer',
       name: 'EmployerDashboard',
       component: EmployerDashboard,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
     {
       path: '/employer/profile',
       name: 'EmployerProfile',
       component: EmployerProfile,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
     {
       path: '/employer/requirements',
       name: 'EmployerRequirements',
       component: EmployerRequirements,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
     {
       path: '/employer/requirements/new',
       name: 'EmployerRequirement',
       component: EmployerRequirement,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
     {
       path: '/employer/talents',
       name: 'EmployerTalents',
       component: EmployerTalents,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
     // TALENT ======================================================================================
     {
       path: '/talent/profile',
       name: 'TalentProfile',
       component: TalentProfile,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
     {
       path: '/talent/conditions',
       name: 'TalentConditions',
       component: TalentConditions,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
     {
       path: '/talent/opportunities',
       name: 'TalentOpportunities',
       component: TalentOpportunities,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
     {
       path: '/talent/opportunities/:id',
       name: 'TalentOpportunity',
       component: TalentOpportunity,
       props: true,
-      beforeEnter: NavGuards.authenticatedGuard,
+      meta: { authRequired: true },
     },
   ],
 });
 
+router.beforeEach(NavGuards.authenticationGuard);
 router.beforeEach(NavGuards.alertComponentGuard);
 
 export default router;
