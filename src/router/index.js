@@ -7,6 +7,7 @@ import AdminProfile from '@/components/Admin/Profile';
 import AdminSearch from '@/components/Admin/Search';
 import AdminDMTalents from '@/components/Admin/DataManagement/Master/Talents';
 import AdminDMTalent from '@/components/Admin/DataManagement/Master/Talent';
+import AdminDMEmployers from '@/components/Admin/DataManagement/Master/Employers';
 import AdminDMUsers from '@/components/Admin/DataManagement/Master/Users';
 import AdminDMNewUser from '@/components/Admin/DataManagement/Master/NewUser';
 import AdminCompanyMaturityLevelDataManagement from '@/components/Admin/DataManagement/ReferenceData/CompanyMaturityLevelDataManagement';
@@ -106,6 +107,12 @@ const router = new Router({
       name: 'AdminDMTalent',
       component: AdminDMTalent,
       props: true,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/admin/data-management/master/employers',
+      name: 'AdminDMEmployers',
+      component: AdminDMEmployers,
       meta: { authRequired: true },
     },
     {
