@@ -17,9 +17,10 @@
             <td>{{ props.item.firstName }}</td>
             <td>{{ props.item.username }}</td>
             <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
+            <td>{{ props.item.company.name }}</td>
             <td class="justify-center layout">
-              <v-btn icon color="error" disabled>
-                <v-icon>delete</v-icon>
+              <v-btn icon color="primary" :to="{ name: 'AdminDMEmployer', params: {id: props.item.id} }">
+                <v-icon>visibility</v-icon>
               </v-btn>
             </td>
           </template>
@@ -43,6 +44,7 @@
         { text: 'First name', value: 'firstName' },
         { text: 'Email', value: 'username' },
         { text: 'Registered at', value: 'createdAt' },
+        { text: 'Company', value: 'company.name', sortable: false },
         { text: 'Actions', value: 'name', sortable: false },
       ],
       totalItems: 0,
@@ -72,7 +74,8 @@
       getEmployers() {
         this.prepareForApiConsumption();
         const path = this.search ? '/employers/search/findByUsernameContainingOrFirstNameContainingOrLastNameContaining' : '/employers';
-        let queryString = `page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
+        let queryString = 'projection=default';
+        queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';
         queryString += this.search ? `&username=${this.search}&firstName=${this.search}&lastName=${this.search}` : '';
         this
