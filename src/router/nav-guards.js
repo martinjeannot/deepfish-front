@@ -12,11 +12,13 @@ export default {
             if (!store.getters.error) {
               next();
             } else {
+              localStorage.removeItem('auth_token'); // clean up eventual token to break auth guard loop
               next('/');
             }
           })
           .catch(() => {
             store.dispatch('setErrorAfterApiConsumption');
+            localStorage.removeItem('auth_token'); // clean up eventual token to break auth guard loop
             next('/');
           });
       } else if (to.matched.some(record => record.meta.authRequired)) {
