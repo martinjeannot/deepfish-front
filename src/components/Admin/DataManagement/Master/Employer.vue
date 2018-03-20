@@ -29,7 +29,8 @@
                     <span style="font-weight: bold">Registration</span> : {{ employer.createdAt | formatDate('LLL') }}
                   </v-flex>
                   <v-flex xs12 class="mb-3">
-                    <span style="font-weight: bold">Last Sign-in</span> : TODO
+                    <span style="font-weight: bold">Last Sign-in</span> : {{ employer.lastSignedInAt | formatDate('LLL')
+                    }}
                   </v-flex>
                   <v-flex xs12 class="mb-3">
                     <v-icon>email</v-icon>

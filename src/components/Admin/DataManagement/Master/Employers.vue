@@ -1,5 +1,5 @@
 <template>
-  <v-layout row wrap>
+  <v-layout>
     <v-flex xs2 class="pr-3">
       <data-management-navigation></data-management-navigation>
     </v-flex>
@@ -10,7 +10,7 @@
           <v-text-field label="Search..." v-model="search" @blur="getEmployers" append-icon="search" single-line
                         hide-details></v-text-field>
         </v-card-title>
-        <v-data-table :headers="headers" :items="employers" :pagination.sync="pagination" :total-items="totalItems"
+        <v-data-table :items="employers" :headers="headers" :pagination.sync="pagination" :total-items="totalItems"
                       :loading="loading">
           <template slot="items" slot-scope="props">
             <td>{{ props.item.lastName }}</td>
@@ -73,7 +73,8 @@
       ]),
       getEmployers() {
         this.prepareForApiConsumption();
-        const path = this.search ? '/employers/search/findByUsernameContainingOrFirstNameContainingOrLastNameContaining' : '/employers';
+        let path = '/employers';
+        path += this.search ? '/search/findByUsernameContainingOrFirstNameContainingOrLastNameContaining' : '';
         let queryString = 'projection=default';
         queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';
@@ -91,6 +92,6 @@
   };
 </script>
 
-<style scopde>
+<style scoped>
 
 </style>
