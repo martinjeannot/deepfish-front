@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
+import moment from 'moment';
 import * as types from './mutation-types';
 
 Vue.use(Vuex);
@@ -139,14 +140,18 @@ export default new Vuex.Store({
         .api(userUrl)
         .then((response) => {
           commit(types.SET_USER, response.data);
+          const lastSignedInUpdatePromise = getters
+            .api.patch(getters.user._links.self.href, { lastSignedInAt: moment().utc().format() });
           if (getters.isUserTalent) {
             // get pending opportunities for menu badge
-            getters
+            return getters
               .api(`/opportunities?talent=${accessToken.user_id}&status=PENDING`)
               .then((pendingOpportunitiesResponse) => {
                 dispatch('setMenuBadges', { opportunities: pendingOpportunitiesResponse.data._embedded.opportunities.length });
+                return lastSignedInUpdatePromise;
               });
           }
+          return lastSignedInUpdatePromise;
         })
         .catch((/* error */) => {
           dispatch('setError', { message: 'Un problème est survenu lors de la connexion' });
