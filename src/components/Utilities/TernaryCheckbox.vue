@@ -1,5 +1,6 @@
 <template>
-  <v-checkbox :label="label" :value="value" :indeterminate="indeterminate" v-model="ternaryModel"></v-checkbox>
+  <v-checkbox :label="label" :value="value" :indeterminate="indeterminate" v-model="ternaryModel"
+              :color="color"></v-checkbox>
 </template>
 
 <script>
@@ -13,6 +14,7 @@
       internalUncheckedStateModel: this.uncheckedStateModel, // state 0
       internalCheckedStateModel: this.checkedStateModel, // state 1
       internalIndeterminateStateModel: this.indeterminateStateModel, // state 2
+      color: null,
     }),
     computed: {
       ternaryModel: {
@@ -48,6 +50,7 @@
           this.internalCheckedStateModel = null;
           this.internalIndeterminateStateModel = null;
         }
+        this.color = null;
       },
       setCheckedStateValue(value) {
         this.indeterminate = false;
@@ -60,6 +63,7 @@
           this.internalCheckedStateModel = value;
           this.internalIndeterminateStateModel = null;
         }
+        this.color = null;
       },
       setIndeterminateStateValue(value) {
         this.indeterminate = true;
@@ -72,6 +76,7 @@
           this.internalCheckedStateModel = null;
           this.internalIndeterminateStateModel = value;
         }
+        this.color = 'red';
       },
       removeValueFromArray(value, array) {
         const index = array.indexOf(value);
