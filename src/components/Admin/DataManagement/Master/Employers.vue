@@ -17,7 +17,11 @@
             <td>{{ props.item.firstName }}</td>
             <td>{{ props.item.username }}</td>
             <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
-            <td>{{ props.item.company.name }}</td>
+            <td>
+              <router-link :to="{ name: 'AdminDMCompany', params: {id: props.item.company.id} }">
+                {{ props.item.company.name }}
+              </router-link>
+            </td>
             <td class="justify-center layout">
               <v-btn icon color="primary" :to="{ name: 'AdminDMEmployer', params: {id: props.item.id} }">
                 <v-icon>visibility</v-icon>

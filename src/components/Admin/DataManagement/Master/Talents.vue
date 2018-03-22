@@ -4,23 +4,32 @@
       <data-management-navigation></data-management-navigation>
     </v-flex>
     <v-flex xs10>
-      <v-data-table :headers="headers" :items="talents" :loading="loading" class="elevation-1">
-        <template slot="items" slot-scope="props">
-          <td>
-            <v-avatar size="46">
-              <img :src="props.item.profile.pictureUrl" alt="picture"/>
-            </v-avatar>
-          </td>
-          <td>{{ props.item.lastName }}</td>
-          <td>{{ props.item.firstName }}</td>
-          <td>{{ props.item.email }}</td>
-          <td class="justify-center layout">
-            <v-btn icon color="primary" :to="{ name: 'AdminDMTalent', params: {id: props.item.id} }">
-              <v-icon>visibility</v-icon>
-            </v-btn>
-          </td>
-        </template>
-      </v-data-table>
+      <v-card>
+        <v-card-title>
+          <v-spacer></v-spacer>
+          <v-text-field label="Search..." v-model="search" @blur="getTalents" append-icon="search" single-line
+                        hide-details></v-text-field>
+        </v-card-title>
+        <v-data-table :items="talents" :headers="headers" :pagination.sync="pagination" :total-items="totalItems"
+                      :loading="loading">
+          <template slot="items" slot-scope="props">
+            <td>
+              <v-avatar size="46">
+                <img :src="props.item.profile.pictureUrl" alt="picture"/>
+              </v-avatar>
+            </td>
+            <td>{{ props.item.lastName }}</td>
+            <td>{{ props.item.firstName }}</td>
+            <td>{{ props.item.email }}</td>
+            <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
+            <td class="justify-center layout">
+              <v-btn icon color="primary" :to="{ name: 'AdminDMTalent', params: {id: props.item.id} }">
+                <v-icon>visibility</v-icon>
+              </v-btn>
+            </td>
+          </template>
+        </v-data-table>
+      </v-card>
     </v-flex>
   </v-layout>
 </template>
@@ -39,8 +48,12 @@
         { text: 'Last name', value: 'lastName' },
         { text: 'First name', value: 'firstName' },
         { text: 'Email', value: 'email' },
+        { text: 'Registered at', value: 'createdAt' },
         { text: 'Actions', value: 'name', sortable: false },
       ],
+      totalItems: 0,
+      pagination: {},
+      search: '',
     }),
     computed: {
       ...mapGetters([
@@ -48,22 +61,37 @@
         'loading',
       ]),
     },
+    watch: {
+      pagination: {
+        handler() {
+          this.getTalents();
+        },
+        deep: true,
+      },
+    },
     methods: {
       ...mapActions([
         'prepareForApiConsumption',
         'clearLoading',
         'showSnackbar',
       ]),
-    },
-    created() {
-      this.prepareForApiConsumption();
-      this
-        .api('/talents')
-        .then((response) => {
-          this.talents = response.data._embedded.talents;
-        })
-        .catch(() => this.showSnackbar('Error'))
-        .finally(() => this.clearLoading());
+      getTalents() {
+        this.prepareForApiConsumption();
+        let path = '/talents';
+        path += this.search ? '/search/findByEmailContainingOrLastNameContainingOrFirstNameContaining' : '';
+        let queryString = '';
+        queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
+        queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';
+        queryString += this.search ? `&email=${this.search}&lastName=${this.search}&firstName=${this.search}` : '';
+        this
+          .api(`${path}?${queryString}`)
+          .then((response) => {
+            this.talents = response.data._embedded.talents;
+            this.totalItems = response.data.page.totalElements;
+          })
+          .catch(() => this.showSnackbar('Error'))
+          .finally(() => this.clearLoading());
+      },
     },
   };
 </script>
