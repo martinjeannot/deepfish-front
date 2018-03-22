@@ -12,6 +12,7 @@ import AdminDMEmployer from '@/components/Admin/DataManagement/Master/Employer';
 import AdminDMCompanies from '@/components/Admin/DataManagement/Master/Companies';
 import AdminDMCompany from '@/components/Admin/DataManagement/Master/Company';
 import AdminDMOpportunities from '@/components/Admin/DataManagement/Master/Opportunities';
+import AdminDMOpportunity from '@/components/Admin/DataManagement/Master/Opportunity';
 import AdminDMUsers from '@/components/Admin/DataManagement/Master/Users';
 import AdminDMNewUser from '@/components/Admin/DataManagement/Master/NewUser';
 import AdminCompanyMaturityLevelDataManagement from '@/components/Admin/DataManagement/ReferenceData/CompanyMaturityLevelDataManagement';
@@ -143,6 +144,13 @@ const router = new Router({
       path: '/admin/data-management/master/opportunities',
       name: 'AdminDMOpportunities',
       component: AdminDMOpportunities,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/admin/data-management/master/opportunities/:id',
+      name: 'AdminDMOpportunity',
+      component: AdminDMOpportunity,
+      props: true,
       meta: { authRequired: true },
     },
     {

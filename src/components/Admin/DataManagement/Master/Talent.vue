@@ -88,137 +88,141 @@
                 </v-layout>
               </v-container>
             </v-flex>
-            <v-flex xs8 class="elevation-1" style="background-color: white">
-              <v-tabs grow>
-                <v-tab>Profile</v-tab>
-                <v-tab>Conditions</v-tab>
-                <v-tab>Qualification</v-tab>
-                <v-tab>Opportunities</v-tab>
-                <v-tab-item>
-                  <v-container>
-                    <v-layout row wrap>
-                      <v-flex xs12 text-xs-center class="pb-3">
-                        <h3>{{ talent.profile.lastName }} {{ talent.profile.firstName }}</h3>
-                        <h4>{{ talent.profile.headline }}</h4>
-                        {{ talent.profile.location.name }} | {{ talent.profile.industry }}
-                      </v-flex>
-                      <v-flex xs12 class="pb-3">
-                        {{ talent.profile.summary }}
-                      </v-flex>
-                      <v-flex xs12 class="pb-2">
-                        <h4>Experience</h4>
-                      </v-flex>
-                      <v-flex xs12>
-                        {{ talent.profile.positions.values[0].title }}
-                      </v-flex>
-                      <v-flex xs12>
-                        {{ talent.profile.positions.values[0].company.name }}
-                        ({{ talent.profile.positions.values[0].company.industry }} /
-                        {{ talent.profile.positions.values[0].company.size }} employees)
-                      </v-flex>
-                      <v-flex v-if="talent.profile.positions.values[0].startDate">
-                        {{ talent.profile.positions.values[0].startDate.year }} -
-                        <span v-if="talent.profile.positions.values[0].isCurrent">Present</span>
-                        <span v-else>DATE ICI</span> |
-                        {{ talent.profile.positions.values[0].location.name }}
-                      </v-flex>
-                      <v-flex xs12 v-if="talent.selfPitch" class="pt-3">
-                        <h4>Self pitch</h4>
-                        <div style="white-space: pre-wrap">{{ talent.selfPitch }}</div>
-                      </v-flex>
-                    </v-layout>
-                  </v-container>
-                </v-tab-item>
-                <v-tab-item>
-                  <v-container>
-                    <v-layout row wrap>
-                      <v-flex xs6>
-                        <h3>Fixed salary</h3>
-                        {{ talent.conditions.fixedSalary }} €
-                      </v-flex>
-                      <v-flex xs6>
-                        <h3>Can start on</h3>
-                        {{ talent.conditions.canStartOn | formatDate('LL') }}
-                      </v-flex>
-                      <v-flex xs12>
-                        <h3>Company maturity levels</h3>
-                        <v-chip v-for="companyMaturityLevel in talent.conditions.companyMaturityLevels"
-                                :key="companyMaturityLevel.id">{{ companyMaturityLevel.l10nKey }}
-                        </v-chip>
-                      </v-flex>
-                      <v-flex xs12>
-                        <h3>Jobs</h3>
-                        <v-chip v-for="job in talent.conditions.jobs" :key="job.id">{{ job.l10nKey }}</v-chip>
-                      </v-flex>
-                      <v-flex xs12>
-                        <h3>Commodity types</h3>
-                        <v-chip v-for="commodityType in talent.conditions.commodityTypes" :key="commodityType.id">
-                          {{ commodityType.l10nKey }}
-                        </v-chip>
-                      </v-flex>
-                      <v-flex xs12>
-                        <h3>Task types</h3>
-                        <v-chip v-for="taskType in talent.conditions.taskTypes" :key="taskType.id">{{ taskType.l10nKey
-                          }}
-                        </v-chip>
-                      </v-flex>
-                      <v-flex xs12>
-                        <h3>Locations</h3>
-                        <v-chip v-for="fixedLocation in talent.conditions.fixedLocations" :key="fixedLocation.id">
-                          {{ fixedLocation.l10nKey }}
-                        </v-chip>
-                      </v-flex>
-                    </v-layout>
-                  </v-container>
-                </v-tab-item>
-                <v-tab-item>
-                  <v-container>
-                    <v-layout row wrap>
-                      <v-flex xs4 class="pr-3">
-                        <v-select
-                          :items="Array(5).fill().map((_, i) => i + 1)"
-                          v-model="talent.qualification.complexSellingSkillsRating"
-                          label="Complex selling skills rating"
-                          @input="saveQualification"
-                        ></v-select>
-                      </v-flex>
-                      <v-flex xs4 class="pr-3">
-                        <v-select
-                          :items="Array(5).fill().map((_, i) => i + 1)"
-                          v-model="talent.qualification.huntingSkillsRating"
-                          label="Hunting skills rating"
-                          @input="saveQualification"
-                        ></v-select>
-                      </v-flex>
-                      <v-flex xs4>
-                        <v-select
-                          :items="Array(5).fill().map((_, i) => i + 1)"
-                          v-model="talent.qualification.technicalSkillsRating"
-                          label="Technical skills rating"
-                          @input="saveQualification"
-                        ></v-select>
-                      </v-flex>
-                      <v-flex>
-                        <h4>Recommendation</h4>
-                        <v-text-field v-model="talent.qualification.recommendation" multi-line rows="9">
-                        </v-text-field>
-                        <div class="text-xs-right">
-                          <v-btn icon fab small color="primary" @click="saveQualification">
-                            <v-icon>done</v-icon>
-                          </v-btn>
-                        </div>
-                      </v-flex>
-                    </v-layout>
-                  </v-container>
-                </v-tab-item>
-                <v-tab-item>
-                  <v-container>
-                    <h3>Accepted opportunities</h3>
-                    <v-data-table :headers="acceptedOpportunitiesHeaders" :items="acceptedOpportunities"
-                                  class="elevation-1">
+            <v-flex xs8>
+              <v-card>
+                <v-tabs grow>
+                  <v-tab>Profile</v-tab>
+                  <v-tab>Conditions</v-tab>
+                  <v-tab>Qualification</v-tab>
+                  <v-tab>Opportunities</v-tab>
+                  <v-tab-item>
+                    <v-container>
+                      <v-layout row wrap>
+                        <v-flex xs12 text-xs-center class="pb-3">
+                          <h3>{{ talent.profile.lastName }} {{ talent.profile.firstName }}</h3>
+                          <h4>{{ talent.profile.headline }}</h4>
+                          {{ talent.profile.location.name }} | {{ talent.profile.industry }}
+                        </v-flex>
+                        <v-flex xs12 class="pb-3">
+                          {{ talent.profile.summary }}
+                        </v-flex>
+                        <v-flex xs12 class="pb-2">
+                          <h4>Experience</h4>
+                        </v-flex>
+                        <v-flex xs12>
+                          {{ talent.profile.positions.values[0].title }}
+                        </v-flex>
+                        <v-flex xs12>
+                          {{ talent.profile.positions.values[0].company.name }}
+                          ({{ talent.profile.positions.values[0].company.industry }} /
+                          {{ talent.profile.positions.values[0].company.size }} employees)
+                        </v-flex>
+                        <v-flex v-if="talent.profile.positions.values[0].startDate">
+                          {{ talent.profile.positions.values[0].startDate.year }} -
+                          <span v-if="talent.profile.positions.values[0].isCurrent">Present</span>
+                          <span v-else>DATE ICI</span> |
+                          {{ talent.profile.positions.values[0].location.name }}
+                        </v-flex>
+                        <v-flex xs12 v-if="talent.selfPitch" class="pt-3">
+                          <h4>Self pitch</h4>
+                          <div style="white-space: pre-wrap">{{ talent.selfPitch }}</div>
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
+                  </v-tab-item>
+                  <v-tab-item>
+                    <v-container>
+                      <v-layout row wrap>
+                        <v-flex xs6>
+                          <h3>Fixed salary</h3>
+                          {{ talent.conditions.fixedSalary }} €
+                        </v-flex>
+                        <v-flex xs6>
+                          <h3>Can start on</h3>
+                          {{ talent.conditions.canStartOn | formatDate('LL') }}
+                        </v-flex>
+                        <v-flex xs12>
+                          <h3>Company maturity levels</h3>
+                          <v-chip v-for="companyMaturityLevel in talent.conditions.companyMaturityLevels"
+                                  :key="companyMaturityLevel.id">{{ companyMaturityLevel.l10nKey }}
+                          </v-chip>
+                        </v-flex>
+                        <v-flex xs12>
+                          <h3>Jobs</h3>
+                          <v-chip v-for="job in talent.conditions.jobs" :key="job.id">{{ job.l10nKey }}</v-chip>
+                        </v-flex>
+                        <v-flex xs12>
+                          <h3>Commodity types</h3>
+                          <v-chip v-for="commodityType in talent.conditions.commodityTypes" :key="commodityType.id">
+                            {{ commodityType.l10nKey }}
+                          </v-chip>
+                        </v-flex>
+                        <v-flex xs12>
+                          <h3>Task types</h3>
+                          <v-chip v-for="taskType in talent.conditions.taskTypes" :key="taskType.id">
+                            {{ taskType.l10nKey }}
+                          </v-chip>
+                        </v-flex>
+                        <v-flex xs12>
+                          <h3>Locations</h3>
+                          <v-chip v-for="fixedLocation in talent.conditions.fixedLocations" :key="fixedLocation.id">
+                            {{ fixedLocation.l10nKey }}
+                          </v-chip>
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
+                  </v-tab-item>
+                  <v-tab-item>
+                    <v-container>
+                      <v-layout row wrap>
+                        <v-flex xs4 class="pr-3">
+                          <v-select
+                            :items="Array(5).fill().map((_, i) => i + 1)"
+                            v-model="talent.qualification.complexSellingSkillsRating"
+                            label="Complex selling skills rating"
+                            @input="saveQualification"
+                          ></v-select>
+                        </v-flex>
+                        <v-flex xs4 class="pr-3">
+                          <v-select
+                            :items="Array(5).fill().map((_, i) => i + 1)"
+                            v-model="talent.qualification.huntingSkillsRating"
+                            label="Hunting skills rating"
+                            @input="saveQualification"
+                          ></v-select>
+                        </v-flex>
+                        <v-flex xs4>
+                          <v-select
+                            :items="Array(5).fill().map((_, i) => i + 1)"
+                            v-model="talent.qualification.technicalSkillsRating"
+                            label="Technical skills rating"
+                            @input="saveQualification"
+                          ></v-select>
+                        </v-flex>
+                        <v-flex>
+                          <h4>Recommendation</h4>
+                          <v-text-field v-model="talent.qualification.recommendation" multi-line rows="9">
+                          </v-text-field>
+                          <div class="text-xs-right">
+                            <v-btn icon fab small color="primary" @click="saveQualification">
+                              <v-icon>done</v-icon>
+                            </v-btn>
+                          </div>
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
+                  </v-tab-item>
+                  <v-tab-item>
+                    <v-data-table :items="talent.opportunities" :headers="opportunitiesHeaders">
                       <template slot="items" slot-scope="props">
-                        <td>{{ props.item.companyName }}</td>
-                        <td>{{ props.item.companyName }}</td>
+                        <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
+                        <td>{{ props.item.company.name }}</td>
+                        <td>
+                          <span :class="`${getOpportunityStatusColor(props.item.status)}--text`"
+                                style="font-weight: bold">
+                            {{ props.item.status }}
+                          </span>
+                        </td>
                         <td>
                           <v-btn v-if="props.item.forwarded"
                                  icon @click="retrieveTalent(props.item)" color="error">
@@ -231,9 +235,9 @@
                         </td>
                       </template>
                     </v-data-table>
-                  </v-container>
-                </v-tab-item>
-              </v-tabs>
+                  </v-tab-item>
+                </v-tabs>
+              </v-card>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -243,7 +247,7 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapGetters, mapActions, mapState } from 'vuex';
   import DataManagementNavigation from '../Navigation';
 
   export default {
@@ -251,9 +255,10 @@
     components: { DataManagementNavigation },
     data: () => ({
       talent: null,
-      acceptedOpportunitiesHeaders: [
-        { text: 'Date', value: 'companyName' },
-        { text: 'Company', value: 'companyName' },
+      opportunitiesHeaders: [
+        { text: 'Sent at', value: 'createdAt' },
+        { text: 'Company', value: 'company.name' },
+        { text: 'Status', value: 'status' },
         { text: 'Actions', value: 'name', sortable: false },
       ],
     }),
@@ -263,6 +268,9 @@
         'api',
         'loading',
         'alertComponent',
+      ]),
+      ...mapState([
+        'getOpportunityStatusColor',
       ]),
       profileCompletion() {
         const profileCompletion = { value: 100, items: [] };
@@ -302,12 +310,6 @@
         profileCompletion.value -=
           Math.floor(profileCompletion.items.length * (100 / profileItemCounter));
         return profileCompletion;
-      },
-      acceptedOpportunities() {
-        return this.talent.opportunities.filter(opportunity => opportunity.status === 'ACCEPTED');
-      },
-      pendingOpportunities() {
-        return this.talent.opportunities.filter(opportunity => opportunity.status === 'PENDING');
       },
     },
     methods: {
@@ -378,7 +380,7 @@
             return Promise.all([
               this.api(`${this.talent._links.conditions.href}?projection=default`),
               this.api(this.talent._links.qualification.href),
-              this.api(`${this.talent._links.opportunities.href}?projection=full`),
+              this.api(`${this.talent._links.opportunities.href}?projection=admin-item`),
             ]);
           })
           .then(([

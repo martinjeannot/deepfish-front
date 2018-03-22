@@ -13,9 +13,10 @@
           </td>
           <td>{{ props.item.lastName }}</td>
           <td>{{ props.item.firstName }}</td>
+          <td>{{ props.item.email }}</td>
           <td class="justify-center layout">
             <v-btn icon color="primary" :to="{ name: 'AdminDMTalent', params: {id: props.item.id} }">
-              <v-icon>edit</v-icon>
+              <v-icon>visibility</v-icon>
             </v-btn>
           </td>
         </template>
@@ -37,6 +38,7 @@
         { text: '', value: 'pictureUrl', sortable: false },
         { text: 'Last name', value: 'lastName' },
         { text: 'First name', value: 'firstName' },
+        { text: 'Email', value: 'email' },
         { text: 'Actions', value: 'name', sortable: false },
       ],
     }),

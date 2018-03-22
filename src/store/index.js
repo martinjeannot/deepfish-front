@@ -20,6 +20,18 @@ export default new Vuex.Store({
     snackbar: { show: false, text: '' },
     error: null,
     alertComponent: null,
+    getOpportunityStatusColor(status) {
+      switch (status) {
+        case 'ACCEPTED':
+          return 'green';
+        case 'PENDING':
+          return 'orange';
+        case 'REFUSED':
+          return 'red';
+        default:
+          return null;
+      }
+    },
   },
   mutations: {
     [types.SET_APP_CREATED](state, appCreated) {

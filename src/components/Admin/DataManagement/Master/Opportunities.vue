@@ -30,7 +30,7 @@
               </span>
             </td>
             <td class="justify-center layout">
-              <v-btn icon color="primary" :to="{ name: 'AdminDMCompany', params: {id: props.item.id} }">
+              <v-btn icon color="primary" :to="{ name: 'AdminDMOpportunity', params: {id: props.item.id} }">
                 <v-icon>visibility</v-icon>
               </v-btn>
             </td>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapGetters, mapActions, mapState } from 'vuex';
   import DataManagementNavigation from '../Navigation';
 
   export default {
@@ -51,7 +51,7 @@
     data: () => ({
       opportunities: [],
       headers: [
-        { text: 'Date', value: 'createdAt' },
+        { text: 'Sent at', value: 'createdAt' },
         { text: 'Company', value: 'company.name' },
         { text: 'Talent', value: 'talent.lastName' },
         { text: 'Status', value: 'status' },
@@ -65,6 +65,9 @@
       ...mapGetters([
         'api',
         'loading',
+      ]),
+      ...mapState([
+        'getOpportunityStatusColor',
       ]),
     },
     watch: {
@@ -81,22 +84,10 @@
         'clearLoading',
         'showSnackbar',
       ]),
-      getOpportunityStatusColor(status) {
-        switch (status) {
-          case 'ACCEPTED':
-            return 'green';
-          case 'PENDING':
-            return 'orange';
-          case 'REFUSED':
-            return 'red';
-          default:
-            return null;
-        }
-      },
       getOpportunities() {
         this.prepareForApiConsumption();
         const path = '/opportunities';
-        let queryString = 'projection=admin';
+        let queryString = 'projection=admin-item';
         queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';
         this

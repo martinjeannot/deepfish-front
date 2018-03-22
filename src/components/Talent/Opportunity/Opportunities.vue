@@ -74,7 +74,7 @@
     created() {
       this.prepareForApiConsumption();
       this
-        .api(`/opportunities?projection=partial&talent=${this.user.id}&status=PENDING&status=ACCEPTED`)
+        .api(`/opportunities?projection=talent&talent=${this.user.id}&status=PENDING&status=ACCEPTED`)
         .then((response) => {
           this.pendingOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.status === 'PENDING');
           this.menuBadges.opportunities = this.pendingOpportunities.length;
