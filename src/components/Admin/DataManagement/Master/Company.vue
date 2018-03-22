@@ -28,8 +28,12 @@
                 </v-card-text>
               </v-card>
             </v-flex>
-            <v-flex xs8 class="elevation-1">
-              <v-flex xs12>???</v-flex>
+            <v-flex xs8>
+              <v-card>
+                <v-card-text>
+                  <v-text-field></v-text-field>
+                </v-card-text>
+              </v-card>
             </v-flex>
           </v-layout>
         </v-flex>

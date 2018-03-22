@@ -51,6 +51,7 @@
         { title: 'Talents', icon: 'dashboard', route: '/admin/data-management/master/talents' },
         { title: 'Employers', icon: 'dashboard', route: '/admin/data-management/master/employers' },
         { title: 'Companies', icon: 'dashboard', route: '/admin/data-management/master/companies' },
+        { title: 'Opportunities', icon: 'dashboard', route: '/admin/data-management/master/opportunities' },
         { title: 'Admins', icon: 'dashboard', route: '/admin/data-management/master/users' },
       ],
       referenceDataItems: [
