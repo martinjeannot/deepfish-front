@@ -224,13 +224,11 @@
                           </span>
                         </td>
                         <td>
-                          <v-btn v-if="props.item.forwarded"
-                                 icon @click="retrieveTalent(props.item)" color="error">
-                            <v-icon>arrow_back</v-icon>
+                          <v-btn v-if="props.item.forwarded" @click="retrieveTalent(props.item)" color="error">
+                            Retrieve from employer
                           </v-btn>
-                          <v-btn v-else
-                                 icon @click="forwardTalent(props.item)" color="success">
-                            <v-icon>arrow_forward</v-icon>
+                          <v-btn v-else @click="forwardTalent(props.item)" color="success">
+                            Send to employer
                           </v-btn>
                         </td>
                       </template>
@@ -360,14 +358,17 @@
         this.saveOpportunity(opportunity);
       },
       saveOpportunity(opportunity) {
+        const opportunityModel = Object.assign({}, opportunity);
+        delete opportunityModel.talent;
+        delete opportunityModel.company;
         this.api
-          .patch(opportunity._links.self.href, opportunity)
+          .patch(opportunity._links.self.href, opportunityModel)
           .then(() => {
             this.showSnackbar('Success');
             this.$forceUpdate();
           })
           .catch(() => {
-            this.fetchData();
+            this.fetchInitialData();
             this.showSnackbar('Error');
           });
       },
