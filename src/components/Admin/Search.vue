@@ -115,9 +115,14 @@
             <v-card>
               <v-layout row wrap class="px-2">
                 <v-flex xs3 class="text-xs-center">
-                  <v-avatar size="50">
-                    <img :src="props.item.profile.pictureUrl" alt="picture"/>
-                  </v-avatar>
+                  <v-badge overlap>
+                    <span slot="badge">{{ getTalentRankingLetter(props.item) }}</span>
+                    <v-avatar size="60" class="light-blue">
+                      <v-avatar size="50">
+                        <img :src="props.item.profile.pictureUrl" alt="picture"/>
+                      </v-avatar>
+                    </v-avatar>
+                  </v-badge>
                 </v-flex>
                 <v-flex xs6 style="margin: auto">
                   <h4>
@@ -295,6 +300,7 @@
         'loading',
         'initialLoading',
         'user',
+        'talentRankingReferenceData',
       ]),
     },
     methods: {
@@ -401,6 +407,11 @@
             this.showSnackbar('Opportunity sent');
           })
           .finally(() => this.clearLoading());
+      },
+      getTalentRankingLetter(talent) {
+        const foundTalentRanking = this.talentRankingReferenceData
+          .find(talentRanking => talentRanking.value === talent.qualification.ranking);
+        return foundTalentRanking ? foundTalentRanking.text : '';
       },
     },
     created() {

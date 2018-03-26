@@ -32,6 +32,11 @@ export default new Vuex.Store({
           return null;
       }
     },
+    talentRankingReferenceData: [
+      { text: 'A', value: 1 },
+      { text: 'B', value: 2 },
+      { text: 'C', value: 3 },
+    ],
   },
   mutations: {
     [types.SET_APP_CREATED](state, appCreated) {
@@ -240,6 +245,10 @@ export default new Vuex.Store({
     },
     isUserTalent(state, getters) {
       return getters.isUserAuthenticated ? getters.user.authorities.some(authority => authority.authority === 'ROLE_TALENT') : false;
+    },
+    // REFERENCE DATA
+    talentRankingReferenceData(state) {
+      return state.talentRankingReferenceData;
     },
   },
 });

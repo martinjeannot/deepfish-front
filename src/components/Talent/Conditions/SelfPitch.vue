@@ -7,6 +7,16 @@
     </v-layout>
     <v-layout wrap v-else>
       <v-flex xs12>
+        <span class="subheading">Votre nombre d'années d'expérience professionnelle</span>
+      </v-flex>
+      <v-flex xs12>
+        <v-select
+          :items="Array(40).fill().map((_, i) => i + 1)"
+          v-model="talent.yearsOfExperience"
+          @input="saveProfile"
+        ></v-select>
+      </v-flex>
+      <v-flex xs12>
         <span class="subheading">Mettez-vous en valeur en quelques mots</span>
       </v-flex>
       <v-form v-model="valid" ref="form" @submit.prevent="saveProfile" style="width: 100%">

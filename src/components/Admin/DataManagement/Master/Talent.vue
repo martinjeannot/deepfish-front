@@ -106,6 +106,14 @@
                         <v-flex xs12 class="pb-3">
                           {{ talent.profile.summary }}
                         </v-flex>
+                        <v-flex xs12 class="pb-3">
+                          <v-select
+                            :items="Array(40).fill().map((_, i) => i + 1)"
+                            v-model="talent.yearsOfExperience"
+                            label="Years of experience"
+                            @input="saveProfile"
+                          ></v-select>
+                        </v-flex>
                         <v-flex xs12 class="pb-2">
                           <h4>Experience</h4>
                         </v-flex>
@@ -175,6 +183,14 @@
                   <v-tab-item>
                     <v-container>
                       <v-layout row wrap>
+                        <v-flex xs12>
+                          <v-select
+                            :items="talentRankingReferenceData"
+                            v-model="talent.qualification.ranking"
+                            label="Ranking"
+                            @input="saveQualification"
+                          ></v-select>
+                        </v-flex>
                         <v-flex xs4 class="pr-3">
                           <v-select
                             :items="Array(5).fill().map((_, i) => i + 1)"
@@ -199,7 +215,7 @@
                             @input="saveQualification"
                           ></v-select>
                         </v-flex>
-                        <v-flex>
+                        <v-flex xs12>
                           <h4>Recommendation</h4>
                           <v-text-field v-model="talent.qualification.recommendation" multi-line rows="9">
                           </v-text-field>
@@ -266,6 +282,7 @@
         'api',
         'loading',
         'alertComponent',
+        'talentRankingReferenceData',
       ]),
       ...mapState([
         'getOpportunityStatusColor',
