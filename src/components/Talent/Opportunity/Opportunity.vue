@@ -9,11 +9,18 @@
       <v-card>
         <v-card-title primary-title>
           <div>
-            <div class="headline">{{ this.opportunity.companyName }}</div>
-            <span class="grey--text">Fonction proposé : {{ this.opportunity.job.l10nKey }}</span>
+            <div class="headline">{{ opportunity.company.name }}</div>
+            <div class="grey--text">Fonction proposé : {{ opportunity.job.l10nKey }}</div>
+            <div class="grey--text">Localisation : {{ opportunity.location }}</div>
           </div>
         </v-card-title>
-        <v-card-text>Bla bla bla, on met quoi ici à part le pitch ?</v-card-text>
+        <v-card-text>
+          <v-flex xs12 class="mb-3" style="white-space: pre-wrap">{{ opportunity.pitch }}</v-flex>
+          <v-flex xs12 class="mb-2">
+            <span style="font-style: italic">{{ opportunity.company.name }}</span> :
+          </v-flex>
+          <v-flex xs12 style="white-space: pre-wrap">{{ opportunity.company.description }}</v-flex>
+        </v-card-text>
         <v-card-actions v-if="this.opportunity.status === 'PENDING'">
           <v-layout row wrap class="text-xs-center">
             <v-flex xs12 sm4>
@@ -101,7 +108,7 @@
       ]),
       fetchData() {
         this.prepareForApiConsumption();
-        this.api(`/opportunities/${this.id}?projection=partial`)
+        this.api(`/opportunities/${this.id}?projection=talent`)
           .then((response) => {
             this.opportunity = response.data;
           })
@@ -125,12 +132,14 @@
           });
       },
       saveOpportunity() {
+        const opportunity = Object.assign({}, this.opportunity);
+        delete opportunity.requirement;
         return this.api
-          .patch(this.opportunity._links.self.href, this.opportunity)
+          .patch(this.opportunity._links.self.href, opportunity)
           .then(() => this.showSnackbar('Opération terminée avec succès'))
           .catch(() => {
-            this.fetchData();
             this.showSnackbar('Erreur');
+            this.fetchData();
           });
       },
       refuseInBulk() {
