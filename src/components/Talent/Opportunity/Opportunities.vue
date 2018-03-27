@@ -45,6 +45,26 @@
         </v-data-iterator>
       </v-container>
     </v-flex>
+    <v-flex xs12>
+      <h2>Mes opportunités refusées</h2>
+    </v-flex>
+    <v-flex xs12>
+      <v-container fluid grid-list-md>
+        <v-data-iterator content-tag="v-layout" row wrap :items="refusedOpportunities">
+          <v-flex slot="item" slot-scope="props" xs12>
+            <v-card>
+              <v-card-title>{{ props.item.companyName }} vous a proposé un job de {{ props.item.job.l10nKey }}
+              </v-card-title>
+              <v-card-actions>
+                <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
+                  Voir l'opportunité
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-data-iterator>
+      </v-container>
+    </v-flex>
   </v-layout>
 </template>
 
@@ -56,6 +76,7 @@
     data: () => ({
       pendingOpportunities: [],
       acceptedOpportunities: [],
+      refusedOpportunities: [],
     }),
     computed: {
       ...mapGetters([
@@ -74,11 +95,12 @@
     created() {
       this.prepareForApiConsumption();
       this
-        .api(`/opportunities?projection=talent&talent=${this.user.id}&status=PENDING&status=ACCEPTED`)
+        .api(`/opportunities?projection=talent&talent=${this.user.id}`)
         .then((response) => {
           this.pendingOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.status === 'PENDING');
           this.menuBadges.opportunities = this.pendingOpportunities.length;
           this.acceptedOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.status === 'ACCEPTED');
+          this.refusedOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.status === 'REFUSED');
         })
         .finally(() => this.clearLoading());
     },
