@@ -66,14 +66,14 @@
       saveProfile() {
         this.prepareForApiConsumption();
         this.api
-          .patch(this.user._links.talent.href, this.talent)
+          .patch(this.user._links.self.href, this.talent)
           .finally(() => this.clearLoading());
       },
     },
     created() {
       this.prepareForApiConsumption(true);
       this
-        .api(this.user._links.talent.href)
+        .api(this.user._links.self.href)
         .then((response) => {
           this.talent = response.data;
         })

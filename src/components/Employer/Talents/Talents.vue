@@ -5,11 +5,11 @@
     </v-flex>
   </v-layout>
   <v-layout v-else>
-    <v-flex xs12 v-for="requirement in this.requirements" :key="requirement.id">
+    <v-flex xs12 v-for="requirement in requirements" :key="requirement.id">
       <h3>{{ requirement.name }}</h3>
-      <v-container fluid grid-list-md>
+      <v-container fluid grid-list-xs>
         <v-data-iterator content-tag="v-layout" row wrap :items="requirement.talents" :hide-actions="true">
-          <v-flex slot="item" slot-scope="props" xs12 sm6>
+          <v-flex slot="item" slot-scope="props" xs12>
             <v-card>
               <v-card-title>
                 <v-flex xs4 sm2 class="text-xs-center">
@@ -17,10 +17,42 @@
                     <img :src="props.item.profile.pictureUrl" alt="picture"/>
                   </v-avatar>
                 </v-flex>
-                <v-flex xs8 sm10>
+                <v-flex xs8 sm4>
                   <h4>{{ props.item.firstName }} {{ props.item.lastName[0] }}.</h4>
                   {{ props.item.profile.positions.values[0].title
                   }} chez {{ props.item.profile.positions.values[0].company.name }}
+                </v-flex>
+                <v-flex xs12 sm6>
+                  <v-layout wrap>
+                    <v-flex xs6>
+                      Compétences en vente complexe
+                    </v-flex>
+                    <v-flex xs6>
+                      <star-rating :rating="props.item.qualification.complexSellingSkillsRating"></star-rating>
+                    </v-flex>
+                    <v-flex xs6>
+                      Compétences en chasse
+                    </v-flex>
+                    <v-flex xs6>
+                      <star-rating :rating="props.item.qualification.huntingSkillsRating"></star-rating>
+                    </v-flex>
+                    <v-flex xs6>
+                      Compétences techniques
+                    </v-flex>
+                    <v-flex xs6>
+                      <star-rating :rating="props.item.qualification.technicalSkillsRating"></star-rating>
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
+                <v-flex xs12 class="mt-2">
+                  Ce profil a <span style="font-weight: bold">{{ props.item.yearsOfExperience
+                  }} années d'expérience</span>
+                  et se place à <span
+                  style="font-weight: bold">{{ props.item.conditions.fixedSalary | formatMonetaryAmount }} €</span>.
+                </v-flex>
+                <v-flex xs12 v-if="props.item.qualification.recommendation" class="mt-2">
+                  <div style="font-weight: bold">L'avis de Deepfish</div>
+                  <div>{{ props.item.qualification.recommendation }}</div>
                 </v-flex>
               </v-card-title>
               <v-card-actions>

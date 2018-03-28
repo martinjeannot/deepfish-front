@@ -163,7 +163,7 @@
                 </v-flex>
                 <v-flex xs12>
                   <v-icon small>euro_symbol</v-icon>
-                  {{ props.item.conditions.fixedSalary.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') }}
+                  {{ props.item.conditions.fixedSalary | formatMonetaryAmount }}
                 </v-flex>
                 <v-flex xs12>
                   <v-chip v-for="taskType in props.item.conditions.taskTypes" :key="taskType.id" small>
