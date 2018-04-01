@@ -88,6 +88,19 @@
           </v-card>
         </v-expansion-panel-content>
         <v-expansion-panel-content>
+          <div slot="header">Talent ranking</div>
+          <v-card>
+            <v-card-text>
+              <v-checkbox v-for="talentRanking in talentRankingReferenceData"
+                          :key="talentRanking.value"
+                          :value="talentRanking.value"
+                          :label="talentRanking.text"
+                          v-model="criteria.talentRankings"
+              ></v-checkbox>
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+        <v-expansion-panel-content>
           <div slot="header">Talent maturity level</div>
           <v-card>
             <v-card-text>
@@ -287,6 +300,7 @@
         fixedLocations: [],
         minFixedSalary: null,
         maxFixedSalary: null,
+        talentRankings: [],
         talentMaturityLevels: [],
       },
       rowsPerPageItems: [4, 8, 12],
@@ -373,6 +387,14 @@
         if (this.criteria.maxFixedSalary) {
           talentQueryString += talentQueryString ? '&' : '';
           talentQueryString += `maxFixedSalary=${this.criteria.maxFixedSalary * 1000}`;
+        }
+        // Talent rankings
+        if (this.criteria.talentRankings.length) {
+          talentQueryString += talentQueryString ? '&' : '';
+          this.criteria.talentRankings.forEach((talentRanking, index) => {
+            talentQueryString += index ? '&' : '';
+            talentQueryString += `qualification.ranking=${talentRanking}`;
+          });
         }
         // Talent maturity levels criterion
         if (this.criteria.talentMaturityLevels.length) {
