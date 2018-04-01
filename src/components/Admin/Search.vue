@@ -82,8 +82,8 @@
           <div slot="header">Fixed salary</div>
           <v-card>
             <v-card-text>
-              <v-text-field type="number" label="Minimum" suffix="K€" v-model="criteria.minFixedSalary"></v-text-field>
-              <v-text-field type="number" label="Maximum" suffix="K€" v-model="criteria.maxFixedSalary"></v-text-field>
+              <v-text-field type="number" label="Minimum" suffix="€" v-model="criteria.minFixedSalary"></v-text-field>
+              <v-text-field type="number" label="Maximum" suffix="€" v-model="criteria.maxFixedSalary"></v-text-field>
             </v-card-text>
           </v-card>
         </v-expansion-panel-content>
@@ -382,11 +382,11 @@
         // Fixed salary criterion
         if (this.criteria.minFixedSalary) {
           talentQueryString += talentQueryString ? '&' : '';
-          talentQueryString += `minFixedSalary=${this.criteria.minFixedSalary * 1000}`;
+          talentQueryString += `minFixedSalary=${this.criteria.minFixedSalary}`;
         }
         if (this.criteria.maxFixedSalary) {
           talentQueryString += talentQueryString ? '&' : '';
-          talentQueryString += `maxFixedSalary=${this.criteria.maxFixedSalary * 1000}`;
+          talentQueryString += `maxFixedSalary=${this.criteria.maxFixedSalary}`;
         }
         // Talent rankings
         if (this.criteria.talentRankings.length) {
