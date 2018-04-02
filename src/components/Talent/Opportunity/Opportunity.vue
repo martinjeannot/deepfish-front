@@ -123,7 +123,7 @@
           });
       },
       decline() {
-        this.opportunity.status = 'REFUSED';
+        this.opportunity.status = 'DECLINED';
         this.declinationDialog = false;
         this
           .saveOpportunity()

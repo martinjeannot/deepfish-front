@@ -76,7 +76,11 @@ const router = new Router({
         if (store.getters.isUserAdmin) {
           next('/admin');
         } else if (store.getters.isUserEmployer) {
-          next('/employer');
+          if (store.getters.user.requirements.length) {
+            next('/employer/talents');
+          } else {
+            next('/employer/requirements/new');
+          }
         } else {
           next('/talent/profile');
         }

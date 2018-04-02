@@ -50,7 +50,7 @@
     </v-flex>
     <v-flex xs12>
       <v-container fluid grid-list-md>
-        <v-data-iterator content-tag="v-layout" row wrap :items="refusedOpportunities">
+        <v-data-iterator content-tag="v-layout" row wrap :items="declinedOpportunities">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card>
               <v-card-title>{{ props.item.companyName }} vous a proposé un job de {{ props.item.job.l10nKey }}
@@ -76,7 +76,7 @@
     data: () => ({
       pendingOpportunities: [],
       acceptedOpportunities: [],
-      refusedOpportunities: [],
+      declinedOpportunities: [],
     }),
     computed: {
       ...mapGetters([
@@ -100,7 +100,7 @@
           this.pendingOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.status === 'PENDING');
           this.menuBadges.opportunities = this.pendingOpportunities.length;
           this.acceptedOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.status === 'ACCEPTED');
-          this.refusedOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.status === 'REFUSED');
+          this.declinedOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.status === 'DECLINED');
         })
         .finally(() => this.clearLoading());
     },

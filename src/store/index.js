@@ -10,6 +10,7 @@ export default new Vuex.Store({
   state: {
     appCreated: true, // still useful ?
     authToken: null,
+    authProcessCompleted: false,
     user: null,
     api: axios.create({
       baseURL: process.env.DEEPFISH_BACK_BASE_URL,
@@ -26,7 +27,7 @@ export default new Vuex.Store({
           return 'green';
         case 'PENDING':
           return 'orange';
-        case 'REFUSED':
+        case 'DECLINED':
           return 'red';
         default:
           return null;
@@ -45,6 +46,9 @@ export default new Vuex.Store({
     [types.SET_AUTH_TOKEN](state, authToken) {
       state.authToken = authToken;
       state.api.defaults.headers.common.Authorization = `Bearer ${authToken.access_token}`;
+    },
+    [types.SET_AUTH_PROCESS_COMPLETED](state, authProcessCompleted) {
+      state.authProcessCompleted = authProcessCompleted;
     },
     [types.SET_USER](state, user) {
       state.user = user;
@@ -144,31 +148,58 @@ export default new Vuex.Store({
       // get authenticated user
       const encodedAccessToken = authToken.access_token.split('.')[1].replace('-', '+').replace('_', '/');
       const accessToken = JSON.parse(window.atob(encodedAccessToken));
-      let userUrl = null;
-      if (accessToken.authorities.includes('ROLE_ADMIN')) {
-        userUrl = `/users/${accessToken.user_id}`;
-      } else if (accessToken.authorities.includes('ROLE_EMPLOYER')) {
-        userUrl = `/employers/${accessToken.user_id}?projection=default`;
-      } else {
-        userUrl = `/talents/${accessToken.user_id}`;
-      }
       dispatch('prepareForApiConsumption');
+      if (accessToken.authorities.includes('ROLE_ADMIN')) { // ADMIN
+        return getters
+          .api(`/users/${accessToken.user_id}`)
+          .then((response) => {
+            commit(types.SET_USER, response.data);
+            return getters.api
+              .patch(getters.user._links.self.href, { lastSignedInAt: moment().utc().format() });
+          })
+          .then(() => {
+            commit(types.SET_AUTH_PROCESS_COMPLETED, true);
+          })
+          .catch((/* error */) => {
+            dispatch('setError', { message: 'Un problème est survenu lors de la connexion' });
+          })
+          .finally(() => dispatch('clearLoading'));
+      } else if (accessToken.authorities.includes('ROLE_EMPLOYER')) { // EMPLOYER
+        return getters
+          .api(`/employers/${accessToken.user_id}?projection=default`)
+          .then((response) => {
+            commit(types.SET_USER, response.data);
+            // check for requirements for redirection
+            return getters.api(`/requirements/search/findByCompany?company=/${getters.user.company.id}`);
+          })
+          .then((response) => {
+            /* eslint-disable no-param-reassign */
+            getters.user.requirements = response.data._embedded.requirements;
+            return getters.api
+              .patch(getters.user._links.self.href, { lastSignedInAt: moment().utc().format() });
+          })
+          .then(() => {
+            commit(types.SET_AUTH_PROCESS_COMPLETED, true);
+          })
+          .catch((/* error */) => {
+            dispatch('setError', { message: 'Un problème est survenu lors de la connexion' });
+          })
+          .finally(() => dispatch('clearLoading'));
+      }
       return getters
-        .api(userUrl)
+        .api(`/talents/${accessToken.user_id}`)
         .then((response) => {
           commit(types.SET_USER, response.data);
-          const lastSignedInUpdatePromise = getters
+          // get pending opportunities for menu badge
+          return getters.api(`/opportunities?talent=${accessToken.user_id}&status=PENDING`);
+        })
+        .then((pendingOpportunitiesResponse) => {
+          dispatch('setMenuBadges', { opportunities: pendingOpportunitiesResponse.data._embedded.opportunities.length });
+          return getters
             .api.patch(getters.user._links.self.href, { lastSignedInAt: moment().utc().format() });
-          if (getters.isUserTalent) {
-            // get pending opportunities for menu badge
-            return getters
-              .api(`/opportunities?talent=${accessToken.user_id}&status=PENDING`)
-              .then((pendingOpportunitiesResponse) => {
-                dispatch('setMenuBadges', { opportunities: pendingOpportunitiesResponse.data._embedded.opportunities.length });
-                return lastSignedInUpdatePromise;
-              });
-          }
-          return lastSignedInUpdatePromise;
+        })
+        .then(() => {
+          commit(types.SET_AUTH_PROCESS_COMPLETED, true);
         })
         .catch((/* error */) => {
           dispatch('setError', { message: 'Un problème est survenu lors de la connexion' });
@@ -177,6 +208,7 @@ export default new Vuex.Store({
     },
     logout({ commit }) {
       localStorage.removeItem('auth_token');
+      commit(types.SET_AUTH_PROCESS_COMPLETED, false);
       commit(types.SET_USER, null);
     },
     signInAs({ dispatch, getters }, username) {
@@ -232,7 +264,7 @@ export default new Vuex.Store({
       return state.user;
     },
     isUserAuthenticated(state, getters) {
-      return getters.user !== null && getters.user !== undefined;
+      return state.authProcessCompleted && getters.user !== null && getters.user !== undefined;
     },
     isUserAdmin(state, getters) {
       return getters.isUserAuthenticated ? getters.user.authorities.some(authority => authority.authority === 'ROLE_ADMIN') : false;
