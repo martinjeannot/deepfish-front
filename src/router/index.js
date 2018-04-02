@@ -20,7 +20,7 @@ import AdminDMNewUser from '@/components/Admin/DataManagement/Master/NewUser';
 import AdminCompanyMaturityLevelDataManagement from '@/components/Admin/DataManagement/ReferenceData/CompanyMaturityLevelDataManagement';
 import EmployerDashboard from '@/components/Employer/Dashboard';
 import EmployerProfile from '@/components/Employer/Profile';
-import EmployerRequirements from '@/components/Employer/Requirements';
+import EmployerRequirements from '@/components/Employer/Requirements/Requirements';
 import EmployerRequirement from '@/components/Employer/Requirements/Requirement';
 import EmployerTalents from '@/components/Employer/Talents/Talents';
 import TalentProfile from '@/components/Talent/Profile';
