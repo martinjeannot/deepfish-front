@@ -94,7 +94,6 @@
             ];
           } else if (this.isUserEmployer) {
             menuItems = [
-              { key: 'dashboard', icon: 'dashboard', title: 'Dashboard', route: '/employer' },
               { key: 'requirements', icon: 'assignment', title: 'Mes besoins', route: '/employer/requirements' },
               { key: 'talents', icon: 'assignment_ind', title: 'Mes talents', route: '/employer/talents' },
               { key: 'profile', icon: 'account_circle', title: 'Profil', route: '/employer/profile' },

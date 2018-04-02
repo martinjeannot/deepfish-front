@@ -18,7 +18,6 @@ import AdminDMOpportunity from '@/components/Admin/DataManagement/Master/Opportu
 import AdminDMUsers from '@/components/Admin/DataManagement/Master/Users';
 import AdminDMNewUser from '@/components/Admin/DataManagement/Master/NewUser';
 import AdminCompanyMaturityLevelDataManagement from '@/components/Admin/DataManagement/ReferenceData/CompanyMaturityLevelDataManagement';
-import EmployerDashboard from '@/components/Employer/Dashboard';
 import EmployerProfile from '@/components/Employer/Profile';
 import EmployerRequirements from '@/components/Employer/Requirements/Requirements';
 import EmployerRequirement from '@/components/Employer/Requirements/Requirement';
@@ -192,12 +191,6 @@ const router = new Router({
       meta: { authRequired: true },
     },
     // EMPLOYER ====================================================================================
-    {
-      path: '/employer',
-      name: 'EmployerDashboard',
-      component: EmployerDashboard,
-      meta: { authRequired: true },
-    },
     {
       path: '/employer/profile',
       name: 'EmployerProfile',
