@@ -24,8 +24,8 @@ import EmployerRequirement from '@/components/Employer/Requirements/Requirement'
 import EmployerTalents from '@/components/Employer/Talents/Talents';
 import TalentProfile from '@/components/Talent/Profile';
 import TalentConditions from '@/components/Talent/Conditions';
-import TalentOpportunities from '@/components/Talent/Opportunity/Opportunities';
-import TalentOpportunity from '@/components/Talent/Opportunity/Opportunity';
+import TalentOpportunities from '@/components/Talent/Opportunities/Opportunities';
+import TalentOpportunity from '@/components/Talent/Opportunities/Opportunity';
 import store from '../store';
 import NavGuards from './nav-guards';
 

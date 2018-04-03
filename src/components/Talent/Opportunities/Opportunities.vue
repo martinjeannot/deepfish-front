@@ -13,7 +13,8 @@
         <v-data-iterator content-tag="v-layout" row wrap :items="pendingOpportunities" :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card>
-              <v-card-title>{{ props.item.companyName }} vous propose un job de {{ props.item.job.l10nKey }}
+              <v-card-title>
+                <span style="font-weight: bold">{{ props.item.company.name }}</span>&nbsp;vous propose un job de {{ props.item.job.l10nKey }}
               </v-card-title>
               <v-card-actions>
                 <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
@@ -33,7 +34,7 @@
         <v-data-iterator content-tag="v-layout" row wrap :items="acceptedOpportunities">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card>
-              <v-card-title>{{ props.item.companyName }} vous a proposé un job de {{ props.item.job.l10nKey }}
+              <v-card-title>{{ props.item.company.name }} vous a proposé un job de {{ props.item.job.l10nKey }}
               </v-card-title>
               <v-card-actions>
                 <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
@@ -53,7 +54,7 @@
         <v-data-iterator content-tag="v-layout" row wrap :items="declinedOpportunities">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card>
-              <v-card-title>{{ props.item.companyName }} vous a proposé un job de {{ props.item.job.l10nKey }}
+              <v-card-title>{{ props.item.company.name }} vous a proposé un job de {{ props.item.job.l10nKey }}
               </v-card-title>
               <v-card-actions>
                 <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">

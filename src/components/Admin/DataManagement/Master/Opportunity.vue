@@ -62,7 +62,7 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12 class="mb-3" style="font-weight: bold">Sent pitch</v-flex>
-                        <v-flex xs12>{{ opportunity.pitch }}</v-flex>
+                        <v-flex xs12 style="white-space: pre-wrap;">{{ opportunity.pitch }}</v-flex>
                       </v-layout>
                     </v-container>
                   </v-tab-item>
