@@ -113,6 +113,14 @@
             </v-card-text>
           </v-card>
         </v-expansion-panel-content>
+        <v-expansion-panel-content>
+          <div slot="header">Active</div>
+          <v-card>
+            <v-card-text>
+              <v-checkbox label="Active" v-model="criteria.active"></v-checkbox>
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
       </v-expansion-panel>
       <v-flex xs12 class="text-xs-center">
         <v-btn block color="primary" @click="search" :disabled="loading" :loading="loading">
@@ -302,6 +310,7 @@
         maxFixedSalary: null,
         talentRankings: [],
         talentMaturityLevels: [],
+        active: true,
       },
       rowsPerPageItems: [4, 8, 12],
       pagination: {
@@ -404,6 +413,9 @@
             talentQueryString += `maturityLevel=${talentMaturityLevel}`;
           });
         }
+        // Active criterion
+        talentQueryString += talentQueryString ? '&' : '';
+        talentQueryString += `active=${this.criteria.active}`;
         // API consumption
         this
           .api(`/queryableTalents?projection=default&${talentQueryString}`)
