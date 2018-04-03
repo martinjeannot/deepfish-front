@@ -36,7 +36,7 @@
         </v-card-actions>
       </v-card>
     </v-flex>
-    <v-dialog v-model="declinationDialog" max-width="40%">
+    <v-dialog v-model="declinationDialog" max-width="650px">
       <v-container style="background-color: white">
         <v-form v-model="opportunityDeclinationValid" @submit.prevent="decline">
           <v-layout row wrap>
@@ -56,7 +56,7 @@
         </v-form>
       </v-container>
     </v-dialog>
-    <v-dialog v-model="bulkDeclinationDialog" max-width="40%">
+    <v-dialog v-model="bulkDeclinationDialog" max-width="650px">
       <v-container style="background-color: white">
         <v-layout row wrap>
           <v-flex xs1>
@@ -64,7 +64,8 @@
           </v-flex>
           <v-flex xs11>
             <h3>
-              Attention, cette action entraînera le refus de toutes vos opportunités en attente et la désactivation de votre profil</h3>
+              Attention, cette action entraînera le refus de toutes vos opportunités en attente et la désactivation de votre profil
+            </h3>
           </v-flex>
           <v-flex xs12 class="text-xs-center">
             <v-btn flat color="error" @click="refuseInBulk">Je confirme cette action</v-btn>
