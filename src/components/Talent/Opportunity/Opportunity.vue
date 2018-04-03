@@ -30,7 +30,7 @@
               <v-btn flat color="warning" @click="declinationDialog = true">Décliner</v-btn>
             </v-flex>
             <v-flex xs12 sm4>
-              <v-btn flat color="error" @click="bulkRefusalDialog = true">Refuser tout</v-btn>
+              <v-btn flat color="error" @click="bulkDeclinationDialog = true">Refuser tout</v-btn>
             </v-flex>
           </v-layout>
         </v-card-actions>
@@ -44,7 +44,7 @@
               <h4>Expliquez la raison de votre refus en quelques mots</h4>
             </v-flex>
             <v-flex xs12>
-              <v-text-field v-model="opportunity.refusalReason" multi-line rows="7"
+              <v-text-field v-model="opportunity.talentDeclinationReason" multi-line rows="7"
                             :rules="[rules.required]"></v-text-field>
             </v-flex>
             <v-flex xs12 class="text-xs-right">
@@ -56,7 +56,7 @@
         </v-form>
       </v-container>
     </v-dialog>
-    <v-dialog v-model="bulkRefusalDialog" max-width="40%">
+    <v-dialog v-model="bulkDeclinationDialog" max-width="40%">
       <v-container style="background-color: white">
         <v-layout row wrap>
           <v-flex xs1>
@@ -90,7 +90,7 @@
       opportunity: null,
       declinationDialog: false,
       opportunityDeclinationValid: false,
-      bulkRefusalDialog: false,
+      bulkDeclinationDialog: false,
     }),
     computed: {
       ...mapGetters([
@@ -143,8 +143,8 @@
           });
       },
       refuseInBulk() {
-        this.bulkRefusalDialog = false;
-        this.api.post(`/talents/${this.user.id}/opportunities/bulk-refusal`)
+        this.bulkDeclinationDialog = false;
+        this.api.post(`/talents/${this.user.id}/opportunities/bulk-declination`)
           .then(() => {
             this.menuBadges.opportunities = 0;
             this.$router.push('/talent/opportunities');

@@ -5,6 +5,12 @@
     </v-flex>
   </v-layout>
   <v-layout v-else>
+    <v-layout v-if="alertComponent">
+      <v-flex xs12 sm6 offset-sm3>
+        <base-alert :type="alertComponent.type" :message="alertComponent.message"
+                    @dismissed="onAlertComponentDismissed"></base-alert>
+      </v-flex>
+    </v-layout>
     <v-flex xs12 v-for="requirement in requirements" :key="requirement.id">
       <h3>{{ requirement.name }}</h3>
       <v-container fluid grid-list-xs>
@@ -57,10 +63,14 @@
               </v-card-title>
               <v-card-actions>
                 <v-flex xs6 class="text-xs-center">
-                  <v-btn flat color="success">Contacter</v-btn>
+                  <v-btn flat color="success" @click.native.stop="selectedTalent = props.item; contactDialog = true">
+                    Contacter
+                  </v-btn>
                 </v-flex>
                 <v-flex xs6 class="text-xs-center">
-                  <v-btn flat color="error">Refuser</v-btn>
+                  <v-btn flat color="error" @click.native.stop="selectedTalent = props.item; declinationDialog = true">
+                    Refuser
+                  </v-btn>
                 </v-flex>
               </v-card-actions>
             </v-card>
@@ -68,6 +78,34 @@
         </v-data-iterator>
       </v-container>
     </v-flex>
+    <v-dialog v-model="contactDialog" v-if="selectedTalent">
+      <v-card>
+        <v-card-title class="headline">
+          <v-flex xs12 class="text-xs-center">
+            Comment contacter {{ selectedTalent.firstName }} ?
+          </v-flex>
+        </v-card-title>
+        <v-card-text>
+          <v-layout wrap>
+            <v-flex xs12 sm6 class="text-xs-center">
+              <v-icon>phone</v-icon>
+              {{ selectedTalent.phoneNumber }}
+            </v-flex>
+            <v-flex xs12 sm6 class="text-xs-center">
+              <v-icon>email</v-icon>
+              {{ selectedTalent.email }}
+            </v-flex>
+          </v-layout>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="declinationDialog" v-if="selectedTalent">
+      <v-card>
+        <v-card-text>
+
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -78,18 +116,24 @@
     name: 'employer-talents',
     data: () => ({
       requirements: [],
+      contactDialog: false,
+      declinationDialog: false,
+      selectedTalent: null,
     }),
     computed: {
       ...mapGetters([
         'api',
         'loading',
         'user',
+        'alertComponent',
       ]),
     },
     methods: {
       ...mapActions([
         'prepareForApiConsumption',
         'clearLoading',
+        'setAlertComponent',
+        'onAlertComponentDismissed',
       ]),
     },
     created() {
@@ -110,6 +154,13 @@
               this.requirements.push(requirementToAdd);
             }
           });
+          // display alert if no results
+          if (!this.requirements.length) {
+            this.setAlertComponent({
+              type: 'info',
+              message: 'Nous n\'avons pas encore de talents à vous présenter, notre équipe travaille actuellement sur vos besoins',
+            });
+          }
         })
         .finally(() => this.clearLoading());
     },
