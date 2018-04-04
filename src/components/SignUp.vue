@@ -63,9 +63,12 @@
                                 required></v-text-field>
                 </v-flex>
               </v-layout>
-              <v-layout row>
+              <v-layout row wrap>
                 <v-flex xs12 text-xs-center>
                   <v-btn type="submit" :disabled="!valid || loading" :loading="loading">S'inscrire</v-btn>
+                </v-flex>
+                <v-flex xs12 class="text-xs-center">
+                  <router-link :to="{ name: 'SignIn' }">Déjà inscrit ?</router-link>
                 </v-flex>
               </v-layout>
             </v-form>

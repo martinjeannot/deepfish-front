@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import SignIn from '@/components/SignIn';
 import SignUp from '@/components/SignUp';
+import PasswordReset from '@/components/PasswordReset';
 import AdminDashboard from '@/components/Admin/Dashboard';
 import AdminProfile from '@/components/Admin/Profile';
 import AdminSearch from '@/components/Admin/Search';
@@ -54,6 +55,11 @@ const router = new Router({
       path: '/sign-up',
       name: 'SignUp',
       component: SignUp,
+    },
+    {
+      path: '/password-reset',
+      name: 'PasswordReset',
+      component: PasswordReset,
     },
     {
       path: '/auth/callback',

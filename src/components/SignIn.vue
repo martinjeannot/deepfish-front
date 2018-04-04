@@ -45,6 +45,12 @@
                 <v-flex xs12 text-xs-center>
                   <v-btn type="submit" :disabled="!valid || loading" :loading="loading">Se connecter</v-btn>
                 </v-flex>
+                <v-flex xs12 class="text-xs-center">
+                  <router-link :to="{ name: 'SignUp' }">S'inscrire</router-link>
+                </v-flex>
+                <v-flex xs12 class="text-xs-center">
+                  <router-link :to="{ name: 'PasswordReset' }">Mot de passe oublié ?</router-link>
+                </v-flex>
               </v-layout>
             </v-form>
           </v-card-text>
