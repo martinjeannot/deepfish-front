@@ -66,7 +66,7 @@
                       <span style="font-weight: bold">LinkedIn</span> :
                       <v-btn flat icon :href="talent.profile.publicProfileUrl" target="_blank"
                              color="light-blue darken-3">
-                        <v-icon>open_in_new</v-icon>
+                        <v-icon>fab fa-linkedin</v-icon>
                       </v-btn>
                       {{ talent.profile.numConnections }}{{ talent.profile.numConnectionsCapped ? '+' : ''
                       }} connections
@@ -125,11 +125,15 @@
                           ({{ talent.profile.positions.values[0].company.industry }} /
                           {{ talent.profile.positions.values[0].company.size }} employees)
                         </v-flex>
-                        <v-flex v-if="talent.profile.positions.values[0].startDate">
+                        <v-flex xs12 v-if="talent.profile.positions.values[0].startDate">
                           {{ talent.profile.positions.values[0].startDate.year }} -
                           <span v-if="talent.profile.positions.values[0].isCurrent">Present</span>
                           <span v-else>DATE ICI</span> |
                           {{ talent.profile.positions.values[0].location.name }}
+                        </v-flex>
+                        <v-flex xs12 v-if="talent.profile.positions.values[0].summary" class="pt-2"
+                                style="white-space: pre-wrap;"
+                        >{{ talent.profile.positions.values[0].summary }}
                         </v-flex>
                         <v-flex xs12 v-if="talent.selfPitch" class="pt-3">
                           <h4>Self pitch</h4>
