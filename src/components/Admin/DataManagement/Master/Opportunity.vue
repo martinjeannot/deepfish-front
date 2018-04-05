@@ -65,7 +65,9 @@
                   <v-tab-item>
                     <v-container>
                       <v-layout row wrap>
-                        <v-flex xs12 class="mb-3" style="font-weight: bold">Sent pitch</v-flex>
+                        <v-flex xs12 class="mb-3" style="font-weight: bold">Declination reason</v-flex>
+                        <v-flex xs12 style="white-space: pre-wrap;">{{ opportunity.talentDeclinationReason }}</v-flex>
+                        <v-flex xs12 class="mt-3 mb-3" style="font-weight: bold">Sent pitch</v-flex>
                         <v-flex xs12 style="white-space: pre-wrap;">{{ opportunity.pitch }}</v-flex>
                       </v-layout>
                     </v-container>

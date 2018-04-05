@@ -378,13 +378,13 @@
           .catch(() => this.showSnackbar('Error'));
       },
       forwardTalent(opportunity) {
-        // eslint-disable-next-line no-param-reassign
         opportunity.forwarded = true;
+        opportunity.employerStatus = 'PENDING';
         this.saveOpportunity(opportunity);
       },
       retrieveTalent(opportunity) {
-        // eslint-disable-next-line no-param-reassign
         opportunity.forwarded = false;
+        opportunity.employerStatus = null;
         this.saveOpportunity(opportunity);
       },
       saveOpportunity(opportunity) {

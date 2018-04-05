@@ -117,7 +117,6 @@
       },
       accept() {
         this.opportunity.talentStatus = 'ACCEPTED';
-        this.opportunity.employerStatus = 'PENDING';
         this
           .saveOpportunity()
           .then(() => {

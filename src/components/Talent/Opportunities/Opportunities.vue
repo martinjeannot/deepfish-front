@@ -11,10 +11,12 @@
     <v-flex xs12>
       <v-container fluid grid-list-md>
         <v-data-iterator content-tag="v-layout" row wrap :items="pendingOpportunities" :hide-actions="true">
-          <v-flex slot="item" slot-scope="props" xs12>
+          <v-flex xs12 slot="item" slot-scope="props">
             <v-card>
               <v-card-title>
-                <span style="font-weight: bold">{{ props.item.company.name }}</span>&nbsp;vous propose un job de {{ props.item.job.l10nKey }}
+                <span style="font-weight: bold">
+                  {{ props.item.company.name}}
+                </span>&nbsp;vous propose un job de {{ props.item.job.l10nKey }}
               </v-card-title>
               <v-card-actions>
                 <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
@@ -22,6 +24,14 @@
                 </v-btn>
               </v-card-actions>
             </v-card>
+          </v-flex>
+          <v-flex xs12 slot="no-data">
+            <v-alert v-if="totalItems" type="success" :value="true">
+              Tout est OK, aucune opportunité en attente
+            </v-alert>
+            <v-alert v-else type="info" :value="true">
+              Vous n'avez pas encore reçu d'opportunité
+            </v-alert>
           </v-flex>
         </v-data-iterator>
       </v-container>
@@ -31,7 +41,7 @@
     </v-flex>
     <v-flex xs12>
       <v-container fluid grid-list-md>
-        <v-data-iterator content-tag="v-layout" row wrap :items="acceptedOpportunities">
+        <v-data-iterator content-tag="v-layout" row wrap :items="acceptedOpportunities" :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card>
               <v-card-title>{{ props.item.company.name }} vous a proposé un job de {{ props.item.job.l10nKey }}
@@ -43,6 +53,11 @@
               </v-card-actions>
             </v-card>
           </v-flex>
+          <v-flex xs12 slot="no-data">
+            <v-alert type="info" :value="true">
+              Vous n'avez pas encore accepté d'opportunité
+            </v-alert>
+          </v-flex>
         </v-data-iterator>
       </v-container>
     </v-flex>
@@ -51,7 +66,7 @@
     </v-flex>
     <v-flex xs12>
       <v-container fluid grid-list-md>
-        <v-data-iterator content-tag="v-layout" row wrap :items="declinedOpportunities">
+        <v-data-iterator content-tag="v-layout" row wrap :items="declinedOpportunities" :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card>
               <v-card-title>{{ props.item.company.name }} vous a proposé un job de {{ props.item.job.l10nKey }}
@@ -62,6 +77,11 @@
                 </v-btn>
               </v-card-actions>
             </v-card>
+          </v-flex>
+          <v-flex xs12 slot="no-data">
+            <v-alert type="info" :value="true">
+              Vous n'avez pas encore refusé d'opportunité
+            </v-alert>
           </v-flex>
         </v-data-iterator>
       </v-container>
@@ -78,6 +98,7 @@
       pendingOpportunities: [],
       acceptedOpportunities: [],
       declinedOpportunities: [],
+      totalItems: 0,
     }),
     computed: {
       ...mapGetters([
@@ -98,6 +119,7 @@
       this
         .api(`/opportunities?projection=talent&talent=${this.user.id}`)
         .then((response) => {
+          this.totalItems = response.data.page.totalElements;
           this.pendingOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.talentStatus === 'PENDING');
           this.menuBadges.opportunities = this.pendingOpportunities.length;
           this.acceptedOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.talentStatus === 'ACCEPTED');
