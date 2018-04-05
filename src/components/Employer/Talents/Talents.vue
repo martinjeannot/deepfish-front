@@ -4,7 +4,7 @@
       <v-progress-circular indeterminate color="primary" :size="70"></v-progress-circular>
     </v-flex>
   </v-layout>
-  <v-layout v-else>
+  <v-layout row wrap v-else>
     <v-layout v-if="alertComponent">
       <v-flex xs12 sm6 offset-sm3>
         <base-alert :type="alertComponent.type" :message="alertComponent.message"
@@ -25,8 +25,14 @@
                 </v-flex>
                 <v-flex xs8 sm4>
                   <h4>{{ props.item.talent.firstName }} {{ props.item.talent.lastName[0] }}.</h4>
-                  {{ props.item.talent.profile.positions.values[0].title
-                  }} chez {{ props.item.talent.profile.positions.values[0].company.name }}
+                  <div v-if="props.item.talent.profile.positions._total">
+                    {{ props.item.talent.profile.positions.values[0].title
+                    }} chez {{ props.item.talent.profile.positions.values[0].company.name }}
+                  </div>
+                  <div>
+                    <a :href="props.item.talent.profile.publicProfileUrl"
+                       target="_blank">Voir ce talent sur LinkedIn</a>
+                  </div>
                 </v-flex>
                 <v-flex xs12 sm6>
                   <v-layout wrap>

@@ -106,7 +106,7 @@
                         <v-flex xs12 class="pb-3">
                           {{ talent.profile.summary }}
                         </v-flex>
-                        <v-flex xs12 class="pb-3">
+                        <v-flex xs12>
                           <v-select
                             :items="Array(40).fill().map((_, i) => i + 1)"
                             v-model="talent.yearsOfExperience"
@@ -114,26 +114,28 @@
                             @input="saveProfile"
                           ></v-select>
                         </v-flex>
-                        <v-flex xs12 class="pb-2">
-                          <h4>Experience</h4>
-                        </v-flex>
-                        <v-flex xs12>
-                          {{ talent.profile.positions.values[0].title }}
-                        </v-flex>
-                        <v-flex xs12>
-                          {{ talent.profile.positions.values[0].company.name }}
-                          ({{ talent.profile.positions.values[0].company.industry }} /
-                          {{ talent.profile.positions.values[0].company.size }} employees)
-                        </v-flex>
-                        <v-flex xs12 v-if="talent.profile.positions.values[0].startDate">
-                          {{ talent.profile.positions.values[0].startDate.year }} -
-                          <span v-if="talent.profile.positions.values[0].isCurrent">Present</span>
-                          <span v-else>DATE ICI</span> |
-                          {{ talent.profile.positions.values[0].location.name }}
-                        </v-flex>
-                        <v-flex xs12 v-if="talent.profile.positions.values[0].summary" class="pt-2"
-                                style="white-space: pre-wrap;"
-                        >{{ talent.profile.positions.values[0].summary }}
+                        <v-flex xs12 v-if="talent.profile.positions._total">
+                          <v-flex xs12 class="pb-2">
+                            <h4>Experience</h4>
+                          </v-flex>
+                          <v-flex xs12>
+                            {{ talent.profile.positions.values[0].title }}
+                          </v-flex>
+                          <v-flex xs12>
+                            {{ talent.profile.positions.values[0].company.name }}
+                            ({{ talent.profile.positions.values[0].company.industry }} /
+                            {{ talent.profile.positions.values[0].company.size }} employees)
+                          </v-flex>
+                          <v-flex xs12 v-if="talent.profile.positions.values[0].startDate">
+                            {{ talent.profile.positions.values[0].startDate | formatLinkedInDate }} -
+                            <span v-if="talent.profile.positions.values[0].isCurrent">Present</span>
+                            <span v-else>{{ talent.profile.positions.values[0].endDate | formatLinkedInDate }}</span> |
+                            {{ talent.profile.positions.values[0].location.name }}
+                          </v-flex>
+                          <v-flex xs12 v-if="talent.profile.positions.values[0].summary" class="pt-2"
+                                  style="white-space: pre-wrap;"
+                          >{{ talent.profile.positions.values[0].summary }}
+                          </v-flex>
                         </v-flex>
                         <v-flex xs12 v-if="talent.selfPitch" class="pt-3">
                           <h4>Self pitch</h4>

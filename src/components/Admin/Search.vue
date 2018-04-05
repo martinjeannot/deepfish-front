@@ -176,8 +176,11 @@
                          color="light-blue darken-3">
                     <v-icon>fab fa-linkedin</v-icon>
                   </v-btn>
-                  {{ props.item.profile.positions.values[0].title }}
-                  at {{ props.item.profile.positions.values[0].company.name }}
+                  <span v-if="props.item.profile.positions._total">
+                    {{ props.item.profile.positions.values[0].title }}
+                    at {{ props.item.profile.positions.values[0].company.name }}
+                  </span>
+                  <span v-else>N/A</span>
                 </v-flex>
                 <v-flex xs12>
                   <v-divider></v-divider>
