@@ -98,10 +98,10 @@
       this
         .api(`/opportunities?projection=talent&talent=${this.user.id}`)
         .then((response) => {
-          this.pendingOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.status === 'PENDING');
+          this.pendingOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.talentStatus === 'PENDING');
           this.menuBadges.opportunities = this.pendingOpportunities.length;
-          this.acceptedOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.status === 'ACCEPTED');
-          this.declinedOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.status === 'DECLINED');
+          this.acceptedOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.talentStatus === 'ACCEPTED');
+          this.declinedOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.talentStatus === 'DECLINED');
         })
         .finally(() => this.clearLoading());
     },

@@ -27,8 +27,12 @@
                         {{ opportunity.company.name }}
                       </router-link>
                     </div>
-                    <v-chip outline :color="getOpportunityStatusColor(opportunity.status)">
-                      {{ opportunity.status }}
+                    <v-chip outline :color="getOpportunityStatusColor(opportunity.talentStatus)">
+                      {{ opportunity.talentStatus }}
+                    </v-chip>
+                    <v-chip v-if="opportunity.employerStatus" outline
+                            :color="getOpportunityStatusColor(opportunity.employerStatus)">
+                      {{ opportunity.employerStatus }}
                     </v-chip>
                   </v-flex>
                   <v-flex xs12 class="mb-3">

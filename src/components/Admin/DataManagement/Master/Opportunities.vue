@@ -25,8 +25,13 @@
               </router-link>
             </td>
             <td>
-              <span :class="`${getOpportunityStatusColor(props.item.status)}--text`" style="font-weight: bold">
-                {{ props.item.status }}
+              <span :class="`${getOpportunityStatusColor(props.item.talentStatus)}--text`" style="font-weight: bold">
+                {{ props.item.talentStatus }}
+              </span>
+            </td>
+            <td>
+              <span :class="`${getOpportunityStatusColor(props.item.employerStatus)}--text`" style="font-weight: bold">
+                {{ props.item.employerStatus }}
               </span>
             </td>
             <td class="justify-center layout">
@@ -54,7 +59,8 @@
         { text: 'Sent at', value: 'createdAt' },
         { text: 'Company', value: 'company.name' },
         { text: 'Talent', value: 'talent.lastName' },
-        { text: 'Status', value: 'status' },
+        { text: 'Talent status', value: 'talentStatus' },
+        { text: 'Employer status', value: 'employerStatus' },
         { text: 'Actions', value: 'id', sortable: false },
       ],
       totalItems: 0,

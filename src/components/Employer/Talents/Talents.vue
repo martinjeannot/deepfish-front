@@ -16,7 +16,7 @@
       <v-container fluid grid-list-xs>
         <v-data-iterator content-tag="v-layout" row wrap :items="requirement.opportunities" :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
-            <v-card>
+            <v-card :style="isOpportunityPending(props.item) ? '' : 'filter: grayscale(1)'">
               <v-card-title>
                 <v-flex xs4 sm2 class="text-xs-center">
                   <v-avatar size="80" class="mr-2">
@@ -68,7 +68,7 @@
                   <div>{{ props.item.talent.qualification.recommendation }}</div>
                 </v-flex>
               </v-card-title>
-              <v-card-actions>
+              <v-card-actions v-if="isOpportunityPending(props.item)">
                 <v-flex xs6 class="text-xs-center">
                   <v-btn flat color="success"
                          @click.native.stop="selectedOpportunity = props.item; contactDialog = true">
@@ -167,7 +167,11 @@
         'onAlertComponentDismissed',
         'showSnackbar',
       ]),
+      isOpportunityPending(opportunity) {
+        return !opportunity.employerStatus || opportunity.employerStatus === 'PENDING';
+      },
       decline(opportunity) {
+        opportunity.employerStatus = 'DECLINED';
         this
           .saveOpportunity(opportunity)
           .then(() => {
