@@ -70,11 +70,11 @@
                   </v-chip>
                 </v-flex>
                 <v-flex xs12 v-if="props.item.talent.selfPitch" class="mt-2">
-                  <div style="font-weight: bold">La présentation du talent</div>
+                  <div class="pb-2" style="font-weight: bold">La présentation du talent</div>
                   <div style="white-space: pre-wrap">{{ props.item.talent.selfPitch }}</div>
                 </v-flex>
                 <v-flex xs12 v-if="props.item.talent.qualification.recommendation" class="mt-2">
-                  <div style="font-weight: bold">L'avis de Deepfish</div>
+                  <div class="pb-2" style="font-weight: bold">L'avis de Deepfish</div>
                   <div style="white-space: pre-wrap">{{ props.item.talent.qualification.recommendation }}</div>
                 </v-flex>
               </v-card-title>
