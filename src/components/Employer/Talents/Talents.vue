@@ -63,9 +63,19 @@
                   style="font-weight: bold">{{ props.item.talent.conditions.fixedSalary | formatMonetaryAmount
                   }} €</span>.
                 </v-flex>
+                <v-flex xs12 v-if="props.item.talent.conditions.taskTypes.length">
+                  Missions acceptées :
+                  <v-chip v-for="taskType in props.item.talent.conditions.taskTypes" :key="taskType.id">
+                    {{ taskType.l10nKey }}
+                  </v-chip>
+                </v-flex>
+                <v-flex xs12 v-if="props.item.talent.selfPitch" class="mt-2">
+                  <div style="font-weight: bold">La présentation du talent</div>
+                  <div style="white-space: pre-wrap">{{ props.item.talent.selfPitch }}</div>
+                </v-flex>
                 <v-flex xs12 v-if="props.item.talent.qualification.recommendation" class="mt-2">
                   <div style="font-weight: bold">L'avis de Deepfish</div>
-                  <div>{{ props.item.talent.qualification.recommendation }}</div>
+                  <div style="white-space: pre-wrap">{{ props.item.talent.qualification.recommendation }}</div>
                 </v-flex>
               </v-card-title>
               <v-card-actions v-if="isOpportunityPending(props.item)">
