@@ -76,7 +76,7 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12 class="mb-3" style="font-weight: bold">Declination reason</v-flex>
-                        <v-flex xs12>{{ opportunity.employerDeclinationReason }}</v-flex>
+                        <v-flex xs12 style="white-space: pre-wrap;">{{ opportunity.employerDeclinationReason }}</v-flex>
                       </v-layout>
                     </v-container>
                   </v-tab-item>
