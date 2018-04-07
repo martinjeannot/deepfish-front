@@ -97,6 +97,7 @@
       valid: false,
       rules,
       talent: null,
+      hasBeenSuccessfullySubmittedOnce: false,
     }),
     computed: {
       ...mapGetters([
@@ -114,6 +115,7 @@
         'showSuccessSnackbar',
         'setErrorAfterApiConsumption',
         'onAlertComponentDismissed',
+        'setAlertComponent',
       ]),
       saveProfile() {
         if (this.$refs.form.validate()) {
@@ -121,6 +123,7 @@
           this.api
             .patch(this.talent._links.self.href, this.talent)
             .then((/* response */) => {
+              this.hasBeenSuccessfullySubmittedOnce = true;
               this.showSuccessSnackbar();
             })
             .catch((/* error */) => {
@@ -135,6 +138,8 @@
           .then((response) => {
             if (response.data.phoneNumber === 'null') {
               response.data.phoneNumber = '';
+            } else {
+              this.hasBeenSuccessfullySubmittedOnce = true;
             }
             this.talent = response.data;
           })
@@ -143,6 +148,14 @@
           })
           .finally(() => this.clearLoading());
       },
+    },
+    beforeRouteLeave(to, from, next) {
+      if ((this.talent.phoneNumber && this.hasBeenSuccessfullySubmittedOnce) || to.name === 'SignIn') {
+        next();
+      } else {
+        this.setAlertComponent({ type: 'info', message: 'Veuillez remplir votre profil en premier lieu' });
+        next(false);
+      }
     },
     created() {
       this.fetchInitialData();
