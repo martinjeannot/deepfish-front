@@ -21,10 +21,10 @@
           </v-flex>
           <v-flex xs12 style="white-space: pre-wrap">{{ opportunity.company.description }}</v-flex>
         </v-card-text>
-        <v-card-actions v-if="this.opportunity.talentStatus === 'PENDING'">
+        <v-card-actions v-if="opportunity.talentStatus === 'PENDING'">
           <v-layout row wrap class="text-xs-center">
             <v-flex xs12 sm4>
-              <v-btn flat color="success" @click="accept">Accepter</v-btn>
+              <v-btn flat color="success" @click="accept(opportunity)">Accepter</v-btn>
             </v-flex>
             <v-flex xs12 sm4>
               <v-btn flat color="warning" @click="declinationDialog = true">Décliner</v-btn>
@@ -115,10 +115,11 @@
           })
           .finally(() => this.clearLoading());
       },
-      accept() {
-        this.opportunity.talentStatus = 'ACCEPTED';
+      accept(opportunity) {
+        opportunity.previousState = Object.assign({}, opportunity);
+        opportunity.talentStatus = 'ACCEPTED';
         this
-          .saveOpportunity()
+          .saveOpportunity(opportunity)
           .then(() => {
             this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
           });
@@ -132,11 +133,11 @@
             this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
           });
       },
-      saveOpportunity() {
-        const opportunity = Object.assign({}, this.opportunity);
-        delete opportunity.requirement;
+      saveOpportunity(opportunity) {
+        const opportunityData = Object.assign({}, opportunity);
+        delete opportunityData.requirement;
         return this.api
-          .patch(this.opportunity._links.self.href, opportunity)
+          .patch(opportunity._links.self.href, opportunityData)
           .then(() => this.showSnackbar('Opération terminée avec succès'))
           .catch(() => {
             this.showSnackbar('Erreur');
