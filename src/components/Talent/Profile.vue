@@ -125,6 +125,7 @@
             .then((/* response */) => {
               this.hasBeenSuccessfullySubmittedOnce = true;
               this.showSuccessSnackbar();
+              this.$router.push({ name: 'TalentConditions' });
             })
             .catch((/* error */) => {
               this.setErrorAfterApiConsumption();
