@@ -1,12 +1,12 @@
 <template>
   <div>
-    <v-stepper v-model="currentStep">
+    <v-stepper v-model="currentStep" @input="scrollToTop">
       <v-stepper-header>
-        <v-stepper-step step="1" :complete="currentStep > 1" editable>Mon poste</v-stepper-step>
+        <v-stepper-step step="1" :complete="currentStep > 1">Mon poste</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="2" :complete="currentStep > 2" editable>Mes souhaits</v-stepper-step>
+        <v-stepper-step step="2" :complete="currentStep > 2">Mes souhaits</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="3" editable>Ma présentation</v-stepper-step>
+        <v-stepper-step step="3">Ma présentation</v-stepper-step>
       </v-stepper-header>
       <v-stepper-items>
         <v-stepper-content step="1">
@@ -42,6 +42,11 @@
     data: () => ({
       currentStep: 0,
     }),
+    methods: {
+      scrollToTop() {
+        window.scrollTo(0, 0);
+      },
+    },
   };
 </script>
 

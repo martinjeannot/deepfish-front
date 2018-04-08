@@ -7,27 +7,30 @@
     </v-layout>
     <v-layout wrap v-else>
       <v-flex xs12 class="mb-2">
-        <span class="subheading">Salaire fixe souhaité</span>
+        <span class="subheading" style="font-weight: bold">Salaire fixe souhaité</span>
       </v-flex>
-      <v-form v-model="fixedSalaryValid" ref="fixedSalaryForm" @submit.prevent="saveConditions" class="d-inline-flex"
+      <v-form v-model="fixedSalaryValid" ref="fixedSalaryForm" @submit.prevent="submitConditions" class="d-inline-flex"
               style="width: 100%">
-        <v-flex xs7>
+        <v-flex xs9 sm-4 offset-sm3>
           <v-text-field type="number" v-model="conditions.fixedSalary" label="Montant annuel" prefix="€"
                         :rules="[rules.required, rules.positive]" required></v-text-field>
         </v-flex>
-        <v-flex xs5 class="text-xs-center">
-          <v-btn type="submit" :disabled="!fixedSalaryValid || subLoading">Valider</v-btn>
+        <v-flex xs3 sm-2 class="text-xs-center">
+          <v-btn type="submit" fab small color="primary" :disabled="!fixedSalaryValid || subLoading"
+                 :loading="subLoading">
+            <v-icon>done</v-icon>
+          </v-btn>
         </v-flex>
       </v-form>
       <v-flex xs12 class="mb-2">
-        <span class="subheading">Date de démarrage idéale</span>
+        <span class="subheading" style="font-weight: bold">Date de démarrage idéale</span>
       </v-flex>
-      <v-flex xs12 class="mb-2">
+      <v-flex xs12 class="mb-2 text-xs-center">
         <v-date-picker v-model="conditions.canStartOn" locale="fr-fr" :first-day-of-week="1"
                        @input="saveConditions" :readonly="subLoading"></v-date-picker>
       </v-flex>
       <v-flex xs12 class="mb-2">
-        <span class="subheading">Lieux de travail</span>
+        <span class="subheading" style="font-weight: bold">Lieux de travail</span>
       </v-flex>
       <v-layout row wrap>
         <v-flex xs12 sm3 md2 lg1 v-for="citiesByCountry in fixedLocationsByCountry" :key="citiesByCountry.country.id">
@@ -43,7 +46,7 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
 
   const rules = {
     required: value => !!value || 'Ce champ est obligatoire',
@@ -134,6 +137,9 @@
       },
     },
     methods: {
+      ...mapActions([
+        'showSnackbar',
+      ]),
       prepareForApiConsumption(onCreated = false) {
         this.loading = onCreated;
         this.subLoading = true;
@@ -142,6 +148,11 @@
         this.loading = false;
         this.subLoading = false;
       },
+      submitConditions() {
+        this
+          .saveConditions()
+          .then(() => this.showSnackbar('OK'));
+      },
       saveConditions() {
         const conditions = Object.assign({}, this.conditions);
         Object.entries(this.conditions).forEach(([key, value]) => {
@@ -149,8 +160,11 @@
             delete conditions[key];
           }
         });
+        if (!this.conditions.fixedSalary) {
+          delete conditions.fixedSalary;
+        }
         this.prepareForApiConsumption();
-        this.api
+        return this.api
           .patch(this.conditions._links.self.href, conditions)
           .finally(() => this.clearLoading());
       },
@@ -167,6 +181,9 @@
                  fixedLocationResponse,
                ]) => {
           this.conditions = conditionsResponse.data;
+          if (!this.conditions.fixedSalary) {
+            this.conditions.fixedSalary = '';
+          }
           this.fixedLocations = fixedLocationResponse.data._embedded.fixedLocations;
           this.fixedLocationsByCountry = this.fixedLocations
             .filter(fixedLocation => fixedLocation.parentLocation === null)

@@ -13,19 +13,20 @@
         <v-select
           :items="Array(40).fill().map((_, i) => i + 1)"
           v-model="talent.yearsOfExperience"
+          :disabled="loading"
           @input="saveProfile"
         ></v-select>
       </v-flex>
       <v-flex xs12>
         <span class="subheading">Mettez-vous en valeur en quelques mots</span>
       </v-flex>
-      <v-form v-model="valid" ref="form" @submit.prevent="saveProfile" style="width: 100%">
+      <v-form v-model="valid" ref="form" @submit.prevent="submitSelfPitch" style="width: 100%">
         <v-flex xs12>
           <v-text-field v-model="talent.selfPitch" multi-line rows="9" :rules="[rules.maxLength]" :counter="1000"
                         :readonly="loading"></v-text-field>
         </v-flex>
         <v-flex xs12 class="text-xs-right">
-          <v-btn type="submit" :disabled="!valid || loading">Valider</v-btn>
+          <v-btn type="submit" color="primary" :disabled="!valid || loading" :loading="loading">Valider</v-btn>
         </v-flex>
       </v-form>
     </v-layout>
@@ -33,7 +34,7 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
 
   const rules = {
     maxLength: value => value.length < 1001 || 'Votre présentation est trop longue',
@@ -55,6 +56,9 @@
       ]),
     },
     methods: {
+      ...mapActions([
+        'showSnackbar',
+      ]),
       prepareForApiConsumption(initialLoading = false) {
         this.initialLoading = initialLoading;
         this.loading = true;
@@ -63,9 +67,16 @@
         this.initialLoading = false;
         this.loading = false;
       },
+      submitSelfPitch() {
+        this
+          .saveProfile()
+          .then(() => {
+            this.showSnackbar('Vos conditions ont été sauvegardées');
+          });
+      },
       saveProfile() {
         this.prepareForApiConsumption();
-        this.api
+        return this.api
           .patch(this.user._links.self.href, this.talent)
           .finally(() => this.clearLoading());
       },
