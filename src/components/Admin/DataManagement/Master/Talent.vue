@@ -58,7 +58,8 @@
                   </v-flex>
                   <v-flex xs12>
                     <p>
-                      <span style="font-weight: bold">Maturity level</span> : {{ talent.maturityLevel.split('_')[0] }}
+                      <span style="font-weight: bold">Maturity level</span>
+                      : {{ getTalentMaturityLevel(talent.maturityLevel) }}
                     </p>
                   </v-flex>
                   <v-flex xs12>
@@ -298,6 +299,7 @@
         'talentRankingReferenceData',
       ]),
       ...mapState([
+        'getTalentMaturityLevel',
         'getOpportunityStatusColor',
       ]),
       profileCompletion() {

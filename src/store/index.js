@@ -21,6 +21,18 @@ export default new Vuex.Store({
     snackbar: { show: false, text: '' },
     error: null,
     alertComponent: null,
+    getTalentMaturityLevel(maturityLevel) {
+      switch (maturityLevel) {
+        case 'CLEAR_WATER':
+          return 'Clear water';
+        case 'OPEN_WATER':
+          return 'Open water';
+        case 'DEEP_WATER':
+          return 'Deep water';
+        default:
+          return '';
+      }
+    },
     getOpportunityStatusColor(status) {
       switch (status) {
         case 'ACCEPTED':
