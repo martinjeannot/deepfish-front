@@ -130,8 +130,8 @@
     </v-flex>
     <v-flex xs10>
       <v-container fluid grid-list-md>
-        <v-data-iterator content-tag="v-layout" row wrap :items="talents" :rows-per-page-items="rowsPerPageItems"
-                         :pagination.sync="pagination">
+        <v-data-iterator content-tag="v-layout" row wrap :items="talents" :pagination.sync="pagination"
+                         :rows-per-page-items="rowsPerPageItems" :total-items="totalItems">
           <v-flex slot="item" slot-scope="props" xs12 sm6 md4 lg3>
             <v-card>
               <v-layout row wrap class="px-2">
@@ -166,7 +166,7 @@
                   Member since {{ props.item.createdAt | formatDate('ll') }}
                 </v-flex>
                 <v-flex xs3 class="text-xs-right">
-                  {{ props.item.maturityLevel.split('_')[0] }}
+                  {{ getTalentMaturityLevel(props.item.maturityLevel) }}
                 </v-flex>
                 <v-flex xs12>
                   <v-divider></v-divider>
@@ -271,7 +271,7 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapGetters, mapActions, mapState } from 'vuex';
 
   const rules = {
     required: value => !!value || 'This field is required',
@@ -288,6 +288,9 @@
     data: () => ({
       rules,
       talents: [],
+      totalItems: 0,
+      pagination: {},
+      rowsPerPageItems: [4, 8, 12],
       selectedTalent: null,
       requirements: [],
       selectedRequirement: null,
@@ -315,10 +318,6 @@
         talentMaturityLevels: [],
         active: true,
       },
-      rowsPerPageItems: [4, 8, 12],
-      pagination: {
-        rowsPerPage: 4,
-      },
     }),
     computed: {
       ...mapGetters([
@@ -328,6 +327,17 @@
         'user',
         'talentRankingReferenceData',
       ]),
+      ...mapState([
+        'getTalentMaturityLevel',
+      ]),
+    },
+    watch: {
+      pagination: {
+        handler() {
+          this.search();
+        },
+        deep: true,
+      },
     },
     methods: {
       ...mapActions([
@@ -419,11 +429,15 @@
         // Active criterion
         talentQueryString += talentQueryString ? '&' : '';
         talentQueryString += `active=${this.criteria.active}`;
+        // Pagination
+        talentQueryString += talentQueryString ? '&' : '';
+        talentQueryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         // API consumption
         this
           .api(`/queryableTalents?projection=default&${talentQueryString}`)
           .then((response) => {
             this.talents = response.data._embedded.queryableTalents;
+            this.totalItems = response.data.page.totalElements;
           })
           .finally(() => this.clearLoading());
       },
