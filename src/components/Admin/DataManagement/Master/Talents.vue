@@ -22,6 +22,11 @@
             <td>{{ props.item.firstName }}</td>
             <td>{{ props.item.email }}</td>
             <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
+            <td>
+              <v-icon :color="props.item.active ? 'green' : 'red'">
+                {{ props.item.active ? 'done' : 'clear' }}
+              </v-icon>
+            </td>
             <td class="justify-center layout">
               <v-btn icon color="primary" :to="{ name: 'AdminDMTalent', params: {id: props.item.id} }">
                 <v-icon>visibility</v-icon>
@@ -49,6 +54,7 @@
         { text: 'First name', value: 'firstName' },
         { text: 'Email', value: 'email' },
         { text: 'Registered at', value: 'createdAt' },
+        { text: 'Active', value: 'active' },
         { text: 'Actions', value: 'name', sortable: false },
       ],
       totalItems: 0,
