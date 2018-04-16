@@ -1,5 +1,5 @@
 <template>
-  <v-layout v-if="loading">
+  <v-layout v-if="loading || requirement == null">
     <v-flex xs12 class="text-xs-center">
       <v-progress-circular indeterminate color="primary" :size="70"></v-progress-circular>
     </v-flex>

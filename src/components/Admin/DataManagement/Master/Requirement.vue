@@ -41,7 +41,14 @@
             </v-flex>
             <v-flex xs8>
               <v-card>
-                COMING SOON
+                <v-card-text>
+                  <v-text-field label="Notes" v-model="requirement.notes" multi-line rows="9"></v-text-field>
+                  <div class="text-xs-right">
+                    <v-btn icon fab small color="primary" @click="saveRequirement(requirement)">
+                      <v-icon>done</v-icon>
+                    </v-btn>
+                  </div>
+                </v-card-text>
               </v-card>
             </v-flex>
           </v-layout>
@@ -79,11 +86,21 @@
         'setErrorAfterApiConsumption',
         'onAlertComponentDismissed',
       ]),
+      saveRequirement(requirement) {
+        const requirementData = Object.assign({}, requirement);
+        delete requirementData.company;
+        delete requirementData.job;
+        delete requirementData.seniority;
+        this.api
+          .patch(requirement._links.self.href, requirementData)
+          .then(() => this.showSnackbar('Success'))
+          .catch(() => this.showSnackbar('Error'));
+      },
     },
     created() {
       this.prepareForApiConsumption(true);
       this
-        .api(`/requirements/${this.id}?projection=default`)
+        .api(`/requirements/${this.id}?projection=admin`)
         .then((response) => {
           this.requirement = response.data;
         })
