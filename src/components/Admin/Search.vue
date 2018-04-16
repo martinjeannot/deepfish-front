@@ -88,6 +88,15 @@
           </v-card>
         </v-expansion-panel-content>
         <v-expansion-panel-content>
+          <div slot="header">Years of experience</div>
+          <v-card>
+            <v-card-text>
+              <v-text-field type="number" label="Minimum" v-model="criteria.minYearsOfExperience"></v-text-field>
+              <v-text-field type="number" label="Maximum" v-model="criteria.maxYearsOfExperience"></v-text-field>
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+        <v-expansion-panel-content>
           <div slot="header">Talent ranking</div>
           <v-card>
             <v-card-text>
@@ -185,9 +194,12 @@
                 <v-flex xs12>
                   <v-divider></v-divider>
                 </v-flex>
-                <v-flex xs12>
+                <v-flex xs6>
                   <v-icon small>euro_symbol</v-icon>
                   {{ props.item.conditions.fixedSalary | formatMonetaryAmount }}
+                </v-flex>
+                <v-flex xs6>
+                  {{ props.item.yearsOfExperience ? props.item.yearsOfExperience : '??' }} years of exp
                 </v-flex>
                 <v-flex xs12>
                   <v-chip v-for="taskType in props.item.conditions.taskTypes" :key="taskType.id" small>
@@ -314,6 +326,8 @@
         fixedLocations: [],
         minFixedSalary: null,
         maxFixedSalary: null,
+        minYearsOfExperience: null,
+        maxYearsOfExperience: null,
         talentRankings: [],
         talentMaturityLevels: [],
         active: true,
@@ -409,6 +423,15 @@
         if (this.criteria.maxFixedSalary) {
           talentQueryString += talentQueryString ? '&' : '';
           talentQueryString += `maxFixedSalary=${this.criteria.maxFixedSalary}`;
+        }
+        // Years of experience criterion
+        if (this.criteria.minYearsOfExperience) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += `minYearsOfExperience=${this.criteria.minYearsOfExperience}`;
+        }
+        if (this.criteria.maxYearsOfExperience) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += `maxYearsOfExperience=${this.criteria.maxYearsOfExperience}`;
         }
         // Talent rankings
         if (this.criteria.talentRankings.length) {
