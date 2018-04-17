@@ -30,7 +30,7 @@ export default new Vuex.Store({
         case 'DEEP_WATER':
           return 'Deep water';
         default:
-          return '';
+          return 'N/A';
       }
     },
     getOpportunityStatusColor(status) {
