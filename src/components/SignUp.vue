@@ -2,7 +2,8 @@
   <div>
     <v-layout row v-if="alertComponent">
       <v-flex xs12 sm6 offset-sm3>
-        <base-alert :type="alertComponent.type" :message="alertComponent.message" @dismissed="onDismissed"></base-alert>
+        <base-alert :type="alertComponent.type" :message="alertComponent.message"
+                    @dismissed="onAlertComponentDismissed"></base-alert>
       </v-flex>
     </v-layout>
     <v-layout row>
@@ -32,7 +33,7 @@
                 <h2>INSCRIPTION RECRUTEURS</h2>
               </v-flex>
             </v-layout>
-            <v-form v-model="valid" ref="form" @submit.prevent="signUp">
+            <v-form v-model="valid" ref="form" @submit.prevent="submitSignUpForm">
               <v-layout row>
                 <v-flex xs12>
                   <v-text-field label="Prénom" v-model="firstName" :rules="[rules.required]" type="text"
@@ -80,7 +81,7 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
 
   const EMAILREGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const rules = {
@@ -109,27 +110,27 @@
       ]),
     },
     methods: {
-      signUp() {
+      ...mapActions([
+        'onAlertComponentDismissed',
+        'signUp',
+        'logout',
+      ]),
+      submitSignUpForm() {
         if (this.$refs.form.validate()) {
-          this.$store.dispatch('signUp', {
+          this.signUp({
             firstName: this.firstName,
             lastName: this.lastName,
             email: this.email,
             phoneNumber: this.phoneNumber,
             companyName: this.companyName,
-          }).then(() => {
+          }).then((response) => {
             if (!this.error) {
-              this.$router.push('/');
-              this.$store.dispatch('setAlertComponent', {
-                type: 'success',
-                message: 'Enregistrement réalisé avec succès !',
-              });
+              this.logout();
+              localStorage.setItem('auth_token', JSON.stringify(response.data));
+              location.href = location.origin;
             }
           });
         }
-      },
-      onDismissed() {
-        this.$store.dispatch('clearError');
       },
     },
   };

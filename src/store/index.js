@@ -147,8 +147,9 @@ export default new Vuex.Store({
         .post(`${process.env.DEEPFISH_BACK_BASE_URL}/employers/sign-up`, signUpForm, {
           auth: { username: '67e43464e9c0483faaf7b773018b2b60', password: '9c7d7778e0534031aa0ed684bba16546' },
         })
-        .then((/* response */) => {
+        .then((response) => {
           commit(types.SET_LOADING, false);
+          return response;
         })
         .catch((/* error */) => {
           commit(types.SET_LOADING, false);
