@@ -39,10 +39,10 @@
                       <h4>Niveau de maturité</h4>
                       <v-radio-group v-model="talent.maturityLevel" row :rules="[rules.required]">
                         <v-tooltip bottom class="bugfix-vuetify-2171">
-                          <v-radio label="Clear" value="CLEAR_WATER" slot="activator"
-                                   class="hidden-sm-and-up"></v-radio>
                           <v-radio label="Clear water" value="CLEAR_WATER" slot="activator"
                                    class="hidden-xs-only"></v-radio>
+                          <v-radio label="Clear" value="CLEAR_WATER" slot="activator"
+                                   class="hidden-sm-and-up"></v-radio>
                           <div>
                             S’adresse à vous si vous souhaitez quitter rapidement<br>
                             ou dans un futur proche votre entreprise, idéalement<br>
@@ -50,9 +50,9 @@
                           </div>
                         </v-tooltip>
                         <v-tooltip bottom class="bugfix-vuetify-2171">
-                          <v-radio label="Open" value="OPEN_WATER" slot="activator" class="hidden-sm-and-up"></v-radio>
                           <v-radio label="Open water" value="OPEN_WATER" slot="activator"
                                    class="hidden-xs-only"></v-radio>
+                          <v-radio label="Open" value="OPEN_WATER" slot="activator" class="hidden-sm-and-up"></v-radio>
                           <div>
                             S’adresse à vous si vous êtes relativement bien<br>
                             dans votre entreprise mais restez à l’affût d’une<br>
@@ -61,9 +61,9 @@
                           </div>
                         </v-tooltip>
                         <v-tooltip bottom class="bugfix-vuetify-2171">
-                          <v-radio label="Deep" value="DEEP_WATER" slot="activator" class="hidden-sm-and-up"></v-radio>
                           <v-radio label="Deep water" value="DEEP_WATER" slot="activator"
                                    class="hidden-xs-only"></v-radio>
+                          <v-radio label="Deep" value="DEEP_WATER" slot="activator" class="hidden-sm-and-up"></v-radio>
                           <div>
                             S’adresse aux profils qui se sentent bien dans<br>
                             leur entreprise actuelle et qui n’ont pas le temps<br>
