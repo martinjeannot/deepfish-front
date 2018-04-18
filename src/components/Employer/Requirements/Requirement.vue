@@ -112,7 +112,8 @@
           this.prepareForApiConsumption();
           this.api
             .post('/requirements', this.requirement)
-            .then(() => {
+            .then((response) => {
+              this.user.requirements.push(response.data);
               this.$router.push('/employer/requirements');
               this.setAlertComponent({
                 type: 'success',
@@ -138,6 +139,12 @@
           this.jobs = jobsResponse.data._embedded.jobs;
           this.seniorities = senioritiesResponse.data._embedded.seniorities;
           this.requirement = this.newRequirement();
+          if (!this.user.requirements.length) {
+            this.setAlertComponent({
+              type: 'success',
+              message: 'Bienvenue sur Deepfish ! Vous pouvez dès maintenant nous confier votre premier besoin en recrutement',
+            });
+          }
         })
         .catch(() => this.setErrorAfterApiConsumption())
         .finally(() => this.clearLoading());
