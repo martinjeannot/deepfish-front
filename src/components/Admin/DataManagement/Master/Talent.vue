@@ -96,6 +96,7 @@
                   <v-tab>Conditions</v-tab>
                   <v-tab>Qualification</v-tab>
                   <v-tab>Opportunities</v-tab>
+                  <v-tab>Notes</v-tab>
                   <v-tab-item>
                     <v-container>
                       <v-layout row wrap>
@@ -263,6 +264,20 @@
                       </template>
                     </v-data-table>
                   </v-tab-item>
+                  <v-tab-item>
+                    <v-container>
+                      <v-layout row wrap>
+                        <v-flex xs12>
+                          <v-text-field v-model="talent.notes" multi-line rows="16"></v-text-field>
+                          <div class="text-xs-right">
+                            <v-btn icon fab small color="primary" @click="saveProfile">
+                              <v-icon>done</v-icon>
+                            </v-btn>
+                          </div>
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
+                  </v-tab-item>
                 </v-tabs>
               </v-card>
             </v-flex>
@@ -367,7 +382,7 @@
         delete profile.opportunities;
         this.api
           .patch(this.talent._links.self.href, profile)
-          .then(() => this.showSnackbar('Success'))
+          .then(() => this.showSnackbar('OK'))
           .catch(() => {
             this.showSnackbar('Error');
             this.fetchInitialData();
