@@ -252,7 +252,8 @@
                   <h2>Send an opportunity to {{ selectedTalent.firstName }}</h2>
                 </v-flex>
                 <v-flex xs2 class="text-xs-right">
-                  <v-btn type="submit" fab small color="success" :disabled="!opportunityValid">
+                  <v-btn type="submit" fab small color="success" :loading="loading"
+                         :disabled="loading || !opportunityValid">
                     <v-icon>send</v-icon>
                   </v-btn>
                 </v-flex>
@@ -351,6 +352,9 @@
           this.search();
         },
         deep: true,
+      },
+      selectedRequirement(requirement) {
+        this.populateOpportunityPitch(requirement);
       },
     },
     methods: {
@@ -465,6 +469,19 @@
             this.talents = response.data._embedded.queryableTalents;
             this.totalItems = response.data.page.totalElements;
           })
+          .finally(() => this.clearLoading());
+      },
+      populateOpportunityPitch(requirement) {
+        this.prepareForApiConsumption();
+        this.opportunityPitch = '';
+        this
+          .api(`/opportunities?requirement=${requirement.id}&sort=createdAt,desc&size=1`)
+          .then((response) => {
+            if (response.data._embedded.opportunities.length) {
+              this.opportunityPitch = response.data._embedded.opportunities[0].pitch;
+            }
+          })
+          .catch(() => this.showSnackbar('Error'))
           .finally(() => this.clearLoading());
       },
       newOpportunity() {
