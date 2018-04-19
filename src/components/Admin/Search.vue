@@ -455,6 +455,9 @@
         // Pagination
         talentQueryString += talentQueryString ? '&' : '';
         talentQueryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
+        // Sorting
+        talentQueryString += talentQueryString ? '&' : '';
+        talentQueryString += '&sort=createdAt,desc';
         // API consumption
         this
           .api(`/queryableTalents?projection=default&${talentQueryString}`)
