@@ -11,6 +11,13 @@
           <v-icon>search</v-icon>
         </v-btn>
       </v-flex>
+      <v-card>
+        <v-card-title>
+          <v-flex xs12 class="white">
+            <v-text-field v-model="criteria.searchQuery" label="Search" clearable hide-details></v-text-field>
+          </v-flex>
+        </v-card-title>
+      </v-card>
       <v-expansion-panel>
         <v-expansion-panel-content>
           <div slot="header">Company maturity level</div>
@@ -319,6 +326,7 @@
       talentMaturityLevels,
       // CRITERIA
       criteria: {
+        searchQuery: null,
         companyMaturityLevels: [],
         companyMaturityLevelsNotIn: [],
         jobs: [],
@@ -366,6 +374,11 @@
       search() {
         this.prepareForApiConsumption();
         let talentQueryString = '';
+        // Search query
+        if (this.criteria.searchQuery) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += `searchQuery=${this.criteria.searchQuery}`;
+        }
         // Company maturity levels criterion
         if (this.criteria.companyMaturityLevels.length) {
           talentQueryString += talentQueryString ? '&' : '';
@@ -458,10 +471,10 @@
         talentQueryString += `active=${this.criteria.active}`;
         // Pagination
         talentQueryString += talentQueryString ? '&' : '';
-        talentQueryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
+        talentQueryString += `page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         // Sorting
         talentQueryString += talentQueryString ? '&' : '';
-        talentQueryString += '&sort=createdAt,desc';
+        talentQueryString += 'sort=createdAt,desc';
         // API consumption
         this
           .api(`/queryableTalents?projection=default&${talentQueryString}`)
