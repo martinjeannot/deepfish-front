@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 export const SET_APP_CREATED = 'SET_APP_CREATED';
 export const SET_AUTH_TOKEN = 'SET_AUTH_TOKEN';
+export const SET_AUTH_TOKEN_REFRESHING = 'SET_AUTH_TOKEN_REFRESHING';
 export const SET_AUTH_PROCESS_COMPLETED = 'SET_AUTH_PROCESS_COMPLETED';
 export const SET_USER = 'SET_USER';
 export const SET_LOADING = 'SET_LOADING';

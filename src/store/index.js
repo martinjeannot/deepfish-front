@@ -10,6 +10,8 @@ export default new Vuex.Store({
   state: {
     appCreated: true, // still useful ?
     authToken: null,
+    authTokenRefreshing: false,
+    authTokenRefreshSubscribers: [],
     authProcessCompleted: false,
     user: null,
     api: axios.create({
@@ -57,7 +59,14 @@ export default new Vuex.Store({
     },
     [types.SET_AUTH_TOKEN](state, authToken) {
       state.authToken = authToken;
-      state.api.defaults.headers.common.Authorization = `Bearer ${authToken.access_token}`;
+      if (authToken) {
+        state.api.defaults.headers.common.Authorization = `Bearer ${authToken.access_token}`;
+      } else {
+        delete state.api.defaults.headers.common.Authorization;
+      }
+    },
+    [types.SET_AUTH_TOKEN_REFRESHING](state, authTokenRefreshing) {
+      state.authTokenRefreshing = authTokenRefreshing;
     },
     [types.SET_AUTH_PROCESS_COMPLETED](state, authProcessCompleted) {
       state.authProcessCompleted = authProcessCompleted;
@@ -93,6 +102,15 @@ export default new Vuex.Store({
   actions: {
     setAppCreated({ commit }) {
       commit(types.SET_APP_CREATED, true);
+    },
+    setAuthToken({ commit }, authToken) {
+      commit(types.SET_AUTH_TOKEN, authToken);
+    },
+    clearAuthToken({ commit }) {
+      commit(types.SET_AUTH_TOKEN, null);
+    },
+    setAuthTokenRefreshing({ commit }, authTokenRefreshing) {
+      commit(types.SET_AUTH_TOKEN_REFRESHING, authTokenRefreshing);
     },
     prepareForApiConsumption({ commit }, initial = false) {
       commit(types.CLEAR_ERROR);
@@ -219,8 +237,9 @@ export default new Vuex.Store({
         })
         .finally(() => dispatch('clearLoading'));
     },
-    logout({ commit }) {
+    logout({ commit, dispatch }) {
       localStorage.removeItem('auth_token');
+      dispatch('clearAuthToken');
       commit(types.SET_AUTH_PROCESS_COMPLETED, false);
       commit(types.SET_USER, null);
     },
@@ -242,6 +261,18 @@ export default new Vuex.Store({
     },
     api(state) {
       return state.api;
+    },
+    authTokenRefreshing(state) {
+      return state.authTokenRefreshing;
+    },
+    authTokenRefreshSubscribers(state) {
+      return state.authTokenRefreshSubscribers;
+    },
+    refreshToken(state) {
+      if (state.authToken) {
+        return state.authToken.refresh_token;
+      }
+      return null;
     },
     loading(state) {
       return state.loading;
