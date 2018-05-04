@@ -38,7 +38,7 @@
     </v-flex>
     <v-dialog v-model="declinationDialog" max-width="650px">
       <v-container style="background-color: white">
-        <v-form v-model="opportunityDeclinationValid" @submit.prevent="decline">
+        <v-form v-model="opportunityDeclinationValid" @submit.prevent="decline(opportunity)">
           <v-layout row wrap>
             <v-flex xs12>
               <h4>Expliquez la raison de votre refus en quelques mots</h4>
@@ -124,13 +124,14 @@
             this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
           });
       },
-      decline() {
-        this.opportunity.talentStatus = 'DECLINED';
+      decline(opportunity) {
+        opportunity.talentStatus = 'DECLINED';
         this.declinationDialog = false;
         this
-          .saveOpportunity()
+          .saveOpportunity(opportunity)
           .then(() => {
             this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
+            this.$router.push('/talent/opportunities');
           });
       },
       saveOpportunity(opportunity) {
