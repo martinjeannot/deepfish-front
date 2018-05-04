@@ -23,14 +23,14 @@
                 <v-layout wrap>
                   <v-flex xs12 class="text-xs-center">
                     <v-avatar size="140">
-                      <img :src="talent.profile.pictureUrl" alt="picture"/>
+                      <img :src="talent.basicProfile.pictureUrl" alt="picture"/>
                     </v-avatar>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
                     <h2>{{ talent.lastName.toUpperCase() }} {{ talent.firstName }}</h2>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center mb-3">
-                    <h4>{{ talent.profile.headline }}</h4>
+                    <h4>{{ talent.basicProfile.headline }}</h4>
                   </v-flex>
                   <v-flex xs12>
                     <p>
@@ -65,11 +65,11 @@
                   <v-flex xs12>
                     <p>
                       <span style="font-weight: bold">LinkedIn</span> :
-                      <v-btn flat icon :href="talent.profile.publicProfileUrl" target="_blank"
+                      <v-btn flat icon :href="talent.basicProfile.publicProfileUrl" target="_blank"
                              color="light-blue darken-3">
                         <v-icon>fab fa-linkedin</v-icon>
                       </v-btn>
-                      {{ talent.profile.numConnections }}{{ talent.profile.numConnectionsCapped ? '+' : ''
+                      {{ talent.basicProfile.numConnections }}{{ talent.basicProfile.numConnectionsCapped ? '+' : ''
                       }} connections
                     </p>
                   </v-flex>
@@ -97,16 +97,17 @@
                   <v-tab>Qualification</v-tab>
                   <v-tab>Opportunities</v-tab>
                   <v-tab>Notes</v-tab>
+                  <v-tab>LKD Profile</v-tab>
                   <v-tab-item>
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12 text-xs-center class="pb-3">
-                          <h3>{{ talent.profile.lastName }} {{ talent.profile.firstName }}</h3>
-                          <h4>{{ talent.profile.headline }}</h4>
-                          {{ talent.profile.location.name }} | {{ talent.profile.industry }}
+                          <h3>{{ talent.basicProfile.lastName }} {{ talent.basicProfile.firstName }}</h3>
+                          <h4>{{ talent.basicProfile.headline }}</h4>
+                          {{ talent.basicProfile.location.name }} | {{ talent.basicProfile.industry }}
                         </v-flex>
                         <v-flex xs12 class="pb-3">
-                          {{ talent.profile.summary }}
+                          {{ talent.basicProfile.summary }}
                         </v-flex>
                         <v-flex xs12>
                           <v-select
@@ -116,27 +117,28 @@
                             @input="saveProfile"
                           ></v-select>
                         </v-flex>
-                        <v-flex xs12 v-if="talent.profile.positions._total">
+                        <v-flex xs12 v-if="talent.basicProfile.positions._total">
                           <v-flex xs12 class="pb-2">
                             <h4>Experience</h4>
                           </v-flex>
                           <v-flex xs12>
-                            {{ talent.profile.positions.values[0].title }}
+                            {{ talent.basicProfile.positions.values[0].title }}
                           </v-flex>
                           <v-flex xs12>
-                            {{ talent.profile.positions.values[0].company.name }}
-                            ({{ talent.profile.positions.values[0].company.industry }} /
-                            {{ talent.profile.positions.values[0].company.size }} employees)
+                            {{ talent.basicProfile.positions.values[0].company.name }}
+                            ({{ talent.basicProfile.positions.values[0].company.industry }} /
+                            {{ talent.basicProfile.positions.values[0].company.size }} employees)
                           </v-flex>
-                          <v-flex xs12 v-if="talent.profile.positions.values[0].startDate">
-                            {{ talent.profile.positions.values[0].startDate | formatLinkedInDate }} -
-                            <span v-if="talent.profile.positions.values[0].isCurrent">Present</span>
-                            <span v-else>{{ talent.profile.positions.values[0].endDate | formatLinkedInDate }}</span> |
-                            {{ talent.profile.positions.values[0].location.name }}
+                          <v-flex xs12 v-if="talent.basicProfile.positions.values[0].startDate">
+                            {{ talent.basicProfile.positions.values[0].startDate | formatLinkedInDate }} -
+                            <span v-if="talent.basicProfile.positions.values[0].isCurrent">Present</span>
+                            <span v-else>{{ talent.basicProfile.positions.values[0].endDate | formatLinkedInDate
+                              }}</span> |
+                            {{ talent.basicProfile.positions.values[0].location.name }}
                           </v-flex>
-                          <v-flex xs12 v-if="talent.profile.positions.values[0].summary" class="pt-2"
+                          <v-flex xs12 v-if="talent.basicProfile.positions.values[0].summary" class="pt-2"
                                   style="white-space: pre-wrap;"
-                          >{{ talent.profile.positions.values[0].summary }}
+                          >{{ talent.basicProfile.positions.values[0].summary }}
                           </v-flex>
                         </v-flex>
                         <v-flex xs12 v-if="talent.selfPitch" class="pt-3">
@@ -269,6 +271,20 @@
                       <v-layout row wrap>
                         <v-flex xs12>
                           <v-text-field v-model="talent.notes" multi-line rows="16"></v-text-field>
+                          <div class="text-xs-right">
+                            <v-btn icon fab small color="primary" @click="saveProfile">
+                              <v-icon>done</v-icon>
+                            </v-btn>
+                          </div>
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
+                  </v-tab-item>
+                  <v-tab-item>
+                    <v-container>
+                      <v-layout row wrap>
+                        <v-flex xs12>
+                          <v-text-field v-model="talent.fullProfileText" multi-line rows="16"></v-text-field>
                           <div class="text-xs-right">
                             <v-btn icon fab small color="primary" @click="saveProfile">
                               <v-icon>done</v-icon>

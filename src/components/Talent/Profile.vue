@@ -22,7 +22,7 @@
                 </v-flex>
                 <v-flex xs4 text-xs-right>
                   <v-avatar size="80">
-                    <img :src="talent.profile.pictureUrl" alt="picture"/>
+                    <img :src="talent.basicProfile.pictureUrl" alt="picture"/>
                   </v-avatar>
                 </v-flex>
                 <v-flex xs12>

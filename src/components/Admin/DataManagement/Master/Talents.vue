@@ -15,7 +15,7 @@
           <template slot="items" slot-scope="props">
             <td>
               <v-avatar size="46">
-                <img :src="props.item.profile.pictureUrl" alt="picture"/>
+                <img :src="props.item.basicProfile.pictureUrl" alt="picture"/>
               </v-avatar>
             </td>
             <td>{{ props.item.lastName }}</td>

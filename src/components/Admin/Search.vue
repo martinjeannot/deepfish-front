@@ -156,7 +156,7 @@
                     <span slot="badge">{{ getTalentRankingLetter(props.item) }}</span>
                     <v-avatar size="60" class="light-blue">
                       <v-avatar size="50">
-                        <img :src="props.item.profile.pictureUrl" alt="picture"/>
+                        <img :src="props.item.basicProfile.pictureUrl" alt="picture"/>
                       </v-avatar>
                     </v-avatar>
                   </v-badge>
@@ -167,7 +167,7 @@
                       {{ props.item.lastName.toUpperCase() }} {{ props.item.firstName }}
                     </router-link>
                   </h4>
-                  {{ props.item.profile.headline }}
+                  {{ props.item.basicProfile.headline }}
                 </v-flex>
                 <v-flex xs3 class="text-xs-right">
                   <v-btn fab small color="primary"
@@ -188,13 +188,13 @@
                   <v-divider></v-divider>
                 </v-flex>
                 <v-flex xs12 justify-center>
-                  <v-btn flat icon :href="props.item.profile.publicProfileUrl" target="_blank"
+                  <v-btn flat icon :href="props.item.basicProfile.publicProfileUrl" target="_blank"
                          color="light-blue darken-3">
                     <v-icon>fab fa-linkedin</v-icon>
                   </v-btn>
-                  <span v-if="props.item.profile.positions._total">
-                    {{ props.item.profile.positions.values[0].title }}
-                    at {{ props.item.profile.positions.values[0].company.name }}
+                  <span v-if="props.item.basicProfile.positions._total">
+                    {{ props.item.basicProfile.positions.values[0].title }}
+                    at {{ props.item.basicProfile.positions.values[0].company.name }}
                   </span>
                   <span v-else>N/A</span>
                 </v-flex>

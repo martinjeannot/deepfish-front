@@ -20,17 +20,17 @@
               <v-card-title>
                 <v-flex xs4 sm2 class="text-xs-center">
                   <v-avatar size="80" class="mr-2">
-                    <img :src="props.item.talent.profile.pictureUrl" alt="picture"/>
+                    <img :src="props.item.talent.basicProfile.pictureUrl" alt="picture"/>
                   </v-avatar>
                 </v-flex>
                 <v-flex xs8 sm4>
                   <h4>{{ props.item.talent.firstName }} {{ props.item.talent.lastName[0] }}.</h4>
-                  <div v-if="props.item.talent.profile.positions._total">
-                    {{ props.item.talent.profile.positions.values[0].title
-                    }} chez {{ props.item.talent.profile.positions.values[0].company.name }}
+                  <div v-if="props.item.talent.basicProfile.positions._total">
+                    {{ props.item.talent.basicProfile.positions.values[0].title
+                    }} chez {{ props.item.talent.basicProfile.positions.values[0].company.name }}
                   </div>
                   <div>
-                    <a :href="props.item.talent.profile.publicProfileUrl"
+                    <a :href="props.item.talent.basicProfile.publicProfileUrl"
                        target="_blank">Voir ce talent sur LinkedIn</a>
                   </div>
                 </v-flex>
