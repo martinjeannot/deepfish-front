@@ -42,7 +42,7 @@
                 <span>pour un salaire fixe maxi de&nbsp;</span>
                 <span style="white-space: nowrap">
                   <v-text-field type="number" placeholder="45" v-model="fixedSalaryInK" :rules="[rules.positive]"
-                                hide-details class="d-inline-flex" style="width: 4rem; direction: rtl"></v-text-field>
+                                hide-details class="d-inline-flex" style="width: 4rem"></v-text-field>
                   K€
                 </span>
               </v-card-text>
@@ -101,7 +101,7 @@
           createdBy: this.user.id,
           company: `/${this.user.company.id}`,
           name: 'Mon nouveau besoin',
-          job: this.jobs[0]._links.self.href,
+          job: this.jobs[1]._links.self.href,
           seniority: this.seniorities[0]._links.self.href,
           location: '',
           fixedSalary: 0,
