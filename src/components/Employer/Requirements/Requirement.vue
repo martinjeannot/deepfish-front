@@ -18,13 +18,8 @@
             <v-form v-model="requirementValid" ref="requirementForm" @submit.prevent="saveRequirement">
               <v-card-title class="d-block">
                 <v-layout row wrap>
-                  <v-flex xs10>
+                  <v-flex xs12>
                     <h2 class="pb-2">Créer un nouveau besoin</h2>
-                  </v-flex>
-                  <v-flex xs2 class="text-xs-right">
-                    <v-btn type="submit" fab small color="success" :disabled="!requirementValid">
-                      <v-icon>done</v-icon>
-                    </v-btn>
                   </v-flex>
                 </v-layout>
                 <v-text-field v-model="requirement.name" hide-details label="Nom du besoin"></v-text-field>
@@ -45,6 +40,11 @@
                                 hide-details class="d-inline-flex" style="width: 4rem"></v-text-field>
                   K€
                 </span>
+                <v-flex xs12 class="text-xs-right">
+                  <v-btn type="submit" fab small color="success" :disabled="!requirementValid">
+                    <v-icon>done</v-icon>
+                  </v-btn>
+                </v-flex>
               </v-card-text>
             </v-form>
           </v-card>
