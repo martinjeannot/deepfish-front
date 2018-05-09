@@ -84,7 +84,7 @@
       getTalents() {
         this.prepareForApiConsumption();
         let path = '/talents';
-        path += this.search ? '/search/findByEmailContainingOrLastNameContainingOrFirstNameContaining' : '';
+        path += this.search ? '/search/findByEmailContainingOrLastNameContainingOrFirstNameContainingAllIgnoreCase' : '';
         let queryString = '';
         queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';
