@@ -126,7 +126,11 @@
             .catch((error) => {
               let customError = { message: 'Un problème est survenu lors de la connexion' };
               if (error.response) {
-                customError = { message: error.response.data.error_description };
+                if (error.response.data.error === 'invalid_grant') {
+                  customError = { message: 'Erreur de connexion, êtes-vous déjà inscrit en tant que recruteur ?' };
+                } else {
+                  customError = { message: error.response.data.error_description };
+                }
               }
               this.setError(customError);
             })
