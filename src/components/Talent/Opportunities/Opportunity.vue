@@ -125,6 +125,7 @@
           });
       },
       decline(opportunity) {
+        opportunity.previousState = Object.assign({}, opportunity);
         opportunity.talentStatus = 'DECLINED';
         this.declinationDialog = false;
         this

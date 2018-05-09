@@ -16,7 +16,7 @@
       <v-container fluid grid-list-xs>
         <v-data-iterator content-tag="v-layout" row wrap :items="requirement.opportunities" :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
-            <v-card :style="isOpportunityPending(props.item) ? '' : 'filter: grayscale(1)'">
+            <v-card :style="isTalentDeclined(props.item) ? 'filter: grayscale(1)' : ''">
               <v-card-title>
                 <v-flex xs4 sm2 class="text-xs-center">
                   <v-avatar size="80" class="mr-2">
@@ -78,10 +78,10 @@
                   <div style="white-space: pre-wrap">{{ props.item.talent.qualification.recommendation }}</div>
                 </v-flex>
               </v-card-title>
-              <v-card-actions v-if="isOpportunityPending(props.item)">
+              <v-card-actions v-if="isTalentPending(props.item)">
                 <v-flex xs6 class="text-xs-center">
-                  <v-btn flat color="success"
-                         @click.native.stop="selectedOpportunity = props.item; contactDialog = true">
+                  <v-btn flat color="success" :loading="loading" :disabled="loading"
+                         @click.native.stop="acceptTalent(props.item)">
                     Contacter
                   </v-btn>
                 </v-flex>
@@ -89,6 +89,14 @@
                   <v-btn flat color="error"
                          @click.native.stop="selectedOpportunity = props.item; declinationDialog = true">
                     Refuser
+                  </v-btn>
+                </v-flex>
+              </v-card-actions>
+              <v-card-actions v-if="isTalentAccepted(props.item)">
+                <v-flex xs6 offset-xs3 class="text-xs-center">
+                  <v-btn flat color="success"
+                         @click.native.stop="selectedOpportunity = props.item; contactDialog = true">
+                    Contacter
                   </v-btn>
                 </v-flex>
               </v-card-actions>
@@ -121,7 +129,7 @@
     <v-dialog v-model="declinationDialog" v-if="selectedOpportunity" max-width="650px">
       <v-card>
         <v-card-text>
-          <v-form v-model="employerDeclinationValid" @submit.prevent="decline(selectedOpportunity)">
+          <v-form v-model="employerDeclinationValid" @submit.prevent="declineTalent(selectedOpportunity)">
             <v-layout wrap>
               <v-flex xs12>
                 <h4>Expliquez la raison de votre refus en quelques mots</h4>
@@ -177,10 +185,27 @@
         'onAlertComponentDismissed',
         'showSnackbar',
       ]),
-      isOpportunityPending(opportunity) {
+      isTalentPending(opportunity) {
         return !opportunity.employerStatus || opportunity.employerStatus === 'PENDING';
       },
-      decline(opportunity) {
+      isTalentAccepted(opportunity) {
+        return opportunity.employerStatus === 'ACCEPTED';
+      },
+      isTalentDeclined(opportunity) {
+        return opportunity.employerStatus === 'DECLINED';
+      },
+      acceptTalent(opportunity) {
+        opportunity.previousState = Object.assign({}, opportunity);
+        opportunity.employerStatus = 'ACCEPTED';
+        this
+          .saveOpportunity(opportunity)
+          .then(() => {
+            this.selectedOpportunity = opportunity;
+            this.contactDialog = true;
+          });
+      },
+      declineTalent(opportunity) {
+        opportunity.previousState = Object.assign({}, opportunity);
         opportunity.employerStatus = 'DECLINED';
         this
           .saveOpportunity(opportunity)
