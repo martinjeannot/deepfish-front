@@ -1,9 +1,9 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
-
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.css';
+import VueAnalytics from 'vue-analytics';
 
 import App from './App';
 import router from './router';
@@ -14,10 +14,14 @@ import BaseAlert from './components/Utilities/BaseAlert';
 import StarRating from './components/Utilities/StarRating';
 import TernaryCheckbox from './components/Utilities/TernaryCheckbox';
 
+Vue.config.productionTip = false;
+
 Vue.use(Vuetify);
 Vue.use(filters);
-
-Vue.config.productionTip = false;
+Vue.use(VueAnalytics, {
+  id: ['UA-90375031-1', 'UA-118984586-1'],
+  router,
+});
 
 Vue.component('base-alert', BaseAlert);
 Vue.component('star-rating', StarRating);
