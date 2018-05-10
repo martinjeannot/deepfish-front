@@ -71,6 +71,7 @@
         this
           .saveProfile()
           .then(() => {
+            this.$router.push('/talent/opportunities');
             this.showSnackbar('Vos conditions ont été sauvegardées');
           });
       },
