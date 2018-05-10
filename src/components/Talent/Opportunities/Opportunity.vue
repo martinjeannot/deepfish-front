@@ -15,22 +15,22 @@
           </div>
         </v-card-title>
         <v-card-text>
-          <v-flex xs12 class="mb-3" style="white-space: pre-wrap">{{ opportunity.pitch }}</v-flex>
-          <v-flex xs12 class="mb-2">
+          <v-flex xs12 class="pb-2">
             <span style="font-style: italic">{{ opportunity.company.name }}</span> :
           </v-flex>
-          <v-flex xs12 style="white-space: pre-wrap">{{ opportunity.company.description }}</v-flex>
+          <v-flex xs12 class="pb-3" style="white-space: pre-wrap">{{ opportunity.company.description }}</v-flex>
+          <v-flex xs12 style="white-space: pre-wrap">{{ opportunity.pitch }}</v-flex>
         </v-card-text>
         <v-card-actions v-if="opportunity.talentStatus === 'PENDING'">
           <v-layout row wrap class="text-xs-center">
             <v-flex xs12 sm4>
-              <v-btn flat color="success" @click="accept(opportunity)">Accepter</v-btn>
+              <v-btn flat color="success" @click="accept(opportunity)">J'accepte</v-btn>
             </v-flex>
             <v-flex xs12 sm4>
-              <v-btn flat color="warning" @click="declinationDialog = true">Décliner</v-btn>
+              <v-btn flat color="warning" @click="declinationDialog = true">Je refuse</v-btn>
             </v-flex>
             <v-flex xs12 sm4>
-              <v-btn flat color="error" @click="bulkDeclinationDialog = true">Refuser tout</v-btn>
+              <v-btn flat color="error" @click="bulkDeclinationDialog = true">Je me désactive</v-btn>
             </v-flex>
           </v-layout>
         </v-card-actions>

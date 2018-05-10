@@ -82,13 +82,13 @@
                 <v-flex xs6 class="text-xs-center">
                   <v-btn flat color="success" :loading="loading" :disabled="loading"
                          @click.native.stop="acceptTalent(props.item)">
-                    Contacter
+                    Je contacte le talent
                   </v-btn>
                 </v-flex>
                 <v-flex xs6 class="text-xs-center">
                   <v-btn flat color="error"
                          @click.native.stop="selectedOpportunity = props.item; declinationDialog = true">
-                    Refuser
+                    Je refuse le talent
                   </v-btn>
                 </v-flex>
               </v-card-actions>
@@ -96,7 +96,7 @@
                 <v-flex xs6 offset-xs3 class="text-xs-center">
                   <v-btn flat color="success"
                          @click.native.stop="selectedOpportunity = props.item; contactDialog = true">
-                    Contacter
+                    Je contacte le talent
                   </v-btn>
                 </v-flex>
               </v-card-actions>
@@ -132,7 +132,7 @@
           <v-form v-model="employerDeclinationValid" @submit.prevent="declineTalent(selectedOpportunity)">
             <v-layout wrap>
               <v-flex xs12>
-                <h4>Expliquez la raison de votre refus en quelques mots</h4>
+                <h4>Expliquez la raison de votre refus pour améliorer la recherche</h4>
               </v-flex>
               <v-flex xs12>
                 <v-text-field v-model="selectedOpportunity.employerDeclinationReason" multi-line rows="7"
@@ -247,7 +247,7 @@
           if (!this.requirements.length) {
             this.setAlertComponent({
               type: 'info',
-              message: 'Nous n\'avons pas encore de talents à vous présenter, notre équipe travaille actuellement sur vos besoins',
+              message: 'Nous n\'avons pas encore de talents à vous présenter, vous recevrez un email lorsque vous aurez un nouveau talent',
             });
           }
         })
