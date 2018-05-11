@@ -15,6 +15,8 @@ import BaseAlert from './components/Utilities/BaseAlert';
 import StarRating from './components/Utilities/StarRating';
 import TernaryCheckbox from './components/Utilities/TernaryCheckbox';
 
+import './assets/stylus/main.styl';
+
 Vue.config.productionTip = false;
 
 Vue.use(Vuetify);
