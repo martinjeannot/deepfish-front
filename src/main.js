@@ -19,7 +19,11 @@ import './assets/stylus/main.styl';
 
 Vue.config.productionTip = false;
 
-Vue.use(Vuetify);
+Vue.use(Vuetify, {
+  theme: {
+    primary: '#2B8CC1',
+  },
+});
 Vue.use(filters);
 Vue.use(VueAnalytics, {
   id: ['UA-90375031-1', 'UA-118984586-1'],
