@@ -1,5 +1,8 @@
 <template>
   <v-app v-if="appCreated">
+    <img class="whale1" src="static/img/whale1.png" alt="<° ) ) ) ><"/>
+    <img class="whale2" src="static/img/whale2.png" alt=">< ( ( ( °>"/>
+    <img class="whale3" src="static/img/whale3.png" alt="<° ) ) ) ><"/>
     <v-navigation-drawer app fixed temporary v-model="showSideNav">
       <v-list>
         <v-list-tile v-for="menuItem in menuItems" :key="menuItem.title" router :to="menuItem.route" exact>
@@ -24,7 +27,7 @@
       <v-toolbar-side-icon @click="showSideNav = !showSideNav" class="hidden-sm-and-up"></v-toolbar-side-icon>
       <v-toolbar-title>
         <router-link :to="menuItems[0].route">
-          <img src="static/header_logo.png" alt="Deepfish"/>
+          <img src="static/img/header_logo.png" alt="Deepfish"/>
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
@@ -117,3 +120,23 @@
     },
   };
 </script>
+
+<style scoped>
+  .whale1 {
+    position: absolute;
+    top: 20%;
+    left: 14%;
+  }
+
+  .whale2 {
+    position: absolute;
+    top: 25%;
+    right: 14%;
+  }
+
+  .whale3 {
+    position: absolute;
+    top: 59%;
+    right: 11%;
+  }
+</style>
