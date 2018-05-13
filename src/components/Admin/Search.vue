@@ -63,12 +63,13 @@
           <div slot="header">Task types</div>
           <v-card>
             <v-card-text>
-              <v-checkbox v-for="taskType in taskTypes"
-                          :key="taskType.id"
-                          :value="taskType.id"
-                          :label="taskType.l10nKey"
-                          v-model="criteria.taskTypes"
-              ></v-checkbox>
+              <ternary-checkbox v-for="taskType in taskTypes"
+                                :key="taskType.id"
+                                :value="taskType.id"
+                                :label="taskType.l10nKey"
+                                :checked-state-model.sync="criteria.taskTypes"
+                                :indeterminate-state-model.sync="criteria.taskTypesNotIn"
+              ></ternary-checkbox>
             </v-card-text>
           </v-card>
         </v-expansion-panel-content>
@@ -76,12 +77,13 @@
           <div slot="header">Locations</div>
           <v-card>
             <v-card-text>
-              <v-checkbox v-for="fixedLocation in fixedLocations"
-                          :key="fixedLocation.id"
-                          :value="fixedLocation.id"
-                          :label="fixedLocation.l10nKey"
-                          v-model="criteria.fixedLocations"
-              ></v-checkbox>
+              <ternary-checkbox v-for="fixedLocation in fixedLocations"
+                                :key="fixedLocation.id"
+                                :value="fixedLocation.id"
+                                :label="fixedLocation.l10nKey"
+                                :checked-state-model.sync="criteria.fixedLocations"
+                                :indeterminate-state-model.sync="criteria.fixedLocationsNotIn"
+              ></ternary-checkbox>
             </v-card-text>
           </v-card>
         </v-expansion-panel-content>
@@ -332,7 +334,9 @@
         jobs: [],
         commodityTypes: [],
         taskTypes: [],
+        taskTypesNotIn: [],
         fixedLocations: [],
+        fixedLocationsNotIn: [],
         minFixedSalary: null,
         maxFixedSalary: null,
         minYearsOfExperience: null,
@@ -423,11 +427,27 @@
             talentQueryString += `${taskType}`;
           });
         }
+        if (this.criteria.taskTypesNotIn.length) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += 'taskTypesNotIn=';
+          this.criteria.taskTypesNotIn.forEach((taskType, index) => {
+            talentQueryString += index ? ',' : '';
+            talentQueryString += `${taskType}`;
+          });
+        }
         // Fixed locations
         if (this.criteria.fixedLocations.length) {
           talentQueryString += talentQueryString ? '&' : '';
           talentQueryString += 'conditions.fixedLocations=';
           this.criteria.fixedLocations.forEach((fixedLocation, index) => {
+            talentQueryString += index ? ',' : '';
+            talentQueryString += `${fixedLocation}`;
+          });
+        }
+        if (this.criteria.fixedLocationsNotIn.length) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += 'fixedLocationsNotIn=';
+          this.criteria.fixedLocationsNotIn.forEach((fixedLocation, index) => {
             talentQueryString += index ? ',' : '';
             talentQueryString += `${fixedLocation}`;
           });
