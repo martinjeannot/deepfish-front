@@ -9,23 +9,21 @@
       <v-flex xs12 class="mb-2">
         <span class="subheading" style="font-weight: bold">Salaire fixe souhaité</span>
       </v-flex>
-      <v-form v-model="fixedSalaryValid" ref="fixedSalaryForm" @submit.prevent="submitConditions" class="d-inline-flex"
-              style="width: 100%">
-        <v-flex xs9 sm-4 offset-sm3>
+      <v-flex xs12 sm4>
+        <v-form v-model="fixedSalaryValid" ref="fixedSalaryForm" @submit.prevent="submitConditions"
+                class="d-inline-flex">
           <v-text-field type="number" v-model="conditions.fixedSalary" label="Montant annuel" prefix="€"
                         :rules="[rules.required, rules.positive]" required></v-text-field>
-        </v-flex>
-        <v-flex xs3 sm-2 class="text-xs-center">
-          <v-btn type="submit" fab small color="primary" :disabled="!fixedSalaryValid || subLoading"
+          <v-btn type="submit" small color="primary" :disabled="!fixedSalaryValid || subLoading"
                  :loading="subLoading">
-            <v-icon>done</v-icon>
+            Valider
           </v-btn>
-        </v-flex>
-      </v-form>
+        </v-form>
+      </v-flex>
       <v-flex xs12 class="mb-2">
         <span class="subheading" style="font-weight: bold">Date de démarrage idéale</span>
       </v-flex>
-      <v-flex xs12 class="mb-2 text-xs-center">
+      <v-flex xs12 class="mb-2">
         <v-date-picker v-model="conditions.canStartOn" locale="fr-fr" :first-day-of-week="1"
                        @input="saveConditions" :readonly="subLoading"></v-date-picker>
       </v-flex>
