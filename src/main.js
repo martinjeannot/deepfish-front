@@ -22,6 +22,7 @@ Vue.config.productionTip = false;
 Vue.use(Vuetify, {
   theme: {
     primary: '#2B8CC1',
+    info: '#0080E6',
   },
 });
 Vue.use(filters);
