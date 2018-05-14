@@ -106,6 +106,7 @@
         'prepareForApiConsumption',
         'clearLoading',
         'showSnackbar',
+        'setAlertComponent',
       ]),
       fetchData() {
         this.prepareForApiConsumption();
@@ -123,6 +124,10 @@
           .then(() => {
             this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
             this.$router.push('/talent/opportunities');
+            this.setAlertComponent({
+              type: 'success',
+              message: 'Merci, le recruteur va maintenant découvrir votre profil complet (non anonymisé) et revenir vers vous si son intérêt est confirmé',
+            });
           });
       },
       decline(opportunity) {
