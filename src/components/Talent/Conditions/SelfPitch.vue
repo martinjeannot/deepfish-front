@@ -59,6 +59,7 @@
     methods: {
       ...mapActions([
         'showSnackbar',
+        'setAlertComponent',
       ]),
       prepareForApiConsumption(initialLoading = false) {
         this.initialLoading = initialLoading;
@@ -74,6 +75,10 @@
           .then(() => {
             this.$router.push('/talent/opportunities');
             this.showSnackbar('Vos conditions ont été sauvegardées');
+            this.setAlertComponent({
+              type: 'success',
+              message: 'Merci, vous recevrez un email de notification pour chaque nouvelle opportunité reçue. À bientôt !',
+            });
           });
       },
       saveProfile() {

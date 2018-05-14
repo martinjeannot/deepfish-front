@@ -5,6 +5,12 @@
     </v-flex>
   </v-layout>
   <v-layout row wrap v-else>
+    <v-layout v-if="alertComponent">
+      <v-flex xs12 sm6 offset-sm3>
+        <base-alert :type="alertComponent.type" :message="alertComponent.message"
+                    @dismissed="onAlertComponentDismissed"></base-alert>
+      </v-flex>
+    </v-layout>
     <v-flex xs12>
       <h2>Mes opportunités en attente</h2>
     </v-flex>
@@ -104,6 +110,7 @@
       ...mapGetters([
         'api',
         'loading',
+        'alertComponent',
         'user',
         'menuBadges',
       ]),
@@ -112,6 +119,7 @@
       ...mapActions([
         'prepareForApiConsumption',
         'clearLoading',
+        'onAlertComponentDismissed',
       ]),
     },
     created() {
