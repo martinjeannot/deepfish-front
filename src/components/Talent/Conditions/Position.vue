@@ -9,28 +9,28 @@
       <v-flex xs12>
         <synchronized-checkbox-list
           :conditions="conditions"
-          title="Type d'entreprises acceptés"
+          title="Quels types d'entreprises acceptez-vous ?"
           :referenceDomainObjects="companyMaturityLevels"
           associationResourceName="companyMaturityLevels"
           class="mb-5"
         ></synchronized-checkbox-list>
         <synchronized-checkbox-list
           :conditions="conditions"
-          title="Type de postes acceptés"
+          title="Quels types de postes acceptez-vous ?"
           :referenceDomainObjects="jobs"
           associationResourceName="jobs"
           class="mb-5"
         ></synchronized-checkbox-list>
         <synchronized-checkbox-list
           :conditions="conditions"
-          title="Type de ventes acceptés"
+          title="Quels types de ventes acceptez-vous ?"
           :referenceDomainObjects="commodityTypes"
           associationResourceName="commodityTypes"
           class="mb-5"
         ></synchronized-checkbox-list>
         <synchronized-checkbox-list
           :conditions="conditions"
-          title="Missions acceptées"
+          title="Quelles missions acceptez-vous ?"
           :referenceDomainObjects="taskTypes"
           associationResourceName="taskTypes"
           class="mb-5"

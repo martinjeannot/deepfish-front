@@ -8,7 +8,7 @@
     <v-flex xs12>
       <v-layout v-if="alertComponent">
         <v-flex xs12 sm6 offset-sm3>
-          <base-alert :type="alertComponent.type" :message="alertComponent.message"
+          <base-alert :type="alertComponent.type" :message="alertComponent.message" :rawHtml="alertComponent.rawHtml"
                       @dismissed="onAlertComponentDismissed"></base-alert>
         </v-flex>
       </v-layout>

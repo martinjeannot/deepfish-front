@@ -31,10 +31,11 @@
                                   :rules="[rules.required, rules.email]" required></v-text-field>
                   </v-flex>
                   <v-flex xs12>
-                    <v-text-field label="Mobile" v-model="employer.phoneNumber" :rules="[rules.required]"
+                    <v-text-field label="Numéro mobile" v-model="employer.phoneNumber" :rules="[rules.required]"
                                   required></v-text-field>
                   </v-flex>
                   <v-flex xs12>
+                    <h3>Modifier mon mot de passe</h3>
                     <v-text-field :type="passwordShown ? 'text' : 'password'" label="Nouveau mot de passe"
                                   v-model="employer.password" :rules="[rules.passwordLength]"
                                   hint="Au moins 6 caractères"

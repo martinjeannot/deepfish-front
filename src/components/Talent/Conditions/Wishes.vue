@@ -7,13 +7,13 @@
     </v-layout>
     <v-layout wrap v-else>
       <v-flex xs12 class="mb-2">
-        <span class="subheading" style="font-weight: bold">Salaire fixe souhaité</span>
+        <span class="subheading" style="font-weight: bold">Quel salaire fixe annuel minimum acceptez-vous ?</span>
       </v-flex>
       <v-flex xs12 sm4>
         <v-form v-model="fixedSalaryValid" ref="fixedSalaryForm" @submit.prevent="submitConditions"
                 class="d-inline-flex">
           <v-text-field type="number" v-model="conditions.fixedSalary" label="Montant annuel" prefix="€"
-                        :rules="[rules.required, rules.positive]" required></v-text-field>
+                        :rules="[rules.required, rules.positive, rules.minValue]" required></v-text-field>
           <v-btn type="submit" small color="primary" :disabled="!fixedSalaryValid || subLoading"
                  :loading="subLoading">
             Valider
@@ -21,14 +21,14 @@
         </v-form>
       </v-flex>
       <v-flex xs12 class="mb-2">
-        <span class="subheading" style="font-weight: bold">Date de démarrage idéale</span>
+        <span class="subheading" style="font-weight: bold">À quelle date pouvez-vous démarrer ?</span>
       </v-flex>
       <v-flex xs12 class="mb-2">
         <v-date-picker v-model="conditions.canStartOn" locale="fr-fr" :first-day-of-week="1"
                        @input="saveConditions" :readonly="subLoading"></v-date-picker>
       </v-flex>
       <v-flex xs12 class="mb-2">
-        <span class="subheading" style="font-weight: bold">Lieux de travail</span>
+        <span class="subheading" style="font-weight: bold">Où souhaitez-vous travailler ?</span>
       </v-flex>
       <v-layout row wrap>
         <v-flex xs12 sm3 md2 lg1 v-for="citiesByCountry in fixedLocationsByCountry" :key="citiesByCountry.country.id">
@@ -49,6 +49,7 @@
   const rules = {
     required: value => !!value || 'Ce champ est obligatoire',
     positive: value => value > 0 || 'La valeur doit être supérieure à 0',
+    minValue: value => value > 10000 || 'Le montant est annuel (ex: 45 000€)',
   };
 
   export default {

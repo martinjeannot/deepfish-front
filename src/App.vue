@@ -99,13 +99,13 @@
             menuItems = [
               { key: 'requirements', icon: 'assignment', title: 'Mes besoins', route: '/employer/requirements' },
               { key: 'talents', icon: 'assignment_ind', title: 'Mes talents', route: '/employer/talents' },
-              { key: 'profile', icon: 'account_circle', title: 'Profil', route: '/employer/profile' },
+              { key: 'profile', icon: 'account_circle', title: 'Mon profil', route: '/employer/profile' },
             ];
           } else {
             menuItems = [
               { key: 'conditions', icon: 'speaker_notes', title: 'Mes conditions', route: '/talent/conditions' },
               { key: 'opportunities', icon: 'assignment', title: 'Mes opportunités', route: '/talent/opportunities' },
-              { key: 'profile', icon: 'account_circle', title: 'Profil', route: '/talent/profile' },
+              { key: 'profile', icon: 'account_circle', title: 'Mon profil', route: '/talent/profile' },
             ];
           }
         }

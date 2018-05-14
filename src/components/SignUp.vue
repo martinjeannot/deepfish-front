@@ -12,7 +12,7 @@
           <v-card-text>
             <v-layout wrap>
               <v-flex xs12 text-xs-center>
-                <h2>INSCRIPTION TALENTS</h2>
+                <h2>Inscription en tant que COMMERCIAL</h2>
               </v-flex>
               <v-flex xs12 text-xs-center>
                 <v-btn class="linkedin-button" :href="linkedInAuthEndpoint" :disabled="linkedInLoading"
@@ -30,7 +30,7 @@
           <v-card-text>
             <v-layout row>
               <v-flex xs12 text-xs-center>
-                <h2>INSCRIPTION RECRUTEURS</h2>
+                <h2>Inscription en tant que RECRUTEUR</h2>
               </v-flex>
             </v-layout>
             <v-form v-model="valid" ref="form" @submit.prevent="submitSignUpForm">
@@ -54,13 +54,13 @@
               </v-layout>
               <v-layout row>
                 <v-flex xs12>
-                  <v-text-field label="Mobile" v-model="phoneNumber" :rules="[rules.required]" type="text"
+                  <v-text-field label="Numéro mobile" v-model="phoneNumber" :rules="[rules.required]" type="text"
                                 required></v-text-field>
                 </v-flex>
               </v-layout>
               <v-layout row>
                 <v-flex xs12>
-                  <v-text-field label="Société" v-model="companyName" :rules="[rules.required]" type="text"
+                  <v-text-field label="Entreprise" v-model="companyName" :rules="[rules.required]" type="text"
                                 required></v-text-field>
                 </v-flex>
               </v-layout>

@@ -10,7 +10,7 @@
         <v-card-title primary-title>
           <div>
             <div class="headline">{{ opportunity.company.name }}</div>
-            <div class="grey--text">Fonction proposé : {{ opportunity.job.l10nKey }}</div>
+            <div class="grey--text">Fonction proposée : {{ opportunity.job.l10nKey }}</div>
             <div class="grey--text">Localisation : {{ opportunity.location }}</div>
           </div>
         </v-card-title>

@@ -36,7 +36,7 @@
                                     type="text" required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                      <h4>Niveau de maturité</h4>
+                      <h4>Quel est votre niveau de maturité ?</h4>
                       <v-radio-group v-model="talent.maturityLevel" row :rules="[rules.required]">
                         <v-tooltip bottom class="bugfix-vuetify-2171">
                           <v-radio label="Clear water" value="CLEAR_WATER" slot="activator"
@@ -44,9 +44,8 @@
                           <v-radio label="Clear" value="CLEAR_WATER" slot="activator"
                                    class="hidden-sm-and-up"></v-radio>
                           <div>
-                            S’adresse à vous si vous souhaitez quitter rapidement<br>
-                            ou dans un futur proche votre entreprise, idéalement<br>
-                            à conditions meilleures ou égales
+                            Vous souhaitez quitter rapidement votre entreprise<br/>
+                            à des conditions meilleures ou égales
                           </div>
                         </v-tooltip>
                         <v-tooltip bottom class="bugfix-vuetify-2171">
@@ -54,10 +53,8 @@
                                    class="hidden-xs-only"></v-radio>
                           <v-radio label="Open" value="OPEN_WATER" slot="activator" class="hidden-sm-and-up"></v-radio>
                           <div>
-                            S’adresse à vous si vous êtes relativement bien<br>
-                            dans votre entreprise mais restez à l’affût d’une<br>
-                            opportunité plus intéressante et que vous répondez<br>
-                            aux sollicitations des recruteurs
+                            Vous êtes à l’affût d’une opportunité plus intéressante<br/>
+                            à moyen terme pour quitter votre entreprise
                           </div>
                         </v-tooltip>
                         <v-tooltip bottom class="bugfix-vuetify-2171">
@@ -65,11 +62,8 @@
                                    class="hidden-xs-only"></v-radio>
                           <v-radio label="Deep" value="DEEP_WATER" slot="activator" class="hidden-sm-and-up"></v-radio>
                           <div>
-                            S’adresse aux profils qui se sentent bien dans<br>
-                            leur entreprise actuelle et qui n’ont pas le temps<br>
-                            ou l’envie de faire de la veille mais qui ont des<br>
-                            conditions très précises pour lesquelles ils seraient<br>
-                            prêts à changer d’entreprise
+                            Vous êtes bien dans votre entreprise actuelle<br/>
+                            mais prêt à changer d'entreprise à des conditions précises
                           </div>
                         </v-tooltip>
                       </v-radio-group>

@@ -7,7 +7,7 @@
     </v-layout>
     <v-layout wrap v-else>
       <v-flex xs12>
-        <span class="subheading">Votre nombre d'années d'expérience professionnelle</span>
+        <span class="subheading">Combien d'années d'expérience professionnelle avez-vous ?</span>
       </v-flex>
       <v-flex xs12>
         <v-select
@@ -18,7 +18,8 @@
         ></v-select>
       </v-flex>
       <v-flex xs12>
-        <span class="subheading">Mettez-vous en valeur en quelques mots</span>
+        <div class="subheading">Mettez-vous en valeur en quelques mots :</div>
+        <div>Quelle opportunité recherchez-vous ? Quelles sont vos qualités ?</div>
       </v-flex>
       <v-form v-model="valid" ref="form" @submit.prevent="submitSelfPitch" style="width: 100%">
         <v-flex xs12>
