@@ -5,11 +5,11 @@
         <v-progress-circular indeterminate color="primary" :size="70"></v-progress-circular>
       </v-flex>
     </v-layout>
-    <v-layout wrap v-else>
+    <v-layout v-else wrap class="d-block">
       <v-flex xs12>
         <span class="subheading">Combien d'années d'expérience professionnelle avez-vous ?</span>
       </v-flex>
-      <v-flex xs12>
+      <v-flex xs12 sm3>
         <v-select
           :items="Array(40).fill().map((_, i) => i + 1)"
           v-model="talent.yearsOfExperience"

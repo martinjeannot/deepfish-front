@@ -122,6 +122,7 @@
           .saveOpportunity(opportunity)
           .then(() => {
             this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
+            this.$router.push('/talent/opportunities');
           });
       },
       decline(opportunity) {
