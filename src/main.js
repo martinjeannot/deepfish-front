@@ -53,6 +53,9 @@ if (!Modernizr.urlsearchparams) {
       this.$store.getters.api.interceptors.response.use(
         response => response,
         (error) => {
+          if (!error.response) {
+            return Promise.reject(error);
+          }
           const { config, response: { status } } = error;
           const originalRequest = config;
 

@@ -218,6 +218,8 @@
         const opportunity = Object.assign({}, opportunityToSave);
         delete opportunity.requirement;
         delete opportunity.talent;
+        delete opportunity.previousState.requirement;
+        delete opportunity.previousState.talent;
         this.prepareForApiConsumption();
         return this.api
           .patch(opportunity._links.self.href, opportunity)
