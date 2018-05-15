@@ -69,6 +69,9 @@
                   <v-btn type="submit" :disabled="!valid || loading" :loading="loading">S'inscrire</v-btn>
                 </v-flex>
                 <v-flex xs12 class="text-xs-center">
+                  En cliquant, j'accepte les <a href="https://www.deepfish.co/cgu" target="_blank">CGU</a>
+                </v-flex>
+                <v-flex xs12 class="text-xs-center">
                   <router-link :to="{ name: 'SignIn' }">Déjà inscrit ?</router-link>
                 </v-flex>
               </v-layout>
