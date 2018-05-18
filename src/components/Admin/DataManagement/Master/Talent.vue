@@ -305,6 +305,7 @@
 </template>
 
 <script>
+  import moment from 'moment';
   import { mapGetters, mapActions, mapState } from 'vuex';
   import DataManagementNavigation from '../Navigation';
 
@@ -412,6 +413,7 @@
       },
       forwardTalent(opportunity) {
         opportunity.forwarded = true;
+        opportunity.forwardedAt = moment().utc().format();
         opportunity.employerStatus = 'PENDING';
         this.saveOpportunity(opportunity);
       },
