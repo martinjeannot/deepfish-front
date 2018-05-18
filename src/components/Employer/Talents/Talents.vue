@@ -16,7 +16,7 @@
       <v-container fluid grid-list-xs>
         <v-data-iterator content-tag="v-layout" row wrap :items="requirement.opportunities" :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
-            <v-card :style="isTalentDeclined(props.item) ? 'filter: grayscale(1)' : ''">
+            <v-card :style="isTalentDeclined(props.item) ? 'display: none' : ''">
               <v-card-title>
                 <v-flex xs4 sm2 class="text-xs-center">
                   <v-avatar size="80" class="mr-2">
