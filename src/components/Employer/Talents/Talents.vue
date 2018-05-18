@@ -16,7 +16,7 @@
       <v-container fluid grid-list-xs>
         <v-data-iterator content-tag="v-layout" row wrap :items="requirement.opportunities" :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
-            <v-card :style="isTalentDeclined(props.item) ? 'filter: grayscale(1)' : ''">
+            <v-card :style="isTalentDeclined(props.item) ? 'display: none' : ''">
               <v-card-title>
                 <v-flex xs4 sm2 class="text-xs-center">
                   <v-avatar size="80" class="mr-2">
@@ -231,7 +231,7 @@
     created() {
       this.prepareForApiConsumption(true);
       this
-        .api(`/opportunities?projection=employer&forwarded=true&requirement.company=${this.user.company.id}`)
+        .api(`/opportunities?projection=employer&forwarded=true&requirement.company=${this.user.company.id}&employerStatus=PENDING&employerStatus=ACCEPTED&sort=forwardedAt,desc`)
         .then((response) => {
           // sort talents by requirements
           response.data._embedded.opportunities.forEach((opportunity) => {
