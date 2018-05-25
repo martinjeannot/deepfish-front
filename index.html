@@ -7,10 +7,23 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <div  style="text-align: center; padding-top: 5rem"><h2 id="r73GXLRjd5SqY9uR">LOADING...</h2></div>
+    </div>
+    <!-- Older browsers prevention -->
+    <script>
+      // eslint-disable-next-line prefer-arrow-callback, func-names
+      setTimeout(function () {
+        // eslint-disable-next-line no-var
+        var r73GXLRjd5SqY9uR = document.getElementById('r73GXLRjd5SqY9uR');
+        if (r73GXLRjd5SqY9uR) {
+          r73GXLRjd5SqY9uR.innerHTML = 'Sorry, Deepfish does not seem to support your browser<br/>Please try again with a more recent one';
+        }
+      }, 9000);
+    </script>
     <!-- built files will be auto injected -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js" integrity="sha384-SlE991lGASHoBfWbelyBPLsUlwY1GwNDJo3jSJO04KZ33K2bwfV9YBauFfnzvynJ" crossorigin="anonymous"></script>
-    <!--Start of Tawk.to Script-->
+    <!-- Start of Tawk.to Script -->
     <script type="text/javascript">
       (() => {
         const s1 = document.createElement('script');
@@ -22,6 +35,6 @@
         s0.parentNode.insertBefore(s1, s0);
       })();
     </script>
-    <!--End of Tawk.to Script-->
+    <!-- End of Tawk.to Script -->
   </body>
 </html>
