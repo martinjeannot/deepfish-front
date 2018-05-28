@@ -25,7 +25,6 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
-      modernizr$: path.resolve(__dirname, '../.modernizrrc'),
     }
   },
   module: {
@@ -74,14 +73,6 @@ module.exports = {
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
       },
-      {
-        test: /\.modernizrrc.js$/,
-        use: ['modernizr-loader']
-      },
-      {
-        test: /\.modernizrrc(\.json)?$/,
-        use: ['modernizr-loader', 'json-loader']
-      }
     ],
   }
 };
