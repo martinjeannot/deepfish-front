@@ -544,7 +544,7 @@
     created() {
       this.prepareForApiConsumption(true);
       Promise.all([
-        this.api('/requirements?projection=default'),
+        this.api('/requirements?projection=default&size=1000'),
         this.api('/companyMaturityLevels'),
         this.api('/jobs'),
         this.api('/commodityTypes'),

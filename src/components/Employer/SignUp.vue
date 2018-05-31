@@ -6,25 +6,7 @@
                     @dismissed="onAlertComponentDismissed"></base-alert>
       </v-flex>
     </v-layout>
-    <v-layout row>
-      <v-flex xs12 sm6 offset-sm3>
-        <v-card>
-          <v-card-text>
-            <v-layout wrap>
-              <v-flex xs12 text-xs-center>
-                <h2>Inscription en tant que COMMERCIAL</h2>
-              </v-flex>
-              <v-flex xs12 text-xs-center>
-                <v-btn class="linkedin-button" :href="linkedInAuthEndpoint" :disabled="linkedInLoading"
-                       :loading="linkedInLoading" @click="linkedInLoading = true">S'inscrire avec LinkedIn
-                </v-btn>
-              </v-flex>
-            </v-layout>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-    </v-layout>
-    <v-layout class="mt-3">
+    <v-layout>
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
           <v-card-text>
@@ -66,13 +48,17 @@
               </v-layout>
               <v-layout row wrap>
                 <v-flex xs12 text-xs-center>
-                  <v-btn type="submit" :disabled="!valid || loading" :loading="loading">S'inscrire</v-btn>
+                  <v-btn type="submit" color="info" :disabled="!valid || loading" :loading="loading">S'inscrire</v-btn>
                 </v-flex>
-                <v-flex xs12 class="text-xs-center">
+                <v-flex xs12 class="mt-2 text-xs-center">
                   En cliquant, j'accepte les <a href="https://www.deepfish.co/cgu" target="_blank">CGU</a>
                 </v-flex>
                 <v-flex xs12 class="text-xs-center">
-                  <router-link :to="{ name: 'SignIn' }">Déjà inscrit ?</router-link>
+                  <router-link :to="{ name: 'EmployerSignIn' }">Déjà inscrit ?</router-link>
+                </v-flex>
+                <v-flex xs12 class="text-xs-center">
+                  <div>-</div>
+                  <router-link :to="{ name: 'TalentSignUp' }">Vous êtes commercial ?</router-link>
                 </v-flex>
               </v-layout>
             </v-form>
@@ -93,9 +79,8 @@
   };
 
   export default {
-    name: 'sign-up',
+    name: 'employer-sign-up',
     data: () => ({
-      linkedInLoading: false,
       valid: false,
       rules,
       firstName: '',
@@ -109,7 +94,6 @@
         'error',
         'alertComponent',
         'loading',
-        'linkedInAuthEndpoint',
       ]),
     },
     methods: {
@@ -140,7 +124,5 @@
 </script>
 
 <style scoped>
-  .linkedin-button {
-    color: #0077B5;
-  }
+
 </style>
