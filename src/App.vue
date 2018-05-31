@@ -26,7 +26,7 @@
     <v-toolbar app>
       <v-toolbar-side-icon @click="showSideNav = !showSideNav" class="hidden-sm-and-up"></v-toolbar-side-icon>
       <v-toolbar-title>
-        <router-link :to="menuItems[0].route">
+        <router-link :to="menuItems[1].route">
           <img src="static/img/header_logo.png" alt="Deepfish"/>
         </router-link>
       </v-toolbar-title>
@@ -79,8 +79,8 @@
       ]),
       menuItems() {
         let menuItems = [
-          { key: 'sign-in', icon: 'power_settings_new', title: 'Connexion', route: '/sign-in' },
           { key: 'sign-up', icon: 'exit_to_app', title: 'Inscription', route: '/sign-up' },
+          { key: 'sign-in', icon: 'power_settings_new', title: 'Connexion', route: '/sign-in' },
         ];
         if (this.isUserAuthenticated) {
           if (this.isUserAdmin) {

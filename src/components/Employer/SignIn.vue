@@ -9,24 +9,6 @@
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
           <v-card-text>
-            <v-layout wrap>
-              <v-flex xs12 text-xs-center>
-                <h2>Connexion en tant que COMMERCIAL</h2>
-              </v-flex>
-              <v-flex xs12 text-xs-center>
-                <v-btn class="linkedin-button" :href="linkedInAuthEndpoint" :disabled="linkedInLoading"
-                       :loading="linkedInLoading" @click="linkedInLoading = true">Se connecter avec LinkedIn
-                </v-btn>
-              </v-flex>
-            </v-layout>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-    </v-layout>
-    <v-layout class="mt-3">
-      <v-flex xs12 sm6 offset-sm3>
-        <v-card>
-          <v-card-text>
             <v-form v-model="valid" ref="form" @submit.prevent="signIn">
               <v-layout wrap>
                 <v-flex xs12 text-xs-center>
@@ -43,13 +25,17 @@
                                 :append-icon-cb="() => (passwordShown = !passwordShown)"></v-text-field>
                 </v-flex>
                 <v-flex xs12 text-xs-center>
-                  <v-btn type="submit" :disabled="!valid || loading" :loading="loading">Se connecter</v-btn>
+                  <v-btn type="submit" color="info" :disabled="!valid || loading" :loading="loading">Se connecter</v-btn>
                 </v-flex>
-                <v-flex xs12 class="text-xs-center">
-                  <router-link :to="{ name: 'SignUp' }">S'inscrire</router-link>
+                <v-flex xs12 class="mt-2 text-xs-center">
+                  <router-link :to="{ name: 'EmployerSignUp' }">S'inscrire</router-link>
                 </v-flex>
                 <v-flex xs12 class="text-xs-center">
                   <router-link :to="{ name: 'PasswordReset' }">Mot de passe oublié ?</router-link>
+                </v-flex>
+                <v-flex xs12 class="text-xs-center">
+                  <div>-</div>
+                  <router-link :to="{ name: 'TalentSignIn' }">Vous êtes commercial ?</router-link>
                 </v-flex>
               </v-layout>
             </v-form>
@@ -70,9 +56,8 @@
   };
 
   export default {
-    name: 'sign-in',
+    name: 'employer-sign-in',
     data: () => ({
-      linkedInLoading: false,
       valid: false,
       rules,
       email: '',
@@ -86,7 +71,6 @@
         'error',
         'alertComponent',
         'isUserAuthenticated',
-        'linkedInAuthEndpoint',
       ]),
     },
     watch: {
@@ -145,7 +129,5 @@
 </script>
 
 <style scoped>
-  .linkedin-button {
-    color: #0077B5;
-  }
+
 </style>
