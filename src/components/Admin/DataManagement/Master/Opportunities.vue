@@ -92,10 +92,12 @@
       ]),
       getOpportunities() {
         this.prepareForApiConsumption();
-        const path = '/opportunities';
+        let path = '/opportunities';
+        path += this.search ? '/search/findByRequirementCompanyNameContainingOrTalentLastNameContainingOrTalentFirstNameContainingAllIgnoreCase' : '';
         let queryString = 'projection=admin-item';
         queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';
+        queryString += this.search ? `&companyName=${this.search}&talentLastName=${this.search}&talentFirstName=${this.search}` : '';
         this
           .api(`${path}?${queryString}`)
           .then((response) => {

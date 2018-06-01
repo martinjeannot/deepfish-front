@@ -78,11 +78,11 @@
       getEmployers() {
         this.prepareForApiConsumption();
         let path = '/employers';
-        path += this.search ? '/search/findByUsernameContainingOrFirstNameContainingOrLastNameContaining' : '';
+        path += this.search ? '/search/findByUsernameContainingOrFirstNameContainingOrLastNameContainingOrCompanyNameContainingAllIgnoreCase' : '';
         let queryString = 'projection=default';
         queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';
-        queryString += this.search ? `&username=${this.search}&firstName=${this.search}&lastName=${this.search}` : '';
+        queryString += this.search ? `&username=${this.search}&firstName=${this.search}&lastName=${this.search}&companyName=${this.search}` : '';
         this
           .api(`${path}?${queryString}`)
           .then((response) => {

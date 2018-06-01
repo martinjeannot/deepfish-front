@@ -73,10 +73,12 @@
       ]),
       getRequirements() {
         this.prepareForApiConsumption();
-        const path = '/requirements';
+        let path = '/requirements';
+        path += this.search ? '/search/findByNameContainingOrCompanyNameContainingAllIgnoreCase' : '';
         let queryString = 'projection=default';
         queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';
+        queryString += this.search ? `&name=${this.search}&companyName=${this.search}` : '';
         this
           .api(`${path}?${queryString}`)
           .then((response) => {
