@@ -152,7 +152,7 @@
       },
     },
     beforeRouteLeave(to, from, next) {
-      if ((this.talent.phoneNumber && this.hasBeenSuccessfullySubmittedOnce) || to.name === 'SignIn') {
+      if ((this.talent.phoneNumber && this.hasBeenSuccessfullySubmittedOnce) || to.name === 'TalentSignIn') {
         next();
       } else {
         this.setAlertComponent({ type: 'info', message: 'Veuillez remplir votre profil en premier lieu' });
