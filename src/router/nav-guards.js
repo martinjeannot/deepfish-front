@@ -5,8 +5,12 @@ export default {
     if (store.getters.user) {
       next();
     } else {
-      const authToken = localStorage.getItem('auth_token');
+      let authToken = localStorage.getItem('auth_token');
       if (authToken) {
+        // trailing slash removal
+        if (authToken.endsWith('/')) {
+          authToken = authToken.substring(0, authToken.length - 1);
+        }
         store.dispatch('autoSignIn', JSON.parse(authToken))
           .then(() => {
             if (!store.getters.error) {
