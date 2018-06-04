@@ -27,6 +27,10 @@ export default {
           });
       } else if (to.matched.some(record => record.meta.authRequired)) {
         next('/');
+      } else if (window.location.href.includes('auth_token') && to.fullPath !== '/auth/callback') {
+        // FIXME : the horrendous hack above fix a strange Safari bug where the /auth/callback
+        // redirection would not be taken into account by the vue router, redirecting to /
+        next('/auth/callback');
       } else { // auth not required
         next();
       }
