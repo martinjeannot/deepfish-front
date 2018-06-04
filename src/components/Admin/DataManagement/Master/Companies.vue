@@ -68,7 +68,7 @@
       getCompanies() {
         this.prepareForApiConsumption();
         let path = '/companies';
-        path += this.search ? '/search/findByNameContaining' : '';
+        path += this.search ? '/search/findByNameContainingAllIgnoreCase' : '';
         let queryString = '';
         queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';

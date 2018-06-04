@@ -5,8 +5,12 @@ export default {
     if (store.getters.user) {
       next();
     } else {
-      const authToken = localStorage.getItem('auth_token');
+      let authToken = localStorage.getItem('auth_token');
       if (authToken) {
+        // trailing slash removal
+        if (authToken.endsWith('/')) {
+          authToken = authToken.substring(0, authToken.length - 1);
+        }
         store.dispatch('autoSignIn', JSON.parse(authToken))
           .then(() => {
             if (!store.getters.error) {
@@ -23,6 +27,10 @@ export default {
           });
       } else if (to.matched.some(record => record.meta.authRequired)) {
         next('/');
+      } else if (window.location.href.includes('auth_token') && to.fullPath !== '/auth/callback') {
+        // FIXME : the horrendous hack above fix a strange Safari bug where the /auth/callback
+        // redirection would not be taken into account by the vue router, redirecting to /
+        next('/auth/callback');
       } else { // auth not required
         next();
       }
