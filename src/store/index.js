@@ -47,6 +47,14 @@ export default new Vuex.Store({
           return null;
       }
     },
+    getTalentLinkedInProfileUrl(basicProfile) {
+      if (basicProfile.publicProfileUrl) {
+        return basicProfile.publicProfileUrl;
+      } else if (basicProfile.siteStandardProfileRequest) {
+        return basicProfile.siteStandardProfileRequest.url;
+      }
+      return null;
+    },
     talentRankingReferenceData: [
       { text: 'A', value: 1 },
       { text: 'B', value: 2 },

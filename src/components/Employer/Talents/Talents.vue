@@ -29,8 +29,8 @@
                     {{ props.item.talent.basicProfile.positions.values[0].title
                     }} chez {{ props.item.talent.basicProfile.positions.values[0].company.name }}
                   </div>
-                  <div>
-                    <a :href="props.item.talent.basicProfile.publicProfileUrl"
+                  <div v-if="getTalentLinkedInProfileUrl(props.item.talent.basicProfile)">
+                    <a :href="getTalentLinkedInProfileUrl(props.item.talent.basicProfile)"
                        target="_blank">Voir ce talent sur LinkedIn</a>
                   </div>
                 </v-flex>
@@ -153,7 +153,7 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapGetters, mapActions, mapState } from 'vuex';
 
   const rules = {
     required: value => !!value || 'This field is required',
@@ -176,6 +176,9 @@
         'initialLoading',
         'user',
         'alertComponent',
+      ]),
+      ...mapState([
+        'getTalentLinkedInProfileUrl',
       ]),
     },
     methods: {

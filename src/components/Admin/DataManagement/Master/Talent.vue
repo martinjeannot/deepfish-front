@@ -62,10 +62,10 @@
                       : {{ getTalentMaturityLevel(talent.maturityLevel) }}
                     </p>
                   </v-flex>
-                  <v-flex xs12>
+                  <v-flex xs12 v-if="getTalentLinkedInProfileUrl(talent.basicProfile)">
                     <p>
                       <span style="font-weight: bold">LinkedIn</span> :
-                      <v-btn flat icon :href="talent.basicProfile.publicProfileUrl" target="_blank"
+                      <v-btn flat icon :href="getTalentLinkedInProfileUrl(talent.basicProfile)" target="_blank"
                              color="light-blue darken-3">
                         <v-icon>fab fa-linkedin</v-icon>
                       </v-btn>
@@ -333,6 +333,7 @@
       ...mapState([
         'getTalentMaturityLevel',
         'getOpportunityStatusColor',
+        'getTalentLinkedInProfileUrl',
       ]),
       profileCompletion() {
         const profileCompletion = { value: 100, items: [] };
