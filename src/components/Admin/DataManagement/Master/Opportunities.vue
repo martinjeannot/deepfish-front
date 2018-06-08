@@ -6,9 +6,32 @@
     <v-flex xs10>
       <v-card>
         <v-card-title>
-          <v-spacer></v-spacer>
-          <v-text-field label="Search..." v-model="search" @blur="getOpportunities" append-icon="search" single-line
-                        hide-details></v-text-field>
+          <v-flex xs12 sm6 class="pr-2">
+            <v-select v-if="!initialLoading" label="Requirement" :items="requirements" v-model="selectedRequirement"
+                      hide-details clearable @input="search = ''; getOpportunities()">
+              <template slot="selection" slot-scope="data">
+                <div class="input-group__selections__comma">
+                  {{ data.item.company.name }} - {{ data.item.name }}
+                </div>
+              </template>
+              <template slot="item" slot-scope="data">
+                <v-list-tile>
+                  <v-list-tile-content>
+                    <v-list-tile-title><span style="font-weight: bold">{{ data.item.company.name }}</span>
+                      : {{ data.item.name }}
+                    </v-list-tile-title>
+                    <v-list-tile-sub-title>{{ data.item.job.l10nKey }} {{ data.item.seniority.l10nKey
+                      }} {{ data.item.fixedSalary / 1000 }}K€ {{ data.item.location }}
+                    </v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </template>
+            </v-select>
+          </v-flex>
+          <v-flex xs12 sm6 class="pl-2">
+            <v-text-field label="Search..." v-model="search" @blur="selectedRequirement = null; getOpportunities()"
+                          append-icon="search" single-line hide-details></v-text-field>
+          </v-flex>
         </v-card-title>
         <v-data-table :items="opportunities" :headers="headers" :pagination.sync="pagination" :total-items="totalItems"
                       :loading="loading">
@@ -66,11 +89,14 @@
       totalItems: 0,
       pagination: {},
       search: '',
+      requirements: [],
+      selectedRequirement: null,
     }),
     computed: {
       ...mapGetters([
         'api',
         'loading',
+        'initialLoading',
       ]),
       ...mapState([
         'getOpportunityStatusColor',
@@ -93,11 +119,16 @@
       getOpportunities() {
         this.prepareForApiConsumption();
         let path = '/opportunities';
-        path += this.search ? '/search/findByRequirementCompanyNameContainingOrTalentLastNameContainingOrTalentFirstNameContainingAllIgnoreCase' : '';
         let queryString = 'projection=admin-item';
+        if (this.search) {
+          path += '/search/findByRequirementCompanyNameContainingOrTalentLastNameContainingOrTalentFirstNameContainingAllIgnoreCase';
+          queryString += `&companyName=${this.search}&talentLastName=${this.search}&talentFirstName=${this.search}`;
+        } else if (this.selectedRequirement) {
+          path += '/search/findByRequirementId';
+          queryString += `&requirementId=${this.selectedRequirement.id}`;
+        }
         queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';
-        queryString += this.search ? `&companyName=${this.search}&talentLastName=${this.search}&talentFirstName=${this.search}` : '';
         this
           .api(`${path}?${queryString}`)
           .then((response) => {
@@ -107,6 +138,16 @@
           .catch(() => this.showSnackbar('Error'))
           .finally(() => this.clearLoading());
       },
+    },
+    created() {
+      this.prepareForApiConsumption(true);
+      this
+        .api('/requirements?projection=default&size=1000')
+        .then((response) => {
+          this.requirements = response.data._embedded.requirements;
+        })
+        .catch(() => this.showSnackbar('Error loading requirements'))
+        .finally(() => this.clearLoading(true));
     },
   };
 </script>
