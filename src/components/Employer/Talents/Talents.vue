@@ -94,10 +94,16 @@
                 </v-flex>
               </v-card-actions>
               <v-card-actions v-if="isTalentAccepted(props.item)">
-                <v-flex xs6 offset-xs3 class="text-xs-center">
+                <v-flex xs6 class="text-xs-center">
                   <v-btn flat color="success"
                          @click.native.stop="selectedOpportunity = props.item; contactDialog = true">
                     Je contacte le talent
+                  </v-btn>
+                </v-flex>
+                <v-flex xs6 class="text-xs-center">
+                  <v-btn flat color="error"
+                         @click.native.stop="selectedOpportunity = props.item; declinationDialog = true">
+                    Je ne retiens pas ce profil
                   </v-btn>
                 </v-flex>
               </v-card-actions>
