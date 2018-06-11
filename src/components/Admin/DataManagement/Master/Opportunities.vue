@@ -80,8 +80,8 @@
       opportunities: [],
       headers: [
         { text: 'Sent at', value: 'createdAt' },
-        { text: 'Company', value: 'company.name' },
-        { text: 'Talent', value: 'talent.lastName' },
+        { text: 'Company', value: 'company.name', sortable: false },
+        { text: 'Talent', value: 'talent.lastName', sortable: false },
         { text: 'Talent status', value: 'talentStatus' },
         { text: 'Employer status', value: 'employerStatus' },
         { text: 'Actions', value: 'id', sortable: false },

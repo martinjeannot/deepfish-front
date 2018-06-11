@@ -1,10 +1,12 @@
 <template>
   <v-layout>
+    <admin-opportunity-sending-dialog :value.sync="opportunityDialog" :talent="talent"
+                                      :requirements="requirements"></admin-opportunity-sending-dialog>
     <v-flex xs2 class="pr-3">
       <data-management-navigation></data-management-navigation>
     </v-flex>
     <v-flex xs10>
-      <v-layout v-if="loading">
+      <v-layout v-if="initialLoading">
         <v-flex xs12 class="text-xs-center">
           <v-progress-circular indeterminate color="primary" :size="70"></v-progress-circular>
         </v-flex>
@@ -29,10 +31,15 @@
                   <v-flex xs12 class="text-xs-center">
                     <h2>{{ talent.lastName.toUpperCase() }} {{ talent.firstName }}</h2>
                   </v-flex>
-                  <v-flex xs12 class="text-xs-center mb-3">
+                  <v-flex xs12 class="text-xs-center">
                     <h4>{{ talent.basicProfile.headline }}</h4>
                   </v-flex>
-                  <v-flex xs12>
+                  <v-flex xs12 class="text-xs-center">
+                    <v-btn color="info" @click.native.stop="opportunityDialog = true">
+                      <v-icon>send</v-icon>
+                    </v-btn>
+                  </v-flex>
+                  <v-flex xs12 class="pt-2">
                     <p>
                       <span style="font-weight: bold">Registration</span> : {{ talent.createdAt | formatDate('LLL')
                       }}
@@ -239,7 +246,14 @@
                     </v-container>
                   </v-tab-item>
                   <v-tab-item>
-                    <v-data-table :items="talent.opportunities" :headers="opportunitiesHeaders">
+                    <v-flex xs12>
+                      <v-btn color="info" @click.native.stop="opportunityDialog = true">
+                        <v-icon>send</v-icon>
+                      </v-btn>
+                    </v-flex>
+                    <v-data-table :items="talent.opportunities" :headers="opportunityTable.headers" :loading="loading"
+                                  :pagination.sync="opportunityTable.pagination"
+                                  :total-items="opportunityTable.totalItems">
                       <template slot="items" slot-scope="props">
                         <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
                         <td>{{ props.item.company.name }}</td>
@@ -308,25 +322,36 @@
   import moment from 'moment';
   import { mapGetters, mapActions, mapState } from 'vuex';
   import DataManagementNavigation from '../Navigation';
+  import AdminOpportunitySendingDialog from '../../Utilities/OpportunitySendingDialog';
 
   export default {
     name: 'talent',
-    components: { DataManagementNavigation },
+    components: {
+      DataManagementNavigation,
+      AdminOpportunitySendingDialog,
+    },
     data: () => ({
       talent: null,
-      opportunitiesHeaders: [
-        { text: 'Sent at', value: 'createdAt' },
-        { text: 'Company', value: 'company.name' },
-        { text: 'Talent status', value: 'talentStatus' },
-        { text: 'Employer status', value: 'employerStatus' },
-        { text: 'Actions', value: 'name', sortable: false },
-      ],
+      opportunityDialog: false,
+      requirements: [],
+      opportunityTable: {
+        headers: [
+          { text: 'Sent at', value: 'createdAt' },
+          { text: 'Company', value: 'company.name', sortable: false },
+          { text: 'Talent status', value: 'talentStatus' },
+          { text: 'Employer status', value: 'employerStatus' },
+          { text: 'Actions', value: 'name', sortable: false },
+        ],
+        totalItems: 0,
+        pagination: {},
+      },
     }),
     props: ['id'],
     computed: {
       ...mapGetters([
         'api',
         'loading',
+        'initialLoading',
         'alertComponent',
         'talentRankingReferenceData',
       ]),
@@ -373,6 +398,14 @@
         profileCompletion.value -=
           Math.floor(profileCompletion.items.length * (100 / profileItemCounter));
         return profileCompletion;
+      },
+    },
+    watch: {
+      'opportunityTable.pagination': {
+        handler() {
+          this.getOpportunities();
+        },
+        deep: true,
       },
     },
     methods: {
@@ -438,16 +471,40 @@
             this.showSnackbar('Error');
           });
       },
-      fetchInitialData() {
+      getOpportunitiesPromise() {
+        const path = '/opportunities';
+        let queryString = `talent=${this.talent._links.self.href.split('/').splice(-1)[0]}&projection=admin-item`;
+        queryString += `&page=${this.opportunityTable.pagination.page - 1}&size=${this.opportunityTable.pagination.rowsPerPage}`;
+        queryString += this.opportunityTable.pagination.sortBy ? `&sort=${this.opportunityTable.pagination.sortBy},${this.opportunityTable.pagination.descending ? 'desc' : 'asc'}` : '';
+        return this.api(`${path}?${queryString}`);
+      },
+      getOpportunities() {
         this.prepareForApiConsumption();
-        this
-          .api(`/talents/${this.id}`)
+        this.getOpportunitiesPromise()
           .then((response) => {
-            this.talent = response.data;
+            this.talent.opportunities = response.data._embedded.opportunities;
+            this.opportunityTable.totalItems = response.data.page.totalElements;
+          })
+          .catch(() => this.showSnackbar('Error while retrieving opportunities'))
+          .finally(() => this.clearLoading());
+      },
+      fetchInitialData() {
+        this.prepareForApiConsumption(true);
+        Promise
+          .all([
+            this.api(`/talents/${this.id}`),
+            this.api('/requirements?projection=default&size=1000'),
+          ])
+          .then(([
+                   talentResponse,
+                   requirementsResponse,
+                 ]) => {
+            this.talent = talentResponse.data;
+            this.requirements = requirementsResponse.data._embedded.requirements;
             return Promise.all([
               this.api(`${this.talent._links.conditions.href}?projection=default`),
               this.api(this.talent._links.qualification.href),
-              this.api(`${this.talent._links.opportunities.href}?projection=admin-item`),
+              this.getOpportunitiesPromise(),
             ]);
           })
           .then(([
@@ -458,9 +515,10 @@
             this.talent.conditions = conditionsResponse.data;
             this.talent.qualification = qualificationResponse.data;
             this.talent.opportunities = opportunitiesResponse.data._embedded.opportunities;
+            this.opportunityTable.totalItems = opportunitiesResponse.data.page.totalElements;
           })
           .catch(() => this.setErrorAfterApiConsumption())
-          .finally(() => this.clearLoading());
+          .finally(() => this.clearLoading(true));
       },
     },
     created() {
