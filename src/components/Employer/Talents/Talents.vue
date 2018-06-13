@@ -80,39 +80,55 @@
                 </v-flex>
               </v-card-title>
               <v-card-actions v-if="isTalentPending(props.item)">
-                <v-flex xs6 class="text-xs-center">
-                  <v-btn flat color="success" :loading="loading" :disabled="loading"
-                         @click.native.stop="acceptTalent(props.item)">
-                    Je contacte le talent
-                  </v-btn>
-                </v-flex>
-                <v-flex xs6 class="text-xs-center">
-                  <v-btn flat color="error"
-                         @click.native.stop="selectedOpportunity = props.item; declinationDialog = true">
-                    Je refuse le talent
-                  </v-btn>
-                </v-flex>
+                <v-layout row wrap>
+                  <v-flex xs12 sm4 class="text-xs-center">
+                    <v-btn flat color="success" :loading="loading" :disabled="loading"
+                           @click.native.stop="acceptTalent(props.item)">
+                      Je contacte le talent
+                    </v-btn>
+                  </v-flex>
+                  <v-flex xs12 sm4 class="text-xs-center">
+                    <v-btn flat color="info" :loading="loading" :disabled="loading"
+                           @click.native.stop="selectedOpportunity = props.item; contactDialog = true">
+                      Je veux en parler avec Deepfish
+                    </v-btn>
+                  </v-flex>
+                  <v-flex xs12 sm4 class="text-xs-center">
+                    <v-btn flat color="error"
+                           @click.native.stop="selectedOpportunity = props.item; declinationDialog = true">
+                      Je refuse le talent
+                    </v-btn>
+                  </v-flex>
+                </v-layout>
               </v-card-actions>
               <v-card-actions v-if="isTalentAccepted(props.item)">
-                <v-flex xs6 class="text-xs-center">
-                  <v-btn flat color="success"
-                         @click.native.stop="selectedOpportunity = props.item; contactDialog = true">
-                    Je contacte le talent
-                  </v-btn>
-                </v-flex>
-                <v-flex xs6 class="text-xs-center">
-                  <v-btn flat color="error"
-                         @click.native.stop="selectedOpportunity = props.item; declinationDialog = true">
-                    Je ne retiens pas ce profil
-                  </v-btn>
-                </v-flex>
+                <v-layout row wrap>
+                  <v-flex xs12 sm4 class="text-xs-center">
+                    <v-btn flat color="success"
+                           @click.native.stop="selectedOpportunity = props.item; acceptanceDialog = true">
+                      Je contacte le talent
+                    </v-btn>
+                  </v-flex>
+                  <v-flex xs12 sm4 class="text-xs-center">
+                    <v-btn flat color="info" :loading="loading" :disabled="loading"
+                           @click.native.stop="selectedOpportunity = props.item; contactDialog = true">
+                      Je veux en parler avec Deepfish
+                    </v-btn>
+                  </v-flex>
+                  <v-flex xs12 sm4 class="text-xs-center">
+                    <v-btn flat color="error"
+                           @click.native.stop="selectedOpportunity = props.item; declinationDialog = true">
+                      Je ne retiens pas ce profil
+                    </v-btn>
+                  </v-flex>
+                </v-layout>
               </v-card-actions>
             </v-card>
           </v-flex>
         </v-data-iterator>
       </v-container>
     </v-flex>
-    <v-dialog v-model="contactDialog" v-if="selectedOpportunity" max-width="650px">
+    <v-dialog v-model="acceptanceDialog" v-if="selectedOpportunity" max-width="650px">
       <v-card>
         <v-card-title class="headline">
           <v-flex xs12 class="text-xs-center">
@@ -133,20 +149,43 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="contactDialog" v-if="selectedOpportunity" max-width="650px">
+      <v-card>
+        <v-card-text>
+          <v-form v-model="contactFormValid" @submit.prevent="contactAdmins(selectedOpportunity)">
+            <v-layout wrap>
+              <v-flex xs12>
+                <h3>Posez-nous vos questions et nous reviendrons rapidement vers vous :</h3>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field v-model="contactMessage" multi-line rows="7" :rules="[rules.required]"></v-text-field>
+              </v-flex>
+              <v-flex xs12 class="text-xs-right">
+                <v-btn type="submit" fab small color="primary" :disabled="!contactFormValid || loading"
+                       :loading="loading">
+                  <v-icon>done</v-icon>
+                </v-btn>
+              </v-flex>
+            </v-layout>
+          </v-form>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-dialog v-model="declinationDialog" v-if="selectedOpportunity" max-width="650px">
       <v-card>
         <v-card-text>
           <v-form v-model="employerDeclinationValid" @submit.prevent="declineTalent(selectedOpportunity)">
             <v-layout wrap>
               <v-flex xs12>
-                <h4>Expliquez la raison de votre refus pour améliorer la recherche</h4>
+                <h3>Expliquez la raison de votre refus pour améliorer la recherche :</h3>
               </v-flex>
               <v-flex xs12>
                 <v-text-field v-model="selectedOpportunity.employerDeclinationReason" multi-line rows="7"
                               :rules="[rules.required]"></v-text-field>
               </v-flex>
               <v-flex xs12 class="text-xs-right">
-                <v-btn type="submit" fab small color="primary" :disabled="!employerDeclinationValid" :loading="loading">
+                <v-btn type="submit" fab small color="primary" :disabled="!employerDeclinationValid || loading"
+                       :loading="loading">
                   <v-icon>done</v-icon>
                 </v-btn>
               </v-flex>
@@ -170,10 +209,13 @@
     data: () => ({
       rules,
       requirements: [],
+      selectedOpportunity: null,
+      acceptanceDialog: false,
       contactDialog: false,
+      contactFormValid: false,
+      contactMessage: '',
       declinationDialog: false,
       employerDeclinationValid: false,
-      selectedOpportunity: null,
     }),
     computed: {
       ...mapGetters([
@@ -211,7 +253,7 @@
           .saveOpportunity(opportunity)
           .then(() => {
             this.selectedOpportunity = opportunity;
-            this.contactDialog = true;
+            this.acceptanceDialog = true;
           });
       },
       declineTalent(opportunity) {
@@ -233,6 +275,21 @@
         return this.api
           .patch(opportunity._links.self.href, opportunity)
           .then(() => this.showSnackbar('Opération terminée avec succès'))
+          .catch(() => this.showSnackbar('Erreur'))
+          .finally(() => this.clearLoading());
+      },
+      contactAdmins(opportunity) {
+        this.prepareForApiConsumption();
+        this.api
+          .post('/employers/contact', {
+            employerId: this.user.id,
+            talentId: opportunity.talent.id,
+            message: this.contactMessage,
+          })
+          .then(() => {
+            this.contactDialog = false;
+            this.showSnackbar('Merci, nous revenons vers vous sous peu');
+          })
           .catch(() => this.showSnackbar('Erreur'))
           .finally(() => this.clearLoading());
       },
