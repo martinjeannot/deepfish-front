@@ -7,17 +7,18 @@
     </v-layout>
     <v-layout wrap v-else>
       <v-flex xs12 class="mb-2">
-        <span class="subheading" style="font-weight: bold">Quel salaire fixe annuel minimum acceptez-vous ?</span>
+        <span class="subheading" style="font-weight: bold">Quel salaire fixe annuel minimum (sans variable) acceptez-vous ?</span>
       </v-flex>
-      <v-flex xs12 sm4>
-        <v-form v-model="fixedSalaryValid" ref="fixedSalaryForm" @submit.prevent="submitConditions"
-                class="d-inline-flex">
-          <v-text-field type="number" v-model="conditions.fixedSalary" label="Montant annuel" prefix="€"
-                        :rules="[rules.required, rules.positive, rules.minValue]" required></v-text-field>
-          <v-btn type="submit" small color="primary" :disabled="!fixedSalaryValid || subLoading"
-                 :loading="subLoading">
-            Valider
-          </v-btn>
+      <v-flex xs12>
+        <v-form v-model="fixedSalaryValid" ref="fixedSalaryForm" @submit.prevent="submitConditions">
+          <v-flex xs12 sm6 class="d-inline-flex">
+            <v-text-field type="number" v-model="conditions.fixedSalary" label="Montant annuel hors primes" prefix="€"
+                          :rules="[rules.required, rules.positive, rules.minValue]" required></v-text-field>
+            <v-btn type="submit" small color="primary" :disabled="!fixedSalaryValid || subLoading"
+                   :loading="subLoading">
+              Valider
+            </v-btn>
+          </v-flex>
         </v-form>
       </v-flex>
       <v-flex xs12 class="mb-2">
