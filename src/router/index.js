@@ -1,10 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import TalentSignIn from '@/components/Talent/SignIn';
-import EmployerSignIn from '@/components/Employer/SignIn';
+import SignIn from '@/components/SignIn';
+import SignUp from '@/components/SignUp';
 import PasswordReset from '@/components/PasswordReset';
-import TalentSignUp from '@/components/Talent/SignUp';
-import EmployerSignUp from '@/components/Employer/SignUp';
 import AdminDashboard from '@/components/Admin/Dashboard';
 import AdminProfile from '@/components/Admin/Profile';
 import AdminSearch from '@/components/Admin/Search';
@@ -51,17 +49,17 @@ const router = new Router({
     {
       path: '/sign-in',
       name: 'SignIn',
-      redirect: { name: 'TalentSignIn' },
+      component: SignIn,
     },
     {
       path: '/talent-sign-in',
       name: 'TalentSignIn',
-      component: TalentSignIn,
+      redirect: { name: 'SignIn' },
     },
     {
       path: '/employer-sign-in',
       name: 'EmployerSignIn',
-      component: EmployerSignIn,
+      redirect: { name: 'SignIn' },
     },
     {
       path: '/password-reset',
@@ -71,17 +69,17 @@ const router = new Router({
     {
       path: '/sign-up',
       name: 'SignUp',
-      redirect: { name: 'TalentSignUp' },
+      component: SignUp,
     },
     {
       path: '/talent-sign-up',
       name: 'TalentSignUp',
-      component: TalentSignUp,
+      redirect: { name: 'SignUp' },
     },
     {
       path: '/employer-sign-up',
       name: 'EmployerSignUp',
-      component: EmployerSignUp,
+      redirect: { name: 'SignUp' },
     },
     {
       path: '/auth/callback',
