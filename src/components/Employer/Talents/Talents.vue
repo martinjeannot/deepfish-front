@@ -31,7 +31,7 @@
                   </div>
                   <div v-if="getTalentLinkedInProfileUrl(props.item.talent.basicProfile)">
                     <a :href="getTalentLinkedInProfileUrl(props.item.talent.basicProfile)"
-                       target="_blank">Voir ce talent sur LinkedIn</a>
+                       target="_blank">Voir le profil complet</a>
                   </div>
                 </v-flex>
                 <v-flex xs12 sm6>
@@ -61,7 +61,7 @@
                   }} années d'expérience</span>
                   et se place à <span
                   style="font-weight: bold">{{ props.item.talent.conditions.fixedSalary | formatMonetaryAmount
-                  }} €</span>.
+                  }} €</span> de salaire fixe.
                 </v-flex>
                 <v-flex xs12 v-if="props.item.talent.conditions.taskTypes.length">
                   Missions acceptées :

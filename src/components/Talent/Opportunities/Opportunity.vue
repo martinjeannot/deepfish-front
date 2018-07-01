@@ -12,6 +12,7 @@
             <div class="headline">{{ opportunity.company.name }}</div>
             <div class="grey--text">Fonction proposée : {{ opportunity.job.l10nKey }}</div>
             <div class="grey--text">Localisation : {{ opportunity.location }}</div>
+            <div class="grey--text">Salaire fixe : il respecte tes conditions</div>
           </div>
         </v-card-title>
         <v-card-text>
@@ -41,7 +42,7 @@
         <v-form v-model="opportunityDeclinationValid" @submit.prevent="decline(opportunity)">
           <v-layout row wrap>
             <v-flex xs12>
-              <h4>Expliquez la raison de votre refus en quelques mots</h4>
+              <h4>Explique-nous la raison de ton refus en quelques mots</h4>
             </v-flex>
             <v-flex xs12>
               <v-text-field v-model="opportunity.talentDeclinationReason" multi-line rows="7"
@@ -64,7 +65,7 @@
           </v-flex>
           <v-flex xs11>
             <h3>
-              Attention, cette action entraînera le refus de toutes vos opportunités en attente et la désactivation de votre profil
+              Attention, cette action entraînera le refus de toutes tes opportunités en attente et la désactivation de ton profil
             </h3>
           </v-flex>
           <v-flex xs12 class="text-xs-center">
@@ -126,7 +127,7 @@
             this.$router.push('/talent/opportunities');
             this.setAlertComponent({
               type: 'success',
-              message: 'Merci, le recruteur va maintenant découvrir votre profil complet (non anonymisé) et revenir vers vous si son intérêt est confirmé',
+              message: 'Merci, le recruteur va maintenant découvrir ton profil complet (non anonymisé) et revenir vers toi si son intérêt est confirmé',
             });
           });
       },

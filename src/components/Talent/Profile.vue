@@ -36,7 +36,7 @@
                                     type="text" required></v-text-field>
                     </v-flex>
                     <v-flex xs12>
-                      <h4>Quel est votre niveau de maturité ?</h4>
+                      <h4>Quel est ton niveau de maturité ?</h4>
                       <v-radio-group v-model="talent.maturityLevel" row :rules="[rules.required]">
                         <v-tooltip bottom class="bugfix-vuetify-2171">
                           <v-radio label="Clear water" value="CLEAR_WATER" slot="activator"
@@ -44,8 +44,7 @@
                           <v-radio label="Clear" value="CLEAR_WATER" slot="activator"
                                    class="hidden-sm-and-up"></v-radio>
                           <div>
-                            Vous souhaitez quitter rapidement votre entreprise<br/>
-                            à des conditions meilleures ou égales
+                            Je suis en recherche active d'un nouveau job le plus vite possible
                           </div>
                         </v-tooltip>
                         <v-tooltip bottom class="bugfix-vuetify-2171">
@@ -53,8 +52,8 @@
                                    class="hidden-xs-only"></v-radio>
                           <v-radio label="Open" value="OPEN_WATER" slot="activator" class="hidden-sm-and-up"></v-radio>
                           <div>
-                            Vous êtes à l’affût d’une opportunité plus intéressante<br/>
-                            à moyen terme pour quitter votre entreprise
+                            Je souhaite quitter mon entreprise prochainement<br/>
+                            et attends que les opportunités se présentent à moi
                           </div>
                         </v-tooltip>
                         <v-tooltip bottom class="bugfix-vuetify-2171">
@@ -62,8 +61,8 @@
                                    class="hidden-xs-only"></v-radio>
                           <v-radio label="Deep" value="DEEP_WATER" slot="activator" class="hidden-sm-and-up"></v-radio>
                           <div>
-                            Vous êtes bien dans votre entreprise actuelle<br/>
-                            mais prêt à changer d'entreprise à des conditions précises
+                            Je ne souhaite pas changer d'entreprise mais<br/>
+                            si mon job idéal se présente, je saisis l'opportunité
                           </div>
                         </v-tooltip>
                       </v-radio-group>
@@ -155,7 +154,7 @@
       if ((this.talent.phoneNumber && this.hasBeenSuccessfullySubmittedOnce) || to.name === 'TalentSignIn') {
         next();
       } else {
-        this.setAlertComponent({ type: 'info', message: 'Veuillez remplir votre profil en premier lieu' });
+        this.setAlertComponent({ type: 'info', message: 'Merci de remplir ton profil en premier lieu' });
         next(false);
       }
     },
