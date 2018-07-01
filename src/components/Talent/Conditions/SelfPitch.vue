@@ -7,7 +7,7 @@
     </v-layout>
     <v-layout v-else wrap class="d-block">
       <v-flex xs12>
-        <span class="subheading">Combien d'années d'expérience professionnelle avez-vous ?</span>
+        <span class="subheading">Combien d'années d'expérience professionnelle as-tu ?</span>
       </v-flex>
       <v-flex xs12 sm3>
         <v-select
@@ -18,8 +18,8 @@
         ></v-select>
       </v-flex>
       <v-flex xs12>
-        <div class="subheading">Mettez-vous en valeur en quelques mots :</div>
-        <div>Quelle opportunité recherchez-vous ? Quelles sont vos qualités ?</div>
+        <div class="subheading">Mets-toi en valeur en quelques mots :</div>
+        <div>Quelle opportunité recherches-tu ? Quelles sont tes qualités ?</div>
       </v-flex>
       <v-form v-model="valid" ref="form" @submit.prevent="submitSelfPitch" style="width: 100%">
         <v-flex xs12>
@@ -38,7 +38,7 @@
   import { mapGetters, mapActions } from 'vuex';
 
   const rules = {
-    maxLength: value => value.length < 1001 || 'Votre présentation est trop longue',
+    maxLength: value => value.length < 1001 || 'Ta présentation est trop longue',
   };
 
   export default {
@@ -74,10 +74,10 @@
           .saveProfile()
           .then(() => {
             this.$router.push('/talent/opportunities');
-            this.showSnackbar('Vos conditions ont été sauvegardées');
+            this.showSnackbar('Tes conditions ont été sauvegardées');
             this.setAlertComponent({
               type: 'success',
-              message: 'Merci, vous recevrez un email de notification pour chaque nouvelle opportunité reçue. À bientôt !',
+              message: 'Merci, tu recevras un email de notification pour chaque nouvelle opportunité reçue. À bientôt !',
             });
           });
       },
