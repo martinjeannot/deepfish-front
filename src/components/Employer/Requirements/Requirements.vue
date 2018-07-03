@@ -29,7 +29,7 @@
                   <v-list-tile-content>
                     <v-list-tile-title>{{ requirement.name }}</v-list-tile-title>
                     <v-list-tile-sub-title>
-                      Je recrute un profil {{ requirement.job.l10nKey
+                      Je recrute un profil {{ requirement.jobType.l10nKey
                       }} avec une expérience {{ requirement.seniority.l10nKey }} sur {{ requirement.location
                       }} pour un salaire fixe maxi de {{ requirement.fixedSalary / 1000 }}K€
                     </v-list-tile-sub-title>

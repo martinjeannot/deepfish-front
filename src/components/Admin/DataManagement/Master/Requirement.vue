@@ -30,7 +30,7 @@
                     </router-link>
                     &nbsp;is looking for a
                     <span style="font-weight: bold">{{ requirement.seniority.l10nKey }}</span>
-                    <span style="font-weight: bold">{{ requirement.job.l10nKey }}</span>
+                    <span style="font-weight: bold">{{ requirement.jobType.l10nKey }}</span>
                     based in
                     <span style="font-weight: bold">{{ requirement.location }}</span>
                     for a max fixed salary of
@@ -89,7 +89,7 @@
       saveRequirement(requirement) {
         const requirementData = Object.assign({}, requirement);
         delete requirementData.company;
-        delete requirementData.job;
+        delete requirementData.jobType;
         delete requirementData.seniority;
         this.api
           .patch(requirement._links.self.href, requirementData)

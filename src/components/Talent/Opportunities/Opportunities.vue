@@ -22,7 +22,7 @@
               <v-card-title>
                 <span style="font-weight: bold">
                   {{ props.item.company.name}}
-                </span>&nbsp;te propose un job de {{ props.item.job.l10nKey }}
+                </span>&nbsp;te propose un job de {{ props.item.jobType.l10nKey }}
               </v-card-title>
               <v-card-actions>
                 <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
@@ -50,7 +50,7 @@
         <v-data-iterator content-tag="v-layout" row wrap :items="acceptedOpportunities" :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card>
-              <v-card-title>{{ props.item.company.name }} t'as proposé un job de {{ props.item.job.l10nKey }}
+              <v-card-title>{{ props.item.company.name }} t'as proposé un job de {{ props.item.jobType.l10nKey }}
               </v-card-title>
               <v-card-actions>
                 <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
@@ -75,7 +75,7 @@
         <v-data-iterator content-tag="v-layout" row wrap :items="declinedOpportunities" :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card>
-              <v-card-title>{{ props.item.company.name }} t'as proposé un job de {{ props.item.job.l10nKey }}
+              <v-card-title>{{ props.item.company.name }} t'as proposé un job de {{ props.item.jobType.l10nKey }}
               </v-card-title>
               <v-card-actions>
                 <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">

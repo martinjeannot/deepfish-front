@@ -26,7 +26,8 @@
               </v-card-title>
               <v-card-text>
                 <span>Je recrute un profil&nbsp;</span>
-                <v-select :items="jobs" v-model="requirement.job" item-value="_links.self.href" item-text="l10nKey"
+                <v-select :items="jobTypes" v-model="requirement.jobType" item-value="_links.self.href"
+                          item-text="l10nKey"
                           hide-details append-icon="" class="d-inline-flex w-auto"></v-select>
                 <span>avec une expérience&nbsp;</span>
                 <v-select :items="seniorities" v-model="requirement.seniority" item-value="_links.self.href"
@@ -67,7 +68,7 @@
     name: 'employer-requirements',
     data: () => ({
       rules,
-      jobs: [],
+      jobTypes: [],
       seniorities: [],
       requirement: null,
       requirementValid: false,
@@ -101,7 +102,7 @@
           createdBy: this.user.id,
           company: `/${this.user.company.id}`,
           name: 'Mon nouveau besoin',
-          job: this.jobs[1]._links.self.href,
+          jobType: this.jobTypes[1]._links.self.href,
           seniority: this.seniorities[0]._links.self.href,
           location: '',
           fixedSalary: 0,
@@ -130,14 +131,14 @@
       this.prepareForApiConsumption();
       Promise
         .all([
-          this.api('/jobs'),
+          this.api('/jobTypes'),
           this.api('/seniorities'),
         ])
         .then(([
-                 jobsResponse,
+                 jobTypesResponse,
                  senioritiesResponse,
                ]) => {
-          this.jobs = jobsResponse.data._embedded.jobs;
+          this.jobTypes = jobTypesResponse.data._embedded.jobTypes;
           this.seniorities = senioritiesResponse.data._embedded.seniorities;
           this.requirement = this.newRequirement();
           if (!this.user.requirements.length) {

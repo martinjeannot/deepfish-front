@@ -17,8 +17,8 @@
         <synchronized-checkbox-list
           :conditions="conditions"
           title="Quels types de postes acceptes-tu ?"
-          :referenceDomainObjects="jobs"
-          associationResourceName="jobs"
+          :referenceDomainObjects="jobTypes"
+          associationResourceName="jobTypes"
           class="mb-5"
         ></synchronized-checkbox-list>
         <synchronized-checkbox-list
@@ -53,7 +53,7 @@
       valid: false,
       conditions: null,
       companyMaturityLevels: [],
-      jobs: [],
+      jobTypes: [],
       commodityTypes: [],
       taskTypes: [],
     }),
@@ -78,21 +78,21 @@
         .all([
           this.api(`${this.user._links.conditions.href}?projection=default`),
           this.api('/companyMaturityLevels'),
-          this.api('/jobs'),
+          this.api('/jobTypes'),
           this.api('/commodityTypes'),
           this.api('/taskTypes'),
         ])
         .then(([
                  conditionsResponse,
                  companyMaturityLevelsResponse,
-                 jobsResponse,
+                 jobTypesResponse,
                  commodityTypesResponse,
                  taskTypesResponse,
                ]) => {
           this.conditions = conditionsResponse.data;
           this.companyMaturityLevels =
             companyMaturityLevelsResponse.data._embedded.companyMaturityLevels;
-          this.jobs = jobsResponse.data._embedded.jobs;
+          this.jobTypes = jobTypesResponse.data._embedded.jobTypes;
           this.commodityTypes = commodityTypesResponse.data._embedded.commodityTypes;
           this.taskTypes = taskTypesResponse.data._embedded.taskTypes;
           this.$store.dispatch('clearLoading');
