@@ -4,7 +4,7 @@
     <v-checkbox v-for="domainObject in referenceDomainObjects"
                 :key="domainObject.id"
                 :value="domainObject.id"
-                :label="domainObject.l10nKey"
+                :label="getLabelFromL10nKey(domainObject.l10nKey)"
                 v-model="domainObjectsModel"
                 :disabled="loading"
     ></v-checkbox>
@@ -73,6 +73,20 @@
       },
       clearLoading() {
         this.loading = false;
+      },
+      getLabelFromL10nKey(l10nKey) {
+        switch (l10nKey) {
+          case 'Amorçage':
+            return 'Amorcage : tu seras le 1er sales';
+          case 'Early stage':
+            return 'Early stage : équipe entre 1 et 5 sales';
+          case 'Accélération':
+            return 'Accélération : équipe entre 6 et 20 sales';
+          case 'Maturité':
+            return 'Maturité : équipe de 20+ sales';
+          default:
+            return l10nKey;
+        }
       },
     },
   };

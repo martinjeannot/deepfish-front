@@ -173,8 +173,9 @@
                           </v-chip>
                         </v-flex>
                         <v-flex xs12>
-                          <h3>Jobs</h3>
-                          <v-chip v-for="job in talent.conditions.jobs" :key="job.id">{{ job.l10nKey }}</v-chip>
+                          <h3>Job Types</h3>
+                          <v-chip v-for="jobType in talent.conditions.jobTypes" :key="jobType.id">{{ jobType.l10nKey }}
+                          </v-chip>
                         </v-flex>
                         <v-flex xs12>
                           <h3>Commodity types</h3>
@@ -379,8 +380,8 @@
           profileCompletion.items.push('Company maturity levels');
         }
         profileItemCounter += 1;
-        if (!this.talent.conditions.jobs.length) {
-          profileCompletion.items.push('Jobs');
+        if (!this.talent.conditions.jobTypes.length) {
+          profileCompletion.items.push('Job types');
         }
         profileItemCounter += 1;
         if (!this.talent.conditions.commodityTypes.length) {

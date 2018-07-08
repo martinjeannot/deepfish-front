@@ -34,14 +34,14 @@
           </v-card>
         </v-expansion-panel-content>
         <v-expansion-panel-content>
-          <div slot="header">Jobs</div>
+          <div slot="header">Job types</div>
           <v-card>
             <v-card-text>
-              <v-checkbox v-for="job in jobs"
-                          :key="job.id"
-                          :value="job.id"
-                          :label="job.l10nKey"
-                          v-model="criteria.jobs"
+              <v-checkbox v-for="jobType in jobTypes"
+                          :key="jobType.id"
+                          :value="jobType.id"
+                          :label="jobType.l10nKey"
+                          v-model="criteria.jobTypes"
               ></v-checkbox>
             </v-card-text>
           </v-card>
@@ -275,7 +275,7 @@
                       <v-list-tile-title><span style="font-weight: bold">{{ data.item.company.name }}</span>
                         : {{ data.item.name }}
                       </v-list-tile-title>
-                      <v-list-tile-sub-title>{{ data.item.job.l10nKey }} {{ data.item.seniority.l10nKey
+                      <v-list-tile-sub-title>{{ data.item.jobType.l10nKey }} {{ data.item.seniority.l10nKey
                         }} {{ data.item.fixedSalary / 1000 }}K€ {{ data.item.location }}
                       </v-list-tile-sub-title>
                     </v-list-tile-content>
@@ -321,7 +321,7 @@
       opportunityValid: false,
       // REFERENCE DATA
       companyMaturityLevels: [],
-      jobs: [],
+      jobTypes: [],
       commodityTypes: [],
       taskTypes: [],
       fixedLocations: [],
@@ -331,7 +331,7 @@
         searchQuery: null,
         companyMaturityLevels: [],
         companyMaturityLevelsNotIn: [],
-        jobs: [],
+        jobTypes: [],
         commodityTypes: [],
         taskTypes: [],
         taskTypesNotIn: [],
@@ -400,13 +400,13 @@
             talentQueryString += `${companyMaturityLevel}`;
           });
         }
-        // Jobs criterion
-        if (this.criteria.jobs.length) {
+        // Job types criterion
+        if (this.criteria.jobTypes.length) {
           talentQueryString += talentQueryString ? '&' : '';
-          talentQueryString += 'conditions.jobs=';
-          this.criteria.jobs.forEach((job, index) => {
+          talentQueryString += 'conditions.jobTypes=';
+          this.criteria.jobTypes.forEach((jobType, index) => {
             talentQueryString += index ? ',' : '';
-            talentQueryString += `${job}`;
+            talentQueryString += `${jobType}`;
           });
         }
         // Commodity types criterion
@@ -546,7 +546,7 @@
       Promise.all([
         this.api('/requirements?projection=default&size=1000'),
         this.api('/companyMaturityLevels'),
-        this.api('/jobs'),
+        this.api('/jobTypes'),
         this.api('/commodityTypes'),
         this.api('/taskTypes'),
         this.api('/fixedLocations'),
@@ -554,7 +554,7 @@
         .then(([
                  requirementsResponse,
                  companyMaturityLevelsResponse,
-                 jobsResponse,
+                 jobTypesResponse,
                  commodityTypesResponse,
                  taskTypesResponse,
                  fixedLocationsResponse,
@@ -563,7 +563,7 @@
           // reference data
           this.companyMaturityLevels =
             companyMaturityLevelsResponse.data._embedded.companyMaturityLevels;
-          this.jobs = jobsResponse.data._embedded.jobs;
+          this.jobTypes = jobTypesResponse.data._embedded.jobTypes;
           this.commodityTypes = commodityTypesResponse.data._embedded.commodityTypes;
           this.taskTypes = taskTypesResponse.data._embedded.taskTypes;
           this.fixedLocations = fixedLocationsResponse.data._embedded.fixedLocations;
