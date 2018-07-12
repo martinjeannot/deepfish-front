@@ -283,8 +283,8 @@
                   </v-list-tile>
                 </template>
               </v-select>
-              <v-text-field label="Opportunity pitch" v-model="opportunityPitch" multi-line rows="7"
-                            :rules="[rules.required]"></v-text-field>
+              <v-textarea label="Opportunity pitch" v-model="opportunityPitch" multi-line rows="7"
+                          :rules="[rules.required]"></v-textarea>
             </v-flex>
           </v-layout>
         </v-form>

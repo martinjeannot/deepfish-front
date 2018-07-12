@@ -42,7 +42,7 @@
             <v-flex xs8>
               <v-card>
                 <v-card-text>
-                  <v-text-field label="Notes" v-model="requirement.notes" multi-line rows="9"></v-text-field>
+                  <v-textarea label="Notes" v-model="requirement.notes" rows="9"></v-textarea>
                   <div class="text-xs-right">
                     <v-btn icon fab small color="primary" @click="saveRequirement(requirement)">
                       <v-icon>done</v-icon>

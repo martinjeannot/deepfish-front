@@ -27,7 +27,7 @@
                 <v-text-field :type="passwordShown ? 'text' : 'password'" label="Password" v-model="uzer.password"
                               :rules="[rules.required, rules.passwordLength]" hint="At least 8 characters"
                               :append-icon="passwordShown ? 'visibility' : 'visibility_off'"
-                              :append-icon-cb="() => (passwordShown = !passwordShown)" required></v-text-field>
+                              @click:append="() => (passwordShown = !passwordShown)" required></v-text-field>
               </v-flex>
               <v-flex xs12 class="text-xs-center">
                 <v-btn type="submit" color="primary" :disabled="!valid || loading" :loading="loading">Save</v-btn>

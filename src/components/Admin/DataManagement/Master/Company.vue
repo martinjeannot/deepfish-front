@@ -31,7 +31,7 @@
             <v-flex xs8>
               <v-card>
                 <v-card-text>
-                  <v-text-field label="Description" v-model="company.description" multi-line rows="9"></v-text-field>
+                  <v-textarea label="Description" v-model="company.description" rows="9"></v-textarea>
                   <div class="text-xs-right">
                     <v-btn icon fab small color="primary" @click="saveCompany">
                       <v-icon>done</v-icon>

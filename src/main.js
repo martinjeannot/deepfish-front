@@ -16,7 +16,9 @@ import TernaryCheckbox from './components/Utilities/TernaryCheckbox';
 
 import './assets/stylus/main.styl';
 
-Vue.config.productionTip = false;
+const isProduction = process.env.NODE_ENV === 'production';
+
+Vue.config.productionTip = !isProduction;
 
 Vue.use(Vuetify, {
   theme: {
@@ -28,6 +30,10 @@ Vue.use(filters);
 Vue.use(VueAnalytics, {
   id: ['UA-90375031-1', 'UA-118984586-1'],
   router,
+  debug: {
+    // enabled: !isProduction,
+    sendHitTask: isProduction,
+  },
 });
 
 Vue.component('base-alert', BaseAlert);

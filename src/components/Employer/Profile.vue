@@ -40,7 +40,7 @@
                                   v-model="employer.password" :rules="[rules.passwordLength]"
                                   hint="Au moins 6 caractères"
                                   :append-icon="passwordShown ? 'visibility' : 'visibility_off'"
-                                  :append-icon-cb="() => (passwordShown = !passwordShown)"></v-text-field>
+                                  @click:append="() => (passwordShown = !passwordShown)"></v-text-field>
                   </v-flex>
                   <v-flex xs12 text-xs-center>
                     <v-btn type="submit" :disabled="!valid || loading" :loading="loading">Valider</v-btn>

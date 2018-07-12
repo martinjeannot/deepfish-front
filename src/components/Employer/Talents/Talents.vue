@@ -158,7 +158,7 @@
                 <h3>Posez-nous vos questions et nous reviendrons rapidement vers vous :</h3>
               </v-flex>
               <v-flex xs12>
-                <v-text-field v-model="contactMessage" multi-line rows="7" :rules="[rules.required]"></v-text-field>
+                <v-textarea v-model="contactMessage" rows="7" :rules="[rules.required]"></v-textarea>
               </v-flex>
               <v-flex xs12 class="text-xs-right">
                 <v-btn type="submit" fab small color="primary" :disabled="!contactFormValid || loading"
@@ -180,8 +180,8 @@
                 <h3>Expliquez la raison de votre refus pour améliorer la recherche :</h3>
               </v-flex>
               <v-flex xs12>
-                <v-text-field v-model="selectedOpportunity.employerDeclinationReason" multi-line rows="7"
-                              :rules="[rules.required]"></v-text-field>
+                <v-textarea v-model="selectedOpportunity.employerDeclinationReason" rows="7"
+                            :rules="[rules.required]"></v-textarea>
               </v-flex>
               <v-flex xs12 class="text-xs-right">
                 <v-btn type="submit" fab small color="primary" :disabled="!employerDeclinationValid || loading"

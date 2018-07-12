@@ -235,8 +235,7 @@
                         </v-flex>
                         <v-flex xs12>
                           <h4>Recommendation</h4>
-                          <v-text-field v-model="talent.qualification.recommendation" multi-line rows="9">
-                          </v-text-field>
+                          <v-textarea v-model="talent.qualification.recommendation" rows="9"></v-textarea>
                           <div class="text-xs-right">
                             <v-btn icon fab small color="primary" @click="saveQualification">
                               <v-icon>done</v-icon>
@@ -285,7 +284,7 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12>
-                          <v-text-field v-model="talent.notes" multi-line rows="16"></v-text-field>
+                          <v-textarea v-model="talent.notes" rows="16"></v-textarea>
                           <div class="text-xs-right">
                             <v-btn icon fab small color="primary" @click="saveProfile">
                               <v-icon>done</v-icon>
@@ -299,7 +298,7 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12>
-                          <v-text-field v-model="talent.fullProfileText" multi-line rows="16"></v-text-field>
+                          <v-textarea v-model="talent.fullProfileText" rows="16"></v-textarea>
                           <div class="text-xs-right">
                             <v-btn icon fab small color="primary" @click="saveProfile">
                               <v-icon>done</v-icon>

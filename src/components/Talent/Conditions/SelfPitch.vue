@@ -23,8 +23,8 @@
       </v-flex>
       <v-form v-model="valid" ref="form" @submit.prevent="submitSelfPitch" style="width: 100%">
         <v-flex xs12>
-          <v-text-field v-model="talent.selfPitch" multi-line rows="9" :rules="[rules.maxLength]" :counter="1000"
-                        :readonly="loading"></v-text-field>
+          <v-textarea v-model="talent.selfPitch" rows="9" :rules="[rules.maxLength]" :counter="1000"
+                      :readonly="loading"></v-textarea>
         </v-flex>
         <v-flex xs12 class="text-xs-right">
           <v-btn type="submit" color="primary" :disabled="!valid || loading" :loading="loading">Valider</v-btn>
