@@ -190,7 +190,8 @@
                   <v-divider></v-divider>
                 </v-flex>
                 <v-flex xs12 justify-center>
-                  <v-btn flat icon :href="props.item.basicProfile.publicProfileUrl" target="_blank"
+                  <v-btn v-if="getTalentLinkedInProfileUrl(props.item.basicProfile)" flat icon
+                         :href="getTalentLinkedInProfileUrl(props.item.basicProfile)" target="_blank"
                          color="light-blue darken-3">
                     <v-icon>fab fa-linkedin</v-icon>
                   </v-btn>
@@ -356,6 +357,7 @@
       ]),
       ...mapState([
         'getTalentMaturityLevel',
+        'getTalentLinkedInProfileUrl',
       ]),
     },
     watch: {
