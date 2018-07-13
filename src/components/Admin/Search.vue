@@ -546,7 +546,7 @@
     created() {
       this.prepareForApiConsumption(true);
       Promise.all([
-        this.api('/requirements?projection=default&size=1000'),
+        this.api('/requirements?projection=default&size=1000&sort=createdAt,desc'),
         this.api('/companyMaturityLevels'),
         this.api('/jobTypes'),
         this.api('/commodityTypes'),

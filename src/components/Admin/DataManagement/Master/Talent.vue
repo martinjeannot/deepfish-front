@@ -493,7 +493,7 @@
         Promise
           .all([
             this.api(`/talents/${this.id}`),
-            this.api('/requirements?projection=default&size=1000'),
+            this.api('/requirements?projection=default&size=1000&sort=createdAt,desc'),
           ])
           .then(([
                    talentResponse,

@@ -52,7 +52,10 @@
         { text: 'Actions', value: 'name', sortable: false },
       ],
       totalItems: 0,
-      pagination: {},
+      pagination: {
+        sortBy: 'createdAt',
+        descending: true,
+      },
       search: '',
     }),
     computed: {
