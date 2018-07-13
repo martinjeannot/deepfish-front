@@ -57,6 +57,9 @@
                   </v-layout>
                 </v-flex>
                 <v-flex xs12 class="mt-2">
+                  Ce talent a accepté votre opportunité.
+                </v-flex>
+                <v-flex xs12>
                   Ce profil a <span style="font-weight: bold">{{ props.item.talent.yearsOfExperience
                   }} années d'expérience</span>
                   et se place à <span
