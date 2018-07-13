@@ -45,8 +45,8 @@
               <h4>Explique-nous la raison de ton refus en quelques mots</h4>
             </v-flex>
             <v-flex xs12>
-              <v-text-field v-model="opportunity.talentDeclinationReason" multi-line rows="7"
-                            :rules="[rules.required]"></v-text-field>
+              <v-textarea v-model="opportunity.talentDeclinationReason" multi-line rows="7"
+                          :rules="[rules.required]"></v-textarea>
             </v-flex>
             <v-flex xs12 class="text-xs-right">
               <v-btn type="submit" fab small color="primary" :disabled="!opportunityDeclinationValid">

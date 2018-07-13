@@ -17,6 +17,7 @@
             <td>{{ props.item.firstName }}</td>
             <td>{{ props.item.username }}</td>
             <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
+            <td>{{ props.item.lastSignedInAt | formatDate('LLL') }}</td>
             <td>
               <router-link :to="{ name: 'AdminDMCompany', params: {id: props.item.company.id} }">
                 {{ props.item.company.name }}
@@ -48,11 +49,15 @@
         { text: 'First name', value: 'firstName' },
         { text: 'Email', value: 'username' },
         { text: 'Registered at', value: 'createdAt' },
+        { text: 'Last signed in at', value: 'lastSignedInAt' },
         { text: 'Company', value: 'company.name', sortable: false },
         { text: 'Actions', value: 'name', sortable: false },
       ],
       totalItems: 0,
-      pagination: {},
+      pagination: {
+        sortBy: 'createdAt',
+        descending: true,
+      },
       search: '',
     }),
     computed: {

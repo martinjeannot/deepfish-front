@@ -190,7 +190,8 @@
                   <v-divider></v-divider>
                 </v-flex>
                 <v-flex xs12 justify-center>
-                  <v-btn flat icon :href="props.item.basicProfile.publicProfileUrl" target="_blank"
+                  <v-btn v-if="getTalentLinkedInProfileUrl(props.item.basicProfile)" flat icon
+                         :href="getTalentLinkedInProfileUrl(props.item.basicProfile)" target="_blank"
                          color="light-blue darken-3">
                     <v-icon>fab fa-linkedin</v-icon>
                   </v-btn>
@@ -282,8 +283,8 @@
                   </v-list-tile>
                 </template>
               </v-select>
-              <v-text-field label="Opportunity pitch" v-model="opportunityPitch" multi-line rows="7"
-                            :rules="[rules.required]"></v-text-field>
+              <v-textarea label="Opportunity pitch" v-model="opportunityPitch" multi-line rows="7"
+                          :rules="[rules.required]"></v-textarea>
             </v-flex>
           </v-layout>
         </v-form>
@@ -356,6 +357,7 @@
       ]),
       ...mapState([
         'getTalentMaturityLevel',
+        'getTalentLinkedInProfileUrl',
       ]),
     },
     watch: {
@@ -544,7 +546,7 @@
     created() {
       this.prepareForApiConsumption(true);
       Promise.all([
-        this.api('/requirements?projection=default&size=1000'),
+        this.api('/requirements?projection=default&size=1000&sort=createdAt,desc'),
         this.api('/companyMaturityLevels'),
         this.api('/jobTypes'),
         this.api('/commodityTypes'),

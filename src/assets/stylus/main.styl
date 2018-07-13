@@ -1,5 +1,7 @@
 @require '~vuetify/src/stylus/settings/_colors'
 
+// TODO here we've copied the whole material-light theme from Vuetify (vuetify/src/stylus/settings/_theme.styl)
+// but there has to be a better way to override it
 $material-light := {
   status-bar: {
     regular: #E0E0E0,
@@ -26,6 +28,7 @@ $material-light := {
     inactive: rgba(#000, .38)
   },
   inputs: {
+    box: rgba(#000, .04),
     solo-inverted: rgba(#000, .16),
     solo-inverted-focused: #424242,
     solo-inverted-focused-text: #fff
@@ -38,6 +41,9 @@ $material-light := {
   },
   expansion-panels: {
     focus: #EEEEEE
+  },
+  list-tile: {
+    hover: rgba(#000, .04)
   },
   selection-controls: {
     thumb: {
@@ -57,6 +63,10 @@ $material-light := {
   },
   tabs: {
     active: rgba(#000, .87)
+  },
+  text-fields: {
+    box: rgba(#000, .06),
+    box-hover: rgba(#000, .12)
   },
   input-bottom-line: rgba(#000, .42),
   stepper: {

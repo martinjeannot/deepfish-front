@@ -49,7 +49,7 @@
                         <v-text-field label="Mot de passe" v-model="password" :rules="[rules.required]" type="password"
                                       required :type="passwordShown ? 'text' : 'password'"
                                       :append-icon="passwordShown ? 'visibility' : 'visibility_off'"
-                                      :append-icon-cb="() => (passwordShown = !passwordShown)"></v-text-field>
+                                      @click:append="() => (passwordShown = !passwordShown)"></v-text-field>
                       </v-flex>
                       <v-flex xs12 text-xs-center>
                         <v-btn type="submit" color="info" :disabled="!valid || loading" :loading="loading">
