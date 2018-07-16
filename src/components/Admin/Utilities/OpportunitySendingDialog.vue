@@ -16,7 +16,7 @@
               </v-flex>
             </v-layout>
             <v-select label="Requirement" :items="requirements" v-model="selectedRequirement" item-text="company.name"
-                      :rules="[rules.required]">
+                      return-object :rules="[rules.required]">
               <template slot="selection" slot-scope="data">
                 <div class="input-group__selections__comma">
                   {{ data.item.company.name }} - {{ data.item.name }}

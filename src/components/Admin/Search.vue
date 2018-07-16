@@ -269,7 +269,7 @@
                 </v-flex>
               </v-layout>
               <v-select label="Requirement" :items="requirements" v-model="selectedRequirement" item-text="company.name"
-                        :rules="[rules.required]">
+                        return-object :rules="[rules.required]">
                 <template slot="item" slot-scope="data">
                   <v-list-tile>
                     <v-list-tile-content>
