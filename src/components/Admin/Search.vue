@@ -5,6 +5,8 @@
     </v-flex>
   </v-layout>
   <v-layout row wrap v-else>
+    <admin-opportunity-sending-dialog :value.sync="opportunityDialog" :talent="selectedTalent"
+                                      :requirements="requirements"></admin-opportunity-sending-dialog>
     <v-flex xs2>
       <v-flex xs12 class="text-xs-center">
         <v-btn block color="primary" @click="search" :disabled="loading" :loading="loading">
@@ -252,49 +254,12 @@
         </v-data-iterator>
       </v-container>
     </v-flex>
-    <v-dialog v-model="opportunityDialog" v-if="selectedTalent" max-width="40%">
-      <v-container style="background-color: white">
-        <v-form v-model="opportunityValid" @submit.prevent="sendOpportunity">
-          <v-layout>
-            <v-flex xs12>
-              <v-layout>
-                <v-flex xs10 style="margin: auto">
-                  <h2>Send an opportunity to {{ selectedTalent.firstName }}</h2>
-                </v-flex>
-                <v-flex xs2 class="text-xs-right">
-                  <v-btn type="submit" fab small color="success" :loading="loading"
-                         :disabled="loading || !opportunityValid">
-                    <v-icon>send</v-icon>
-                  </v-btn>
-                </v-flex>
-              </v-layout>
-              <v-select label="Requirement" :items="requirements" v-model="selectedRequirement" item-text="company.name"
-                        return-object :rules="[rules.required]">
-                <template slot="item" slot-scope="data">
-                  <v-list-tile>
-                    <v-list-tile-content>
-                      <v-list-tile-title><span style="font-weight: bold">{{ data.item.company.name }}</span>
-                        : {{ data.item.name }}
-                      </v-list-tile-title>
-                      <v-list-tile-sub-title>{{ data.item.jobType.l10nKey }} {{ data.item.seniority.l10nKey
-                        }} {{ data.item.fixedSalary / 1000 }}K€ {{ data.item.location }}
-                      </v-list-tile-sub-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
-                </template>
-              </v-select>
-              <v-textarea label="Opportunity pitch" v-model="opportunityPitch" multi-line rows="7"
-                          :rules="[rules.required]"></v-textarea>
-            </v-flex>
-          </v-layout>
-        </v-form>
-      </v-container>
-    </v-dialog>
   </v-layout>
 </template>
 
 <script>
   import { mapGetters, mapActions, mapState } from 'vuex';
+  import AdminOpportunitySendingDialog from './Utilities/OpportunitySendingDialog';
 
   const rules = {
     required: value => !!value || 'This field is required',
@@ -308,6 +273,9 @@
 
   export default {
     name: 'admin-search',
+    components: {
+      AdminOpportunitySendingDialog,
+    },
     data: () => ({
       rules,
       talents: [],
@@ -316,10 +284,7 @@
       rowsPerPageItems: [4, 8, 12],
       selectedTalent: null,
       requirements: [],
-      selectedRequirement: null,
       opportunityDialog: false,
-      opportunityPitch: '',
-      opportunityValid: false,
       // REFERENCE DATA
       companyMaturityLevels: [],
       jobTypes: [],
@@ -503,37 +468,6 @@
           .then((response) => {
             this.talents = response.data._embedded.queryableTalents;
             this.totalItems = response.data.page.totalElements;
-          })
-          .finally(() => this.clearLoading());
-      },
-      populateOpportunityPitch(requirement) {
-        this.prepareForApiConsumption();
-        this.opportunityPitch = '';
-        this
-          .api(`/opportunities?requirement=${requirement.id}&sort=createdAt,desc&size=1`)
-          .then((response) => {
-            if (response.data._embedded.opportunities.length) {
-              this.opportunityPitch = response.data._embedded.opportunities[0].pitch;
-            }
-          })
-          .catch(() => this.showSnackbar('Error'))
-          .finally(() => this.clearLoading());
-      },
-      newOpportunity() {
-        return {
-          creator: this.user._links.self.href,
-          talent: this.selectedTalent._links.self.href,
-          requirement: this.selectedRequirement._links.self.href,
-          pitch: this.opportunityPitch,
-        };
-      },
-      sendOpportunity() {
-        this.prepareForApiConsumption();
-        this.api
-          .post('/opportunities', this.newOpportunity())
-          .then((/* response */) => {
-            this.opportunityDialog = false;
-            this.showSnackbar('Opportunity sent');
           })
           .finally(() => this.clearLoading());
       },
