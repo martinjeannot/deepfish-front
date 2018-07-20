@@ -57,7 +57,7 @@
                   </v-layout>
                 </v-flex>
                 <v-flex xs12 class="mt-2">
-                  Ce talent a accepté votre opportunité.
+                  Ce talent a accepté votre opportunité le {{ props.item.forwardedAt | formatDate('LL') }}.
                 </v-flex>
                 <v-flex xs12>
                   Ce profil a <span style="font-weight: bold">{{ props.item.talent.yearsOfExperience

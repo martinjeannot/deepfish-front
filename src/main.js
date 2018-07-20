@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import moment from 'moment';
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.css';
@@ -16,6 +17,10 @@ import TernaryCheckbox from './components/Utilities/TernaryCheckbox';
 
 import './assets/stylus/main.styl';
 
+// Localization
+moment.locale(navigator.language || navigator.userLanguage);
+
+// Enable/disable production configuration
 const isProduction = process.env.NODE_ENV === 'production';
 
 Vue.config.productionTip = !isProduction;
