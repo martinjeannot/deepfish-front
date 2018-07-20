@@ -48,8 +48,17 @@
                 </v-card-text>
               </v-card>
             </v-flex>
-            <v-flex xs8 class="elevation-1">
-              <v-flex xs12>???</v-flex>
+            <v-flex xs8>
+              <v-card>
+                <v-card-text>
+                  <v-textarea label="Notes" v-model="employer.notes" rows="20"></v-textarea>
+                  <div class="text-xs-right">
+                    <v-btn icon fab small color="primary" @click="saveEmployer">
+                      <v-icon>done</v-icon>
+                    </v-btn>
+                  </div>
+                </v-card-text>
+              </v-card>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -87,6 +96,14 @@
         'onAlertComponentDismissed',
         'signInAs',
       ]),
+      saveEmployer() {
+        const employerData = Object.assign({}, this.employer);
+        delete employerData.company;
+        this.api
+          .patch(this.employer._links.self.href, employerData)
+          .then(() => this.showSnackbar('Success'))
+          .catch(() => this.showSnackbar('Error'));
+      },
     },
     created() {
       this.prepareForApiConsumption(true);
