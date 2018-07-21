@@ -51,7 +51,7 @@
             <v-flex xs8>
               <v-card>
                 <v-card-text>
-                  <v-textarea label="Notes" v-model="employer.notes" rows="20"></v-textarea>
+                  <v-textarea label="Notes" v-model="employer.notes" prepend-inner-icon="lock" rows="20"></v-textarea>
                   <div class="text-xs-right">
                     <v-btn icon fab small color="primary" @click="saveEmployer">
                       <v-icon>done</v-icon>
