@@ -284,7 +284,8 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12>
-                          <v-textarea v-model="talent.notes" rows="16"></v-textarea>
+                          <v-textarea label="Notes" v-model="talent.notes" prepend-inner-icon="lock"
+                                      rows="16"></v-textarea>
                           <div class="text-xs-right">
                             <v-btn icon fab small color="primary" @click="saveProfile">
                               <v-icon>done</v-icon>
@@ -298,7 +299,7 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12>
-                          <v-textarea v-model="talent.fullProfileText" rows="16"></v-textarea>
+                          <v-textarea v-model="talent.fullProfileText" prepend-inner-icon="lock" rows="16"></v-textarea>
                           <div class="text-xs-right">
                             <v-btn icon fab small color="primary" @click="saveProfile">
                               <v-icon>done</v-icon>
@@ -343,7 +344,10 @@
           { text: 'Actions', value: 'name', sortable: false },
         ],
         totalItems: 0,
-        pagination: {},
+        pagination: {
+          sortBy: 'createdAt',
+          descending: true,
+        },
       },
     }),
     props: ['id'],

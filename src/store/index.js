@@ -56,6 +56,7 @@ export default new Vuex.Store({
       return null;
     },
     talentRankingReferenceData: [
+      { text: '', value: 0 },
       { text: 'A', value: 1 },
       { text: 'B', value: 2 },
       { text: 'C', value: 3 },
