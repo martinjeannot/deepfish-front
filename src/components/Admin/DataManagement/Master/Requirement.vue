@@ -36,13 +36,18 @@
                     for a max fixed salary of
                     <span style="font-weight: bold">{{ requirement.fixedSalary }} €</span>
                   </v-flex>
+                  <v-flex xs12>
+                    <h3 class="text-xs-center">Sent opportunities : {{ opportunitiesCounts.total }}</h3>
+                    <doughnut-chart :data="doughnutChartData"></doughnut-chart>
+                  </v-flex>
                 </v-card-text>
               </v-card>
             </v-flex>
             <v-flex xs8>
               <v-card>
                 <v-card-text>
-                  <v-textarea label="Notes" v-model="requirement.notes" prepend-inner-icon="lock" rows="9"></v-textarea>
+                  <v-textarea label="Notes" v-model="requirement.notes" prepend-inner-icon="lock"
+                              rows="27"></v-textarea>
                   <div class="text-xs-right">
                     <v-btn icon fab small color="primary" @click="saveRequirement(requirement)">
                       <v-icon>done</v-icon>
@@ -68,6 +73,7 @@
     props: ['id'],
     data: () => ({
       requirement: null,
+      opportunitiesCounts: null,
     }),
     computed: {
       ...mapGetters([
@@ -76,6 +82,18 @@
         'loading',
         'alertComponent',
       ]),
+      doughnutChartData() {
+        return {
+          labels: ['Accepted', 'Pending', 'Declined'],
+          datasets: [
+            {
+              backgroundColor: ['#25CD73', '#FFC62E', '#FF5D2E'],
+              data: [this.opportunitiesCounts.acceptedCount, this.opportunitiesCounts.pendingCount,
+                this.opportunitiesCounts.declinedCount],
+            },
+          ],
+        };
+      },
     },
     methods: {
       ...mapActions([
@@ -99,10 +117,17 @@
     },
     created() {
       this.prepareForApiConsumption(true);
-      this
-        .api(`/requirements/${this.id}?projection=admin`)
-        .then((response) => {
-          this.requirement = response.data;
+      Promise
+        .all([
+          this.api(`/requirements/${this.id}?projection=admin`),
+          this.api(`/opportunities/counts?requirementId=${this.id}`),
+        ])
+        .then(([
+                 requirementResponse,
+                 opportunitiesCountsResponse,
+               ]) => {
+          this.requirement = requirementResponse.data;
+          this.opportunitiesCounts = opportunitiesCountsResponse.data;
         })
         .catch(() => this.setErrorAfterApiConsumption())
         .finally(() => this.clearLoading(true));

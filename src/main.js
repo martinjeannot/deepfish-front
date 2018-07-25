@@ -14,6 +14,7 @@ import filters from './filters';
 import BaseAlert from './components/Utilities/BaseAlert';
 import StarRating from './components/Utilities/StarRating';
 import TernaryCheckbox from './components/Utilities/TernaryCheckbox';
+import DoughnutChart from './components/Utilities/Charts/DoughnutChart';
 
 import './assets/stylus/main.styl';
 
@@ -44,6 +45,7 @@ Vue.use(VueAnalytics, {
 Vue.component('base-alert', BaseAlert);
 Vue.component('star-rating', StarRating);
 Vue.component('ternary-checkbox', TernaryCheckbox);
+Vue.component('doughnut-chart', DoughnutChart);
 
 /* eslint-disable no-new */
 new Vue({
