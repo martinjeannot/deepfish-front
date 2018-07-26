@@ -42,11 +42,11 @@
                   <v-form v-model="valid" ref="form" @submit.prevent="signIn">
                     <v-layout wrap>
                       <v-flex xs12>
-                        <v-text-field type="email" label="Email" v-model="email" :rules="[rules.required, rules.email]"
-                                      validate-on-blur required></v-text-field>
+                        <v-text-field type="email" label="Email" v-model="email" ref="email"
+                                      :rules="[rules.required, rules.email]" validate-on-blur required></v-text-field>
                       </v-flex>
                       <v-flex xs12>
-                        <v-text-field label="Mot de passe" v-model="password" :rules="[rules.required]" type="password"
+                        <v-text-field type="password" label="Mot de passe" v-model="password" :rules="[rules.required]"
                                       required :type="passwordShown ? 'text' : 'password'"
                                       :append-icon="passwordShown ? 'visibility' : 'visibility_off'"
                                       @click:append="() => (passwordShown = !passwordShown)"></v-text-field>
@@ -152,6 +152,17 @@
             .finally(() => this.clearLoading());
         }
       },
+    },
+    mounted() {
+      // FIXME : VueJS/autofill bug (browsers do not trigger input/change event when autofilling)
+      const autofillIntervalId = setInterval(() => {
+        if (this.$refs.email && this.$refs.email.value) {
+          this.$refs.form.validate();
+        }
+      }, 1000);
+      setTimeout(() => {
+        clearInterval(autofillIntervalId);
+      }, 3000);
     },
   };
 </script>
