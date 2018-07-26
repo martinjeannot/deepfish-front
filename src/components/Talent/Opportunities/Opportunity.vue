@@ -19,8 +19,9 @@
           <v-flex xs12 class="pb-2">
             <span style="font-style: italic">{{ opportunity.company.name }}</span> :
           </v-flex>
-          <v-flex xs12 class="pb-3" style="white-space: pre-wrap">{{ opportunity.company.description }}</v-flex>
-          <v-flex xs12 style="white-space: pre-wrap">{{ opportunity.pitch }}</v-flex>
+          <v-flex xs12 class="pb-3" style="white-space: pre-wrap" v-html="opportunity.company.description"
+                  v-linkified></v-flex>
+          <v-flex xs12 style="white-space: pre-wrap" v-html="opportunity.pitch" v-linkified></v-flex>
         </v-card-text>
         <v-card-actions v-if="opportunity.talentStatus === 'PENDING'">
           <v-layout row wrap class="text-xs-center">

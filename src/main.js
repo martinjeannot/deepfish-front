@@ -1,5 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import linkify from 'vue-linkify';
 import moment from 'moment';
 import Vue from 'vue';
 import Vuetify from 'vuetify';
@@ -46,6 +47,8 @@ Vue.component('base-alert', BaseAlert);
 Vue.component('star-rating', StarRating);
 Vue.component('ternary-checkbox', TernaryCheckbox);
 Vue.component('doughnut-chart', DoughnutChart);
+
+Vue.directive('linkified', linkify);
 
 /* eslint-disable no-new */
 new Vue({
