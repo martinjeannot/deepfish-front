@@ -17,7 +17,7 @@
           <v-layout wrap>
             <v-flex xs12 sm6 class="text-xs-center" style="padding-top: 5%">
               <h3 class="pb-2">{{ requirement.name }}</h3>
-              <div>Nombre d'opportunités envoyées à nos talents : <span
+              <div>Nombre d'opportunités envoyées aux talents Deepfish : <span
                 style="font-weight: bold">{{ requirement.opportunitiesCounts.total }}</span></div>
             </v-flex>
             <v-flex xs12 sm6 class="text-xs-center">
