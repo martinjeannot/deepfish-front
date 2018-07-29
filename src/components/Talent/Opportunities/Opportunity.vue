@@ -19,8 +19,9 @@
           <v-flex xs12 class="pb-2">
             <span style="font-style: italic">{{ opportunity.company.name }}</span> :
           </v-flex>
-          <v-flex xs12 class="pb-3" style="white-space: pre-wrap">{{ opportunity.company.description }}</v-flex>
-          <v-flex xs12 style="white-space: pre-wrap">{{ opportunity.pitch }}</v-flex>
+          <v-flex xs12 class="pb-3" style="white-space: pre-wrap" v-html="opportunity.company.description"
+                  v-linkified></v-flex>
+          <v-flex xs12 style="white-space: pre-wrap" v-html="opportunity.pitch" v-linkified></v-flex>
         </v-card-text>
         <v-card-actions v-if="opportunity.talentStatus === 'PENDING'">
           <v-layout row wrap class="text-xs-center">
@@ -39,7 +40,7 @@
     </v-flex>
     <v-dialog v-model="declinationDialog" max-width="650px">
       <v-container style="background-color: white">
-        <v-form v-model="opportunityDeclinationValid" @submit.prevent="decline(opportunity)">
+        <v-form v-model="declinationValid" @submit.prevent="decline(opportunity)">
           <v-layout row wrap>
             <v-flex xs12>
               <h4>Explique-nous la raison de ton refus en quelques mots</h4>
@@ -49,7 +50,7 @@
                           :rules="[rules.required]"></v-textarea>
             </v-flex>
             <v-flex xs12 class="text-xs-right">
-              <v-btn type="submit" fab small color="primary" :disabled="!opportunityDeclinationValid">
+              <v-btn type="submit" fab small color="primary" :disabled="!declinationValid">
                 <v-icon>done</v-icon>
               </v-btn>
             </v-flex>
@@ -59,19 +60,27 @@
     </v-dialog>
     <v-dialog v-model="bulkDeclinationDialog" max-width="650px">
       <v-container style="background-color: white">
-        <v-layout row wrap>
-          <v-flex xs1>
-            <v-icon>warning</v-icon>
-          </v-flex>
-          <v-flex xs11>
-            <h3>
-              Attention, cette action entraînera le refus de toutes tes opportunités en attente et la désactivation de ton profil
-            </h3>
-          </v-flex>
-          <v-flex xs12 class="text-xs-center">
-            <v-btn flat color="error" @click="refuseInBulk">Je confirme cette action</v-btn>
-          </v-flex>
-        </v-layout>
+        <v-form v-model="bulkDeclinationValid" @submit.prevent="declineInBulk(opportunity)">
+          <v-layout row wrap>
+            <v-flex xs1>
+              <v-icon>warning</v-icon>
+            </v-flex>
+            <v-flex xs11>
+              <h3>
+                Attention, cette action entraînera le refus de toutes tes opportunités en attente et la désactivation de ton profil
+              </h3>
+            </v-flex>
+            <v-flex xs12 class="mt-3">
+              <h4>Explique-nous la raison de ton refus en quelques mots</h4>
+            </v-flex>
+            <v-flex xs12>
+              <v-textarea v-model="bulkDeclinationReason" multi-line rows="7" :rules="[rules.required]"></v-textarea>
+            </v-flex>
+            <v-flex xs12 class="text-xs-center">
+              <v-btn type="submit" flat color="error" :disabled="!bulkDeclinationValid">Je confirme cette action</v-btn>
+            </v-flex>
+          </v-layout>
+        </v-form>
       </v-container>
     </v-dialog>
   </v-layout>
@@ -91,8 +100,10 @@
       rules,
       opportunity: null,
       declinationDialog: false,
-      opportunityDeclinationValid: false,
+      declinationValid: false,
       bulkDeclinationDialog: false,
+      bulkDeclinationValid: false,
+      bulkDeclinationReason: '',
     }),
     computed: {
       ...mapGetters([
@@ -153,12 +164,12 @@
             this.fetchData();
           });
       },
-      refuseInBulk() {
+      declineInBulk() {
         this.bulkDeclinationDialog = false;
-        this.api.post(`/talents/${this.user.id}/opportunities/bulk-declination`)
+        this.api.post(`/talents/${this.user.id}/opportunities/bulk-declination`, { bulkDeclinationReason: this.bulkDeclinationReason })
           .then(() => {
             this.menuBadges.opportunities = 0;
-            this.$router.push('/talent/opportunities');
+            this.$router.push('/talent/opportunities'); // refresh data
             this.showSnackbar('Opération terminée avec succès');
           })
           .catch(() => {

@@ -12,7 +12,23 @@
       </v-flex>
     </v-layout>
     <v-flex xs12 v-for="requirement in requirements" :key="requirement.id">
-      <h3>{{ requirement.name }}</h3>
+      <v-card>
+        <v-card-text>
+          <v-layout wrap>
+            <v-flex xs12 sm6 class="text-xs-center" style="padding-top: 5%">
+              <h3 class="pb-2">{{ requirement.name }}</h3>
+              <div>Nombre d'opportunités envoyées aux talents Deepfish : <span
+                style="font-weight: bold">{{ requirement.opportunitiesCounts.total }}</span></div>
+            </v-flex>
+            <v-flex xs12 sm6 class="text-xs-center">
+              <v-flex xs12 sm6 offset-sm3 lg4 offset-lg4>
+                <doughnut-chart :data="getDoughnutChartData(requirement.opportunitiesCounts)"
+                                :options="{responsive: true, maintainAspectRatio: true}"></doughnut-chart>
+              </v-flex>
+            </v-flex>
+          </v-layout>
+        </v-card-text>
+      </v-card>
       <v-container fluid grid-list-xs>
         <v-data-iterator content-tag="v-layout" row wrap :items="requirement.opportunities" :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
@@ -249,6 +265,18 @@
       isTalentDeclined(opportunity) {
         return opportunity.employerStatus === 'DECLINED';
       },
+      getDoughnutChartData(opportunitiesCounts) {
+        return {
+          labels: ['Acceptées', 'En attente', 'Déclinées'],
+          datasets: [
+            {
+              backgroundColor: ['#25CD73', '#FFC62E', '#FF5D2E'],
+              data: [opportunitiesCounts.acceptedCount, opportunitiesCounts.pendingCount,
+                opportunitiesCounts.declinedCount],
+            },
+          ],
+        };
+      },
       acceptTalent(opportunity) {
         opportunity.previousState = Object.assign({}, opportunity);
         opportunity.employerStatus = 'ACCEPTED';
@@ -322,6 +350,12 @@
               message: 'Nous n\'avons pas encore de talents à vous présenter, vous recevrez un email lorsque vous aurez un nouveau talent',
             });
           }
+          return Promise.all(this.requirements.map(requirement => this.api(`/opportunities/counts?requirementId=${requirement.id}`)));
+        })
+        .then((opportunitiesCountsResponses) => {
+          opportunitiesCountsResponses.forEach((opportunitiesCountsResponse, index) => {
+            this.requirements[index].opportunitiesCounts = opportunitiesCountsResponse.data;
+          });
         })
         .finally(() => this.clearLoading(true));
     },

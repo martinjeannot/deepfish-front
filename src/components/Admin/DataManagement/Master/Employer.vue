@@ -23,7 +23,11 @@
                     <h2>{{ employer.lastName.toUpperCase() }} {{ employer.firstName }}</h2>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center mb-3">
-                    <h4>{{ employer.company.name }}</h4>
+                    <h4>
+                      <router-link :to="{ name: 'AdminDMCompany', params: {id: employer.company.id} }">
+                        {{ employer.company.name }}
+                      </router-link>
+                    </h4>
                   </v-flex>
                   <v-flex xs12 class="mb-3">
                     <span style="font-weight: bold">Registration</span> : {{ employer.createdAt | formatDate('LLL') }}
@@ -98,6 +102,7 @@
       ]),
       saveEmployer() {
         const employerData = Object.assign({}, this.employer);
+        // linked refs deletion
         delete employerData.company;
         this.api
           .patch(this.employer._links.self.href, employerData)

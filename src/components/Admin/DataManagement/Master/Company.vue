@@ -25,6 +25,18 @@
                   <v-flex xs12 class="mb-3">
                     <span style="font-weight: bold">Registration</span> : {{ company.createdAt | formatDate('LLL') }}
                   </v-flex>
+                  <v-flex xs12 class="mb-3">
+                    <span style="font-weight: bold">Employers :</span>
+                    <v-list>
+                      <v-list-tile v-for="employer in company.employers" :key="employer.id">
+                        <v-list-tile-content>
+                          <router-link :to="{ name: 'AdminDMEmployer', params: {id: employer.id} }">
+                            {{ employer.lastName.toUpperCase() + ' ' + employer.firstName }}
+                          </router-link>
+                        </v-list-tile-content>
+                      </v-list-tile>
+                    </v-list>
+                  </v-flex>
                 </v-card-text>
               </v-card>
             </v-flex>
@@ -77,7 +89,8 @@
       ]),
       saveCompany() {
         const company = Object.assign({}, this.company);
-        // delete any linked ref here
+        // linked refs deletion
+        delete company.employers;
         this.api
           .patch(this.company._links.self.href, company)
           .then(() => this.showSnackbar('Success'))
@@ -93,6 +106,10 @@
         .api(`/companies/${this.id}`)
         .then((response) => {
           this.company = response.data;
+          return this.api(this.company._links.employers.href);
+        })
+        .then((response) => {
+          this.company.employers = response.data._embedded.employers;
         })
         .catch(() => this.setErrorAfterApiConsumption())
         .finally(() => this.clearLoading(true));

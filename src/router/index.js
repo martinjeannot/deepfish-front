@@ -106,8 +106,12 @@ const router = new Router({
           } else {
             next('/employer/requirements/new');
           }
-        } else {
-          next('/talent/profile');
+        } else if (store.getters.isUserTalent) {
+          if (store.getters.user.phoneNumber !== 'null') {
+            next('/talent/opportunities');
+          } else {
+            next('/talent/profile');
+          }
         }
       },
     },
