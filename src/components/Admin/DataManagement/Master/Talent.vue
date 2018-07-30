@@ -1,7 +1,7 @@
 <template>
   <v-layout>
-    <admin-opportunity-sending-dialog :value.sync="opportunityDialog" :talent="talent"
-                                      :requirements="requirements"></admin-opportunity-sending-dialog>
+    <admin-opportunity-sending-dialog :value.sync="opportunityDialog" :talent="talent" :requirements="requirements"
+                                      @opportunity-sent="getOpportunities"></admin-opportunity-sending-dialog>
     <v-flex xs2 class="pr-3">
       <data-management-navigation></data-management-navigation>
     </v-flex>
