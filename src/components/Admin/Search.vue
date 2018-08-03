@@ -470,6 +470,7 @@
             this.talents = response.data._embedded.queryableTalents;
             this.totalItems = response.data.page.totalElements;
           })
+          .catch(() => this.showSnackbar('Error'))
           .finally(() => this.clearLoading());
       },
       getTalentRankingLetter(talent) {
