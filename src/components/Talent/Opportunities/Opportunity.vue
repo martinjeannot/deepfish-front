@@ -138,7 +138,7 @@
             this.$router.push('/talent/opportunities');
             this.setAlertComponent({
               type: 'success',
-              message: 'Merci, le recruteur va maintenant découvrir ton profil complet (non anonymisé) et revenir vers toi si son intérêt est confirmé',
+              message: `${opportunity.company.name} va maintenant découvrir ton profil complet (non anonymisé) et revenir vers toi si son intérêt est confirmé`,
             });
           });
       },
