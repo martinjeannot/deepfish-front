@@ -1,7 +1,7 @@
 <template>
   <v-layout>
-    <admin-opportunity-sending-dialog :value.sync="opportunityDialog" :talent="talent"
-                                      :requirements="requirements"></admin-opportunity-sending-dialog>
+    <admin-opportunity-sending-dialog :value.sync="opportunityDialog" :talent="talent" :requirements="requirements"
+                                      @opportunity-sent="getOpportunities"></admin-opportunity-sending-dialog>
     <v-flex xs2 class="pr-3">
       <data-management-navigation></data-management-navigation>
     </v-flex>
@@ -256,7 +256,11 @@
                                   :total-items="opportunityTable.totalItems">
                       <template slot="items" slot-scope="props">
                         <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
-                        <td>{{ props.item.company.name }}</td>
+                        <td>
+                          <router-link :to="{ name: 'AdminDMCompany', params: {id: props.item.company.id} }">
+                            {{ props.item.company.name }}
+                          </router-link>
+                        </td>
                         <td>
                           <span :class="`${getOpportunityStatusColor(props.item.talentStatus)}--text`"
                                 style="font-weight: bold">

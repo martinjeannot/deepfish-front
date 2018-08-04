@@ -91,6 +91,7 @@
           .then((/* response */) => {
             this.dialog = false;
             this.showSnackbar('Opportunity sent');
+            this.$emit('opportunity-sent');
           })
           .catch((/* error */) => this.showSnackbar('Error'))
           .finally(() => this.clearLoading());
