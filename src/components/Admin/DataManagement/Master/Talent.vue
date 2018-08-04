@@ -256,7 +256,11 @@
                                   :total-items="opportunityTable.totalItems">
                       <template slot="items" slot-scope="props">
                         <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
-                        <td>{{ props.item.company.name }}</td>
+                        <td>
+                          <router-link :to="{ name: 'AdminDMCompany', params: {id: props.item.company.id} }">
+                            {{ props.item.company.name }}
+                          </router-link>
+                        </td>
                         <td>
                           <span :class="`${getOpportunityStatusColor(props.item.talentStatus)}--text`"
                                 style="font-weight: bold">
