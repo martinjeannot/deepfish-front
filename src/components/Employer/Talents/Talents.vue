@@ -264,7 +264,10 @@
         opportunity.employerStatus = 'ACCEPTED';
         this
           .saveOpportunity(opportunity)
-          .then(() => this.showSnackbar('Vous pouvez désormais contacter ce talent par téléphone ou mail'));
+          .then(() => {
+            this.menuBadges.talents = this.menuBadges.talents - 1;
+            this.showSnackbar('Vous pouvez désormais contacter ce talent par téléphone ou mail');
+          });
       },
       declineTalent(opportunity) {
         opportunity.previousState = Object.assign({}, opportunity);
@@ -272,6 +275,10 @@
         this
           .saveOpportunity(opportunity)
           .then(() => {
+            // user does not have one less pending talent if the talent was previously accepted
+            if (opportunity.previousState.employerStatus === 'PENDING') {
+              this.menuBadges.talents = this.menuBadges.talents - 1;
+            }
             this.declinationDialog = false;
           });
       },
@@ -284,11 +291,7 @@
         this.prepareForApiConsumption();
         return this.api
           .patch(opportunity._links.self.href, opportunity)
-          .then(() => {
-            this.showSnackbar('Opération terminée avec succès');
-            // either for an acceptance or a declination, user has one less pending talent
-            this.menuBadges.talents = this.menuBadges.talents - 1;
-          })
+          .then(() => this.showSnackbar('Opération terminée avec succès'))
           .catch(() => this.showSnackbar('Erreur'))
           .finally(() => this.clearLoading());
       },
