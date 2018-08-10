@@ -224,6 +224,7 @@
         'initialLoading',
         'user',
         'alertComponent',
+        'menuBadges',
       ]),
       ...mapState([
         'getTalentLinkedInProfileUrl',
@@ -283,7 +284,11 @@
         this.prepareForApiConsumption();
         return this.api
           .patch(opportunity._links.self.href, opportunity)
-          .then(() => this.showSnackbar('Opération terminée avec succès'))
+          .then(() => {
+            this.showSnackbar('Opération terminée avec succès');
+            // either for an acceptance or a declination, user has one less pending talent
+            this.menuBadges.talents = this.menuBadges.talents - 1;
+          })
           .catch(() => this.showSnackbar('Erreur'))
           .finally(() => this.clearLoading());
       },

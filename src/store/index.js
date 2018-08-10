@@ -209,12 +209,19 @@ export default new Vuex.Store({
           .api(`/employers/${accessToken.user_id}?projection=default`)
           .then((response) => {
             commit(types.SET_USER, response.data);
-            // check for requirements for redirection
-            return getters.api(`/requirements/search/findByCompany?company=/${getters.user.company.id}`);
+            // check for requirements for redirection and pending talents for menu badge
+            return Promise.all([
+              getters.api(`/requirements?company=${getters.user.company.id}`),
+              getters.api(`/opportunities?projection=employer&requirement.company=${getters.user.company.id}&employerStatus=PENDING`),
+            ]);
           })
-          .then((response) => {
+          .then(([
+                   requirementsResponse,
+                   opportunitiesResponse,
+                 ]) => {
             /* eslint-disable no-param-reassign */
-            getters.user.requirements = response.data._embedded.requirements;
+            getters.user.requirements = requirementsResponse.data._embedded.requirements;
+            dispatch('setMenuBadges', { talents: opportunitiesResponse.data._embedded.opportunities.length });
             return getters.api
               .patch(getters.user._links.self.href, { lastSignedInAt: moment().utc().format() });
           })
