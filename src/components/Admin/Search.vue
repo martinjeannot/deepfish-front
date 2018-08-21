@@ -17,7 +17,7 @@
         <v-card-title>
           <v-flex xs12 class="white">
             <v-text-field v-model="criteria.searchQuery" label="Search" clearable hide-details
-                          @keyup.narive.enter="search"></v-text-field>
+                          @keyup.narive.enter="search" v-focus></v-text-field>
           </v-flex>
         </v-card-title>
       </v-card>
@@ -507,6 +507,14 @@
           this.fixedLocations = fixedLocationsResponse.data._embedded.fixedLocations;
         })
         .finally(() => this.clearLoading(true));
+    },
+    directives: {
+      focus: {
+        inserted(el) {
+          // we must use a query selector since vuetify bury the input element inside other stuff
+          el.querySelector('input').focus();
+        },
+      },
     },
   };
 </script>
