@@ -46,6 +46,7 @@
             <v-flex xs8>
               <v-card>
                 <v-card-text>
+                  <v-text-field v-model="requirement.name" label="Requirement name"></v-text-field>
                   <v-textarea label="Notes" v-model="requirement.notes" prepend-inner-icon="lock"
                               rows="27"></v-textarea>
                   <div class="text-xs-right">

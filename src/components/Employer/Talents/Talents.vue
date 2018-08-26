@@ -17,13 +17,13 @@
           <v-layout wrap>
             <v-flex xs12 sm6 class="text-xs-center" style="padding-top: 5%">
               <h3 class="pb-2">{{ requirement.name }}</h3>
-              <div>Nombre d'opportunités envoyées aux talents Deepfish : <span
+              <div>Nombre de talents Deepfish contactés pour ce besoin : <span
                 style="font-weight: bold">{{ requirement.opportunitiesCounts.total }}</span></div>
             </v-flex>
             <v-flex xs12 sm6 class="text-xs-center">
               <v-flex xs12 sm6 offset-sm3 lg4 offset-lg4>
                 <doughnut-chart :data="getDoughnutChartData(requirement.opportunitiesCounts)"
-                                :options="{responsive: true, maintainAspectRatio: true}"></doughnut-chart>
+                                :options="{responsive: true, maintainAspectRatio: true, title: {display: true, text: 'Répartition des réponses talents'}}"></doughnut-chart>
               </v-flex>
             </v-flex>
           </v-layout>
@@ -41,6 +41,15 @@
                 </v-flex>
                 <v-flex xs8 sm4>
                   <h4>{{ props.item.talent.firstName }} {{ props.item.talent.lastName[0] }}.</h4>
+                  <v-chip v-if="isTalentPending(props.item)" color="red" text-color="white">
+                    Nouveau profil à traiter
+                  </v-chip>
+                  <h4 v-if="isTalentAccepted(props.item)" class="red--text">
+                    <v-icon>phone</v-icon>
+                    {{ props.item.talent.phoneNumber }}
+                    <v-icon>email</v-icon>
+                    {{ props.item.talent.email }}
+                  </h4>
                   <div v-if="props.item.talent.basicProfile.positions._total">
                     {{ props.item.talent.basicProfile.positions.values[0].title
                     }} chez {{ props.item.talent.basicProfile.positions.values[0].company.name }}
@@ -98,46 +107,40 @@
                   <div style="white-space: pre-wrap">{{ props.item.talent.qualification.recommendation }}</div>
                 </v-flex>
               </v-card-title>
-              <v-card-actions v-if="isTalentPending(props.item)">
+              <v-card-title v-if="isTalentPending(props.item)">
                 <v-layout row wrap>
                   <v-flex xs12 sm4 class="text-xs-center">
-                    <v-btn flat color="success" :loading="loading" :disabled="loading"
+                    <v-btn color="success" :loading="loading" :disabled="loading"
                            @click.native.stop="acceptTalent(props.item)">
-                      Je contacte le talent
+                      J'accepte ce talent
                     </v-btn>
                   </v-flex>
                   <v-flex xs12 sm4 class="text-xs-center">
-                    <v-btn flat color="info" :loading="loading" :disabled="loading"
+                    <v-btn color="info" :loading="loading" :disabled="loading"
                            @click.native.stop="selectedOpportunity = props.item; contactDialog = true">
-                      Je veux en parler avec Deepfish
+                      J'ai une question sur ce talent
                     </v-btn>
                   </v-flex>
                   <v-flex xs12 sm4 class="text-xs-center">
-                    <v-btn flat color="error"
+                    <v-btn color="error"
                            @click.native.stop="selectedOpportunity = props.item; declinationDialog = true">
-                      Je refuse le talent
+                      Je refuse ce talent
                     </v-btn>
                   </v-flex>
                 </v-layout>
-              </v-card-actions>
+              </v-card-title>
               <v-card-actions v-if="isTalentAccepted(props.item)">
                 <v-layout row wrap>
-                  <v-flex xs12 sm4 class="text-xs-center">
-                    <v-btn flat color="success"
-                           @click.native.stop="selectedOpportunity = props.item; acceptanceDialog = true">
-                      Je contacte le talent
-                    </v-btn>
-                  </v-flex>
-                  <v-flex xs12 sm4 class="text-xs-center">
+                  <v-flex xs12 sm4 offset-sm4 class="text-xs-center">
                     <v-btn flat color="info" :loading="loading" :disabled="loading"
                            @click.native.stop="selectedOpportunity = props.item; contactDialog = true">
-                      Je veux en parler avec Deepfish
+                      J'ai une question sur ce talent
                     </v-btn>
                   </v-flex>
                   <v-flex xs12 sm4 class="text-xs-center">
                     <v-btn flat color="error"
                            @click.native.stop="selectedOpportunity = props.item; declinationDialog = true">
-                      Je ne retiens pas ce profil
+                      Je ne retiens plus ce profil
                     </v-btn>
                   </v-flex>
                 </v-layout>
@@ -147,34 +150,13 @@
         </v-data-iterator>
       </v-container>
     </v-flex>
-    <v-dialog v-model="acceptanceDialog" v-if="selectedOpportunity" max-width="650px">
-      <v-card>
-        <v-card-title class="headline">
-          <v-flex xs12 class="text-xs-center">
-            Comment contacter {{ selectedOpportunity.talent.firstName }} ?
-          </v-flex>
-        </v-card-title>
-        <v-card-text>
-          <v-layout wrap>
-            <v-flex xs12 sm6 class="text-xs-center">
-              <v-icon>phone</v-icon>
-              {{ selectedOpportunity.talent.phoneNumber }}
-            </v-flex>
-            <v-flex xs12 sm6 class="text-xs-center">
-              <v-icon>email</v-icon>
-              {{ selectedOpportunity.talent.email }}
-            </v-flex>
-          </v-layout>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
     <v-dialog v-model="contactDialog" v-if="selectedOpportunity" max-width="650px">
       <v-card>
         <v-card-text>
           <v-form v-model="contactFormValid" @submit.prevent="contactAdmins(selectedOpportunity)">
             <v-layout wrap>
               <v-flex xs12>
-                <h3>Posez-nous vos questions et nous reviendrons rapidement vers vous :</h3>
+                <h3>Posez vos questions et Deepfish reviendra rapidement vers vous :</h3>
               </v-flex>
               <v-flex xs12>
                 <v-textarea v-model="contactMessage" rows="7" :rules="[rules.required]"></v-textarea>
@@ -229,7 +211,6 @@
       rules,
       requirements: [],
       selectedOpportunity: null,
-      acceptanceDialog: false,
       contactDialog: false,
       contactFormValid: false,
       contactMessage: '',
@@ -243,6 +224,7 @@
         'initialLoading',
         'user',
         'alertComponent',
+        'menuBadges',
       ]),
       ...mapState([
         'getTalentLinkedInProfileUrl',
@@ -267,7 +249,7 @@
       },
       getDoughnutChartData(opportunitiesCounts) {
         return {
-          labels: ['Acceptées', 'En attente', 'Déclinées'],
+          labels: ['Opportunités acceptées', 'Opportunités en attente', 'Opportunités refusées'],
           datasets: [
             {
               backgroundColor: ['#25CD73', '#FFC62E', '#FF5D2E'],
@@ -283,8 +265,8 @@
         this
           .saveOpportunity(opportunity)
           .then(() => {
-            this.selectedOpportunity = opportunity;
-            this.acceptanceDialog = true;
+            this.menuBadges.talents = this.menuBadges.talents - 1;
+            this.showSnackbar('Vous pouvez désormais contacter ce talent par téléphone ou mail');
           });
       },
       declineTalent(opportunity) {
@@ -293,6 +275,10 @@
         this
           .saveOpportunity(opportunity)
           .then(() => {
+            // user does not have one less pending talent if the talent was previously accepted
+            if (opportunity.previousState.employerStatus === 'PENDING') {
+              this.menuBadges.talents = this.menuBadges.talents - 1;
+            }
             this.declinationDialog = false;
           });
       },
@@ -328,7 +314,7 @@
     created() {
       this.prepareForApiConsumption(true);
       this
-        .api(`/opportunities?projection=employer&forwarded=true&requirement.company=${this.user.company.id}&employerStatus=PENDING&employerStatus=ACCEPTED&sort=forwardedAt,desc`)
+        .api(`/opportunities?projection=employer&forwarded=true&requirement.company=${this.user.company.id}&employerStatus=PENDING&employerStatus=ACCEPTED&sort=employerStatus,desc&sort=forwardedAt,desc`)
         .then((response) => {
           // sort talents by requirements
           response.data._embedded.opportunities.forEach((opportunity) => {

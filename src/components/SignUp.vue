@@ -17,11 +17,11 @@
                 <v-card-text>
                   <v-layout wrap>
                     <v-flex xs12 class="text-xs-center">
-                      <h2>Inscription en tant que COMMERCIAL</h2>
+                      <h2>Inscription en tant que Commercial via LinkedIn</h2>
                     </v-flex>
                     <v-flex xs12 class="text-xs-center">
                       <v-btn color="info" :href="linkedInAuthEndpoint" :disabled="loading"
-                             :loading="loading" @click="prepareForApiConsumption()">S'inscrire avec LinkedIn
+                             :loading="loading" @click="prepareForApiConsumption()">S'inscrire en tant que commercial
                       </v-btn>
                     </v-flex>
                     <v-flex xs12 class="mt-2 text-xs-center">

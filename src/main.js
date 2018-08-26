@@ -16,6 +16,7 @@ import BaseAlert from './components/Utilities/BaseAlert';
 import StarRating from './components/Utilities/StarRating';
 import TernaryCheckbox from './components/Utilities/TernaryCheckbox';
 import DoughnutChart from './components/Utilities/Charts/DoughnutChart';
+import LineChart from './components/Utilities/Charts/LineChart';
 
 import './assets/stylus/main.styl';
 
@@ -47,6 +48,7 @@ Vue.component('base-alert', BaseAlert);
 Vue.component('star-rating', StarRating);
 Vue.component('ternary-checkbox', TernaryCheckbox);
 Vue.component('doughnut-chart', DoughnutChart);
+Vue.component('line-chart', LineChart);
 
 Vue.directive('linkified', linkify);
 
