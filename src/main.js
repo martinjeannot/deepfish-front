@@ -6,6 +6,8 @@ import Vue from 'vue';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.css';
 import VueAnalytics from 'vue-analytics';
+import vue2Dropzone from 'vue2-dropzone';
+import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 
 import App from './App';
 import router from './router';
@@ -17,6 +19,7 @@ import StarRating from './components/Utilities/StarRating';
 import TernaryCheckbox from './components/Utilities/TernaryCheckbox';
 import DoughnutChart from './components/Utilities/Charts/DoughnutChart';
 import LineChart from './components/Utilities/Charts/LineChart';
+import UploadZone from './components/Utilities/UploadZone';
 
 import './assets/stylus/main.styl';
 
@@ -49,6 +52,8 @@ Vue.component('star-rating', StarRating);
 Vue.component('ternary-checkbox', TernaryCheckbox);
 Vue.component('doughnut-chart', DoughnutChart);
 Vue.component('line-chart', LineChart);
+Vue.component('vue-dropzone', vue2Dropzone);
+Vue.component('upload-zone', UploadZone);
 
 Vue.directive('linkified', linkify);
 

@@ -22,6 +22,9 @@
                   <v-flex xs12 class="text-xs-center mb-3">
                     <h2>{{ company.name }}</h2>
                   </v-flex>
+                  <v-flex v-if="company.logoURI" xs12 class="text-xs-center mb-3">
+                    <v-img :src="company.logoURL"></v-img>
+                  </v-flex>
                   <v-flex xs12 class="mb-3">
                     <span style="font-weight: bold">Registration</span> : {{ company.createdAt | formatDate('LLL') }}
                   </v-flex>
@@ -36,6 +39,10 @@
                         </v-list-tile-content>
                       </v-list-tile>
                     </v-list>
+                  </v-flex>
+                  <v-flex xs12 class="mb-3">
+                    <upload-zone :id="'dropzone'" :uri="`/companies/${company.id}/upload-logo`"
+                                 :files="company.logoURI ? [{file: {}, url: company.logoURL}] : []"></upload-zone>
                   </v-flex>
                 </v-card-text>
               </v-card>
@@ -103,7 +110,7 @@
     created() {
       this.prepareForApiConsumption(true);
       this
-        .api(`/companies/${this.id}`)
+        .api(`/companies/${this.id}?projection=default`)
         .then((response) => {
           this.company = response.data;
           return this.api(this.company._links.employers.href);
