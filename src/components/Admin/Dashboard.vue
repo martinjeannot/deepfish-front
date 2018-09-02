@@ -8,10 +8,6 @@
     <v-flex xs12 class="text-xs-center">
       <h1>Admin dashboard</h1>
     </v-flex>
-    <v-flex xs6>Coming soon</v-flex>
-    <v-flex xs6>
-      <!-- <line-chart :data="opportunityChartData"></line-chart> -->
-    </v-flex>
   </v-layout>
 </template>
 
@@ -20,23 +16,12 @@
 
   export default {
     name: 'admin-dashboard',
-    data: () => ({
-      opportunityStatistics: null,
-    }),
+    data: () => ({}),
     computed: {
       ...mapGetters([
         'api',
         'initialLoading',
       ]),
-      opportunityChartData() {
-        return {
-          labels: this.opportunityStatistics.map(point => point[0]),
-          datasets: [{
-            label: 'Total',
-            data: this.opportunityStatistics.map(point => point[1]),
-          }],
-        };
-      },
     },
     methods: {
       ...mapActions([
@@ -44,14 +29,6 @@
         'clearLoading',
         'showSnackbar',
       ]),
-    },
-    created() {
-      this.prepareForApiConsumption(true);
-      this.api('/opportunities/statistics?datepart=day')
-        .then((response) => {
-          this.opportunityStatistics = response.data;
-        })
-        .finally(() => this.clearLoading(true));
     },
   };
 </script>
