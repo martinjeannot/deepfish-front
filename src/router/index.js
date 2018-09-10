@@ -19,6 +19,8 @@ import AdminDMOpportunity from '@/components/Admin/DataManagement/Master/Opportu
 import AdminDMUsers from '@/components/Admin/DataManagement/Master/Users';
 import AdminDMNewUser from '@/components/Admin/DataManagement/Master/NewUser';
 import AdminCompanyMaturityLevelDataManagement from '@/components/Admin/DataManagement/ReferenceData/CompanyMaturityLevelDataManagement';
+import AdminStatisticsOpportunities from '@/components/Admin/Statistics/Opportunities';
+import AdminStatisticsTalentAcquisition from '@/components/Admin/Statistics/TalentAcquisition';
 import EmployerProfile from '@/components/Employer/Profile';
 import EmployerRequirements from '@/components/Employer/Requirements/Requirements';
 import EmployerRequirement from '@/components/Employer/Requirements/Requirement';
@@ -217,6 +219,19 @@ const router = new Router({
       path: '/admin/data-management/reference/company-maturity-levels',
       name: 'AdminCompanyMaturityLevelDataManagement',
       component: AdminCompanyMaturityLevelDataManagement,
+      meta: { authRequired: true },
+    },
+    // Statistics
+    {
+      path: '/admin/statistics/opportunities',
+      name: 'AdminStatisticsOpportunities',
+      component: AdminStatisticsOpportunities,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/admin/statistics/talent-acquisition',
+      name: 'AdminStatisticsTalentAcquisition',
+      component: AdminStatisticsTalentAcquisition,
       meta: { authRequired: true },
     },
     // EMPLOYER ====================================================================================

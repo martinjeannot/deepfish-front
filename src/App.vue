@@ -93,6 +93,12 @@
                 title: 'Data Management',
                 route: '/admin/data-management/master/talents',
               },
+              {
+                key: 'statistics',
+                icon: 'timeline',
+                title: 'Statistics',
+                route: { name: 'AdminStatisticsOpportunities' },
+              },
               { key: 'profile', icon: 'account_circle', title: 'Profile', route: '/admin/profile' },
             ];
           } else if (this.isUserEmployer) {
