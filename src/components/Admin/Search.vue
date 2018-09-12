@@ -17,7 +17,7 @@
         <v-card-title>
           <v-flex xs12 class="white">
             <v-text-field v-model="criteria.searchQuery" label="Search" clearable hide-details
-                          @keyup.narive.enter="search" v-focus></v-text-field>
+                          @keyup.native.enter="search" v-focus></v-text-field>
           </v-flex>
         </v-card-title>
       </v-card>
