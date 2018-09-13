@@ -154,6 +154,9 @@
         }
       },
     },
+    created() {
+      Object.keys(this.$route.query)[0] === 'employer' ? this.activeTabIndex = 1 : ''
+    },
     mounted() {
       // FIXME : VueJS/autofill bug (browsers do not trigger input/change event when autofilling)
       const autofillIntervalId = setInterval(() => {
