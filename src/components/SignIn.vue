@@ -58,7 +58,7 @@
                         </v-btn>
                       </v-flex>
                       <v-flex xs12 class="mt-2 text-xs-center">
-                        <router-link :to="{ name: 'SignUp' }">S'inscrire</router-link>
+                        <router-link :to="{ name: 'SignUp', query: { employer: null } }">S'inscrire</router-link>
                       </v-flex>
                       <v-flex xs12 class="text-xs-center">
                         <router-link :to="{ name: 'PasswordReset' }">Mot de passe oublié ?</router-link>
