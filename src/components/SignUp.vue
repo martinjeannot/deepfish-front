@@ -147,6 +147,11 @@
         }
       },
     },
+    created() {
+      if (Object.keys(this.$route.query)[0] === 'employer') {
+        this.activeTabIndex = 1;
+      }
+    },
   };
 </script>
 
