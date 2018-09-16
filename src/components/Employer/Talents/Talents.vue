@@ -59,28 +59,6 @@
                        target="_blank">Voir le profil complet</a>
                   </div>
                 </v-flex>
-                <v-flex xs12 sm6>
-                  <v-layout wrap>
-                    <v-flex xs6>
-                      Compétences en vente complexe
-                    </v-flex>
-                    <v-flex xs6>
-                      <star-rating :rating="props.item.talent.qualification.complexSellingSkillsRating"></star-rating>
-                    </v-flex>
-                    <v-flex xs6>
-                      Compétences en chasse
-                    </v-flex>
-                    <v-flex xs6>
-                      <star-rating :rating="props.item.talent.qualification.huntingSkillsRating"></star-rating>
-                    </v-flex>
-                    <v-flex xs6>
-                      Compétences techniques
-                    </v-flex>
-                    <v-flex xs6>
-                      <star-rating :rating="props.item.talent.qualification.technicalSkillsRating"></star-rating>
-                    </v-flex>
-                  </v-layout>
-                </v-flex>
                 <v-flex xs12 class="mt-2">
                   Ce talent a accepté votre opportunité le {{ props.item.forwardedAt | formatDate('LL') }}.
                 </v-flex>

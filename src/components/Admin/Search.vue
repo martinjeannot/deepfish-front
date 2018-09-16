@@ -17,7 +17,7 @@
         <v-card-title>
           <v-flex xs12 class="white">
             <v-text-field v-model="criteria.searchQuery" label="Search" clearable hide-details
-                          @keyup.narive.enter="search" v-focus></v-text-field>
+                          @keyup.native.enter="search" v-focus></v-text-field>
           </v-flex>
         </v-card-title>
       </v-card>
@@ -221,31 +221,7 @@
                 </v-flex>
                 <v-flex xs12>
                   <v-divider></v-divider>
-                </v-flex>
-                <v-flex xs12 d-inline-flex>
-                  <v-flex xs6>
-                    Complex selling
-                  </v-flex>
-                  <v-flex xs6 class="text-xs-right">
-                    <star-rating :rating="props.item.qualification.complexSellingSkillsRating"></star-rating>
-                  </v-flex>
-                </v-flex>
-                <v-flex xs12 d-inline-flex>
-                  <v-flex xs6>
-                    Hunting
-                  </v-flex>
-                  <v-flex xs6 class="text-xs-right">
-                    <star-rating :rating="props.item.qualification.huntingSkillsRating"></star-rating>
-                  </v-flex>
-                </v-flex>
-                <v-flex xs12 d-inline-flex>
-                  <v-flex xs6>
-                    Technical
-                  </v-flex>
-                  <v-flex xs6 class="text-xs-right">
-                    <star-rating :rating="props.item.qualification.technicalSkillsRating"></star-rating>
-                  </v-flex>
-                </v-flex>
+                </v-flex>             
                 <v-flex xs12 v-if="props.item.qualification.recommendation">
                   <div style="white-space: pre-wrap">{{ props.item.qualification.recommendation.substr(0, 120) }}</div>
                 </v-flex>

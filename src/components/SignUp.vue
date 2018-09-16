@@ -79,7 +79,7 @@
                         En cliquant, j'accepte les <a href="https://www.deepfish.co/cgu" target="_blank">CGU</a>
                       </v-flex>
                       <v-flex xs12 class="text-xs-center">
-                        <router-link :to="{ name: 'SignIn' }">Déjà inscrit ?</router-link>
+                        <router-link :to="{ name: 'SignIn', query: { employer: null } }">Déjà inscrit ?</router-link>
                       </v-flex>
                     </v-layout>
                   </v-form>
@@ -146,6 +146,11 @@
           });
         }
       },
+    },
+    created() {
+      if (Object.keys(this.$route.query)[0] === 'employer') {
+        this.activeTabIndex = 1;
+      }
     },
   };
 </script>
