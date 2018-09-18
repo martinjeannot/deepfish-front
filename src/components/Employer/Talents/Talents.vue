@@ -16,7 +16,7 @@
         <v-card-text>
           <v-layout wrap>
             <v-flex xs12 sm6 class="text-xs-center" style="padding-top: 5%">
-              <h3 class="pb-2">{{ requirement.name }}</h3>
+              <h3 class="pb-2 headline font-weight-bold"><span style="text-decoration: underline;">Votre besoin</span> : {{ requirement.name }}</h3>
               <div>Nombre de talents Deepfish contactés pour ce besoin : <span
                 style="font-weight: bold">{{ requirement.opportunitiesCounts.total }}</span></div>
             </v-flex>
@@ -26,6 +26,7 @@
                                 :options="{responsive: true, maintainAspectRatio: true, title: {display: true, text: 'Répartition des réponses talents'}}"></doughnut-chart>
               </v-flex>
             </v-flex>
+            <v-icon style="margin: 0 auto; width: 100%;" size="5rem">keyboard_arrow_down</v-icon>
           </v-layout>
         </v-card-text>
       </v-card>
