@@ -15,6 +15,16 @@
                   prepend-icon="event" readonly></v-text-field>
                 <v-date-picker v-model="createdAtAfter" @input="$refs.createdAtAfterMenu.save(createdAtAfter); getStatistics()"></v-date-picker>
               </v-menu>
+               <v-layout row wrap>
+                <v-flex xs6>
+                  <label for="groupA" inline>groupe A:</label>
+                  <v-checkbox id="groupA" v-model="checkboxGroupA"></v-checkbox>
+                </v-flex>
+                <v-flex xs6>
+                  <label for="groupA">groupe B:</label>
+                  <v-checkbox v-model="checkboxGroupB"></v-checkbox>
+                </v-flex>
+               </v-layout>
             </v-flex>
             <v-flex xs4>
               <v-menu ref="createdAtBeforeMenu" v-model="createdAtBeforeMenu" :close-on-content-click="false"
@@ -61,6 +71,8 @@ export default {
     createdAtBeforeMenu: false,
     groupBy: 'day',
     statistics: null,
+    checkboxGroupA: true,
+    checkboxGroupB: false,
   }),
   computed: {
     ...mapGetters(['api', 'loading', 'alertComponent']),
