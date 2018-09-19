@@ -17,12 +17,12 @@
               </v-menu>
                <v-layout row wrap>
                 <v-flex xs6>
-                  <label for="groupA" inline>groupe A:</label>
-                  <v-checkbox id="groupA" v-model="checkboxGroupA"></v-checkbox>
+                  <label>groupe A:</label>
+                  <v-checkbox v-model="checkboxGroupA" @change="getStatistics"></v-checkbox>
                 </v-flex>
                 <v-flex xs6>
-                  <label for="groupA">groupe B:</label>
-                  <v-checkbox v-model="checkboxGroupB"></v-checkbox>
+                  <label>groupe B:</label>
+                  <v-checkbox v-model="checkboxGroupB" @change="getStatistics"></v-checkbox>
                 </v-flex>
                </v-layout>
             </v-flex>
@@ -71,7 +71,7 @@ export default {
     createdAtBeforeMenu: false,
     groupBy: 'day',
     statistics: null,
-    checkboxGroupA: true,
+    checkboxGroupA: false,
     checkboxGroupB: false,
   }),
   computed: {
@@ -84,6 +84,10 @@ export default {
             label: 'Talents',
             data: this.statistics.map(point => point[1]),
           },
+          {
+            label: 'Talent',
+            data: [1, 2, 3, 4],
+          },
         ],
       };
     },
@@ -92,10 +96,17 @@ export default {
     ...mapActions(['prepareForApiConsumption', 'clearLoading']),
     getStatistics() {
       this.prepareForApiConsumption();
+      let queryString = `created-at-after=${this.createdAtAfter}
+                          &created-at-before=${this.createdAtBefore}
+                          &group-by=${this.groupBy}`;
+      if (this.checkboxGroupA) {
+        queryString += '&qualification-ranking=1';
+      }
+      if (this.checkboxGroupB) {
+        queryString += '&qualification-ranking=2';
+      }
       this.api(
-        `/talents/statistics?created-at-after=${this.createdAtAfter}&created-at-before=${
-          this.createdAtBefore
-        }&group-by=${this.groupBy}`,
+        `/talents/statistics?${queryString}`,
       )
         .then((response) => {
           this.statistics = response.data;
