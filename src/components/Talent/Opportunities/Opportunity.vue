@@ -16,7 +16,7 @@
               <div class="headline">{{ opportunity.company.name }}</div>
               <div class="grey--text">Fonction proposée : {{ opportunity.jobType.l10nKey }}</div>
               <div class="grey--text">Localisation : {{ opportunity.location }}</div>
-              <div class="grey--text"Salaire fixe : il respecte tes conditions</div>
+              <div class="grey--text">Salaire fixe : il respecte tes conditions</div>
             </v-flex>
           </v-layout>
         </v-card-title>
