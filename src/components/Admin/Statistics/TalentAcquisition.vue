@@ -70,7 +70,8 @@ export default {
     createdAtBefore: moment().format('YYYY-MM-DD'),
     createdAtBeforeMenu: false,
     groupBy: 'day',
-    statistics: null,
+    Globalstatistics: null,
+    filteredTalentStatistics: null,
     checkboxGroupA: false,
     checkboxGroupB: false,
   }),
@@ -78,15 +79,15 @@ export default {
     ...mapGetters(['api', 'loading', 'alertComponent']),
     chartData() {
       return {
-        labels: this.statistics.map(point => point[0]),
+        labels: this.Globalstatistics.map(point => point[0]),
         datasets: [
           {
-            label: 'Talents',
-            data: this.statistics.map(point => point[1]),
+            label: 'globalTalents',
+            data: this.Globalstatistics.map(point => point[1]),
           },
           {
             label: 'Talent',
-            data: [1, 2, 3, 4],
+            data: this.filteredTalentStatistics.map(point => point[1]),
           },
         ],
       };
@@ -96,20 +97,25 @@ export default {
     ...mapActions(['prepareForApiConsumption', 'clearLoading']),
     getStatistics() {
       this.prepareForApiConsumption();
-      let queryString = `created-at-after=${this.createdAtAfter}
+      const globalquery = `created-at-after=${this.createdAtAfter}
                           &created-at-before=${this.createdAtBefore}
                           &group-by=${this.groupBy}`;
+      let filteredQuery = globalquery;
       if (this.checkboxGroupA) {
-        queryString += '&qualification-ranking=1';
+        filteredQuery += '&qualification-ranking=1';
       }
       if (this.checkboxGroupB) {
-        queryString += '&qualification-ranking=2';
+        filteredQuery += '&qualification-ranking=2';
       }
-      this.api(
-        `/talents/statistics?${queryString}`,
-      )
+      return Promise.all([
+        this.api(
+          `/talents/statistics?${globalquery}`),
+        this.api(
+        `/talents/statistics?${filteredQuery}`),
+      ])
         .then((response) => {
-          this.statistics = response.data;
+          this.Globalstatistics = response[0].data;
+          this.filteredTalentStatistics = response[1].data;
         })
         .finally(() => this.clearLoading());
     },
