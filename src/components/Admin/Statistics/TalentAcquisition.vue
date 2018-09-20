@@ -88,6 +88,7 @@ export default {
           {
             label: 'Talent',
             data: this.filteredTalentStatistics.map(point => point[1]),
+            borderColor: '#00ff00',
           },
         ],
       };
