@@ -18,11 +18,11 @@
                <v-layout row wrap>
                 <v-flex xs6>
                   <label>groupe A:</label>
-                  <v-checkbox v-model="checkboxGroupA" @change="getStatistics"></v-checkbox>
+                  <v-checkbox v-model="checkboxGroupA" @change="getStatistics" color="success"></v-checkbox>
                 </v-flex>
                 <v-flex xs6>
                   <label>groupe B:</label>
-                  <v-checkbox v-model="checkboxGroupB" @change="getStatistics"></v-checkbox>
+                  <v-checkbox v-model="checkboxGroupB" @change="getStatistics" color="success"></v-checkbox>
                 </v-flex>
                </v-layout>
             </v-flex>
@@ -72,8 +72,8 @@ export default {
     groupBy: 'day',
     Globalstatistics: null,
     filteredTalentStatistics: null,
-    checkboxGroupA: false,
-    checkboxGroupB: false,
+    checkboxGroupA: true,
+    checkboxGroupB: true,
   }),
   computed: {
     ...mapGetters(['api', 'loading', 'alertComponent']),
@@ -89,6 +89,7 @@ export default {
             label: 'Talent',
             data: this.filteredTalentStatistics.map(point => point[1]),
             borderColor: '#00ff00',
+            backgroundColor: 'rgba(123, 245, 36, 0.5)',
           },
         ],
       };
