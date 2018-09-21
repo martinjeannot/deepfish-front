@@ -8,12 +8,17 @@
     <v-flex xs12 sm6 offset-sm3>
       <v-card>
         <v-card-title primary-title>
-          <div>
-            <div class="headline">{{ opportunity.company.name }}</div>
-            <div class="grey--text">Fonction proposée : {{ opportunity.jobType.l10nKey }}</div>
-            <div class="grey--text">Localisation : {{ opportunity.location }}</div>
-            <div class="grey--text">Salaire fixe : il respecte tes conditions</div>
-          </div>
+          <v-layout>
+            <v-flex xs3 md3 lg2 mr-3>
+              <v-img :src="opportunity.company.logoURL" alt="logo"></v-img>
+            </v-flex>
+            <v-flex xs9 md9 lg10>
+              <div class="headline">{{ opportunity.company.name }}</div>
+              <div class="grey--text">Fonction proposée : {{ opportunity.jobType.l10nKey }}</div>
+              <div class="grey--text">Localisation : {{ opportunity.location }}</div>
+              <div class="grey--text">Salaire fixe : il respecte tes conditions</div>
+            </v-flex>
+          </v-layout>
         </v-card-title>
         <v-card-text>
           <v-flex xs12 class="pb-2">
