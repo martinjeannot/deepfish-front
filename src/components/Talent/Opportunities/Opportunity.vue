@@ -9,7 +9,7 @@
       <v-card>
         <v-card-title primary-title>
           <v-layout>
-            <v-flex xs3 md3 lg2 style="margin-right: 15px;">
+            <v-flex xs3 md3 lg2 mr-3>
               <v-img :src="opportunity.company.logoURL" alt="logo"></v-img>
             </v-flex>
             <v-flex xs9 md9 lg10>
