@@ -15,16 +15,6 @@
                   prepend-icon="event" readonly></v-text-field>
                 <v-date-picker v-model="createdAtAfter" @input="$refs.createdAtAfterMenu.save(createdAtAfter); getStatistics()"></v-date-picker>
               </v-menu>
-               <v-layout row wrap>
-                <v-flex xs6>
-                  <label>groupe A:</label>
-                  <v-checkbox v-model="checkboxGroupA" @change="getStatistics" color="success"></v-checkbox>
-                </v-flex>
-                <v-flex xs6>
-                  <label>groupe B:</label>
-                  <v-checkbox v-model="checkboxGroupB" @change="getStatistics" color="success"></v-checkbox>
-                </v-flex>
-               </v-layout>
             </v-flex>
             <v-flex xs4>
               <v-menu ref="createdAtBeforeMenu" v-model="createdAtBeforeMenu" :close-on-content-click="false"
@@ -38,6 +28,12 @@
             <v-flex xs4 class="pl-3">
               <v-select :items="['day', 'week', 'month', 'year']" v-model="groupBy" label="Group by"
                 @change="getStatistics"></v-select>
+            </v-flex>
+            <v-flex xs2>
+              <v-checkbox label="groupe A" v-model="checkboxGroupA" @change="getStatistics" color="success"></v-checkbox>
+            </v-flex>
+            <v-flex xs2>
+              <v-checkbox label="groupe B" v-model="checkboxGroupB" @change="getStatistics" color="success"></v-checkbox>
             </v-flex>
             <v-flex xs12 v-if="loading">
               <v-flex xs12 class="text-xs-center">
@@ -70,7 +66,7 @@ export default {
     createdAtBefore: moment().format('YYYY-MM-DD'),
     createdAtBeforeMenu: false,
     groupBy: 'day',
-    Globalstatistics: null,
+    globalStatistics: null,
     filteredTalentStatistics: null,
     checkboxGroupA: true,
     checkboxGroupB: true,
@@ -79,11 +75,11 @@ export default {
     ...mapGetters(['api', 'loading', 'alertComponent']),
     chartData() {
       return {
-        labels: this.Globalstatistics.map(point => point[0]),
+        labels: this.globalStatistics.map(point => point[0]),
         datasets: [
           {
             label: 'globalTalents',
-            data: this.Globalstatistics.map(point => point[1]),
+            data: this.globalStatistics.map(point => point[1]),
           },
           {
             label: 'Talent',
@@ -110,14 +106,12 @@ export default {
         filteredQuery += '&qualification-ranking=2';
       }
       return Promise.all([
-        this.api(
-          `/talents/statistics?${globalquery}`),
-        this.api(
-        `/talents/statistics?${filteredQuery}`),
+        this.api(`/talents/statistics?${globalquery}`),
+        this.api(`/talents/statistics?${filteredQuery}`),
       ])
-        .then((response) => {
-          this.Globalstatistics = response[0].data;
-          this.filteredTalentStatistics = response[1].data;
+        .then(([globalResponse, filteredResponse]) => {
+          this.globalStatistics = globalResponse.data;
+          this.filteredTalentStatistics = filteredResponse.data;
         })
         .finally(() => this.clearLoading());
     },
