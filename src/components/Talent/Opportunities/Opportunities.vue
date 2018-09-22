@@ -24,10 +24,8 @@
                     alt="logo" max-width="100px"></v-img>
                 </v-flex>
                 <v-flex xs8 sm10 md11>
-                  <span style="font-weight: bold">
-                    {{ props.item.company.name}}
-                  </span>&nbsp;te propose un job de {{ props.item.jobType.l10nKey
-                  }}
+                  Deepfish te propose un job chez
+                  <span style="font-weight: bold">{{ props.item.company.name }}</span>
                 </v-flex>
               </v-card-title>
               <v-card-actions>
@@ -58,13 +56,22 @@
         <v-data-iterator content-tag="v-layout" row wrap :items="acceptedOpportunities" :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card>
-              <v-card-title>{{ props.item.company.name }} t'as proposé un job de {{ props.item.jobType.l10nKey
-                }}
+              <v-card-title>
+                <v-flex xs4 sm2 md1>
+                  <v-img :src="props.item.company.logoURL ? props.item.company.logoURL : 'static/img/placeholder_150.jpg'"
+                    alt="logo" max-width="100px"></v-img>
+                </v-flex>
+                <v-flex xs8 sm10 md11>
+                  Deepfish t'as proposé un job chez
+                  <span style="font-weight: bold">{{ props.item.company.name }}</span>
+                </v-flex>
               </v-card-title>
               <v-card-actions>
+                <v-flex xs12 class="text-xs-center">
                 <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
                   Voir l'opportunité
                 </v-btn>
+                </v-flex>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -84,13 +91,22 @@
         <v-data-iterator content-tag="v-layout" row wrap :items="declinedOpportunities" :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card>
-              <v-card-title>{{ props.item.company.name }} t'as proposé un job de {{ props.item.jobType.l10nKey
-                }}
+              <v-card-title>
+                <v-flex xs4 sm2 md1>
+                  <v-img :src="props.item.company.logoURL ? props.item.company.logoURL : 'static/img/placeholder_150.jpg'"
+                    alt="logo" max-width="100px"></v-img>
+                </v-flex>
+                <v-flex xs8 sm10 md11>
+                  Deepfish t'as proposé un job chez
+                  <span style="font-weight: bold">{{ props.item.company.name }}</span>
+                </v-flex>
               </v-card-title>
               <v-card-actions>
+                <v-flex xs12 class="text-xs-center">
                 <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
                   Voir l'opportunité
                 </v-btn>
+                </v-flex>
               </v-card-actions>
             </v-card>
           </v-flex>
