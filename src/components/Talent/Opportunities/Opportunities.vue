@@ -20,7 +20,8 @@
           <v-flex xs12 slot="item" slot-scope="props">
             <v-card>
               <v-card-title>
-                <span style="font-weight: bold">
+                <v-img :src="props.item.company.logoURL" alt="logo" max-width="100px"></v-img>
+                <span style="font-weight: bold" class="ml-5">
                   {{ props.item.company.name}}
                 </span>&nbsp;te propose un job de {{ props.item.jobType.l10nKey }}
               </v-card-title>
