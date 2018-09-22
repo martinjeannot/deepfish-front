@@ -8,24 +8,23 @@
     <v-flex xs12 sm6 offset-sm3>
       <v-card>
         <v-card-title primary-title>
-          <v-layout>
-            <v-flex xs3 md3 lg2 mr-3>
-              <v-img :src="opportunity.company.logoURL" alt="logo"></v-img>
-            </v-flex>
-            <v-flex xs9 md9 lg10>
-              <div class="headline">{{ opportunity.company.name }}</div>
-              <div class="grey--text">Fonction proposée : {{ opportunity.jobType.l10nKey }}</div>
-              <div class="grey--text">Localisation : {{ opportunity.location }}</div>
-              <div class="grey--text">Salaire fixe : il respecte tes conditions</div>
-            </v-flex>
-          </v-layout>
+          <v-flex xs3 lg2>
+            <v-img :src="opportunity.company.logoURL ? opportunity.company.logoURL : 'static/img/placeholder_150.jpg'"
+              alt="logo"></v-img>
+          </v-flex>
+          <v-flex xs9 lg10 pl-3>
+            <div class="headline">{{ opportunity.company.name }}</div>
+            <div class="grey--text">Fonction proposée : {{ opportunity.jobType.l10nKey }}</div>
+            <div class="grey--text">Localisation : {{ opportunity.location }}</div>
+            <div class="grey--text">Salaire fixe : il respecte tes conditions</div>
+          </v-flex>
         </v-card-title>
         <v-card-text>
           <v-flex xs12 class="pb-2">
             <span style="font-style: italic">{{ opportunity.company.name }}</span> :
           </v-flex>
           <v-flex xs12 class="pb-3" style="white-space: pre-wrap" v-html="opportunity.company.description"
-                  v-linkified></v-flex>
+            v-linkified></v-flex>
           <v-flex xs12 style="white-space: pre-wrap" v-html="opportunity.pitch" v-linkified></v-flex>
         </v-card-text>
         <v-card-actions v-if="opportunity.talentStatus === 'PENDING'">
@@ -51,8 +50,7 @@
               <h4>Explique-nous la raison de ton refus en quelques mots</h4>
             </v-flex>
             <v-flex xs12>
-              <v-textarea v-model="opportunity.talentDeclinationReason" multi-line rows="7"
-                          :rules="[rules.required]"></v-textarea>
+              <v-textarea v-model="opportunity.talentDeclinationReason" multi-line rows="7" :rules="[rules.required]"></v-textarea>
             </v-flex>
             <v-flex xs12 class="text-xs-right">
               <v-btn type="submit" fab small color="primary" :disabled="!declinationValid">
@@ -72,7 +70,8 @@
             </v-flex>
             <v-flex xs11>
               <h3>
-                Attention, cette action entraînera le refus de toutes tes opportunités en attente et la désactivation de ton profil
+                Attention, cette action entraînera le refus de toutes tes opportunités en attente
+                et la désactivation de ton profil
               </h3>
             </v-flex>
             <v-flex xs12 class="mt-3">
@@ -92,103 +91,98 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
-  const rules = {
-    required: value => !!value || 'This field is required',
-  };
+const rules = {
+  required: value => !!value || 'This field is required',
+};
 
-  export default {
-    name: 'opportunity',
-    props: ['id'],
-    data: () => ({
-      rules,
-      opportunity: null,
-      declinationDialog: false,
-      declinationValid: false,
-      bulkDeclinationDialog: false,
-      bulkDeclinationValid: false,
-      bulkDeclinationReason: '',
-    }),
-    computed: {
-      ...mapGetters([
-        'api',
-        'loading',
-        'user',
-        'menuBadges',
-      ]),
+export default {
+  name: 'opportunity',
+  props: ['id'],
+  data: () => ({
+    rules,
+    opportunity: null,
+    declinationDialog: false,
+    declinationValid: false,
+    bulkDeclinationDialog: false,
+    bulkDeclinationValid: false,
+    bulkDeclinationReason: '',
+  }),
+  computed: {
+    ...mapGetters(['api', 'loading', 'user', 'menuBadges']),
+  },
+  methods: {
+    ...mapActions([
+      'prepareForApiConsumption',
+      'clearLoading',
+      'showSnackbar',
+      'setAlertComponent',
+    ]),
+    fetchData() {
+      this.prepareForApiConsumption();
+      this.api(`/opportunities/${this.id}?projection=talent`)
+        .then((response) => {
+          this.opportunity = response.data;
+        })
+        .finally(() => this.clearLoading());
     },
-    methods: {
-      ...mapActions([
-        'prepareForApiConsumption',
-        'clearLoading',
-        'showSnackbar',
-        'setAlertComponent',
-      ]),
-      fetchData() {
-        this.prepareForApiConsumption();
-        this.api(`/opportunities/${this.id}?projection=talent`)
-          .then((response) => {
-            this.opportunity = response.data;
-          })
-          .finally(() => this.clearLoading());
-      },
-      accept(opportunity) {
-        opportunity.previousState = Object.assign({}, opportunity);
-        opportunity.talentStatus = 'ACCEPTED';
-        this
-          .saveOpportunity(opportunity)
-          .then(() => {
-            this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
-            this.$router.push('/talent/opportunities');
-            this.setAlertComponent({
-              type: 'success',
-              message: `${opportunity.company.name} va maintenant découvrir ton profil complet (non anonymisé) et revenir vers toi si son intérêt est confirmé`,
-            });
-          });
-      },
-      decline(opportunity) {
-        opportunity.previousState = Object.assign({}, opportunity);
-        opportunity.talentStatus = 'DECLINED';
-        this.declinationDialog = false;
-        this
-          .saveOpportunity(opportunity)
-          .then(() => {
-            this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
-            this.$router.push('/talent/opportunities');
-          });
-      },
-      saveOpportunity(opportunity) {
-        const opportunityData = Object.assign({}, opportunity);
-        delete opportunityData.requirement;
-        return this.api
-          .patch(opportunity._links.self.href, opportunityData)
-          .then(() => this.showSnackbar('Opération terminée avec succès'))
-          .catch(() => {
-            this.showSnackbar('Erreur');
-            this.fetchData();
-          });
-      },
-      declineInBulk() {
-        this.bulkDeclinationDialog = false;
-        this.api.post(`/talents/${this.user.id}/opportunities/bulk-declination`, { bulkDeclinationReason: this.bulkDeclinationReason })
-          .then(() => {
-            this.menuBadges.opportunities = 0;
-            this.$router.push('/talent/opportunities'); // refresh data
-            this.showSnackbar('Opération terminée avec succès');
-          })
-          .catch(() => {
-            this.fetchData();
-            this.showSnackbar('Erreur');
-          });
-      },
+    accept(opportunity) {
+      opportunity.previousState = Object.assign({}, opportunity);
+      opportunity.talentStatus = 'ACCEPTED';
+      this.saveOpportunity(opportunity).then(() => {
+        this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
+        this.$router.push('/talent/opportunities');
+        this.setAlertComponent({
+          type: 'success',
+          message: `${
+            opportunity.company.name
+          } va maintenant découvrir ton profil complet (non anonymisé) et revenir vers toi si son intérêt est confirmé`,
+        });
+      });
     },
-    created() {
-      this.fetchData();
+    decline(opportunity) {
+      opportunity.previousState = Object.assign({}, opportunity);
+      opportunity.talentStatus = 'DECLINED';
+      this.declinationDialog = false;
+      this.saveOpportunity(opportunity).then(() => {
+        this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
+        this.$router.push('/talent/opportunities');
+      });
     },
-  };
+    saveOpportunity(opportunity) {
+      const opportunityData = Object.assign({}, opportunity);
+      delete opportunityData.requirement;
+      return this.api
+        .patch(opportunity._links.self.href, opportunityData)
+        .then(() => this.showSnackbar('Opération terminée avec succès'))
+        .catch(() => {
+          this.showSnackbar('Erreur');
+          this.fetchData();
+        });
+    },
+    declineInBulk() {
+      this.bulkDeclinationDialog = false;
+      this.api
+        .post(`/talents/${this.user.id}/opportunities/bulk-declination`, {
+          bulkDeclinationReason: this.bulkDeclinationReason,
+        })
+        .then(() => {
+          this.menuBadges.opportunities = 0;
+          this.$router.push('/talent/opportunities'); // refresh data
+          this.showSnackbar('Opération terminée avec succès');
+        })
+        .catch(() => {
+          this.fetchData();
+          this.showSnackbar('Erreur');
+        });
+    },
+  },
+  created() {
+    this.fetchData();
+  },
+};
 </script>
 
 <style scoped>
-
 </style>

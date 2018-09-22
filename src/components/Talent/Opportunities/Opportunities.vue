@@ -7,8 +7,7 @@
   <v-layout row wrap v-else>
     <v-layout v-if="alertComponent">
       <v-flex xs12 sm6 offset-sm3>
-        <base-alert :type="alertComponent.type" :message="alertComponent.message"
-                    @dismissed="onAlertComponentDismissed"></base-alert>
+        <base-alert :type="alertComponent.type" :message="alertComponent.message" @dismissed="onAlertComponentDismissed"></base-alert>
       </v-flex>
     </v-layout>
     <v-flex xs12>
@@ -20,15 +19,23 @@
           <v-flex xs12 slot="item" slot-scope="props">
             <v-card>
               <v-card-title>
-                <v-img :src="props.item.company.logoURL" alt="logo" max-width="100px"></v-img>
-                <span style="font-weight: bold" class="ml-5">
-                  {{ props.item.company.name}}
-                </span>&nbsp;te propose un job de {{ props.item.jobType.l10nKey }}
+                <v-flex xs4 sm2 md1>
+                  <v-img :src="props.item.company.logoURL ? props.item.company.logoURL : 'static/img/placeholder_150.jpg'"
+                    alt="logo" max-width="100px"></v-img>
+                </v-flex>
+                <v-flex xs8 sm10 md11>
+                  <span style="font-weight: bold">
+                    {{ props.item.company.name}}
+                  </span>&nbsp;te propose un job de {{ props.item.jobType.l10nKey
+                  }}
+                </v-flex>
               </v-card-title>
               <v-card-actions>
-                <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
-                  Voir l'opportunité
-                </v-btn>
+                <v-flex xs12 class="text-xs-center">
+                  <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
+                    Voir l'opportunité
+                  </v-btn>
+                </v-flex>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -51,7 +58,8 @@
         <v-data-iterator content-tag="v-layout" row wrap :items="acceptedOpportunities" :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card>
-              <v-card-title>{{ props.item.company.name }} t'as proposé un job de {{ props.item.jobType.l10nKey }}
+              <v-card-title>{{ props.item.company.name }} t'as proposé un job de {{ props.item.jobType.l10nKey
+                }}
               </v-card-title>
               <v-card-actions>
                 <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
@@ -76,7 +84,8 @@
         <v-data-iterator content-tag="v-layout" row wrap :items="declinedOpportunities" :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card>
-              <v-card-title>{{ props.item.company.name }} t'as proposé un job de {{ props.item.jobType.l10nKey }}
+              <v-card-title>{{ props.item.company.name }} t'as proposé un job de {{ props.item.jobType.l10nKey
+                }}
               </v-card-title>
               <v-card-actions>
                 <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
@@ -97,48 +106,42 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
-  export default {
-    name: 'talent-opportunities',
-    data: () => ({
-      pendingOpportunities: [],
-      acceptedOpportunities: [],
-      declinedOpportunities: [],
-      totalItems: 0,
-    }),
-    computed: {
-      ...mapGetters([
-        'api',
-        'loading',
-        'alertComponent',
-        'user',
-        'menuBadges',
-      ]),
-    },
-    methods: {
-      ...mapActions([
-        'prepareForApiConsumption',
-        'clearLoading',
-        'onAlertComponentDismissed',
-      ]),
-    },
-    created() {
-      this.prepareForApiConsumption();
-      this
-        .api(`/opportunities?projection=talent&talent=${this.user.id}`)
-        .then((response) => {
-          this.totalItems = response.data.page.totalElements;
-          this.pendingOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.talentStatus === 'PENDING');
-          this.menuBadges.opportunities = this.pendingOpportunities.length;
-          this.acceptedOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.talentStatus === 'ACCEPTED');
-          this.declinedOpportunities = response.data._embedded.opportunities.filter(opportunity => opportunity.talentStatus === 'DECLINED');
-        })
-        .finally(() => this.clearLoading());
-    },
-  };
+export default {
+  name: 'talent-opportunities',
+  data: () => ({
+    pendingOpportunities: [],
+    acceptedOpportunities: [],
+    declinedOpportunities: [],
+    totalItems: 0,
+  }),
+  computed: {
+    ...mapGetters(['api', 'loading', 'alertComponent', 'user', 'menuBadges']),
+  },
+  methods: {
+    ...mapActions(['prepareForApiConsumption', 'clearLoading', 'onAlertComponentDismissed']),
+  },
+  created() {
+    this.prepareForApiConsumption();
+    this.api(`/opportunities?projection=talent&talent=${this.user.id}`)
+      .then((response) => {
+        this.totalItems = response.data.page.totalElements;
+        this.pendingOpportunities = response.data._embedded.opportunities.filter(
+          opportunity => opportunity.talentStatus === 'PENDING',
+        );
+        this.menuBadges.opportunities = this.pendingOpportunities.length;
+        this.acceptedOpportunities = response.data._embedded.opportunities.filter(
+          opportunity => opportunity.talentStatus === 'ACCEPTED',
+        );
+        this.declinedOpportunities = response.data._embedded.opportunities.filter(
+          opportunity => opportunity.talentStatus === 'DECLINED',
+        );
+      })
+      .finally(() => this.clearLoading());
+  },
+};
 </script>
 
 <style scoped>
-
 </style>
