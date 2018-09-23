@@ -251,7 +251,8 @@
                         <v-icon>send</v-icon>
                       </v-btn>
                     </v-flex>
-                    <v-data-table :items="talent.opportunities" :headers="opportunityTable.headers" :loading="loading"
+                    <v-data-table :rows-per-page-items="[100, {text: '$vuetify.dataIterator.rowsPerPageAll', value: 10}]" 
+                                  :items="talent.opportunities" :headers="opportunityTable.headers" :loading="loading"
                                   :pagination.sync="opportunityTable.pagination"
                                   :total-items="opportunityTable.totalItems">
                       <template slot="items" slot-scope="props">

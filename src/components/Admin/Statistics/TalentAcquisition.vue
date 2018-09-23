@@ -29,6 +29,12 @@
               <v-select :items="['day', 'week', 'month', 'year']" v-model="groupBy" label="Group by"
                 @change="getStatistics"></v-select>
             </v-flex>
+            <v-flex xs2>
+              <v-checkbox label="groupe A" v-model="checkboxGroupA" @change="getStatistics" color="success"></v-checkbox>
+            </v-flex>
+            <v-flex xs2>
+              <v-checkbox label="groupe B" v-model="checkboxGroupB" @change="getStatistics" color="success"></v-checkbox>
+            </v-flex>
             <v-flex xs12 v-if="loading">
               <v-flex xs12 class="text-xs-center">
                 <v-progress-circular indeterminate color="primary" :size="70"></v-progress-circular>
@@ -60,17 +66,26 @@ export default {
     createdAtBefore: moment().format('YYYY-MM-DD'),
     createdAtBeforeMenu: false,
     groupBy: 'day',
-    statistics: null,
+    globalStatistics: null,
+    filteredTalentStatistics: null,
+    checkboxGroupA: true,
+    checkboxGroupB: true,
   }),
   computed: {
     ...mapGetters(['api', 'loading', 'alertComponent']),
     chartData() {
       return {
-        labels: this.statistics.map(point => point[0]),
+        labels: this.globalStatistics.map(point => point[0]),
         datasets: [
           {
-            label: 'Talents',
-            data: this.statistics.map(point => point[1]),
+            label: 'globalTalents',
+            data: this.globalStatistics.map(point => point[1]),
+          },
+          {
+            label: 'Talent',
+            data: this.filteredTalentStatistics.map(point => point[1]),
+            borderColor: '#00ff00',
+            backgroundColor: 'rgba(123, 245, 36, 0.5)',
           },
         ],
       };
@@ -80,13 +95,23 @@ export default {
     ...mapActions(['prepareForApiConsumption', 'clearLoading']),
     getStatistics() {
       this.prepareForApiConsumption();
-      this.api(
-        `/talents/statistics?created-at-after=${this.createdAtAfter}&created-at-before=${
-          this.createdAtBefore
-        }&group-by=${this.groupBy}`,
-      )
-        .then((response) => {
-          this.statistics = response.data;
+      const globalquery = `created-at-after=${this.createdAtAfter}
+                          &created-at-before=${this.createdAtBefore}
+                          &group-by=${this.groupBy}`;
+      let filteredQuery = globalquery;
+      if (this.checkboxGroupA) {
+        filteredQuery += '&qualification-ranking=1';
+      }
+      if (this.checkboxGroupB) {
+        filteredQuery += '&qualification-ranking=2';
+      }
+      return Promise.all([
+        this.api(`/talents/statistics?${globalquery}`),
+        this.api(`/talents/statistics?${filteredQuery}`),
+      ])
+        .then(([globalResponse, filteredResponse]) => {
+          this.globalStatistics = globalResponse.data;
+          this.filteredTalentStatistics = filteredResponse.data;
         })
         .finally(() => this.clearLoading());
     },
