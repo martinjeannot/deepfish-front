@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <h4 class="mb-4">{{ title }}</h4>
-    <v-tooltip top v-for="domainObject in referenceDomainObjects" :key="domainObject.id" :disabled="hideTooltip">
+    <v-tooltip top v-for="domainObject in referenceDomainObjects" :key="domainObject.id" :disabled="!getTooltipFromL10nKey(domainObject.l10nKey)">
       <v-checkbox 
                   :value="domainObject.id"
                   :label="getLabelFromL10nKey(domainObject.l10nKey)"
@@ -22,7 +22,6 @@
     props: ['conditions', 'title', 'referenceDomainObjects', 'associationResourceName'],
     data: () => ({
       loading: false,
-      hideTooltip: false,
     }),
     computed: {
       ...mapGetters([
@@ -95,25 +94,18 @@
       getTooltipFromL10nKey(l10nKey) {
         switch (l10nKey) {
           case 'Pre-Sales':
-            this.hideTooltip = false;
             return 'Amorcage : tu seras le 1er sales';
           case 'Sales':
-            this.hideTooltip = false;
             return 'BizDev, Commercial, Account Executive, Account Manager, Ingé d\'affaires, etc.';
           case 'Customer Success':
-            this.hideTooltip = false;
             return 'Après-vente ou suivi/relation client';
           case 'Cold calling':
-            this.hideTooltip = false;
             return 'Prospection ou appel à froid';
           case 'New business':
-            this.hideTooltip = false;
             return 'Développement de nouveaux clients/New logo ou nouvelles ventes au sein de client existants';
           case 'Account management':
-            this.hideTooltip = false;
             return 'Gestion de comptes existants';
           case 'Gestion d\'équipe':
-            this.hideTooltip = false;
             return 'Management d\'une équipe commerciale';
           default:
             this.hideTooltip = true;
