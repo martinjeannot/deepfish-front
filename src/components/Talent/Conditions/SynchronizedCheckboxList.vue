@@ -1,13 +1,16 @@
 <template>
   <v-card>
     <h4 class="mb-4">{{ title }}</h4>
-    <v-checkbox v-for="domainObject in referenceDomainObjects"
-                :key="domainObject.id"
-                :value="domainObject.id"
-                :label="getLabelFromL10nKey(domainObject.l10nKey)"
-                v-model="domainObjectsModel"
-                :disabled="loading"
-    ></v-checkbox>
+    <v-tooltip top v-for="domainObject in referenceDomainObjects" :key="domainObject.id" :disabled="hideTooltip">
+      <v-checkbox 
+                  :value="domainObject.id"
+                  :label="getLabelFromL10nKey(domainObject.l10nKey)"
+                  v-model="domainObjectsModel"
+                  :disabled="loading"
+                  slot="activator"
+      ></v-checkbox>
+      <span>{{getTooltipFromL10nKey(domainObject.l10nKey)}}</span>
+    </v-tooltip>
   </v-card>
 </template>
 
@@ -19,6 +22,7 @@
     props: ['conditions', 'title', 'referenceDomainObjects', 'associationResourceName'],
     data: () => ({
       loading: false,
+      hideTooltip: false,
     }),
     computed: {
       ...mapGetters([
@@ -86,6 +90,34 @@
             return 'Maturité : équipe de 20+ sales';
           default:
             return l10nKey;
+        }
+      },
+      getTooltipFromL10nKey(l10nKey) {
+        switch (l10nKey) {
+          case 'Pre-Sales':
+            this.hideTooltip = false;
+            return 'Amorcage : tu seras le 1er sales';
+          case 'Sales':
+            this.hideTooltip = false;
+            return 'BizDev, Commercial, Account Executive, Account Manager, Ingé d\'affaires, etc.';
+          case 'Customer Success':
+            this.hideTooltip = false;
+            return 'Après-vente ou suivi/relation client';
+          case 'Cold calling':
+            this.hideTooltip = false;
+            return 'Prospection ou appel à froid';
+          case 'New business':
+            this.hideTooltip = false;
+            return 'Développement de nouveaux clients/New logo ou nouvelles ventes au sein de client existants';
+          case 'Account management':
+            this.hideTooltip = false;
+            return 'Gestion de comptes existants';
+          case 'Gestion d\'équipe':
+            this.hideTooltip = false;
+            return 'Management d\'une équipe commerciale';
+          default:
+            this.hideTooltip = true;
+            return null;
         }
       },
     },
