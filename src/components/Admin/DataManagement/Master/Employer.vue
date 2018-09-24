@@ -74,7 +74,17 @@
                   <v-tab-item>
                     <v-container>
                       <v-layout row wrap>
-                        <v-card-text>fefzef</v-card-text>
+                        <v-data-table :items="requirements" :headers="headers">
+                          <template slot="items" slot-scope="props">
+                            <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
+                            <td>{{props.item.name}}</td>
+                            <td class="justify-center layout">
+                              <v-btn icon color="primary" :to="{ name: 'AdminDMRequirement', params: {id: props.item.id} }">
+                                <v-icon>visibility</v-icon>
+                              </v-btn>
+                            </td>
+                          </template>
+                        </v-data-table>
                       </v-layout>
                     </v-container>
                   </v-tab-item>
@@ -98,6 +108,12 @@
     props: ['id'],
     data: () => ({
       employer: null,
+      requirements: null,
+      headers: [
+        { text: 'Received at', value: 'createdAt' },
+        { text: 'Name', value: 'name' },
+        { text: 'Actions', value: 'id', sortable: false },
+      ],
     }),
     computed: {
       ...mapGetters([
@@ -129,9 +145,13 @@
     },
     created() {
       this.prepareForApiConsumption(true);
-      this.api(`/employers/${this.id}`)
-        .then((response) => {
-          this.employer = response.data;
+      return Promise.all([
+        this.api(`/employers/${this.id}`),
+        this.api(`/requirements?createdBy=${this.id}`),
+      ])
+        .then(([employerResponse, requirementResponse]) => {
+          this.employer = employerResponse.data;
+          this.requirements = requirementResponse.data._embedded.requirements;
           return this.api(this.employer._links.company.href);
         })
         .then((response) => {
