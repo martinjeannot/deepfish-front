@@ -54,14 +54,31 @@
             </v-flex>
             <v-flex xs8>
               <v-card>
-                <v-card-text>
-                  <v-textarea label="Notes" v-model="employer.notes" prepend-inner-icon="lock" rows="20"></v-textarea>
-                  <div class="text-xs-right">
-                    <v-btn icon fab small color="primary" @click="saveEmployer">
-                      <v-icon>done</v-icon>
-                    </v-btn>
-                  </div>
-                </v-card-text>
+                <v-tabs grow>
+                  <v-tab>Notes</v-tab>
+                  <v-tab>Requirements</v-tab>
+                  <v-tab-item>
+                    <v-container>
+                      <v-layout row wrap>
+                        <v-card-text>
+                          <v-textarea label="Notes" v-model="employer.notes" prepend-inner-icon="lock" rows="20"></v-textarea>
+                          <div class="text-xs-right">
+                            <v-btn icon fab small color="primary" @click="saveEmployer">
+                              <v-icon>done</v-icon>
+                            </v-btn>
+                          </div>
+                        </v-card-text>
+                      </v-layout>
+                    </v-container>
+                  </v-tab-item>
+                  <v-tab-item>
+                    <v-container>
+                      <v-layout row wrap>
+                        <v-card-text>fefzef</v-card-text>
+                      </v-layout>
+                    </v-container>
+                  </v-tab-item>
+                </v-tabs>
               </v-card>
             </v-flex>
           </v-layout>
