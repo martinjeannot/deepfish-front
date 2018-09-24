@@ -18,7 +18,7 @@
         ></v-select>
       </v-flex>
       <v-flex xs12>
-        <div class="subheading font-weight-bold">par "Mets-toi en valeur en quelques mots (visible par le recruteur) :</div>
+        <div class="subheading font-weight-bold">"Mets-toi en valeur en quelques mots (visible par le recruteur) :</div>
         <div>Quelle opportunité recherches-tu ? Quelles sont tes qualités ?</div>
       </v-flex>
       <v-form v-model="valid" ref="form" @submit.prevent="submitSelfPitch" style="width: 100%">
