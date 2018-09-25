@@ -49,15 +49,42 @@
             </v-flex>
             <v-flex xs8>
               <v-card>
-                <v-card-text>
-                  <v-textarea label="Description" v-model="company.description" rows="9"></v-textarea>
-                  <div class="text-xs-right">
-                    <v-btn icon fab small color="primary" @click="saveCompany">
-                      <v-icon>done</v-icon>
-                    </v-btn>
-                  </div>
-                </v-card-text>
-              </v-card>
+                <v-tabs grow>
+                    <v-tab>Notes</v-tab>
+                    <v-tab>Requirements</v-tab>
+                    <v-tab-item>
+                      <v-container>
+                        <v-layout row wrap>
+                          <v-card-text>
+                            <v-textarea label="Description" v-model="company.description" rows="9"></v-textarea>
+                            <div class="text-xs-right">
+                              <v-btn icon fab small color="primary" @click="saveCompany">
+                                <v-icon>done</v-icon>
+                              </v-btn>
+                            </div>
+                          </v-card-text>
+                        </v-layout>
+                      </v-container>
+                    </v-tab-item>
+                    <v-tab-item>
+                      <v-container>
+                        <v-layout row wrap>
+                          <v-data-table :items="requirements" :headers="headers">
+                            <template slot="items" slot-scope="props">
+                              <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
+                              <td>{{props.item.name}}</td>
+                              <td class="justify-center layout">
+                                <v-btn icon color="primary" :to="{ name: 'AdminDMRequirement', params: {id: props.item.id} }">
+                                  <v-icon>visibility</v-icon>
+                                </v-btn>
+                              </td>
+                            </template>
+                          </v-data-table>
+                        </v-layout>
+                      </v-container>
+                    </v-tab-item>
+                  </v-tabs>
+              </v-card> 
             </v-flex>
           </v-layout>
         </v-flex>
@@ -76,6 +103,12 @@
     props: ['id'],
     data: () => ({
       company: null,
+      requirements: null,
+      headers: [
+        { text: 'Received at', value: 'createdAt' },
+        { text: 'Name', value: 'name' },
+        { text: 'Actions', value: 'id', sortable: false },
+      ],
     }),
     computed: {
       ...mapGetters([
@@ -109,10 +142,13 @@
     },
     created() {
       this.prepareForApiConsumption(true);
-      this
-        .api(`/companies/${this.id}?projection=default`)
-        .then((response) => {
-          this.company = response.data;
+      return Promise.all([
+        this.api(`/companies/${this.id}?projection=default`),
+        this.api(`/requirements?company=${this.id}`),
+      ])
+        .then(([companiesResponse, requirementsResponse]) => {
+          this.company = companiesResponse.data;
+          this.requirements = requirementsResponse.data._embedded.requirements;
           return this.api(this.company._links.employers.href);
         })
         .then((response) => {
