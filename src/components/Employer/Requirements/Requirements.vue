@@ -9,7 +9,7 @@
       <v-layout v-if="alertComponent">
         <v-flex xs12 sm6 offset-sm3>
           <base-alert :type="alertComponent.type" :message="alertComponent.message" :rawHtml="alertComponent.rawHtml"
-                      @dismissed="onAlertComponentDismissed"></base-alert>
+            @dismissed="onAlertComponentDismissed"></base-alert>
         </v-flex>
       </v-layout>
       <v-layout>
@@ -23,15 +23,15 @@
                 <v-subheader>Mes besoins</v-subheader>
               </template>
               <template v-for="(requirement, index) in requirements">
-                <v-subheader v-if="index === 0">Mes besoins</v-subheader>
-                <v-divider></v-divider>
-                <v-list-tile :key="requirement.id">
+                <v-subheader v-if="index === 0" :key="requirement.id + '-subheader'">Mes besoins</v-subheader>
+                <v-divider :key="requirement.id + '-divider'"></v-divider>
+                <v-list-tile :key="requirement.id + '-list-tile'">
                   <v-list-tile-content>
                     <v-list-tile-title>{{ requirement.name }}</v-list-tile-title>
-                    <v-list-tile-sub-title>
-                      Je recrute un profil {{ requirement.jobType.l10nKey
-                      }} avec une expérience {{ requirement.seniority.l10nKey }} sur {{ requirement.location
-                      }} pour un salaire fixe maxi de {{ requirement.fixedSalary / 1000 }}K€
+                    <v-list-tile-sub-title v-if="requirement.jobType">
+                      Je recrute un profil {{ requirement.jobType.l10nKey }} avec une expérience {{ requirement.seniority.l10nKey
+                      }} sur {{ requirement.location }} pour un salaire fixe maxi
+                      de {{ requirement.fixedSalary / 1000 }}K€
                     </v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
@@ -45,42 +45,37 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
-  export default {
-    name: 'employer-requirements',
-    data: () => ({
-      requirements: [],
-    }),
-    computed: {
-      ...mapGetters([
-        'api',
-        'loading',
-        'alertComponent',
-        'user',
-      ]),
-    },
-    methods: {
-      ...mapActions([
-        'prepareForApiConsumption',
-        'setErrorAfterApiConsumption',
-        'onAlertComponentDismissed',
-        'clearLoading',
-      ]),
-    },
-    created() {
-      this.prepareForApiConsumption();
-      this
-        .api(`/requirements/search/findByCompany?company=/${this.user.company.id}&projection=default`)
-        .then((response) => {
-          this.requirements = response.data._embedded.requirements;
-        })
-        .catch(() => this.setErrorAfterApiConsumption())
-        .finally(() => this.clearLoading());
-    },
-  };
+export default {
+  name: 'employer-requirements',
+  data: () => ({
+    requirements: [],
+  }),
+  computed: {
+    ...mapGetters(['api', 'loading', 'alertComponent', 'user']),
+  },
+  methods: {
+    ...mapActions([
+      'prepareForApiConsumption',
+      'setErrorAfterApiConsumption',
+      'onAlertComponentDismissed',
+      'clearLoading',
+    ]),
+  },
+  created() {
+    this.prepareForApiConsumption();
+    this.api(
+      `/requirements/search/findByCompany?company=/${this.user.company.id}&projection=default`,
+    )
+      .then((response) => {
+        this.requirements = response.data._embedded.requirements;
+      })
+      .catch(() => this.setErrorAfterApiConsumption())
+      .finally(() => this.clearLoading());
+  },
+};
 </script>
 
 <style scoped>
-
 </style>
