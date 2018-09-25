@@ -108,7 +108,6 @@
           case 'Gestion d\'équipe':
             return 'Management d\'une équipe commerciale';
           default:
-            this.hideTooltip = true;
             return null;
         }
       },
