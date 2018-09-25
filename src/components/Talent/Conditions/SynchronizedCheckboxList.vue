@@ -94,7 +94,7 @@
       getTooltipFromL10nKey(l10nKey) {
         switch (l10nKey) {
           case 'Pre-Sales':
-            return 'Amorcage : tu seras le 1er sales';
+            return 'Ingénieur avant-vente';
           case 'Sales':
             return 'BizDev, Commercial, Account Executive, Account Manager, Ingé d\'affaires, etc.';
           case 'Customer Success':
