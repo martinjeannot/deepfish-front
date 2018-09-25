@@ -7,7 +7,7 @@
     </v-layout>
     <v-layout v-else wrap class="d-block">
       <v-flex xs12>
-        <span class="subheading">Combien d'années d'expérience professionnelle as-tu ?</span>
+        <span class="subheading font-weight-bold">Combien d'années d'expérience professionnelle as-tu ?</span>
       </v-flex>
       <v-flex xs12 sm3>
         <v-select
@@ -18,7 +18,7 @@
         ></v-select>
       </v-flex>
       <v-flex xs12>
-        <div class="subheading">Mets-toi en valeur en quelques mots :</div>
+        <div class="subheading font-weight-bold">Mets-toi en valeur en quelques mots (visible par le recruteur) :</div>
         <div>Quelle opportunité recherches-tu ? Quelles sont tes qualités ?</div>
       </v-flex>
       <v-form v-model="valid" ref="form" @submit.prevent="submitSelfPitch" style="width: 100%">
