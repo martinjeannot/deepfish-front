@@ -115,7 +115,6 @@ export default {
     bulkDeclinationDialog: false,
     bulkDeclinationValid: false,
     bulkDeclinationReason: '',
-    toto: 'Ton profil a été décliné<br/>par le recruteur',
   }),
   computed: {
     ...mapGetters(['api', 'loading', 'user', 'menuBadges']),
