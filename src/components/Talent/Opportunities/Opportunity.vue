@@ -17,6 +17,9 @@
             <div class="grey--text">Fonction proposée : {{ opportunity.jobType.l10nKey }}</div>
             <div class="grey--text">Localisation : {{ opportunity.location }}</div>
             <div class="grey--text">Salaire fixe : il respecte tes conditions</div>
+            <div v-if="opportunity.talentStatus !== 'PENDING' && opportunity.talentStatus !== 'DECLINED'">
+              <v-chip :color="getOpportunityStatusColor(opportunity.employerStatus)">{{getLabelFromStatus(opportunity.employerStatus)}}</v-chip>
+            </div>
           </v-flex>
         </v-card-title>
         <v-card-text>
@@ -91,7 +94,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 
 const rules = {
   required: value => !!value || 'This field is required',
@@ -111,6 +114,7 @@ export default {
   }),
   computed: {
     ...mapGetters(['api', 'loading', 'user', 'menuBadges']),
+    ...mapState(['getOpportunityStatusColor']),
   },
   methods: {
     ...mapActions([
@@ -176,6 +180,18 @@ export default {
           this.fetchData();
           this.showSnackbar('Erreur');
         });
+    },
+    getLabelFromStatus(status) {
+      switch (status) {
+        case 'ACCEPTED':
+          return 'Ton profil a été accepté par le recruteur';
+        case 'PENDING':
+          return 'Ton profil est en attente du recruteur';
+        case 'DECLINED':
+          return 'Ton profil a été décliné par le recruteur';
+        default:
+          return null;
+      }
     },
   },
   created() {
