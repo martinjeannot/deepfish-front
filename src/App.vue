@@ -83,6 +83,7 @@ export default {
       { icon: 'fab fa-facebook', href: 'https://www.facebook.com/Deepfish-183214365456134' },
       { icon: 'fab fa-twitter', href: 'https://twitter.com/deepfish_co' },
       { icon: 'fab fa-linkedin', href: 'https://www.linkedin.com/company/deepfish' },
+      { icon: 'fab fa-instagram', href: 'https://www.instagram.com/deepfish.co/' },
     ],
   }),
   computed: {
