@@ -61,9 +61,12 @@
                   <v-img :src="props.item.company.logoURL ? props.item.company.logoURL : 'static/img/placeholder_150.jpg'"
                     alt="logo" max-width="100px"></v-img>
                 </v-flex>
-                <v-flex xs8 sm10 md11>
+                <v-flex xs8 sm4 md7>
                   Deepfish t'as proposé un job chez
                   <span style="font-weight: bold">{{ props.item.company.name }}</span>
+                </v-flex>
+                <v-flex xs12 sm6 md4 class="text-xs-center">
+                  <v-chip :color="getOpportunityStatusColor(props.item.employerStatus)">{{getLabelFromStatus(props.item.employerStatus)}}</v-chip>
                 </v-flex>
               </v-card-title>
               <v-card-actions>
@@ -122,7 +125,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 
 export default {
   name: 'talent-opportunities',
@@ -134,9 +137,22 @@ export default {
   }),
   computed: {
     ...mapGetters(['api', 'loading', 'alertComponent', 'user', 'menuBadges']),
+    ...mapState(['getOpportunityStatusColor']),
   },
   methods: {
     ...mapActions(['prepareForApiConsumption', 'clearLoading', 'onAlertComponentDismissed']),
+    getLabelFromStatus(status) {
+      switch (status) {
+        case 'ACCEPTED':
+          return 'Ton profil a été accepté par le recruteur';
+        case 'PENDING':
+          return 'Ton profil est en attente du recruteur';
+        case 'DECLINED':
+          return 'Ton profil a été décliné par le recruteur';
+        default:
+          return null;
+      }
+    },
   },
   created() {
     this.prepareForApiConsumption();
