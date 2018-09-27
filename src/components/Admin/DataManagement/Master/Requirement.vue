@@ -50,15 +50,32 @@
             </v-flex>
             <v-flex xs8>
               <v-card>
-                <v-card-text>
-                  <v-text-field v-model="requirement.name" label="Requirement name"></v-text-field>
-                  <v-textarea label="Notes" v-model="requirement.notes" prepend-inner-icon="lock" rows="27"></v-textarea>
-                  <div class="text-xs-right">
-                    <v-btn icon fab small color="primary" @click="saveRequirement(requirement)">
-                      <v-icon>done</v-icon>
-                    </v-btn>
-                  </div>
-                </v-card-text>
+                <v-tabs grow>
+                  <v-tab>Requirement name</v-tab>
+                  <v-tab>Declination reason</v-tab>
+                  <v-tab-item>
+                    <v-container>
+                      <v-layout row wrap>
+                        <v-card-text>
+                          <v-text-field v-model="requirement.name" label="Requirement name"></v-text-field>
+                          <v-textarea label="Notes" v-model="requirement.notes" prepend-inner-icon="lock" rows="27"></v-textarea>
+                          <div class="text-xs-right">
+                            <v-btn icon fab small color="primary" @click="saveRequirement(requirement)">
+                              <v-icon>done</v-icon>
+                            </v-btn>
+                          </div>
+                        </v-card-text>
+                      </v-layout>
+                    </v-container>
+                  </v-tab-item>
+                  <v-tab-item>
+                    <v-container>
+                      <v-layout row wrap>
+                        IN PROGRESS
+                      </v-layout>
+                    </v-container>
+                  </v-tab-item>
+                </v-tabs>
               </v-card>
             </v-flex>
           </v-layout>
@@ -79,6 +96,7 @@ export default {
   data: () => ({
     requirement: null,
     opportunitiesCounts: null,
+    // currentRequirement: null,
   }),
   computed: {
     ...mapGetters(['api', 'initialLoading', 'loading', 'alertComponent']),
@@ -139,10 +157,12 @@ export default {
     Promise.all([
       this.api(`/requirements/${this.id}?projection=admin`),
       this.api(`/opportunities/counts?requirementId=${this.id}`),
+      // this.api(`/opportunities/${this.id}/requirement`),
     ])
       .then(([requirementResponse, opportunitiesCountsResponse]) => {
         this.requirement = requirementResponse.data;
         this.opportunitiesCounts = opportunitiesCountsResponse.data;
+        // this.currentRequirement = currentRequirementResponse;
       })
       .catch(() => this.setErrorAfterApiConsumption())
       .finally(() => this.clearLoading(true));
