@@ -71,7 +71,13 @@
                   <v-tab-item>
                     <v-container>
                       <v-layout row wrap>
-                        IN PROGRESS
+                        <v-list>
+                          <v-list-tile v-for="(reason, key) in requirementStatus" :key="key">
+                            <v-list-tile-content>
+                              {{reason.employerDeclinationReason}}
+                            </v-list-tile-content>
+                          </v-list-tile>
+                        </v-list>
                       </v-layout>
                     </v-container>
                   </v-tab-item>
@@ -96,7 +102,7 @@ export default {
   data: () => ({
     requirement: null,
     opportunitiesCounts: null,
-    // currentRequirement: null,
+    requirementStatus: null,
   }),
   computed: {
     ...mapGetters(['api', 'initialLoading', 'loading', 'alertComponent']),
@@ -157,12 +163,13 @@ export default {
     Promise.all([
       this.api(`/requirements/${this.id}?projection=admin`),
       this.api(`/opportunities/counts?requirementId=${this.id}`),
-      // this.api(`/opportunities/${this.id}/requirement`),
+      this.api(`/opportunities?requirement=${this.id}`),
     ])
-      .then(([requirementResponse, opportunitiesCountsResponse]) => {
+      .then(([requirementResponse, opportunitiesCountsResponse, currentRequirementResponse]) => {
         this.requirement = requirementResponse.data;
         this.opportunitiesCounts = opportunitiesCountsResponse.data;
-        // this.currentRequirement = currentRequirementResponse;
+        this.requirementStatus = currentRequirementResponse.data._embedded.opportunities
+          .filter(data => data.employerStatus === 'DECLINED');
       })
       .catch(() => this.setErrorAfterApiConsumption())
       .finally(() => this.clearLoading(true));
