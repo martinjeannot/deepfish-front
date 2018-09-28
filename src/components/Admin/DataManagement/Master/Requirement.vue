@@ -72,17 +72,10 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-list>
-                          <v-list-tile v-for="(declinedOpportunity, key) in declinedOpportunities" :key="key">
+                          <v-list-tile v-for="(opportunity, key) in opportunities" :key="key">
                             <v-list-tile-content>
-                              <v-list-tile-sub-title>
-                                <span class='text--primary'>
-                                  {{declinedOpportunity.talent.firstName}}
-                                  {{declinedOpportunity.talent.lastName}}
-                                </span> &mdash; 
-                                {{declinedOpportunity.employerDeclinationReason}}
-                              </v-list-tile-sub-title>
+                              <v-list-tile-sub-title v-html="formattedDeclinationReason(opportunity)"></v-list-tile-sub-title>
                             </v-list-tile-content>
-                              
                           </v-list-tile>
                         </v-list>
                       </v-layout>
@@ -109,7 +102,7 @@ export default {
   data: () => ({
     requirement: null,
     opportunitiesCounts: null,
-    declinedOpportunities: null,
+    opportunities: null,
   }),
   computed: {
     ...mapGetters(['api', 'initialLoading', 'loading', 'alertComponent']),
@@ -164,18 +157,23 @@ export default {
         .then(() => this.showSnackbar('Success'))
         .catch(() => this.showSnackbar('Error'));
     },
+    formattedDeclinationReason(opportunity) {
+      return `<span class='text--primary'>
+                ${opportunity.talent.firstName} ${opportunity.talent.lastName}
+              </span> &mdash; ${opportunity.employerDeclinationReason}`;
+    },
   },
   created() {
     this.prepareForApiConsumption(true);
     Promise.all([
       this.api(`/requirements/${this.id}?projection=admin`),
       this.api(`/opportunities/counts?requirementId=${this.id}`),
-      this.api(`/opportunities?requirements=${this.id}&employerStatus=DECLINED&projection=admin`),
+      this.api(`/opportunities?requirement=${this.id}&employerStatus=DECLINED&projection=admin`),
     ])
       .then(([requirementResponse, opportunitiesCountsResponse, currentRequirementResponse]) => {
         this.requirement = requirementResponse.data;
         this.opportunitiesCounts = opportunitiesCountsResponse.data;
-        this.declinedOpportunities = currentRequirementResponse.data._embedded.opportunities;
+        this.opportunities = currentRequirementResponse.data._embedded.opportunities;
       })
       .catch(() => this.setErrorAfterApiConsumption())
       .finally(() => this.clearLoading(true));
