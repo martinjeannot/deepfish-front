@@ -14,18 +14,26 @@
           </v-flex>
           <v-flex xs9 lg10 pl-3>
             <div class="headline">{{ opportunity.company.name }}</div>
-            <div class="grey--text">Fonction proposée : {{ opportunity.jobType.l10nKey }}</div>
+            <div class="grey--text">Fonction proposée : {{
+              opportunity.jobType.l10nKey }}</div>
             <div class="grey--text">Localisation : {{ opportunity.location }}</div>
             <div class="grey--text">Salaire fixe : il respecte tes conditions</div>
+            <div v-if="opportunity.talentStatus === 'ACCEPTED'">
+              <v-chip :color="getOpportunityStatusColor(opportunity.employerStatus)"
+                v-html="getLabelFromStatus(opportunity.employerStatus)" class="text-xs-center px-3">
+              </v-chip>
+            </div>
           </v-flex>
         </v-card-title>
         <v-card-text>
           <v-flex xs12 class="pb-2">
-            <span style="font-style: italic">{{ opportunity.company.name }}</span> :
+            <span style="font-style: italic">{{ opportunity.company.name }}</span>
+            :
           </v-flex>
           <v-flex xs12 class="pb-3" style="white-space: pre-wrap" v-html="opportunity.company.description"
             v-linkified></v-flex>
-          <v-flex xs12 style="white-space: pre-wrap" v-html="opportunity.pitch" v-linkified></v-flex>
+          <v-flex xs12 style="white-space: pre-wrap" v-html="opportunity.pitch"
+            v-linkified></v-flex>
         </v-card-text>
         <v-card-actions v-if="opportunity.talentStatus === 'PENDING'">
           <v-layout row wrap class="text-xs-center">
@@ -33,10 +41,12 @@
               <v-btn flat color="success" @click="accept(opportunity)">J'accepte</v-btn>
             </v-flex>
             <v-flex xs12 sm4>
-              <v-btn flat color="warning" @click="declinationDialog = true">Je refuse</v-btn>
+              <v-btn flat color="warning" @click="declinationDialog = true">Je
+                refuse</v-btn>
             </v-flex>
             <v-flex xs12 sm4>
-              <v-btn flat color="error" @click="bulkDeclinationDialog = true">Je me désactive</v-btn>
+              <v-btn flat color="error" @click="bulkDeclinationDialog = true">Je
+                me désactive</v-btn>
             </v-flex>
           </v-layout>
         </v-card-actions>
@@ -50,7 +60,8 @@
               <h4>Explique-nous la raison de ton refus en quelques mots</h4>
             </v-flex>
             <v-flex xs12>
-              <v-textarea v-model="opportunity.talentDeclinationReason" multi-line rows="7" :rules="[rules.required]"></v-textarea>
+              <v-textarea v-model="opportunity.talentDeclinationReason"
+                multi-line rows="7" :rules="[rules.required]"></v-textarea>
             </v-flex>
             <v-flex xs12 class="text-xs-right">
               <v-btn type="submit" fab small color="primary" :disabled="!declinationValid">
@@ -70,7 +81,8 @@
             </v-flex>
             <v-flex xs11>
               <h3>
-                Attention, cette action entraînera le refus de toutes tes opportunités en attente
+                Attention, cette action entraînera le refus de toutes tes
+                opportunités en attente
                 et la désactivation de ton profil
               </h3>
             </v-flex>
@@ -78,10 +90,12 @@
               <h4>Explique-nous la raison de ton refus en quelques mots</h4>
             </v-flex>
             <v-flex xs12>
-              <v-textarea v-model="bulkDeclinationReason" multi-line rows="7" :rules="[rules.required]"></v-textarea>
+              <v-textarea v-model="bulkDeclinationReason" multi-line rows="7"
+                :rules="[rules.required]"></v-textarea>
             </v-flex>
             <v-flex xs12 class="text-xs-center">
-              <v-btn type="submit" flat color="error" :disabled="!bulkDeclinationValid">Je confirme cette action</v-btn>
+              <v-btn type="submit" flat color="error" :disabled="!bulkDeclinationValid">Je
+                confirme cette action</v-btn>
             </v-flex>
           </v-layout>
         </v-form>
@@ -91,7 +105,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 
 const rules = {
   required: value => !!value || 'This field is required',
@@ -111,6 +125,7 @@ export default {
   }),
   computed: {
     ...mapGetters(['api', 'loading', 'user', 'menuBadges']),
+    ...mapState(['getOpportunityStatusColor']),
   },
   methods: {
     ...mapActions([
@@ -176,6 +191,18 @@ export default {
           this.fetchData();
           this.showSnackbar('Erreur');
         });
+    },
+    getLabelFromStatus(status) {
+      switch (status) {
+        case 'ACCEPTED':
+          return 'Ton profil a été accepté par le recruteur';
+        case 'PENDING':
+          return 'Ton profil est en attente du recruteur';
+        case 'DECLINED':
+          return 'Ton profil a été décliné par le recruteur';
+        default:
+          return 'Ton profil est en cours de validation';
+      }
     },
   },
   created() {

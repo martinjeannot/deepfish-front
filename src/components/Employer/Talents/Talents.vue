@@ -42,9 +42,12 @@
                 </v-flex>
                 <v-flex xs8 sm4>
                   <h4>{{ props.item.talent.firstName }} {{ props.item.talent.lastName[0] }}.</h4>
-                  <v-chip v-if="isTalentPending(props.item)" color="red" text-color="white">
-                    Nouveau profil à traiter
-                  </v-chip>
+                  <v-tooltip top>
+                    <v-chip slot="activator" v-if="isTalentPending(props.item)" color="red" text-color="white">
+                      Nouveau profil à traiter
+                    </v-chip>
+                    <span>Il faut nous donner une réponse pour ce profil (accepté ou refusé ?)</span>
+                  </v-tooltip>
                   <h4 v-if="isTalentAccepted(props.item)" class="red--text">
                     <v-icon>phone</v-icon>
                     {{ props.item.talent.phoneNumber }}
@@ -89,10 +92,13 @@
               <v-card-title v-if="isTalentPending(props.item)">
                 <v-layout row wrap>
                   <v-flex xs12 sm4 class="text-xs-center">
-                    <v-btn color="success" :loading="loading" :disabled="loading"
-                           @click.native.stop="acceptTalent(props.item)">
-                      J'accepte ce talent
-                    </v-btn>
+                    <v-tooltip top>
+                      <v-btn slot="activator" color="success" :loading="loading" :disabled="loading"
+                            @click.native.stop="acceptTalent(props.item)">
+                        J'accepte ce talent
+                      </v-btn>
+                      <span>En acceptant ce talent, vous accédez à ses coordonnées</span>
+                    </v-tooltip>
                   </v-flex>
                   <v-flex xs12 sm4 class="text-xs-center">
                     <v-btn color="info" :loading="loading" :disabled="loading"

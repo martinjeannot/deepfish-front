@@ -7,7 +7,8 @@
   <v-layout row wrap v-else>
     <v-layout v-if="alertComponent">
       <v-flex xs12 sm6 offset-sm3>
-        <base-alert :type="alertComponent.type" :message="alertComponent.message" @dismissed="onAlertComponentDismissed"></base-alert>
+        <base-alert :type="alertComponent.type" :message="alertComponent.message"
+          @dismissed="onAlertComponentDismissed"></base-alert>
       </v-flex>
     </v-layout>
     <v-flex xs12>
@@ -15,7 +16,8 @@
     </v-flex>
     <v-flex xs12>
       <v-container fluid grid-list-md>
-        <v-data-iterator content-tag="v-layout" row wrap :items="pendingOpportunities" :hide-actions="true">
+        <v-data-iterator content-tag="v-layout" row wrap :items="pendingOpportunities"
+          :hide-actions="true">
           <v-flex xs12 slot="item" slot-scope="props">
             <v-card>
               <v-card-title>
@@ -53,7 +55,8 @@
     </v-flex>
     <v-flex xs12>
       <v-container fluid grid-list-md>
-        <v-data-iterator content-tag="v-layout" row wrap :items="acceptedOpportunities" :hide-actions="true">
+        <v-data-iterator content-tag="v-layout" row wrap :items="acceptedOpportunities"
+          :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card>
               <v-card-title>
@@ -61,16 +64,20 @@
                   <v-img :src="props.item.company.logoURL ? props.item.company.logoURL : 'static/img/placeholder_150.jpg'"
                     alt="logo" max-width="100px"></v-img>
                 </v-flex>
-                <v-flex xs8 sm10 md11>
+                <v-flex xs8 sm4 md7>
                   Deepfish t'as proposé un job chez
                   <span style="font-weight: bold">{{ props.item.company.name }}</span>
+                </v-flex>
+                <v-flex xs12 sm6 md4 class="text-xs-center">
+                  <v-chip :color="getOpportunityStatusColor(props.item.employerStatus)">{{
+                    getLabelFromStatus(props.item.employerStatus) }}</v-chip>
                 </v-flex>
               </v-card-title>
               <v-card-actions>
                 <v-flex xs12 class="text-xs-center">
-                <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
-                  Voir l'opportunité
-                </v-btn>
+                  <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
+                    Voir l'opportunité
+                  </v-btn>
                 </v-flex>
               </v-card-actions>
             </v-card>
@@ -88,7 +95,8 @@
     </v-flex>
     <v-flex xs12>
       <v-container fluid grid-list-md>
-        <v-data-iterator content-tag="v-layout" row wrap :items="declinedOpportunities" :hide-actions="true">
+        <v-data-iterator content-tag="v-layout" row wrap :items="declinedOpportunities"
+          :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card>
               <v-card-title>
@@ -103,9 +111,9 @@
               </v-card-title>
               <v-card-actions>
                 <v-flex xs12 class="text-xs-center">
-                <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
-                  Voir l'opportunité
-                </v-btn>
+                  <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
+                    Voir l'opportunité
+                  </v-btn>
                 </v-flex>
               </v-card-actions>
             </v-card>
@@ -122,7 +130,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 
 export default {
   name: 'talent-opportunities',
@@ -134,9 +142,22 @@ export default {
   }),
   computed: {
     ...mapGetters(['api', 'loading', 'alertComponent', 'user', 'menuBadges']),
+    ...mapState(['getOpportunityStatusColor']),
   },
   methods: {
     ...mapActions(['prepareForApiConsumption', 'clearLoading', 'onAlertComponentDismissed']),
+    getLabelFromStatus(status) {
+      switch (status) {
+        case 'ACCEPTED':
+          return 'Ton profil a été accepté par le recruteur';
+        case 'PENDING':
+          return 'Ton profil est en attente du recruteur';
+        case 'DECLINED':
+          return 'Ton profil a été décliné par le recruteur';
+        default:
+          return 'Ton profil est en cours de validation';
+      }
+    },
   },
   created() {
     this.prepareForApiConsumption();

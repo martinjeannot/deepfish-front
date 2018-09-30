@@ -1,13 +1,16 @@
 <template>
   <v-card>
     <h4 class="mb-4">{{ title }}</h4>
-    <v-checkbox v-for="domainObject in referenceDomainObjects"
-                :key="domainObject.id"
-                :value="domainObject.id"
-                :label="getLabelFromL10nKey(domainObject.l10nKey)"
-                v-model="domainObjectsModel"
-                :disabled="loading"
-    ></v-checkbox>
+    <v-tooltip top v-for="domainObject in referenceDomainObjects" :key="domainObject.id" :disabled="!getTooltipFromL10nKey(domainObject.l10nKey)">
+      <v-checkbox 
+                  :value="domainObject.id"
+                  :label="getLabelFromL10nKey(domainObject.l10nKey)"
+                  v-model="domainObjectsModel"
+                  :disabled="loading"
+                  slot="activator"
+      ></v-checkbox>
+      <span>{{getTooltipFromL10nKey(domainObject.l10nKey)}}</span>
+    </v-tooltip>
   </v-card>
 </template>
 
@@ -86,6 +89,26 @@
             return 'Maturité : équipe de 20+ sales';
           default:
             return l10nKey;
+        }
+      },
+      getTooltipFromL10nKey(l10nKey) {
+        switch (l10nKey) {
+          case 'Pre-Sales':
+            return 'Ingénieur avant-vente';
+          case 'Sales':
+            return 'BizDev, Commercial, Account Executive, Account Manager, Ingé d\'affaires, etc.';
+          case 'Customer Success':
+            return 'Après-vente ou suivi/relation client';
+          case 'Cold calling':
+            return 'Prospection ou appel à froid';
+          case 'New business':
+            return 'Développement de nouveaux clients/New logo ou nouvelles ventes au sein de client existants';
+          case 'Account management':
+            return 'Gestion de comptes existants';
+          case 'Gestion d\'équipe':
+            return 'Management d\'une équipe commerciale';
+          default:
+            return null;
         }
       },
     },

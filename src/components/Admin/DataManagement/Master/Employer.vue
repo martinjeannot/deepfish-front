@@ -13,14 +13,15 @@
         <v-flex xs12>
           <v-flex xs12 v-if="alertComponent">
             <base-alert :type="alertComponent.type" :message="alertComponent.message"
-                        @dismissed="onAlertComponentDismissed"></base-alert>
+              @dismissed="onAlertComponentDismissed"></base-alert>
           </v-flex>
           <v-layout v-if="employer">
             <v-flex xs4 class="pr-3">
               <v-card>
                 <v-card-text>
                   <v-flex xs12 class="text-xs-center">
-                    <h2>{{ employer.lastName.toUpperCase() }} {{ employer.firstName }}</h2>
+                    <h2>{{ employer.lastName.toUpperCase() }} {{
+                      employer.firstName }}</h2>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center mb-3">
                     <h4>
@@ -30,10 +31,12 @@
                     </h4>
                   </v-flex>
                   <v-flex xs12 class="mb-3">
-                    <span style="font-weight: bold">Registration</span> : {{ employer.createdAt | formatDate('LLL') }}
+                    <span style="font-weight: bold">Registration</span> : {{
+                    employer.createdAt | formatDate('LLL') }}
                   </v-flex>
                   <v-flex xs12 class="mb-3">
-                    <span style="font-weight: bold">Last Sign-in</span> : {{ employer.lastSignedInAt | formatDate('LLL')
+                    <span style="font-weight: bold">Last Sign-in</span> : {{
+                    employer.lastSignedInAt | formatDate('LLL')
                     }}
                   </v-flex>
                   <v-flex xs12 class="mb-3">
@@ -54,14 +57,34 @@
             </v-flex>
             <v-flex xs8>
               <v-card>
-                <v-card-text>
-                  <v-textarea label="Notes" v-model="employer.notes" prepend-inner-icon="lock" rows="20"></v-textarea>
-                  <div class="text-xs-right">
-                    <v-btn icon fab small color="primary" @click="saveEmployer">
-                      <v-icon>done</v-icon>
-                    </v-btn>
-                  </div>
-                </v-card-text>
+                <v-tabs grow>
+                  <v-tab>Notes</v-tab>
+                  <v-tab>Requirements</v-tab>
+                  <v-tab-item>
+                    <v-card-text>
+                      <v-textarea label="Notes" v-model="employer.notes"
+                        prepend-inner-icon="lock" rows="20"></v-textarea>
+                      <div class="text-xs-right">
+                        <v-btn icon fab small color="primary" @click="saveEmployer">
+                          <v-icon>done</v-icon>
+                        </v-btn>
+                      </div>
+                    </v-card-text>
+                  </v-tab-item>
+                  <v-tab-item>
+                    <v-data-table :items="requirements" :headers="headers">
+                      <template slot="items" slot-scope="props">
+                        <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
+                        <td>{{props.item.name}}</td>
+                        <td class="justify-center layout">
+                          <v-btn icon color="primary" :to="{ name: 'AdminDMRequirement', params: {id: props.item.id} }">
+                            <v-icon>visibility</v-icon>
+                          </v-btn>
+                        </td>
+                      </template>
+                    </v-data-table>
+                  </v-tab-item>
+                </v-tabs>
               </v-card>
             </v-flex>
           </v-layout>
@@ -72,60 +95,64 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
-  import DataManagementNavigation from '../Navigation';
+import { mapGetters, mapActions } from 'vuex';
+import DataManagementNavigation from '../Navigation';
 
-  export default {
-    name: 'data-management-employer',
-    components: { DataManagementNavigation },
-    props: ['id'],
-    data: () => ({
-      employer: null,
-    }),
-    computed: {
-      ...mapGetters([
-        'api',
-        'initialLoading',
-        'loading',
-        'alertComponent',
-      ]),
+export default {
+  name: 'data-management-employer',
+  components: { DataManagementNavigation },
+  props: ['id'],
+  data: () => ({
+    employer: null,
+    requirements: null,
+    headers: [
+      { text: 'Received at', value: 'createdAt' },
+      { text: 'Name', value: 'name' },
+      { text: 'Actions', value: 'id', sortable: false },
+    ],
+  }),
+  computed: {
+    ...mapGetters(['api', 'initialLoading', 'loading', 'alertComponent']),
+  },
+  methods: {
+    ...mapActions([
+      'prepareForApiConsumption',
+      'clearLoading',
+      'showSnackbar',
+      'showSuccessSnackbar',
+      'setErrorAfterApiConsumption',
+      'onAlertComponentDismissed',
+      'signInAs',
+    ]),
+    saveEmployer() {
+      const employerData = Object.assign({}, this.employer);
+      // linked refs deletion
+      delete employerData.company;
+      this.api
+        .patch(this.employer._links.self.href, employerData)
+        .then(() => this.showSnackbar('Success'))
+        .catch(() => this.showSnackbar('Error'));
     },
-    methods: {
-      ...mapActions([
-        'prepareForApiConsumption',
-        'clearLoading',
-        'showSnackbar',
-        'showSuccessSnackbar',
-        'setErrorAfterApiConsumption',
-        'onAlertComponentDismissed',
-        'signInAs',
-      ]),
-      saveEmployer() {
-        const employerData = Object.assign({}, this.employer);
-        // linked refs deletion
-        delete employerData.company;
-        this.api
-          .patch(this.employer._links.self.href, employerData)
-          .then(() => this.showSnackbar('Success'))
-          .catch(() => this.showSnackbar('Error'));
-      },
-    },
-    created() {
-      this.prepareForApiConsumption(true);
-      this.api(`/employers/${this.id}`)
-        .then((response) => {
-          this.employer = response.data;
-          return this.api(this.employer._links.company.href);
-        })
-        .then((response) => {
-          this.employer.company = response.data;
-        })
-        .catch(() => this.setErrorAfterApiConsumption())
-        .finally(() => this.clearLoading(true));
-    },
-  };
+  },
+  created() {
+    this.prepareForApiConsumption(true);
+    return Promise.all([
+      this.api(`/employers/${this.id}`),
+      this.api(`/requirements?createdBy=${this.id}`),
+    ])
+      .then(([employerResponse, requirementsResponse]) => {
+        this.employer = employerResponse.data;
+        this.requirements = requirementsResponse.data._embedded.requirements;
+        return this.api(this.employer._links.company.href);
+      })
+      .then((response) => {
+        this.employer.company = response.data;
+      })
+      .catch(() => this.setErrorAfterApiConsumption())
+      .finally(() => this.clearLoading(true));
+  },
+};
 </script>
 
 <style scoped>
-
 </style>

@@ -8,8 +8,7 @@
     <v-flex xs12>
       <v-layout v-if="alertComponent">
         <v-flex xs12 sm6 offset-sm3>
-          <base-alert :type="alertComponent.type" :message="alertComponent.message"
-                      @dismissed="onAlertComponentDismissed"></base-alert>
+          <base-alert :type="alertComponent.type" :message="alertComponent.message" @dismissed="onAlertComponentDismissed"></base-alert>
         </v-flex>
       </v-layout>
       <v-layout>
@@ -27,18 +26,17 @@
               <v-card-text>
                 <span>Je recrute un profil&nbsp;</span>
                 <v-select :items="jobTypes" v-model="requirement.jobType" item-value="_links.self.href"
-                          item-text="l10nKey"
-                          hide-details append-icon="" class="d-inline-flex w-auto"></v-select>
+                  item-text="l10nKey" hide-details append-icon="" class="d-inline-flex w-auto"></v-select>
                 <span>avec une expérience&nbsp;</span>
                 <v-select :items="seniorities" v-model="requirement.seniority" item-value="_links.self.href"
-                          item-text="l10nKey" hide-details append-icon="" class="d-inline-flex w-auto"></v-select>
+                  item-text="l10nKey" hide-details append-icon="" class="d-inline-flex w-auto"></v-select>
                 <span>sur&nbsp;</span>
-                <v-text-field placeholder="Paris" v-model="requirement.location" :rules="[rules.required]" hide-details
-                              class="d-inline-flex" style="width: 8rem"></v-text-field>
+                <v-text-field placeholder="Paris" v-model="requirement.location" :rules="[rules.required]"
+                  hide-details class="d-inline-flex" style="width: 8rem"></v-text-field>
                 <span>pour un salaire fixe maxi de&nbsp;</span>
                 <span style="white-space: nowrap">
                   <v-text-field type="number" placeholder="45" v-model="fixedSalaryInK" :rules="[rules.positive]"
-                                hide-details class="d-inline-flex" style="width: 4rem"></v-text-field>
+                    hide-details class="d-inline-flex" style="width: 4rem"></v-text-field>
                   K€
                 </span>
                 <v-flex xs12 class="text-xs-right">
@@ -56,106 +54,96 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
-  const rules = {
-    required: value => !!value || 'Ce champ est obligatoire',
-    positive: value => value > 0 || 'La valeur doit être supérieure à 0',
-    passwordLength: value => (!value || (value && value.length >= 6)) || 'Au moins 6 caractères',
-  };
+const rules = {
+  required: value => !!value || 'Ce champ est obligatoire',
+  positive: value => value > 0 || 'La valeur doit être supérieure à 0',
+  passwordLength: value => !value || (value && value.length >= 6) || 'Au moins 6 caractères',
+};
 
-  export default {
-    name: 'employer-requirements',
-    data: () => ({
-      rules,
-      jobTypes: [],
-      seniorities: [],
-      requirement: null,
-      requirementValid: false,
-    }),
-    computed: {
-      ...mapGetters([
-        'api',
-        'loading',
-        'alertComponent',
-        'user',
-      ]),
-      fixedSalaryInK: {
-        get() {
-          return this.requirement.fixedSalary ? this.requirement.fixedSalary / 1000 : '';
-        },
-        set(fixedSalaryInK) {
-          this.requirement.fixedSalary = fixedSalaryInK * 1000;
-        },
+export default {
+  name: 'employer-requirements',
+  data: () => ({
+    rules,
+    jobTypes: [],
+    seniorities: [],
+    requirement: null,
+    requirementValid: false,
+  }),
+  computed: {
+    ...mapGetters(['api', 'loading', 'alertComponent', 'user']),
+    fixedSalaryInK: {
+      get() {
+        return this.requirement.fixedSalary ? this.requirement.fixedSalary / 1000 : '';
+      },
+      set(fixedSalaryInK) {
+        this.requirement.fixedSalary = fixedSalaryInK * 1000;
       },
     },
-    methods: {
-      ...mapActions([
-        'prepareForApiConsumption',
-        'setErrorAfterApiConsumption',
-        'onAlertComponentDismissed',
-        'clearLoading',
-        'setAlertComponent',
-      ]),
-      newRequirement() {
-        return {
-          createdBy: this.user.id,
-          company: `/${this.user.company.id}`,
-          name: 'Mon nouveau besoin',
-          jobType: this.jobTypes[1]._links.self.href,
-          seniority: this.seniorities[0]._links.self.href,
-          location: '',
-          fixedSalary: 0,
-        };
-      },
-      saveRequirement() {
-        if (this.$refs.requirementForm.validate()) {
-          this.prepareForApiConsumption();
-          this.api
-            .post('/requirements', this.requirement)
-            .then((response) => {
-              this.user.requirements.push(response.data);
-              this.$router.push('/employer/requirements');
-              this.setAlertComponent({
-                type: 'success',
-                message: 'Nouveau besoin enregistré ! <a href="https://calendly.com/deepfish/15min/" target="_blank" style="color: white; font-weight: bold">Veuillez choisir un créneau d\'échange pour valider votre besoin en cliquant ici</a>',
-                rawHtml: true,
-              });
-            })
-            .catch(() => this.setErrorAfterApiConsumption())
-            .finally(() => this.clearLoading());
-        }
-      },
+  },
+  methods: {
+    ...mapActions([
+      'prepareForApiConsumption',
+      'setErrorAfterApiConsumption',
+      'onAlertComponentDismissed',
+      'clearLoading',
+      'setAlertComponent',
+    ]),
+    newRequirement() {
+      return {
+        createdBy: this.user.id,
+        company: `/${this.user.company.id}`,
+        name: 'Mon nouveau besoin',
+        jobType: this.jobTypes[1]._links.self.href,
+        seniority: this.seniorities[0]._links.self.href,
+        location: '',
+        fixedSalary: 0,
+      };
     },
-    created() {
-      this.prepareForApiConsumption();
-      Promise
-        .all([
-          this.api('/jobTypes'),
-          this.api('/seniorities'),
-        ])
-        .then(([
-                 jobTypesResponse,
-                 senioritiesResponse,
-               ]) => {
-          this.jobTypes = jobTypesResponse.data._embedded.jobTypes;
-          this.seniorities = senioritiesResponse.data._embedded.seniorities;
-          this.requirement = this.newRequirement();
-          if (!this.user.requirements.length) {
+    saveRequirement() {
+      if (this.$refs.requirementForm.validate()) {
+        this.prepareForApiConsumption();
+        this.api
+          .post('/requirements', this.requirement)
+          .then((response) => {
+            this.user.requirements.push(response.data);
+            this.$router.push('/employer/requirements');
             this.setAlertComponent({
               type: 'success',
-              message: 'Bienvenue sur Deepfish ! Vous pouvez dès maintenant nous confier votre premier besoin en recrutement',
+              message:
+                'Nouveau besoin enregistré ! <a href="https://calendly.com/deepfish/15min/" target="_blank" style="color: white; font-weight: bold">Veuillez choisir un créneau d\'échange pour valider votre besoin en cliquant ici</a>',
+              rawHtml: true,
             });
-          }
-        })
-        .catch(() => this.setErrorAfterApiConsumption())
-        .finally(() => this.clearLoading());
+          })
+          .catch(() => this.setErrorAfterApiConsumption())
+          .finally(() => this.clearLoading());
+      }
     },
-  };
+  },
+  created() {
+    this.prepareForApiConsumption();
+    Promise.all([this.api('/jobTypes'), this.api('/seniorities')])
+      .then(([jobTypesResponse, senioritiesResponse]) => {
+        this.jobTypes = jobTypesResponse.data._embedded.jobTypes;
+        this.seniorities = senioritiesResponse.data._embedded.seniorities;
+        this.requirement = this.newRequirement();
+        if (!this.user.requirements.length) {
+          this.setAlertComponent({
+            type: 'success',
+            message:
+              'Bienvenue sur Deepfish ! Vous pouvez dès maintenant nous confier votre premier besoin en recrutement',
+          });
+        }
+      })
+      .catch(() => this.setErrorAfterApiConsumption())
+      .finally(() => this.clearLoading());
+  },
+};
 </script>
 
 <style scoped>
-  .w-auto {
-    width: auto;
-  }
+.w-auto {
+  width: auto;
+}
 </style>
