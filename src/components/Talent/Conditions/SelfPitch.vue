@@ -27,7 +27,10 @@
                       :readonly="loading"></v-textarea>
         </v-flex>
         <v-flex xs12 class="text-xs-right">
-          <v-btn type="submit" color="primary" :disabled="!valid || loading" :loading="loading">Valider</v-btn>
+          <v-btn 
+            style="position: absolute; bottom: 15px; right: 40px;"
+            type="submit" color="primary" :disabled="!valid || loading" :loading="loading">Valider
+          </v-btn>
         </v-flex>
       </v-form>
     </v-layout>
