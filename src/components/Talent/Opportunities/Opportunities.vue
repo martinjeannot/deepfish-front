@@ -163,7 +163,6 @@ export default {
     this.prepareForApiConsumption();
     this.api(`/opportunities?projection=talent&talent=${this.user.id}&sort=createdAt,desc`)
       .then((response) => {
-        console.log(response);
         this.totalItems = response.data.page.totalElements;
         this.pendingOpportunities = response.data._embedded.opportunities.filter(
           opportunity => opportunity.talentStatus === 'PENDING',
