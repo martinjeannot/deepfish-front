@@ -17,13 +17,17 @@
           <v-card>
             <v-card-text>
               <v-layout row wrap>
-                <v-flex xs8 d-flex align-center>
-                  <h3>{{ talent.firstName }} {{ talent.lastName }}</h3>
-                </v-flex>
-                <v-flex xs4 text-xs-right>
+                <v-flex xs6 md3 d-flex>
                   <v-avatar size="80">
                     <img :src="talent.basicProfile.pictureUrl" alt="picture"/>
                   </v-avatar>
+                </v-flex>
+                <v-flex xs4 md4 d-flex align-center  text-xs-center text-md-left>
+                  <h3>{{ talent.firstName }} {{ talent.lastName }}</h3>
+                </v-flex>
+                <v-flex xs12 md5 d-flex align-center>
+                  <v-btn color="error"  v-if="talent.active" @click="talent.active = !talent.active">Je désactive mon profil</v-btn>
+                  <v-btn color="success" v-else>J'active mon profil</v-btn>
                 </v-flex>
                 <v-flex xs12>
                   <v-form v-model="valid" ref="form" @submit.prevent="saveProfile">
