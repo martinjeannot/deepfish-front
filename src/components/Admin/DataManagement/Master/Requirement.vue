@@ -52,6 +52,10 @@
                       opportunitiesCounts.total }}</h3>
                     <doughnut-chart :data="doughnutChartData"></doughnut-chart>
                   </v-flex>
+                  <v-flex xs12 class="text-xs-center">
+                    <v-btn v-if="requirement.status === 'OPEN'" class="mt-3" color="error" @click="showDialogAlert">Archiver</v-btn>
+                    <v-btn v-else class="mt-3" color="success" @click="openRequirement">Désarchiver</v-btn>
+                  </v-flex>
                 </v-card-text>
               </v-card>
             </v-flex>
@@ -90,6 +94,27 @@
         </v-flex>
       </v-layout>
     </v-flex>
+    <v-dialog v-model="alertDialog" max-width="650px">
+      <v-container style="background-color: white">
+        <v-form @submit.prevent="closedRequirement">
+          <v-layout row wrap>
+            <v-flex xs1>
+              <v-icon>warning</v-icon>
+            </v-flex>
+            <v-flex xs11>
+              <h3>
+                Attention, cette action entraînera la désactivation de ce requierement !
+              </h3>
+            </v-flex>
+            <v-flex xs12>
+            </v-flex>
+            <v-flex xs12 class="text-xs-center">
+              <v-btn type="submit" color="primary" class="mt-4">Valider</v-btn>
+            </v-flex>
+          </v-layout>
+        </v-form>
+      </v-container>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -105,6 +130,7 @@ export default {
     requirement: null,
     opportunitiesCounts: null,
     opportunities: null,
+    alertDialog: false,
   }),
   computed: {
     ...mapGetters(['api', 'initialLoading', 'loading', 'alertComponent']),
@@ -163,6 +189,18 @@ export default {
       return `<span style="display: contents; font-weight: bold">${opportunity.talent.firstName} ${
         opportunity.talent.lastName
       }</span> &mdash; ${opportunity.employerDeclinationReason}`;
+    },
+    closedRequirement() {
+      this.requirement.status = 'CLOSED';
+      this.showDialogAlert();
+      this.saveRequirement(this.requirement);
+    },
+    openRequirement() {
+      this.requirement.status = 'OPEN';
+      this.saveRequirement(this.requirement);
+    },
+    showDialogAlert() {
+      this.alertDialog = !this.alertDialog;
     },
   },
   created() {
