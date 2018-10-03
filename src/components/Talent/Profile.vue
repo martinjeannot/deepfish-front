@@ -87,7 +87,17 @@
       <v-container style="background-color: white">
         <v-form v-model="textReason" @submit.prevent="deactivate()">
           <v-layout row wrap>
-            <v-flex xs12>
+            <v-flex xs1>
+              <v-icon>warning</v-icon>
+            </v-flex>
+            <v-flex xs11>
+              <h3>
+                Attention, cette action entraînera le refus de toutes tes
+                opportunités en attente
+                et la désactivation de ton profil
+              </h3>
+            </v-flex>
+            <v-flex xs12 class="mt-3">
               <h4>Explique-nous la raison de ta désactivation en quelques mots</h4>
             </v-flex>
             <v-flex xs12>
