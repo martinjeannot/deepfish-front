@@ -163,7 +163,6 @@
                 this.hasBeenSuccessfullySubmittedOnce = true;
                 this.$router.push({ name: 'TalentConditions' });
               }
-              console.log(this.talent);
               this.showSuccessSnackbar();
             })
             .catch((/* error */) => {
