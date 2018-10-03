@@ -26,11 +26,11 @@
                   <h3>{{ talent.firstName }} {{ talent.lastName }}</h3>
                 </v-flex>
                 <v-flex xs12 md5 d-flex align-center>
-                  <v-btn color="error"  v-if="talent.active" @click="talent.active = !talent.active">Je désactive mon profil</v-btn>
-                  <v-btn color="success" v-else>J'active mon profil</v-btn>
+                  <v-btn key="disable" color="error"  v-if="talent.active" @click="showDialogReason" slot="activator">Je désactive mon profil</v-btn>
+                  <v-btn key="enable" color="success" v-else @click="activate">J'active mon profil</v-btn>
                 </v-flex>
                 <v-flex xs12>
-                  <v-form v-model="valid" ref="form" @submit.prevent="saveProfile">
+                  <v-form v-model="valid" ref="form" @submit.prevent="saveProfile(true)">
                     <v-flex xs12>
                       <v-text-field label="Email" v-model="talent.email" :rules="[rules.required, rules.email]"
                                     type="email" required></v-text-field>
@@ -83,6 +83,26 @@
         </v-flex>
       </v-layout>
     </v-flex>
+    <v-dialog v-model="declinationDialog" max-width="650px">
+      <v-container style="background-color: white">
+        <v-form v-model="textReason" @submit.prevent="deactivate()">
+          <v-layout row wrap>
+            <v-flex xs12>
+              <h4>Explique-nous la raison de ta désactivation en quelques mots</h4>
+            </v-flex>
+            <v-flex xs12>
+            <v-textarea v-model="talent.deactivationReason"
+              multi-line rows="7" :rules="[rules.required]"></v-textarea>
+            </v-flex>
+            <v-flex xs12 class="text-xs-right">
+              <v-btn type="submit" fab small color="primary" :disabled="!textReason">
+                <v-icon>done</v-icon>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-form>
+      </v-container>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -102,6 +122,8 @@
       rules,
       talent: null,
       hasBeenSuccessfullySubmittedOnce: false,
+      declinationDialog: false,
+      textReason: false,
     }),
     computed: {
       ...mapGetters([
@@ -121,21 +143,37 @@
         'onAlertComponentDismissed',
         'setAlertComponent',
       ]),
-      saveProfile() {
+      saveProfile(redirectOnConditions) {
         if (this.$refs.form.validate()) {
           this.prepareForApiConsumption();
           this.api
             .patch(this.talent._links.self.href, this.talent)
             .then((/* response */) => {
-              this.hasBeenSuccessfullySubmittedOnce = true;
+              if (redirectOnConditions) {
+                this.hasBeenSuccessfullySubmittedOnce = true;
+                this.$router.push({ name: 'TalentConditions' });
+              }
+              console.log(this.talent);
               this.showSuccessSnackbar();
-              this.$router.push({ name: 'TalentConditions' });
             })
             .catch((/* error */) => {
               this.setErrorAfterApiConsumption();
             })
             .finally(() => this.clearLoading());
         }
+      },
+      showDialogReason() {
+        this.declinationDialog = !this.declinationDialog;
+      },
+      deactivate() {
+        this.talent.active = false;
+        this.talent.notes = `${this.talent.notes} ${this.talent.deactivationReason}`;
+        this.declinationDialog = false;
+        this.saveProfile(false);
+      },
+      activate() {
+        this.talent.active = true;
+        this.saveProfile(false);
       },
       fetchInitialData() {
         this.prepareForApiConsumption();
@@ -147,6 +185,7 @@
               this.hasBeenSuccessfullySubmittedOnce = true;
             }
             this.talent = response.data;
+            this.talent.deactivationReason = '';
           })
           .catch((/* error */) => {
             this.setErrorAfterApiConsumption();
