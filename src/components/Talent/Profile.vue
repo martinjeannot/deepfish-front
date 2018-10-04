@@ -175,8 +175,11 @@
         this.declinationDialog = !this.declinationDialog;
       },
       deactivate() {
+        const date = new Date();
         this.talent.active = false;
-        this.talent.notes = `${this.talent.notes} ${this.talent.deactivationReason}`;
+        this.talent.notes = `
+          [${date.getDay()}/${date.getMonth()}/${date.getFullYear()}] - ${this.talent.deactivationReason}
+           ${this.talent.notes}`;
         this.declinationDialog = false;
         this.saveProfile(false);
       },
@@ -194,7 +197,7 @@
               this.hasBeenSuccessfullySubmittedOnce = true;
             }
             this.talent = response.data;
-            this.talent.deactivationReason = '';
+            this.talent.deactivationReason = null;
           })
           .catch((/* error */) => {
             this.setErrorAfterApiConsumption();
