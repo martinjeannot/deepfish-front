@@ -299,7 +299,7 @@
     created() {
       this.prepareForApiConsumption(true);
       this
-        .api(`/opportunities?projection=employer&forwarded=true&requirement.company=${this.user.company.id}&employerStatus=PENDING&employerStatus=ACCEPTED&sort=employerStatus,desc&sort=forwardedAt,desc`)
+        .api(`/opportunities?projection=employer&forwarded=true&requirement.company=${this.user.company.id}&employerStatus=PENDING&employerStatus=ACCEPTED&sort=employerStatus,desc&sort=forwardedAt,desc&requirement.status=OPEN`)
         .then((response) => {
           // sort talents by requirements
           response.data._embedded.opportunities.forEach((opportunity) => {
