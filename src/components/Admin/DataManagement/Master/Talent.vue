@@ -443,6 +443,7 @@
         'setErrorAfterApiConsumption',
         'onAlertComponentDismissed',
         'signInAs',
+        'saveTalent',
       ]),
       activateProfile() {
         this.talent.active = true;
@@ -453,12 +454,7 @@
         this.saveProfile();
       },
       saveProfile() {
-        const profile = Object.assign({}, this.talent);
-        delete profile.conditions;
-        delete profile.qualification;
-        delete profile.opportunities;
-        this.api
-          .patch(this.talent._links.self.href, profile)
+        this.saveTalent(this.talent)
           .then(() => this.showSnackbar('OK'))
           .catch(() => {
             this.showSnackbar('Error');

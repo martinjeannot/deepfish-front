@@ -169,6 +169,10 @@ export default new Vuex.Store({
     },
     saveTalent({ getters }, talent) {
       const talentCopy = Object.assign({}, talent);
+      // linked refs deletion
+      delete talentCopy.conditions;
+      delete talentCopy.qualification;
+      delete talentCopy.opportunities;
       // nested maps deletion (to avoid merging)
       delete talentCopy.basicProfile;
       return getters.api.patch(talentCopy._links.self.href, talentCopy);
