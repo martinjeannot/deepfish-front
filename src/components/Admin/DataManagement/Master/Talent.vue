@@ -526,7 +526,8 @@
                    requirementsResponse,
                  ]) => {
             this.talent = talentResponse.data;
-            this.requirements = requirementsResponse.data._embedded.requirements;
+            this.requirements = requirementsResponse.data._embedded.requirements
+              .filter(requirement => requirement.status === 'OPEN');
             return Promise.all([
               this.api(`${this.talent._links.conditions.href}?projection=default`),
               this.api(this.talent._links.qualification.href),
