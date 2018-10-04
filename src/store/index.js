@@ -167,6 +167,12 @@ export default new Vuex.Store({
     onAlertComponentDismissed({ dispatch }) {
       dispatch('clearError');
     },
+    saveTalent({ getters }, talent) {
+      const talentCopy = Object.assign({}, talent);
+      // nested maps deletion (to avoid merging)
+      delete talentCopy.basicProfile;
+      return getters.api.patch(talentCopy._links.self.href, talentCopy);
+    },
     signUp({ commit, dispatch }, signUpForm) {
       commit(types.CLEAR_ERROR);
       commit(types.SET_LOADING, true);
