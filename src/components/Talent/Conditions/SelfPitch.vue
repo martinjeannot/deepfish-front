@@ -63,6 +63,7 @@
       ...mapActions([
         'showSnackbar',
         'setAlertComponent',
+        'saveTalent',
       ]),
       prepareForApiConsumption(initialLoading = false) {
         this.initialLoading = initialLoading;
@@ -86,8 +87,7 @@
       },
       saveProfile() {
         this.prepareForApiConsumption();
-        return this.api
-          .patch(this.user._links.self.href, this.talent)
+        return this.saveTalent(this.talent)
           .finally(() => this.clearLoading());
       },
     },
