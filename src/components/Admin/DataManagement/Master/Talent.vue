@@ -519,15 +519,14 @@
         Promise
           .all([
             this.api(`/talents/${this.id}`),
-            this.api('/requirements?projection=default&size=1000&sort=createdAt,desc'),
+            this.api('/requirements?projection=default&size=1000&sort=createdAt,desc&status=OPEN'),
           ])
           .then(([
                    talentResponse,
                    requirementsResponse,
                  ]) => {
             this.talent = talentResponse.data;
-            this.requirements = requirementsResponse.data._embedded.requirements
-              .filter(requirement => requirement.status === 'OPEN');
+            this.requirements = requirementsResponse.data._embedded.requirements;
             return Promise.all([
               this.api(`${this.talent._links.conditions.href}?projection=default`),
               this.api(this.talent._links.qualification.href),
