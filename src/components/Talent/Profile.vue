@@ -178,7 +178,7 @@
         const date = new Date();
         this.talent.active = false;
         this.talent.notes = `
-          [${date.getDay()}/${date.getMonth()}/${date.getFullYear()}] - ${this.talent.deactivationReason}
+          [${date.getDay()}/${date.getMonth()}/${date.getFullYear()}] Raison de désactivation : - ${this.talent.deactivationReason}
            ${this.talent.notes}`;
         this.declinationDialog = false;
         this.saveProfile(false);
