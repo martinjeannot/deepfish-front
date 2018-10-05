@@ -126,6 +126,49 @@
         </v-data-iterator>
       </v-container>
     </v-flex>
+    <v-flex xs12>
+      <h2>Opportunités archivées</h2>
+    </v-flex>
+    <v-flex xs12>
+      <v-container fluid grid-list-md>
+        <v-data-iterator content-tag="v-layout" row wrap :items="closedOpportunities"
+          :hide-actions="true">
+          <v-flex slot="item" slot-scope="props" xs12>
+            <v-card  color="brown lighten-4">
+              <v-card-title>
+                <v-flex xs4 sm2 md1>
+                  <v-img :src="props.item.company.logoURL ? props.item.company.logoURL : 'static/img/placeholder_150.jpg'"
+                    alt="logo" max-width="100px"></v-img>
+                </v-flex>
+                <v-flex xs8 sm4 md7>
+                  Deepfish t'as proposé un job chez
+                  <span style="font-weight: bold">{{ props.item.company.name }}</span>
+                </v-flex>
+                <v-flex xs12 sm6 md4 class="text-xs-center">
+                  <v-chip class="grey lighten-2">{{
+                    getLabelFromStatus('CLOSED') }}</v-chip>
+                </v-flex>
+              </v-card-title>
+              <v-card-actions>
+                <v-flex xs12 class="text-xs-center">
+                  <v-tooltip top>
+                  <v-btn slot="activator" flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
+                    Voir l'opportunité
+                  </v-btn>
+                  <span>L'offre n'est plus d'actualité</span>
+                  </v-tooltip>
+                </v-flex>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+          <v-flex xs12 slot="no-data">
+            <v-alert type="info" :value="true">
+              Tu n'as pas encore refusé d'opportunité
+            </v-alert>
+          </v-flex>
+        </v-data-iterator>
+      </v-container>
+    </v-flex>
   </v-layout>
 </template>
 
@@ -138,6 +181,7 @@ export default {
     pendingOpportunities: [],
     acceptedOpportunities: [],
     declinedOpportunities: [],
+    closedOpportunities: [],
     totalItems: 0,
   }),
   computed: {
@@ -154,6 +198,8 @@ export default {
           return 'Ton profil est en attente du recruteur';
         case 'DECLINED':
           return 'Ton profil a été décliné par le recruteur';
+        case 'CLOSED':
+          return 'L\'offre n\'est plus d\'actualité';
         default:
           return 'Ton profil est en cours de validation';
       }
@@ -165,14 +211,17 @@ export default {
       .then((response) => {
         this.totalItems = response.data.page.totalElements;
         this.pendingOpportunities = response.data._embedded.opportunities.filter(
-          opportunity => opportunity.talentStatus === 'PENDING',
+          opportunity => opportunity.talentStatus === 'PENDING' && opportunity.requirement.status === 'OPEN',
         );
         this.menuBadges.opportunities = this.pendingOpportunities.length;
         this.acceptedOpportunities = response.data._embedded.opportunities.filter(
-          opportunity => opportunity.talentStatus === 'ACCEPTED',
+          opportunity => opportunity.talentStatus === 'ACCEPTED' && opportunity.requirement.status === 'OPEN',
         );
         this.declinedOpportunities = response.data._embedded.opportunities.filter(
-          opportunity => opportunity.talentStatus === 'DECLINED',
+          opportunity => opportunity.talentStatus === 'DECLINED' && opportunity.requirement.status === 'OPEN',
+        );
+        this.closedOpportunities = response.data._embedded.opportunities.filter(
+          opportunity => opportunity.requirement.status === 'CLOSED',
         );
       })
       .finally(() => this.clearLoading());
