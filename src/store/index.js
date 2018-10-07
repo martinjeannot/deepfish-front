@@ -248,7 +248,7 @@ export default new Vuex.Store({
         .then((response) => {
           commit(types.SET_USER, response.data);
           // get pending opportunities for menu badge
-          return getters.api(`/opportunities?talent=${accessToken.user_id}&talentStatus=PENDING`);
+          return getters.api(`/opportunities?talent=${accessToken.user_id}&talentStatus=PENDING&requirement.status=OPEN`);
         })
         .then((pendingOpportunitiesResponse) => {
           dispatch('setMenuBadges', { opportunities: pendingOpportunitiesResponse.data._embedded.opportunities.length });
