@@ -443,6 +443,7 @@
         'setErrorAfterApiConsumption',
         'onAlertComponentDismissed',
         'signInAs',
+        'saveTalent',
       ]),
       activateProfile() {
         this.talent.active = true;
@@ -453,12 +454,7 @@
         this.saveProfile();
       },
       saveProfile() {
-        const profile = Object.assign({}, this.talent);
-        delete profile.conditions;
-        delete profile.qualification;
-        delete profile.opportunities;
-        this.api
-          .patch(this.talent._links.self.href, profile)
+        this.saveTalent(this.talent)
           .then(() => this.showSnackbar('OK'))
           .catch(() => {
             this.showSnackbar('Error');
@@ -519,7 +515,7 @@
         Promise
           .all([
             this.api(`/talents/${this.id}`),
-            this.api('/requirements?projection=default&size=1000&sort=createdAt,desc'),
+            this.api('/requirements?projection=default&size=1000&sort=createdAt,desc&status=OPEN'),
           ])
           .then(([
                    talentResponse,

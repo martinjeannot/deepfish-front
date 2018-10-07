@@ -27,7 +27,10 @@
                       :readonly="loading"></v-textarea>
         </v-flex>
         <v-flex xs12 class="text-xs-right">
-          <v-btn type="submit" color="primary" :disabled="!valid || loading" :loading="loading">Valider</v-btn>
+          <v-btn 
+            style="position: absolute; bottom: 15px; right: 40px;"
+            type="submit" color="primary" :disabled="!valid || loading" :loading="loading">Valider
+          </v-btn>
         </v-flex>
       </v-form>
     </v-layout>
@@ -60,6 +63,7 @@
       ...mapActions([
         'showSnackbar',
         'setAlertComponent',
+        'saveTalent',
       ]),
       prepareForApiConsumption(initialLoading = false) {
         this.initialLoading = initialLoading;
@@ -83,8 +87,7 @@
       },
       saveProfile() {
         this.prepareForApiConsumption();
-        return this.api
-          .patch(this.user._links.self.href, this.talent)
+        return this.saveTalent(this.talent)
           .finally(() => this.clearLoading());
       },
     },

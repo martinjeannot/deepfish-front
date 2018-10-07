@@ -18,7 +18,12 @@
               opportunity.jobType.l10nKey }}</div>
             <div class="grey--text">Localisation : {{ opportunity.location }}</div>
             <div class="grey--text">Salaire fixe : il respecte tes conditions</div>
-            <div v-if="opportunity.talentStatus === 'ACCEPTED'">
+            <div v-if="opportunity.requirement.status === 'CLOSED'">
+              <v-chip v-html="getLabelFromStatus(opportunity.requirement.status)" 
+              class="text-xs-center px-3 grey lighten-2">
+              </v-chip>
+            </div>
+            <div v-else-if="opportunity.talentStatus !== 'PENDING'">
               <v-chip :color="getOpportunityStatusColor(opportunity.employerStatus)"
                 v-html="getLabelFromStatus(opportunity.employerStatus)" class="text-xs-center px-3">
               </v-chip>
@@ -36,7 +41,7 @@
             v-linkified></v-flex>
         </v-card-text>
         <v-card-actions v-if="opportunity.talentStatus === 'PENDING'">
-          <v-layout row wrap class="text-xs-center">
+          <v-layout row wrap class="text-xs-center" v-if="opportunity.requirement.status === 'OPEN'">
             <v-flex xs12 sm4>
               <v-btn flat color="success" @click="accept(opportunity)">J'accepte</v-btn>
             </v-flex>
@@ -200,6 +205,8 @@ export default {
           return 'Ton profil est en attente du recruteur';
         case 'DECLINED':
           return 'Ton profil a été décliné par le recruteur';
+        case 'CLOSED':
+          return 'L\'offre n\'est plus d\'actualité';
         default:
           return 'Ton profil est en cours de validation';
       }

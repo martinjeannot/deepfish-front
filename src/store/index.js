@@ -167,6 +167,16 @@ export default new Vuex.Store({
     onAlertComponentDismissed({ dispatch }) {
       dispatch('clearError');
     },
+    saveTalent({ getters }, talent) {
+      const talentCopy = Object.assign({}, talent);
+      // linked refs deletion
+      delete talentCopy.conditions;
+      delete talentCopy.qualification;
+      delete talentCopy.opportunities;
+      // nested maps deletion (to avoid merging)
+      delete talentCopy.basicProfile;
+      return getters.api.patch(talentCopy._links.self.href, talentCopy);
+    },
     signUp({ commit, dispatch }, signUpForm) {
       commit(types.CLEAR_ERROR);
       commit(types.SET_LOADING, true);
@@ -238,7 +248,7 @@ export default new Vuex.Store({
         .then((response) => {
           commit(types.SET_USER, response.data);
           // get pending opportunities for menu badge
-          return getters.api(`/opportunities?talent=${accessToken.user_id}&talentStatus=PENDING`);
+          return getters.api(`/opportunities?talent=${accessToken.user_id}&talentStatus=PENDING&requirement.status=OPEN`);
         })
         .then((pendingOpportunitiesResponse) => {
           dispatch('setMenuBadges', { opportunities: pendingOpportunitiesResponse.data._embedded.opportunities.length });
