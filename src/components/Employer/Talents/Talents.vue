@@ -16,7 +16,8 @@
         <v-card-text>
           <v-layout wrap>
             <v-flex xs12 sm6 class="text-xs-center" style="padding-top: 5%">
-              <h3 class="pb-2 headline font-weight-bold"><span style="text-decoration: underline;">Votre besoin</span> : {{ requirement.name }}</h3>
+              <h3 class="pb-2 headline font-weight-bold"><span style="text-decoration: underline;">Votre besoin</span>
+                : {{ requirement.name }}</h3>
               <div>Nombre de talents Deepfish contactés pour ce besoin : <span
                 style="font-weight: bold">{{ requirement.opportunitiesCounts.total }}</span></div>
             </v-flex>
@@ -43,7 +44,7 @@
                 <v-flex xs8 sm4>
                   <h4>{{ props.item.talent.firstName }} {{ props.item.talent.lastName[0] }}.</h4>
                   <v-tooltip top>
-                    <v-chip v-if="isTalentPending(props.item)" color="red" text-color="white">
+                    <v-chip slot="activator" v-if="isTalentPending(props.item)" color="red" text-color="white">
                       Nouveau profil à traiter
                     </v-chip>
                     <span>Il faut nous donner une réponse pour ce profil (accepté ou refusé ?)</span>
@@ -94,7 +95,7 @@
                   <v-flex xs12 sm4 class="text-xs-center">
                     <v-tooltip top>
                       <v-btn slot="activator" color="success" :loading="loading" :disabled="loading"
-                            @click.native.stop="acceptTalent(props.item)">
+                             @click.native.stop="acceptTalent(props.item)">
                         J'accepte ce talent
                       </v-btn>
                       <span>En acceptant ce talent, vous accédez à ses coordonnées</span>
@@ -299,7 +300,7 @@
     created() {
       this.prepareForApiConsumption(true);
       this
-        .api(`/opportunities?projection=employer&forwarded=true&requirement.company=${this.user.company.id}&employerStatus=PENDING&employerStatus=ACCEPTED&sort=employerStatus,desc&sort=forwardedAt,desc&requirement.status=OPEN`)
+        .api(`/opportunities?projection=employer&forwarded=true&requirement.company=${this.user.company.id}&employerStatus=PENDING&employerStatus=ACCEPTED&requirement.status=OPEN&sort=employerStatus,desc&sort=forwardedAt,desc`)
         .then((response) => {
           // sort talents by requirements
           response.data._embedded.opportunities.forEach((opportunity) => {
