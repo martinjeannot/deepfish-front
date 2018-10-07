@@ -127,7 +127,7 @@
       </v-container>
     </v-flex>
     <v-flex xs12>
-      <h2>Opportunités archivées</h2>
+      <h2>Mes opportunités archivées</h2>
     </v-flex>
     <v-flex xs12>
       <v-container fluid grid-list-md>
