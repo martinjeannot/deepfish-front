@@ -65,7 +65,7 @@
                 </v-flex>
                 <v-flex xs12 sm6 md4 class="text-xs-center" pt-3>
                   <v-chip :color="getOpportunityStatusColor(props.item.employerStatus)"
-                          v-html="getLabelFromOpportunityStatus(props.item.employerStatus)" style="padding: 6px">
+                          v-html="getLabelFromOpportunityStatus(props.item.employerStatus)" class="pa-2">
                   </v-chip>
                 </v-flex>
               </v-card-title>
@@ -138,8 +138,7 @@
                   <span style="font-weight: bold">{{ props.item.company.name }}</span>
                 </v-flex>
                 <v-flex xs12 sm6 md4 class="text-xs-center" pt-3>
-                  <v-chip color="grey lighten-2" v-html="getLabelFromOpportunityStatus('CLOSED')"
-                          style="padding: 6px"></v-chip>
+                  <v-chip color="grey lighten-2" v-html="'L\'offre n\'est plus d\'actualité'" class="pa-2"></v-chip>
                 </v-flex>
               </v-card-title>
               <v-card-actions>
@@ -149,16 +148,11 @@
                            :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
                       Voir l'opportunité
                     </v-btn>
-                    <span>{{ getLabelFromOpportunityStatus('CLOSED') }}</span>
+                    <span>L'offre n'est plus d'actualité</span>
                   </v-tooltip>
                 </v-flex>
               </v-card-actions>
             </v-card>
-          </v-flex>
-          <v-flex xs12 slot="no-data">
-            <v-alert type="info" :value="true">
-              Tu n'as pas encore refusé d'opportunité
-            </v-alert>
           </v-flex>
         </v-data-iterator>
       </v-container>
@@ -180,24 +174,10 @@
     }),
     computed: {
       ...mapGetters(['api', 'loading', 'alertComponent', 'user', 'menuBadges']),
-      ...mapState(['getOpportunityStatusColor']),
+      ...mapState(['getOpportunityStatusColor', 'getLabelFromOpportunityStatus']),
     },
     methods: {
       ...mapActions(['prepareForApiConsumption', 'clearLoading', 'onAlertComponentDismissed']),
-      getLabelFromOpportunityStatus(opportunityStatus) {
-        switch (opportunityStatus) {
-          case 'ACCEPTED':
-            return 'Ton profil a été accepté par le recruteur';
-          case 'PENDING':
-            return 'Ton profil est en attente du recruteur';
-          case 'DECLINED':
-            return 'Ton profil a été décliné par le recruteur';
-          case 'CLOSED':
-            return 'L\'offre n\'est plus d\'actualité';
-          default:
-            return 'Ton profil est en cours de validation';
-        }
-      },
     },
     created() {
       this.prepareForApiConsumption();

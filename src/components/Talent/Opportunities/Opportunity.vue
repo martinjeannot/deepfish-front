@@ -14,32 +14,27 @@
           </v-flex>
           <v-flex xs9 lg10 pl-3>
             <div class="headline">{{ opportunity.company.name }}</div>
-            <div class="grey--text">Fonction proposée : {{
-              opportunity.jobType.l10nKey }}
+            <div class="grey--text">Fonction proposée : {{ opportunity.jobType.l10nKey }}
             </div>
             <div class="grey--text">Localisation : {{ opportunity.location }}</div>
             <div class="grey--text">Salaire fixe : il respecte tes conditions</div>
             <div v-if="opportunity.requirement.status === 'CLOSED'">
-              <v-chip v-html="getLabelFromStatus(opportunity.requirement.status)"
-                      class="text-xs-center px-3 grey lighten-2">
-              </v-chip>
+              <v-chip v-html="'L\'offre n\'est plus d\'actualité'" class="text-xs-center pa-2"></v-chip>
             </div>
             <div v-else-if="opportunity.talentStatus !== 'PENDING'">
               <v-chip :color="getOpportunityStatusColor(opportunity.employerStatus)"
-                      v-html="getLabelFromStatus(opportunity.employerStatus)" class="text-xs-center px-3">
+                      v-html="getLabelFromOpportunityStatus(opportunity.employerStatus)" class="text-xs-center pa-2">
               </v-chip>
             </div>
           </v-flex>
         </v-card-title>
         <v-card-text>
           <v-flex xs12 class="pb-2">
-            <span style="font-style: italic">{{ opportunity.company.name }}</span>
-            :
+            <span style="font-style: italic">{{ opportunity.company.name }}</span> :
           </v-flex>
           <v-flex xs12 class="pb-3" style="white-space: pre-wrap" v-html="opportunity.company.description"
                   v-linkified></v-flex>
-          <v-flex xs12 style="white-space: pre-wrap" v-html="opportunity.pitch"
-                  v-linkified></v-flex>
+          <v-flex xs12 style="white-space: pre-wrap" v-html="opportunity.pitch" v-linkified></v-flex>
         </v-card-text>
         <v-card-actions v-if="opportunity.talentStatus === 'PENDING'">
           <v-layout row wrap class="text-xs-center" v-if="opportunity.requirement.status === 'OPEN'">
@@ -47,14 +42,10 @@
               <v-btn flat color="success" @click="accept(opportunity)">J'accepte</v-btn>
             </v-flex>
             <v-flex xs12 sm4>
-              <v-btn flat color="warning" @click="declinationDialog = true">Je
-                refuse
-              </v-btn>
+              <v-btn flat color="warning" @click="declinationDialog = true">Je refuse</v-btn>
             </v-flex>
             <v-flex xs12 sm4>
-              <v-btn flat color="error" @click="bulkDeclinationDialog = true">Je
-                me désactive
-              </v-btn>
+              <v-btn flat color="error" @click="bulkDeclinationDialog = true">Je me désactive</v-btn>
             </v-flex>
           </v-layout>
         </v-card-actions>
@@ -90,21 +81,17 @@
             <v-flex xs11>
               <h3>
                 Attention, cette action entraînera le refus de toutes tes
-                opportunités en attente
-                et la désactivation de ton profil
+                opportunités en attente et la désactivation de ton profil
               </h3>
             </v-flex>
             <v-flex xs12 class="mt-3">
               <h4>Explique-nous la raison de ton refus en quelques mots</h4>
             </v-flex>
             <v-flex xs12>
-              <v-textarea v-model="bulkDeclinationReason" multi-line rows="7"
-                          :rules="[rules.required]"></v-textarea>
+              <v-textarea v-model="bulkDeclinationReason" multi-line rows="7" :rules="[rules.required]"></v-textarea>
             </v-flex>
             <v-flex xs12 class="text-xs-center">
-              <v-btn type="submit" flat color="error" :disabled="!bulkDeclinationValid">Je
-                confirme cette action
-              </v-btn>
+              <v-btn type="submit" flat color="error" :disabled="!bulkDeclinationValid">Je confirme cette action</v-btn>
             </v-flex>
           </v-layout>
         </v-form>
@@ -134,7 +121,7 @@
     }),
     computed: {
       ...mapGetters(['api', 'loading', 'user', 'menuBadges']),
-      ...mapState(['getOpportunityStatusColor']),
+      ...mapState(['getOpportunityStatusColor', 'getLabelFromOpportunityStatus']),
     },
     methods: {
       ...mapActions([
@@ -198,20 +185,6 @@
             this.fetchData();
             this.showSnackbar('Erreur');
           });
-      },
-      getLabelFromStatus(status) {
-        switch (status) {
-          case 'ACCEPTED':
-            return 'Ton profil a été accepté par le recruteur';
-          case 'PENDING':
-            return 'Ton profil est en attente du recruteur';
-          case 'DECLINED':
-            return 'Ton profil a été décliné par le recruteur';
-          case 'CLOSED':
-            return 'L\'offre n\'est plus d\'actualité';
-          default:
-            return 'Ton profil est en cours de validation';
-        }
       },
     },
     created() {
