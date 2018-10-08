@@ -47,6 +47,18 @@ export default new Vuex.Store({
           return null;
       }
     },
+    getLabelFromOpportunityStatus(opportunityStatus) {
+      switch (opportunityStatus) {
+        case 'ACCEPTED':
+          return 'Ton profil a été accepté par le recruteur';
+        case 'PENDING':
+          return 'Ton profil est en attente du recruteur';
+        case 'DECLINED':
+          return 'Ton profil a été décliné par le recruteur';
+        default:
+          return 'Ton profil est en cours de validation';
+      }
+    },
     getTalentLinkedInProfileUrl(basicProfile) {
       if (basicProfile.publicProfileUrl) {
         return basicProfile.publicProfileUrl;
