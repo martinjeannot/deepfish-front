@@ -49,6 +49,7 @@ module.exports = {
         '$scope', // for Angular 1 scopes
         'state', // for vuex mutations, see https://stackoverflow.com/questions/44657142,
         'opportunity',
+        'talent',
       ],
     }],
     // no-underscore-dangle override
