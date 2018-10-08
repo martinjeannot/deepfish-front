@@ -21,7 +21,8 @@
                     </v-flex>
                     <v-flex xs12 class="text-xs-center">
                       <v-btn color="info" :href="linkedInAuthEndpoint" :disabled="loading"
-                             :loading="loading" @click="prepareForApiConsumption()">S'inscrire en tant que commercial
+                             :loading="loading" @click="prepareForApiConsumption()"
+                             v-html="'S\'inscrire en tant que commercial'" large>
                       </v-btn>
                     </v-flex>
                     <v-flex xs12 class="mt-2 text-xs-center">
