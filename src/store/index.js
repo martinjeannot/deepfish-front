@@ -187,7 +187,17 @@ export default new Vuex.Store({
       delete talentCopy.opportunities;
       // nested maps deletion (to avoid merging)
       delete talentCopy.basicProfile;
-      return getters.api.patch(talentCopy._links.self.href, talentCopy);
+      return getters.api.patch(talent._links.self.href, talentCopy);
+    },
+    saveRequirementData({ getters }, requirement) {
+      const requirementCopy = Object.assign({}, requirement);
+      // linked refs deletion
+      delete requirementCopy.company;
+      delete requirementCopy.jobType;
+      delete requirementCopy.seniority;
+      // nested maps deletion (to avoid merging)
+      delete requirementCopy.typeform;
+      return getters.api.patch(requirement._links.self.href, requirementCopy);
     },
     signUp({ commit, dispatch }, signUpForm) {
       commit(types.CLEAR_ERROR);
