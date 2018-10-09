@@ -1,0 +1,65 @@
+<template>
+  <v-layout>
+    <v-flex xs12>
+      <v-layout>
+        <v-flex xs12 sm6 offset-sm3>
+          <v-card>
+            <v-card-title>
+              <h2>Créer un nouveau besoin</h2>
+            </v-card-title>
+            <v-card-text>
+              <div class="typeform-widget" :data-url="requirementCreationTypeformUrl + user.id" data-transparency="50"
+                   data-hide-headers="true" data-hide-footer="true" style="width: 100%; height: 500px;"></div>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-flex>
+  </v-layout>
+</template>
+
+<script>
+  import { mapGetters } from 'vuex';
+
+  export default {
+    name: 'employer-requirements',
+    data: () => ({
+      jobTypes: [],
+      seniorities: [],
+      requirement: null,
+      requirementValid: false,
+      requirementCreationTypeformUrl: `${process.env.REQUIREMENT_CREATION_TYPEFORM_URL}`,
+    }),
+    computed: {
+      ...mapGetters(['user']),
+    },
+    methods: {
+      loadTypeform() {
+        let js;
+        let q;
+        const d = document;
+        const gi = d.getElementById;
+        const ce = d.createElement;
+        const gt = d.getElementsByTagName;
+        const id = 'typef_orm';
+        const b = 'https://embed.typeform.com/';
+        if (!gi.call(d, id)) {
+          js = ce.call(d, 'script');
+          js.id = id;
+          js.src = `${b}embed.js`;
+          q = gt.call(d, 'script')[0];
+          q.parentNode.insertBefore(js, q);
+        }
+      },
+    },
+    created() {
+      this.loadTypeform();
+    },
+  };
+</script>
+
+<style scoped>
+  .w-auto {
+    width: auto;
+  }
+</style>
