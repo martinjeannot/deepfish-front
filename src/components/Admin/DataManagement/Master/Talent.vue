@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <admin-opportunity-sending-dialog :value.sync="opportunityDialog" :talent="talent" :requirements="requirements"
+    <admin-opportunity-sending-dialog :value.sync="opportunityDialog" :talent="talent"
                                       @opportunity-sent="getOpportunities"></admin-opportunity-sending-dialog>
     <v-flex xs2 class="pr-3">
       <data-management-navigation></data-management-navigation>
@@ -251,10 +251,11 @@
                         <v-icon>send</v-icon>
                       </v-btn>
                     </v-flex>
-                    <v-data-table :rows-per-page-items="[100, {text: '$vuetify.dataIterator.rowsPerPageAll', value: 10}]" 
-                                  :items="talent.opportunities" :headers="opportunityTable.headers" :loading="loading"
-                                  :pagination.sync="opportunityTable.pagination"
-                                  :total-items="opportunityTable.totalItems">
+                    <v-data-table
+                      :rows-per-page-items="[100, {text: '$vuetify.dataIterator.rowsPerPageAll', value: 10}]"
+                      :items="talent.opportunities" :headers="opportunityTable.headers" :loading="loading"
+                      :pagination.sync="opportunityTable.pagination"
+                      :total-items="opportunityTable.totalItems">
                       <template slot="items" slot-scope="props">
                         <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
                         <td>
@@ -356,7 +357,6 @@
     data: () => ({
       talent: null,
       opportunityDialog: false,
-      requirements: [],
       opportunityTable: {
         headers: [
           { text: 'Sent at', value: 'createdAt' },
@@ -515,14 +515,11 @@
         Promise
           .all([
             this.api(`/talents/${this.id}`),
-            this.api('/requirements?projection=default&size=1000&sort=createdAt,desc&status=OPEN'),
           ])
           .then(([
                    talentResponse,
-                   requirementsResponse,
                  ]) => {
             this.talent = talentResponse.data;
-            this.requirements = requirementsResponse.data._embedded.requirements;
             return Promise.all([
               this.api(`${this.talent._links.conditions.href}?projection=default`),
               this.api(this.talent._links.qualification.href),

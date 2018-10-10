@@ -5,8 +5,8 @@
     </v-flex>
   </v-layout>
   <v-layout row wrap v-else>
-    <admin-opportunity-sending-dialog :value.sync="opportunityDialog" :talent="selectedTalent"
-                                      :requirements="requirements"></admin-opportunity-sending-dialog>
+    <admin-opportunity-sending-dialog :value.sync="opportunityDialog"
+                                      :talent="selectedTalent"></admin-opportunity-sending-dialog>
     <v-flex xs2>
       <v-flex xs12 class="text-xs-center">
         <v-btn block color="primary" @click="search" :disabled="loading" :loading="loading">
@@ -221,7 +221,7 @@
                 </v-flex>
                 <v-flex xs12>
                   <v-divider></v-divider>
-                </v-flex>             
+                </v-flex>
                 <v-flex xs12 v-if="props.item.qualification.recommendation">
                   <div style="white-space: pre-wrap">{{ props.item.qualification.recommendation.substr(0, 120) }}</div>
                 </v-flex>
@@ -260,7 +260,6 @@
       pagination: {},
       rowsPerPageItems: [4, 8, 12],
       selectedTalent: null,
-      requirements: [],
       opportunityDialog: false,
       // REFERENCE DATA
       companyMaturityLevels: [],
@@ -458,7 +457,6 @@
     created() {
       this.prepareForApiConsumption(true);
       Promise.all([
-        this.api('/requirements?projection=default&size=1000&sort=createdAt,desc'),
         this.api('/companyMaturityLevels'),
         this.api('/jobTypes'),
         this.api('/commodityTypes'),
@@ -466,14 +464,12 @@
         this.api('/fixedLocations'),
       ])
         .then(([
-                 requirementsResponse,
                  companyMaturityLevelsResponse,
                  jobTypesResponse,
                  commodityTypesResponse,
                  taskTypesResponse,
                  fixedLocationsResponse,
                ]) => {
-          this.requirements = requirementsResponse.data._embedded.requirements;
           // reference data
           this.companyMaturityLevels =
             companyMaturityLevelsResponse.data._embedded.companyMaturityLevels;
