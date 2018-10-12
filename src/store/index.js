@@ -265,6 +265,7 @@ export default new Vuex.Store({
           })
           .finally(() => dispatch('clearLoading'));
       }
+      // TALENT
       return getters
         .api(`/talents/${accessToken.user_id}`)
         .then((response) => {
