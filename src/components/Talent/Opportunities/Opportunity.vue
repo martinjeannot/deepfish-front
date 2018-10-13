@@ -14,10 +14,7 @@
           </v-flex>
           <v-flex xs9 lg10 pl-3>
             <div class="headline">{{ opportunity.company.name }}</div>
-            <div class="grey--text">Fonction proposée : {{ opportunity.jobType.l10nKey }}
-            </div>
-            <div class="grey--text">Localisation : {{ opportunity.location }}</div>
-            <div class="grey--text">Salaire fixe : il respecte tes conditions</div>
+            <div class="grey--text">Salaire fixe et localisation : ils respectent tes conditions</div>
             <div v-if="opportunity.requirement.status === 'CLOSED'">
               <v-chip v-html="'L\'offre n\'est plus d\'actualité'" class="text-xs-center pa-2"></v-chip>
             </div>
