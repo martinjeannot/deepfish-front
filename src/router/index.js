@@ -23,7 +23,7 @@ import AdminStatisticsOpportunities from '@/components/Admin/Statistics/Opportun
 import AdminStatisticsTalentAcquisition from '@/components/Admin/Statistics/TalentAcquisition';
 import EmployerProfile from '@/components/Employer/Profile';
 import EmployerRequirements from '@/components/Employer/Requirements/Requirements';
-import EmployerRequirement from '@/components/Employer/Requirements/Requirement';
+import EmployerTypeformRequirement from '@/components/Employer/Requirements/TypeformRequirement';
 import EmployerTalents from '@/components/Employer/Talents/Talents';
 import TalentProfile from '@/components/Talent/Profile';
 import TalentConditions from '@/components/Talent/Conditions';
@@ -250,7 +250,7 @@ const router = new Router({
     {
       path: '/employer/requirements/new',
       name: 'EmployerRequirement',
-      component: EmployerRequirement,
+      component: EmployerTypeformRequirement,
       meta: { authRequired: true },
     },
     {

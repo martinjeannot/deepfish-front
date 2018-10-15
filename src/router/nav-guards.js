@@ -1,8 +1,14 @@
 import store from '../store';
+import router from './index';
 
 export default {
   authenticationGuard: (to, from, next) => {
-    if (store.getters.user) {
+    if (to.query.auth_token) { // remove auth_token query param
+      localStorage.setItem('auth_token', to.query.auth_token);
+      const query = Object.assign({}, to.query);
+      delete query.auth_token;
+      router.replace({ path: to.path, query });
+    } else if (store.getters.user) {
       next();
     } else {
       let authToken = localStorage.getItem('auth_token');

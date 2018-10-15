@@ -20,6 +20,11 @@
                 {{ props.item.company.name }}
               </router-link>
             </td>
+            <td>
+              <v-icon :color="props.item.status === 'OPEN' ? 'green' : 'red'">
+                {{ props.item.status === 'OPEN' ? 'done' : 'clear' }}
+              </v-icon>
+            </td>
             <td class="justify-center layout">
               <v-btn icon color="primary" :to="{ name: 'AdminDMRequirement', params: {id: props.item.id} }">
                 <v-icon>visibility</v-icon>
@@ -45,6 +50,7 @@
         { text: 'Received at', value: 'createdAt' },
         { text: 'Name', value: 'name' },
         { text: 'Company', value: 'company.name' },
+        { text: 'Status', value: 'status' },
         { text: 'Actions', value: 'id', sortable: false },
       ],
       totalItems: 0,
