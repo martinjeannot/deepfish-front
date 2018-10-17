@@ -7,7 +7,10 @@
       <v-list>
         <v-list-tile v-for="menuItem in menuItems" :key="menuItem.title" router :to="menuItem.route" exact>
           <v-list-tile-action>
-            <v-icon>{{ menuItem.icon }}</v-icon>
+            <v-badge color="red">
+              <v-icon>{{ menuItem.icon }}</v-icon>
+              <span slot="badge" v-if="menuBadges[menuItem.key]">{{ menuBadges[menuItem.key] }}</span>
+            </v-badge>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>{{ menuItem.title }}</v-list-tile-title>
@@ -35,8 +38,7 @@
         <v-btn flat v-for="menuItem in menuItems" :key="menuItem.key" router :to="menuItem.route" exact>
           <v-badge color="red">
             <v-icon left>{{ menuItem.icon }}</v-icon>
-            <span slot="badge" v-if="menuBadges[menuItem.key]">{{
-              menuBadges[menuItem.key] }}</span>
+            <span slot="badge" v-if="menuBadges[menuItem.key]">{{ menuBadges[menuItem.key] }}</span>
             {{ menuItem.title }}
           </v-badge>
         </v-btn>
