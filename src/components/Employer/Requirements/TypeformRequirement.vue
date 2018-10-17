@@ -8,7 +8,7 @@
               <h2>Créer un nouveau besoin</h2>
             </v-card-title>
             <v-card-text>
-              <div class="typeform-widget" :data-url="requirementCreationTypeformUrl + user.id" data-transparency="50"
+              <div class="typeform-widget" :data-url="requirementCreationTypeformUrl + user.id" data-transparency="100"
                    data-hide-headers="true" data-hide-footer="true" style="width: 100%; height: 500px;"></div>
             </v-card-text>
           </v-card>
