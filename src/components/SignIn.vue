@@ -118,6 +118,7 @@
         'setError',
         'onAlertComponentDismissed',
         'autoSignIn',
+        'setAlertComponent',
       ]),
       redirectOnAuthentication() {
         if (this.isUserAuthenticated) {
@@ -161,8 +162,14 @@
       },
     },
     created() {
-      if (Object.keys(this.$route.query)[0] === 'employer') {
+      if (Object.prototype.hasOwnProperty.call(this.$route.query, 'employer')) {
         this.activeTabIndex = 1;
+      }
+      if (Object.prototype.hasOwnProperty.call(this.$route.query, 'employer-sign-up-success')) {
+        this.setAlertComponent({
+          type: 'success',
+          message: 'Félicitations ! Vous allez recevoir un mail avec vos identifiants de connexion',
+        });
       }
     },
     mounted() {

@@ -29,9 +29,12 @@
               </v-card-title>
               <v-card-actions>
                 <v-flex xs12 class="text-xs-center">
-                  <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
-                    Voir l'opportunité
-                  </v-btn>
+                  <v-badge overlap color="red">
+                    <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
+                      Voir l'opportunité
+                    </v-btn>
+                    <v-icon slot="badge" color="white">priority_high</v-icon>
+                  </v-badge>
                 </v-flex>
               </v-card-actions>
             </v-card>

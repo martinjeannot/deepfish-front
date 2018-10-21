@@ -20,9 +20,6 @@
                     <v-list-tile-title><span style="font-weight: bold">{{ data.item.company.name }}</span>
                       : {{ data.item.name }}
                     </v-list-tile-title>
-                    <v-list-tile-sub-title>{{ data.item.jobType.l10nKey }} {{ data.item.seniority.l10nKey
-                      }} {{ data.item.fixedSalary / 1000 }}K€ {{ data.item.location }}
-                    </v-list-tile-sub-title>
                   </v-list-tile-content>
                 </v-list-tile>
               </template>

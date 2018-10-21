@@ -43,7 +43,7 @@
                                   @click:append="() => (passwordShown = !passwordShown)"></v-text-field>
                   </v-flex>
                   <v-flex xs12 text-xs-center>
-                    <v-btn type="submit" :disabled="!valid || loading" :loading="loading">Valider</v-btn>
+                    <v-btn type="submit" color="primary" :disabled="!valid || loading" :loading="loading">Valider</v-btn>
                   </v-flex>
                 </v-layout>
               </v-form>

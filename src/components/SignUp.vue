@@ -149,7 +149,7 @@
       },
     },
     created() {
-      if (Object.keys(this.$route.query)[0] === 'employer') {
+      if (Object.prototype.hasOwnProperty.call(this.$route.query, 'employer')) {
         this.activeTabIndex = 1;
       }
     },
