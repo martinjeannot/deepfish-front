@@ -55,6 +55,12 @@
                     </v-layout>
                     <v-layout row>
                       <v-flex xs12>
+                        <v-text-field label="Entreprise" v-model="companyName" :rules="[rules.required]" type="text"
+                                      required></v-text-field>
+                      </v-flex>
+                    </v-layout>
+                    <v-layout row>
+                      <v-flex xs12>
                         <v-text-field label="Email" v-model="email" :rules="[rules.required, rules.email]" type="email"
                                       required></v-text-field>
                       </v-flex>
@@ -62,12 +68,6 @@
                     <v-layout row>
                       <v-flex xs12>
                         <v-text-field label="Numéro mobile" v-model="phoneNumber" :rules="[rules.required]" type="text"
-                                      required></v-text-field>
-                      </v-flex>
-                    </v-layout>
-                    <v-layout row>
-                      <v-flex xs12>
-                        <v-text-field label="Entreprise" v-model="companyName" :rules="[rules.required]" type="text"
                                       required></v-text-field>
                       </v-flex>
                     </v-layout>
