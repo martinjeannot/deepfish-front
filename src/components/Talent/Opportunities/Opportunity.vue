@@ -117,15 +117,22 @@
       bulkDeclinationReason: '',
     }),
     computed: {
-      ...mapGetters(['api', 'loading', 'user', 'menuBadges']),
-      ...mapState(['getOpportunityStatusColor', 'getLabelFromOpportunityStatus']),
+      ...mapGetters([
+        'api',
+        'loading',
+        'user',
+        'menuBadges',
+      ]),
+      ...mapState([
+        'getOpportunityStatusColor',
+        'getLabelFromOpportunityStatus',
+      ]),
     },
     methods: {
       ...mapActions([
         'prepareForApiConsumption',
         'clearLoading',
         'showSnackbar',
-        'setAlertComponent',
       ]),
       fetchData() {
         this.prepareForApiConsumption();
@@ -140,11 +147,7 @@
         opportunity.talentStatus = 'ACCEPTED';
         this.saveOpportunity(opportunity).then(() => {
           this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
-          this.$router.push('/talent/opportunities');
-          this.setAlertComponent({
-            type: 'success',
-            message: `${opportunity.company.name} va maintenant découvrir ton profil complet (non anonymisé) et revenir vers toi si son intérêt est confirmé`,
-          });
+          this.$router.push('/talent/opportunities?opportunityAccepted');
         });
       },
       decline(opportunity) {

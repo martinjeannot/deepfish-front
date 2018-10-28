@@ -160,6 +160,27 @@
         </v-data-iterator>
       </v-container>
     </v-flex>
+    <v-dialog v-model="qualificationDialog" persistent max-width="650px">
+      <v-container style="background-color: white">
+        <v-layout row wrap>
+          <v-flex xs12 class="text-xs-center">
+            <h3>
+              Félicitations, tu viens d'accepter ta première opportunité !
+              <v-icon color="success">thumb_up</v-icon>
+            </h3>
+          </v-flex>
+          <v-flex xs12 class="mt-3">
+            Mais avant de permettre au recruteur de découvrir ton profil complet (non anonymisé), nous aimerions échanger avec toi par téléphone :
+          </v-flex>
+          <v-flex xs12 class="text-xs-center mt-3">
+            <v-btn href="https://calendly.com/deepfish/15min" target="_blank" flat color="info"
+                   @click.native="qualificationDialog = false">
+              Choisir un créneau
+            </v-btn>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -174,13 +195,28 @@
       declinedOpportunities: [],
       closedOpportunities: [],
       totalItems: 0,
+      qualificationDialog: false,
     }),
     computed: {
-      ...mapGetters(['api', 'loading', 'alertComponent', 'user', 'menuBadges']),
-      ...mapState(['getOpportunityStatusColor', 'getLabelFromOpportunityStatus']),
+      ...mapGetters([
+        'api',
+        'loading',
+        'alertComponent',
+        'user',
+        'menuBadges',
+      ]),
+      ...mapState([
+        'getOpportunityStatusColor',
+        'getLabelFromOpportunityStatus',
+      ]),
     },
     methods: {
-      ...mapActions(['prepareForApiConsumption', 'clearLoading', 'onAlertComponentDismissed']),
+      ...mapActions([
+        'prepareForApiConsumption',
+        'clearLoading',
+        'setAlertComponent',
+        'onAlertComponentDismissed',
+      ]),
     },
     created() {
       this.prepareForApiConsumption();
@@ -196,6 +232,17 @@
             .filter(opportunity => opportunity.talentStatus === 'DECLINED' && opportunity.requirement.status === 'OPEN');
           this.closedOpportunities = response.data._embedded.opportunities
             .filter(opportunity => opportunity.requirement.status === 'CLOSED');
+          // Opportunity accepted
+          if (Object.prototype.hasOwnProperty.call(this.$route.query, 'opportunityAccepted')) {
+            if (this.acceptedOpportunities.length) {
+              this.setAlertComponent({
+                type: 'success',
+                message: 'Le recruteur va bientôt découvrir ton profil complet (non anonymisé) et revenir vers toi si son intérêt est confirmé',
+              });
+            } else {
+              this.qualificationDialog = true;
+            }
+          }
         })
         .finally(() => this.clearLoading());
     },

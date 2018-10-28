@@ -127,11 +127,12 @@
       },
       signIn() {
         if (this.$refs.form.validate()) {
-          // axios does not support x-www-form-urlencoded as content-type out of the box yet
-          const payload = new URLSearchParams();
-          payload.append('grant_type', 'password');
-          payload.append('username', this.email);
-          payload.append('password', this.password);
+          // https://github.com/axios/axios/issues/1195
+          const payload = {
+            grant_type: 'password',
+            username: this.email,
+            password: this.password,
+          };
           this.prepareForApiConsumption();
           this.api
             .post('/oauth/token', payload, {
@@ -139,6 +140,17 @@
                 username: '67e43464e9c0483faaf7b773018b2b60',
                 password: '9c7d7778e0534031aa0ed684bba16546',
               },
+              transformRequest: [
+                function transformRequest(data) {
+                  const serializedData = [];
+                  Object.keys(data).forEach((key) => {
+                    if (data[key]) {
+                      serializedData.push(`${key}=${encodeURIComponent(data[key])}`);
+                    }
+                  });
+                  return serializedData.join('&');
+                },
+              ],
             })
             .then((response) => {
               localStorage.setItem('auth_token', JSON.stringify(response.data));

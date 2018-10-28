@@ -65,7 +65,8 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text class="py-2">
-          Copyright &copy; {{ new Date().getFullYear() }} — <strong>Deepfish</strong>
+          <a href="https://www.deepfish.co/cgu" target="_blank" style="color: white">CGU</a> &mdash;
+          Copyright &copy; {{ new Date().getFullYear() }} &mdash; <strong>Deepfish</strong>
         </v-card-text>
       </v-card>
     </v-footer>
@@ -121,8 +122,8 @@
             ];
           } else if (this.isUserEmployer) {
             menuItems = [
-              { key: 'requirements', icon: 'assignment', title: 'Mes besoins', route: '/employer/requirements' },
-              { key: 'talents', icon: 'assignment_ind', title: 'Mes talents', route: '/employer/talents' },
+              { key: 'requirements', icon: 'work', title: 'Mes besoins', route: '/employer/requirements' },
+              { key: 'talents', icon: 'people', title: 'Mes talents', route: '/employer/talents' },
               { key: 'profile', icon: 'account_circle', title: 'Mon profil', route: '/employer/profile' },
             ];
           } else {
