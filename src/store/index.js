@@ -56,7 +56,7 @@ export default new Vuex.Store({
         case 'DECLINED':
           return 'Ton profil a été décliné par le recruteur';
         default:
-          return 'Ton profil est en cours de validation';
+          return 'Ton profil est en cours de validation par Deepfish';
       }
     },
     getTalentLinkedInProfileUrl(basicProfile) {
