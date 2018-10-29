@@ -84,14 +84,11 @@ new Vue({
             });
           }
           this.$store.dispatch('setAuthTokenRefreshing', true);
-          const payload = new URLSearchParams();
-          payload.append('grant_type', 'refresh_token');
-          payload.append('refresh_token', this.$store.getters.refreshToken);
           this.$store.dispatch('clearAuthToken'); // to prevent infinite looping with previous invalid token
-          return this.$store.getters.api
-            .post('/oauth/token', payload, {
-              auth: { username: '67e43464e9c0483faaf7b773018b2b60', password: '9c7d7778e0534031aa0ed684bba16546' },
-            })
+          return this.$store.dispatch('requestAccessToken', {
+            grant_type: 'refresh_token',
+            refresh_token: this.$store.getters.refreshToken,
+          })
             .then((response) => {
               localStorage.setItem('auth_token', JSON.stringify(response.data));
               this.$store.dispatch('setAuthToken', response.data);
