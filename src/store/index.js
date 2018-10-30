@@ -199,6 +199,26 @@ export default new Vuex.Store({
       delete requirementCopy.typeform;
       return getters.api.patch(requirement._links.self.href, requirementCopy);
     },
+    requestAccessToken({ getters }, payload) {
+      // https://github.com/axios/axios/issues/1195
+      return getters.api.post('/oauth/token', payload, {
+        auth: {
+          username: '67e43464e9c0483faaf7b773018b2b60',
+          password: '9c7d7778e0534031aa0ed684bba16546',
+        },
+        transformRequest: [
+          function transformRequest(data) {
+            const serializedData = [];
+            Object.keys(data).forEach((key) => {
+              if (data[key]) {
+                serializedData.push(`${key}=${encodeURIComponent(data[key])}`);
+              }
+            });
+            return serializedData.join('&');
+          },
+        ],
+      });
+    },
     signUp({ commit, dispatch }, signUpForm) {
       commit(types.CLEAR_ERROR);
       commit(types.SET_LOADING, true);

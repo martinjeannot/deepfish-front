@@ -119,6 +119,7 @@
         'onAlertComponentDismissed',
         'autoSignIn',
         'setAlertComponent',
+        'requestAccessToken',
       ]),
       redirectOnAuthentication() {
         if (this.isUserAuthenticated) {
@@ -127,31 +128,8 @@
       },
       signIn() {
         if (this.$refs.form.validate()) {
-          // https://github.com/axios/axios/issues/1195
-          const payload = {
-            grant_type: 'password',
-            username: this.email,
-            password: this.password,
-          };
           this.prepareForApiConsumption();
-          this.api
-            .post('/oauth/token', payload, {
-              auth: {
-                username: '67e43464e9c0483faaf7b773018b2b60',
-                password: '9c7d7778e0534031aa0ed684bba16546',
-              },
-              transformRequest: [
-                function transformRequest(data) {
-                  const serializedData = [];
-                  Object.keys(data).forEach((key) => {
-                    if (data[key]) {
-                      serializedData.push(`${key}=${encodeURIComponent(data[key])}`);
-                    }
-                  });
-                  return serializedData.join('&');
-                },
-              ],
-            })
+          this.requestAccessToken({ grant_type: 'password', username: this.email, password: this.password })
             .then((response) => {
               localStorage.setItem('auth_token', JSON.stringify(response.data));
               this.autoSignIn(response.data); // should set user => watcher
