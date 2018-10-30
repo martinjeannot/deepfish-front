@@ -12,6 +12,7 @@ import 'vue2-dropzone/dist/vue2Dropzone.min.css';
 import App from './App';
 import router from './router';
 import store from './store';
+import httpInterceptorsInit from './store/httpInterceptors';
 import filters from './filters';
 
 import BaseAlert from './components/Utilities/BaseAlert';
@@ -55,6 +56,9 @@ Vue.component('upload-zone', UploadZone);
 
 Vue.directive('linkified', linkify);
 
+// cannot be done in Vue beforeCreate/created hooks because routing is already done then
+httpInterceptorsInit();
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
@@ -62,50 +66,4 @@ new Vue({
   store,
   template: '<App/>',
   components: { App },
-  created() {
-    this.$store.getters.api.interceptors.response.use(
-      response => response,
-      (error) => {
-        if (!error.response) {
-          return Promise.reject(error);
-        }
-        const { config, response: { status } } = error;
-        const originalRequest = config;
-
-        if (status === 401 && !originalRequest.retry) {
-          originalRequest.retry = true;
-          if (this.$store.getters.authTokenRefreshing) {
-            return new Promise((resolve/* , reject */) => {
-              this.$store.getters.authTokenRefreshSubscribers.push(
-                (authToken) => {
-                  originalRequest.headers.Authorization = `Bearer ${authToken.access_token}`;
-                  return resolve(this.$store.getters.api(originalRequest));
-                });
-            });
-          }
-          this.$store.dispatch('setAuthTokenRefreshing', true);
-          this.$store.dispatch('clearAuthToken'); // to prevent infinite looping with previous invalid token
-          return this.$store.dispatch('requestAccessToken', {
-            grant_type: 'refresh_token',
-            refresh_token: this.$store.getters.refreshToken,
-          })
-            .then((response) => {
-              localStorage.setItem('auth_token', JSON.stringify(response.data));
-              this.$store.dispatch('setAuthToken', response.data);
-              this.$store.dispatch('setAuthTokenRefreshing', false);
-              this.$store.getters.authTokenRefreshSubscribers
-                .forEach(callback => callback(response.data));
-              this.$store.getters.authTokenRefreshSubscribers.length = 0;
-              originalRequest.headers.Authorization = `Bearer ${response.data.access_token}`;
-              return this.$store.getters.api(originalRequest);
-            })
-            .catch(() => {
-              this.$store.dispatch('logout');
-              this.$router.push('/');
-              this.$store.dispatch('setAlertComponent', { type: 'error', message: 'Your session has expired' });
-            });
-        }
-        return Promise.reject(error);
-      });
-  },
 });
