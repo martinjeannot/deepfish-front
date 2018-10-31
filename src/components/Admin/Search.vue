@@ -9,7 +9,7 @@
                                       :talent="selectedTalent"></admin-opportunity-sending-dialog>
     <v-flex xs2>
       <v-flex xs12 class="text-xs-center">
-        <v-btn block color="primary" @click="search" :disabled="loading" :loading="loading">
+        <v-btn block color="primary" @click="search(true)" :disabled="loading" :loading="loading">
           <v-icon>search</v-icon>
         </v-btn>
       </v-flex>
@@ -144,7 +144,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-flex xs12 class="text-xs-center">
-        <v-btn block color="primary" @click="search" :disabled="loading" :loading="loading">
+        <v-btn block color="primary" @click="search(true)" :disabled="loading" :loading="loading">
           <v-icon>search</v-icon>
         </v-btn>
       </v-flex>
@@ -152,7 +152,7 @@
     <v-flex xs10>
       <v-container fluid grid-list-md>
         <v-data-iterator content-tag="v-layout" row wrap :items="talents" :pagination.sync="pagination"
-                         :rows-per-page-items="rowsPerPageItems" :total-items="totalItems">
+                         :rows-per-page-items="rowsPerPageItems" :total-items="totalItems" ref="talentDataIterator">
           <v-flex slot="item" slot-scope="props" xs12 sm6 md4 lg3>
             <v-card>
               <v-layout row wrap class="px-2">
@@ -318,8 +318,11 @@
         'clearLoading',
         'showSnackbar',
       ]),
-      search() {
+      search(resetPagination = false) {
         this.prepareForApiConsumption();
+        if (resetPagination) {
+          this.$refs.talentDataIterator.resetPagination();
+        }
         let talentQueryString = '';
         // Search query
         if (this.criteria.searchQuery) {
