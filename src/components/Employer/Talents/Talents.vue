@@ -38,7 +38,11 @@
               <v-card-title>
                 <v-flex xs4 sm2 class="text-xs-center">
                   <v-avatar size="80" class="mr-2">
-                    <img :src="props.item.talent.basicProfile.pictureUrl" alt="picture"/>
+                    <v-img
+                      :src="props.item.talent.basicProfile.pictureUrl"
+                      lazy-src="static/img/avatar.png"
+                      alt="picture"
+                    ></v-img>
                   </v-avatar>
                 </v-flex>
                 <v-flex xs8 sm4>

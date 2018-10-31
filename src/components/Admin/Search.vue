@@ -161,7 +161,12 @@
                     <span slot="badge">{{ getTalentRankingLetter(props.item) }}</span>
                     <v-avatar size="60" class="light-blue">
                       <v-avatar size="50">
-                        <img :src="props.item.basicProfile.pictureUrl" alt="picture"/>
+                        <v-img
+                          :src="props.item.basicProfile.pictureUrl"
+                          lazy-src="static/img/avatar.png"
+                          alt="picture"
+                          style="margin-top: 2px"
+                        ></v-img>
                       </v-avatar>
                     </v-avatar>
                   </v-badge>

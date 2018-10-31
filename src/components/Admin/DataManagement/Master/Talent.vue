@@ -25,7 +25,11 @@
                 <v-layout wrap>
                   <v-flex xs12 class="text-xs-center">
                     <v-avatar size="140">
-                      <img :src="talent.basicProfile.pictureUrl" alt="picture"/>
+                      <v-img
+                        :src="talent.basicProfile.pictureUrl"
+                        lazy-src="static/img/avatar.png"
+                        alt="picture"
+                      ></v-img>
                     </v-avatar>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
