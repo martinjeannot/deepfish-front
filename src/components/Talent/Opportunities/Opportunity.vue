@@ -18,7 +18,7 @@
             <div v-if="opportunity.requirement.status === 'CLOSED'">
               <v-chip v-html="'L\'offre n\'est plus d\'actualité'" class="text-xs-center pa-2"></v-chip>
             </div>
-            <div v-else-if="opportunity.talentStatus !== 'PENDING'">
+            <div v-else-if="opportunity.talentStatus === 'ACCEPTED'">
               <v-chip :color="getOpportunityStatusColor(opportunity.employerStatus)"
                       v-html="getLabelFromOpportunityStatus(opportunity.employerStatus)" class="text-xs-center pa-2">
               </v-chip>
