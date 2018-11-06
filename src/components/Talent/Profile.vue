@@ -156,12 +156,12 @@
         'setErrorAfterApiConsumption',
         'onAlertComponentDismissed',
         'setAlertComponent',
-        'saveTalent',
+        'saveTalentData',
       ]),
       saveProfile(talent, redirectOnConditions) {
         if (this.$refs.form.validate()) {
           this.prepareForApiConsumption();
-          return this.saveTalent(talent)
+          return this.saveTalentData(talent)
             .then((response) => {
               this.talent = response.data;
               this.showSuccessSnackbar();
