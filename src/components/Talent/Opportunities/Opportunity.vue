@@ -133,6 +133,7 @@
         'prepareForApiConsumption',
         'clearLoading',
         'showSnackbar',
+        'saveOpportunityData',
       ]),
       fetchData() {
         this.prepareForApiConsumption();
@@ -143,27 +144,29 @@
           .finally(() => this.clearLoading());
       },
       accept(opportunity) {
-        opportunity.previousState = Object.assign({}, opportunity);
+        const previousState = Object.assign({}, opportunity);
         opportunity.talentStatus = 'ACCEPTED';
-        this.saveOpportunity(opportunity).then(() => {
-          this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
-          this.$router.push('/talent/opportunities?opportunityAccepted');
-        });
+        return this
+          .saveOpportunity(opportunity, previousState)
+          .then(() => {
+            this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
+            this.$router.push('/talent/opportunities?opportunityAccepted');
+          });
       },
       decline(opportunity) {
-        opportunity.previousState = Object.assign({}, opportunity);
+        const previousState = Object.assign({}, opportunity);
         opportunity.talentStatus = 'DECLINED';
         this.declinationDialog = false;
-        this.saveOpportunity(opportunity).then(() => {
-          this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
-          this.$router.push('/talent/opportunities');
-        });
+        return this
+          .saveOpportunity(opportunity, previousState)
+          .then(() => {
+            this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
+            this.$router.push('/talent/opportunities');
+          });
       },
-      saveOpportunity(opportunity) {
-        const opportunityData = Object.assign({}, opportunity);
-        delete opportunityData.requirement;
-        return this.api
-          .patch(opportunity._links.self.href, opportunityData)
+      saveOpportunity(opportunity, previousState) {
+        return this
+          .saveOpportunityData({ opportunity, previousState })
           .then(() => this.showSnackbar('Opération terminée avec succès'))
           .catch(() => {
             this.showSnackbar('Erreur');
