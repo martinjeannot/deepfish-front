@@ -310,8 +310,8 @@ export default new Vuex.Store({
         })
         .then((pendingOpportunitiesResponse) => {
           dispatch('setMenuBadges', { opportunities: pendingOpportunitiesResponse.data._embedded.opportunities.length });
-          return getters
-            .api.patch(getters.user._links.self.href, { lastSignedInAt: moment().utc().format() });
+          return getters.api
+            .patch(getters.user._links.self.href, { lastSignedInAt: moment().utc().format() });
         })
         .then(() => {
           commit(types.SET_AUTH_PROCESS_COMPLETED, true);
