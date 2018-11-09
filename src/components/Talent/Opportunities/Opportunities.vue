@@ -234,13 +234,13 @@
             .filter(opportunity => opportunity.requirement.status === 'CLOSED');
           // Opportunity accepted
           if (Object.prototype.hasOwnProperty.call(this.$route.query, 'opportunityAccepted')) {
-            if (this.acceptedOpportunities.length) {
+            if (this.acceptedOpportunities.length === 1) {
+              this.qualificationDialog = true;
+            } else {
               this.setAlertComponent({
                 type: 'success',
                 message: 'Le recruteur va bientôt découvrir ton profil complet (non anonymisé) et revenir vers toi si son intérêt est confirmé',
               });
-            } else {
-              this.qualificationDialog = true;
             }
           }
         })
