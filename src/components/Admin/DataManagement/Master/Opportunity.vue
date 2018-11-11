@@ -42,17 +42,8 @@
                     </router-link>
                   </v-flex>
                   <v-flex xs12 class="mb-3">
-                    <span style="font-weight: bold">Sent at</span> : {{ opportunity.createdAt | formatDate('LLL') }}
-                  </v-flex>
-                  <v-flex xs12 class="mb-3">
                     <span style="font-weight: bold">Sent by</span> :
                     {{ opportunity.creator.firstName }} {{ opportunity.creator.lastName }}
-                  </v-flex>
-                  <v-flex xs12 class="mb-3 d-flex">
-                    <span class="pt-1" style="font-weight: bold">Forwarded to employer</span>
-                    <span>
-                      <v-checkbox :input-value="opportunity.forwarded" disabled></v-checkbox>
-                    </span>
                   </v-flex>
                 </v-card-text>
               </v-card>
@@ -60,8 +51,14 @@
             <v-flex xs8>
               <v-card>
                 <v-tabs grow>
+                  <v-tab>Timeline</v-tab>
                   <v-tab>Talent</v-tab>
                   <v-tab>Employer</v-tab>
+                  <v-tab-item>
+                    <v-container>
+                      <opportunity-timeline :opportunity="opportunity"></opportunity-timeline>
+                    </v-container>
+                  </v-tab-item>
                   <v-tab-item>
                     <v-container>
                       <v-layout row wrap>
@@ -93,10 +90,11 @@
 <script>
   import { mapGetters, mapActions, mapState } from 'vuex';
   import DataManagementNavigation from '../Navigation';
+  import OpportunityTimeline from '../../../Opportunity/OpportunityTimeline';
 
   export default {
     name: 'data-management-opportunity',
-    components: { DataManagementNavigation },
+    components: { DataManagementNavigation, OpportunityTimeline },
     props: ['id'],
     data: () => ({
       opportunity: null,

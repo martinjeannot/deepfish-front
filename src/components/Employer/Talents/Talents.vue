@@ -11,7 +11,7 @@
                     @dismissed="onAlertComponentDismissed"></base-alert>
       </v-flex>
     </v-layout>
-    <v-flex xs12 v-for="requirement in requirements" :key="requirement.id">
+    <v-flex xs12 v-for="requirement in requirements" :key="requirement.id + reRenderingVersion">
       <v-card>
         <v-card-text>
           <v-layout wrap>
@@ -38,7 +38,11 @@
               <v-card-title>
                 <v-flex xs4 sm2 class="text-xs-center">
                   <v-avatar size="80" class="mr-2">
-                    <img :src="props.item.talent.basicProfile.pictureUrl" alt="picture"/>
+                    <v-img
+                      :src="props.item.talent.basicProfile.pictureUrl"
+                      lazy-src="static/img/avatar.png"
+                      alt="picture"
+                    ></v-img>
                   </v-avatar>
                 </v-flex>
                 <v-flex xs8 sm4>
@@ -202,6 +206,7 @@
       contactMessage: '',
       declinationDialog: false,
       employerDeclinationValid: false,
+      reRenderingVersion: 0,
     }),
     computed: {
       ...mapGetters([
@@ -223,6 +228,7 @@
         'setAlertComponent',
         'onAlertComponentDismissed',
         'showSnackbar',
+        'saveOpportunityData',
       ]),
       isTalentPending(opportunity) {
         return !opportunity.employerStatus || opportunity.employerStatus === 'PENDING';
@@ -246,40 +252,54 @@
         };
       },
       acceptTalent(opportunity) {
-        opportunity.previousState = Object.assign({}, opportunity);
+        this.prepareForApiConsumption();
+        const previousState = Object.assign({}, opportunity);
         opportunity.employerStatus = 'ACCEPTED';
-        this
-          .saveOpportunity(opportunity)
+        return this
+          .saveOpportunity(opportunity, previousState)
           .then(() => {
             this.menuBadges.talents = this.menuBadges.talents - 1;
             this.showSnackbar('Vous pouvez désormais contacter ce talent par téléphone ou mail');
-          });
+          })
+          .catch(error => this.handleOpportunitySavingError(opportunity, previousState, error))
+          .finally(() => this.clearLoading());
       },
       declineTalent(opportunity) {
-        opportunity.previousState = Object.assign({}, opportunity);
+        this.prepareForApiConsumption();
+        const previousState = Object.assign({}, opportunity);
         opportunity.employerStatus = 'DECLINED';
         this
-          .saveOpportunity(opportunity)
+          .saveOpportunity(opportunity, previousState)
           .then(() => {
             // user does not have one less pending talent if the talent was previously accepted
-            if (opportunity.previousState.employerStatus === 'PENDING') {
+            if (previousState.employerStatus === 'PENDING') {
               this.menuBadges.talents = this.menuBadges.talents - 1;
             }
             this.declinationDialog = false;
-          });
-      },
-      saveOpportunity(opportunityToSave) {
-        const opportunity = Object.assign({}, opportunityToSave);
-        delete opportunity.requirement;
-        delete opportunity.talent;
-        delete opportunity.previousState.requirement;
-        delete opportunity.previousState.talent;
-        this.prepareForApiConsumption();
-        return this.api
-          .patch(opportunity._links.self.href, opportunity)
-          .then(() => this.showSnackbar('Opération terminée avec succès'))
-          .catch(() => this.showSnackbar('Erreur'))
+          })
+          .catch(error => this.handleOpportunitySavingError(opportunity, previousState, error))
           .finally(() => this.clearLoading());
+      },
+      handleOpportunitySavingError(opportunity, previousState, error) {
+        // https://vuejs.org/v2/guide/list.html#Caveats
+        const requirementIndex = this.requirements
+          .findIndex(req => req.id === opportunity.requirement.id);
+        const opportunityIndex = this.requirements[requirementIndex].opportunities
+          .findIndex(opport => opport.id === opportunity.id);
+        this.$set(
+          this.requirements[requirementIndex].opportunities,
+          opportunityIndex,
+          { ...opportunity, ...previousState });
+        return Promise.reject(error);
+      },
+      saveOpportunity(opportunity, previousState) {
+        return this
+          .saveOpportunityData({ opportunity, previousState })
+          .then(() => this.showSnackbar('Opération terminée avec succès'))
+          .catch((error) => {
+            this.showSnackbar('Erreur');
+            return Promise.reject(error);
+          });
       },
       contactAdmins(opportunity) {
         this.prepareForApiConsumption();

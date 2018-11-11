@@ -17,9 +17,13 @@
           <v-card>
             <v-card-text>
               <v-layout row wrap>
-                <v-flex xs6 md3 d-flex>
+                <v-flex xs6 md3 class="text-xs-center">
                   <v-avatar size="80">
-                    <img :src="talent.basicProfile.pictureUrl" alt="picture"/>
+                    <v-img
+                      :src="talent.basicProfile.pictureUrl"
+                      lazy-src="static/img/avatar.png"
+                      alt="picture"
+                    ></v-img>
                   </v-avatar>
                 </v-flex>
                 <v-flex xs4 md4 d-flex align-center text-xs-center text-md-left>
@@ -152,12 +156,12 @@
         'setErrorAfterApiConsumption',
         'onAlertComponentDismissed',
         'setAlertComponent',
-        'saveTalent',
+        'saveTalentData',
       ]),
       saveProfile(talent, redirectOnConditions) {
         if (this.$refs.form.validate()) {
           this.prepareForApiConsumption();
-          return this.saveTalent(talent)
+          return this.saveTalentData(talent)
             .then((response) => {
               this.talent = response.data;
               this.showSuccessSnackbar();

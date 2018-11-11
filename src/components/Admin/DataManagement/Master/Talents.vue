@@ -15,7 +15,11 @@
           <template slot="items" slot-scope="props">
             <td>
               <v-avatar size="46">
-                <img :src="props.item.basicProfile.pictureUrl" alt="picture"/>
+                <v-img
+                  :src="props.item.basicProfile.pictureUrl"
+                  lazy-src="static/img/avatar.png"
+                  alt="picture"
+                ></v-img>
               </v-avatar>
             </td>
             <td>{{ props.item.lastName }}</td>

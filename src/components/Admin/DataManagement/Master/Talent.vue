@@ -25,7 +25,11 @@
                 <v-layout wrap>
                   <v-flex xs12 class="text-xs-center">
                     <v-avatar size="140">
-                      <img :src="talent.basicProfile.pictureUrl" alt="picture"/>
+                      <v-img
+                        :src="talent.basicProfile.pictureUrl"
+                        lazy-src="static/img/avatar.png"
+                        alt="picture"
+                      ></v-img>
                     </v-avatar>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
@@ -343,7 +347,6 @@
 </template>
 
 <script>
-  import moment from 'moment';
   import { mapGetters, mapActions, mapState } from 'vuex';
   import DataManagementNavigation from '../Navigation';
   import AdminOpportunitySendingDialog from '../../Utilities/OpportunitySendingDialog';
@@ -443,7 +446,8 @@
         'setErrorAfterApiConsumption',
         'onAlertComponentDismissed',
         'signInAs',
-        'saveTalent',
+        'saveTalentData',
+        'saveOpportunityData',
       ]),
       activateProfile() {
         this.talent.active = true;
@@ -454,7 +458,7 @@
         this.saveProfile();
       },
       saveProfile() {
-        this.saveTalent(this.talent)
+        this.saveTalentData(this.talent)
           .then(() => this.showSnackbar('OK'))
           .catch(() => {
             this.showSnackbar('Error');
@@ -468,23 +472,23 @@
           .catch(() => this.showSnackbar('Error'));
       },
       forwardTalent(opportunity) {
-        opportunity.forwarded = true;
-        opportunity.forwardedAt = moment().utc().format();
+        const previousState = Object.assign({}, opportunity);
         opportunity.employerStatus = 'PENDING';
-        this.saveOpportunity(opportunity);
+        return this.saveOpportunity(opportunity, previousState);
       },
       retrieveTalent(opportunity) {
-        opportunity.forwarded = false;
+        const previousState = Object.assign({}, opportunity);
         opportunity.employerStatus = null;
-        this.saveOpportunity(opportunity);
+        return this.saveOpportunity(opportunity, previousState);
       },
-      saveOpportunity(opportunity) {
-        const opportunityModel = Object.assign({}, opportunity);
-        delete opportunityModel.talent;
-        delete opportunityModel.company;
-        this.api
-          .patch(opportunity._links.self.href, opportunityModel)
-          .then(() => {
+      saveOpportunity(opportunity, previousState) {
+        return this
+          .saveOpportunityData({ opportunity, previousState })
+          .then(() => this.api(`${opportunity._links.self.href}?projection=admin-item`))
+          .then((opportunityResponse) => {
+            const opportunityIndex = this.talent.opportunities
+              .findIndex(opport => opport.id === opportunityResponse.data.id);
+            this.talent.opportunities[opportunityIndex] = opportunityResponse.data;
             this.showSnackbar('Success');
             this.$forceUpdate();
           })

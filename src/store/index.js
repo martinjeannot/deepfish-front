@@ -179,25 +179,40 @@ export default new Vuex.Store({
     onAlertComponentDismissed({ dispatch }) {
       dispatch('clearError');
     },
-    saveTalent({ getters }, talent) {
-      const talentCopy = Object.assign({}, talent);
+    saveTalentData({ getters }, talent) {
+      const talentData = Object.assign({}, talent);
       // linked refs deletion
-      delete talentCopy.conditions;
-      delete talentCopy.qualification;
-      delete talentCopy.opportunities;
+      delete talentData.conditions;
+      delete talentData.qualification;
+      delete talentData.opportunities;
       // nested maps deletion (to avoid merging)
-      delete talentCopy.basicProfile;
-      return getters.api.patch(talent._links.self.href, talentCopy);
+      delete talentData.basicProfile;
+      return getters.api.patch(talent._links.self.href, talentData);
+    },
+    saveOpportunityData({ getters }, { opportunity, previousState }) {
+      const opportunityData = Object.assign({}, opportunity);
+      // linked refs deletion
+      delete opportunityData.talent;
+      delete opportunityData.requirement;
+      delete opportunityData.company;
+      if (previousState) {
+        opportunityData.previousState = previousState;
+        // linked refs deletion
+        delete opportunityData.previousState.talent;
+        delete opportunityData.previousState.requirement;
+        delete opportunityData.previousState.company;
+      }
+      return getters.api.patch(opportunity._links.self.href, opportunityData);
     },
     saveRequirementData({ getters }, requirement) {
-      const requirementCopy = Object.assign({}, requirement);
+      const requirementData = Object.assign({}, requirement);
       // linked refs deletion
-      delete requirementCopy.company;
-      delete requirementCopy.jobType;
-      delete requirementCopy.seniority;
+      delete requirementData.company;
+      delete requirementData.jobType;
+      delete requirementData.seniority;
       // nested maps deletion (to avoid merging)
-      delete requirementCopy.typeform;
-      return getters.api.patch(requirement._links.self.href, requirementCopy);
+      delete requirementData.typeform;
+      return getters.api.patch(requirement._links.self.href, requirementData);
     },
     requestAccessToken({ getters }, payload) {
       // https://github.com/axios/axios/issues/1195
@@ -295,8 +310,8 @@ export default new Vuex.Store({
         })
         .then((pendingOpportunitiesResponse) => {
           dispatch('setMenuBadges', { opportunities: pendingOpportunitiesResponse.data._embedded.opportunities.length });
-          return getters
-            .api.patch(getters.user._links.self.href, { lastSignedInAt: moment().utc().format() });
+          return getters.api
+            .patch(getters.user._links.self.href, { lastSignedInAt: moment().utc().format() });
         })
         .then(() => {
           commit(types.SET_AUTH_PROCESS_COMPLETED, true);
