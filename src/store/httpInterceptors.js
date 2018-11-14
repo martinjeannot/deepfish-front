@@ -8,7 +8,11 @@ export default function () {
       if (!error.response) {
         return Promise.reject(error);
       }
-      const { config, response: { status } } = error;
+      const { config, response: { status, data } } = error;
+      // in case of wrongly encoded token or other errors not expiration-related
+      if (data.error === 'invalid_token' && !data.error_description.toLowerCase().includes('expired')) {
+        return Promise.reject(error);
+      }
       const originalRequest = config;
 
       if (status === 401 && !originalRequest.retry) {

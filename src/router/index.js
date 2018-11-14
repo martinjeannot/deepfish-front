@@ -87,7 +87,12 @@ const router = new Router({
       path: '/auth/callback',
       name: 'AuthCallback',
       beforeEnter: (to, from, next) => {
-        const queryParams = new URLSearchParams(location.search);
+        let queryParams = new URLSearchParams();
+        if (location.search) {
+          queryParams = new URLSearchParams(location.search);
+        } else if (location.hash) {
+          queryParams = new URLSearchParams(location.hash.split('?').pop());
+        }
         if (queryParams.has('auth_token')) {
           localStorage.setItem('auth_token', queryParams.get('auth_token'));
           location.href = location.origin;
