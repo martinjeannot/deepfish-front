@@ -5,7 +5,9 @@ export default function () {
   store.getters.api.interceptors.response.use(
     response => response,
     (error) => {
-      if (!error.response) {
+      if (!error.response // not an HTTP related error
+        || store.getters.authTokenRefreshing // auth token refreshing failed
+      ) {
         return Promise.reject(error);
       }
       const { config, response: { status, data } } = error;
@@ -44,8 +46,10 @@ export default function () {
             return store.getters.api(originalRequest);
           })
           .catch(() => {
+            store.dispatch('setAuthTokenRefreshing', false);
             store.dispatch('logout');
             router.push('/');
+            // FIXME below message get overridden by autoSignIn catch clause
             store.dispatch('setAlertComponent', { type: 'error', message: 'Your session has expired' });
           });
       }
