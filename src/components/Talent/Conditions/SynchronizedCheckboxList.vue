@@ -1,16 +1,18 @@
 <template>
-  <v-card>
+  <v-card class="elevation-0">
     <h4 class="mb-4">{{ title }}</h4>
-    <v-tooltip top v-for="domainObject in referenceDomainObjects" :key="domainObject.id" :disabled="!getTooltipFromL10nKey(domainObject.l10nKey)">
-      <v-checkbox 
-                  :value="domainObject.id"
-                  :label="getLabelFromL10nKey(domainObject.l10nKey)"
-                  v-model="domainObjectsModel"
-                  :disabled="loading"
-                  slot="activator"
+    <div v-for="domainObject in referenceDomainObjects" :key="domainObject.id">
+      <v-checkbox
+        :value="domainObject.id"
+        :label="getLabelFromL10nKey(domainObject.l10nKey)"
+        v-model="domainObjectsModel"
+        :disabled="loading"
+        :hide-details="true"
       ></v-checkbox>
-      <span>{{getTooltipFromL10nKey(domainObject.l10nKey)}}</span>
-    </v-tooltip>
+      <div v-if="getDescriptionFromL10nKey(domainObject.l10nKey)" class="pl-4 font-italic">
+        {{ getDescriptionFromL10nKey(domainObject.l10nKey) }}
+      </div>
+    </div>
   </v-card>
 </template>
 
@@ -91,7 +93,7 @@
             return l10nKey;
         }
       },
-      getTooltipFromL10nKey(l10nKey) {
+      getDescriptionFromL10nKey(l10nKey) {
         switch (l10nKey) {
           case 'Pre-Sales':
             return 'Ingénieur avant-vente';

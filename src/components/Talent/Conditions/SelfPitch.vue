@@ -29,7 +29,7 @@
         <v-flex xs12 class="text-xs-right">
           <v-btn
             style="position: absolute; bottom: 15px; right: 40px;"
-            type="submit" color="primary" :disabled="!valid || loading" :loading="loading">Valider
+            type="submit" color="primary" :disabled="!valid || loading" :loading="loading">Valider mon profil
           </v-btn>
         </v-flex>
       </v-form>
