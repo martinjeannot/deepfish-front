@@ -31,12 +31,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 Vue.config.productionTip = !isProduction;
 
-Vue.use(Vuetify, {
-  theme: {
-    primary: '#2B8CC1',
-    info: '#0080E6',
-  },
-});
+Vue.use(Vuetify);
 Vue.use(filters);
 Vue.use(VueAnalytics, {
   id: ['UA-90375031-1', 'UA-118984586-1'],
