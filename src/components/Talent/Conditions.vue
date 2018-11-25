@@ -2,11 +2,11 @@
   <div>
     <v-stepper v-model="currentStep" @input="scrollToTop">
       <v-stepper-header>
-        <v-stepper-step step="1" :complete="currentStep > 1">Mon poste souhaité</v-stepper-step>
+        <v-stepper-step step="1" :complete="currentStep > 1">Mon poste souhaité (4 questions)</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="2" :complete="currentStep > 2">Mes exigences</v-stepper-step>
+        <v-stepper-step step="2" :complete="currentStep > 2">Mes exigences (3 questions)</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="3">Ma présentation</v-stepper-step>
+        <v-stepper-step step="3">Ma présentation (3 questions)</v-stepper-step>
       </v-stepper-header>
       <v-stepper-items>
         <v-stepper-content step="1">
