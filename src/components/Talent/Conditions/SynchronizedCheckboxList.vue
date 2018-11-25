@@ -4,9 +4,10 @@
     <div v-for="domainObject in referenceDomainObjects" :key="domainObject.id">
       <v-checkbox
         :value="domainObject.id"
-        :label="getLabelFromL10nKey(domainObject.l10nKey)"
+        :label="domainObject.l10nKey"
         v-model="domainObjectsModel"
         :disabled="loading"
+        v-show="domainObject.enabled"
         :hide-details="true"
       ></v-checkbox>
       <div v-if="getDescriptionFromL10nKey(domainObject.l10nKey)" class="pl-4 font-italic">
@@ -79,35 +80,25 @@
       clearLoading() {
         this.loading = false;
       },
-      getLabelFromL10nKey(l10nKey) {
-        switch (l10nKey) {
-          case 'Amorçage':
-            return 'Amorcage : tu seras le 1er sales';
-          case 'Early stage':
-            return 'Early stage : équipe entre 1 et 5 sales';
-          case 'Accélération':
-            return 'Accélération : équipe entre 6 et 20 sales';
-          case 'Maturité':
-            return 'Maturité : équipe de 20+ sales';
-          default:
-            return l10nKey;
-        }
-      },
       getDescriptionFromL10nKey(l10nKey) {
         switch (l10nKey) {
-          case 'Pre-Sales':
-            return 'Ingénieur avant-vente';
-          case 'Sales':
-            return 'BizDev, Commercial, Account Executive, Account Manager, Ingé d\'affaires, etc.';
-          case 'Customer Success':
-            return 'Après-vente ou suivi/relation client';
-          case 'Cold calling':
+          // Company maturity levels
+          case 'Petite entreprise':
+            return 'Moins de 50 consultants avec environ 5 profils business';
+          case 'PME':
+            return 'Moins de 250 consultants avec environ 15 profils business';
+          case 'ETI':
+            return 'Moins de 2000 consultants avec environ 100 profils business';
+          case 'Grand groupe':
+            return 'Plus de 2000 consultants avec plus de 100 profils business';
+          // Task types
+          case 'Prospection':
             return 'Prospection ou appel à froid';
-          case 'New business':
-            return 'Développement de nouveaux clients/New logo ou nouvelles ventes au sein de client existants';
-          case 'Account management':
+          case 'Ouverture de nouveaux clients':
+            return 'Développement de nouveaux clients/new logo ou nouvelles ventes au sein de client existants';
+          case 'Gestion de comptes clients':
             return 'Gestion de comptes existants';
-          case 'Gestion d\'équipe':
+          case 'Management de commerciaux':
             return 'Management d\'une équipe commerciale';
           default:
             return null;

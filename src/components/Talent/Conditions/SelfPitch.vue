@@ -17,11 +17,23 @@
           @input="saveProfile"
         ></v-select>
       </v-flex>
-      <v-flex xs12>
-        <div class="subheading font-weight-bold">Mets-toi en valeur en quelques mots (visible par le recruteur) :</div>
-        <div>Quelle opportunité recherches-tu ? Quelles sont tes qualités ?</div>
-      </v-flex>
       <v-form v-model="valid" ref="form" @submit.prevent="submitSelfPitch" style="width: 100%">
+        <div class="subheading font-weight-bold">Combien gères-tu de consultants et/ou de projets ?</div>
+        <v-flex xs12 sm6>
+          <!-- TODO virer le 0 pour faire comme le phone tel sur profile (i.e simuler pas de default value) -->
+          <v-text-field type="number" v-model="talent.numberOfManagedConsultants"
+                        label="Nombre de consultants"></v-text-field>
+        </v-flex>
+        <v-flex xs12 sm6>
+          <!-- TODO virer le 0 pour faire comme le phone tel sur profile (i.e simuler pas de default value) -->
+          <v-text-field type="number" v-model="talent.numberOfManagedProjects"
+                        label="Nombre de projets"></v-text-field>
+        </v-flex>
+        <v-flex xs12>
+          <div class="subheading font-weight-bold">Mets-toi en valeur en quelques mots (visible par le recruteur) :
+          </div>
+          <div>Quelle opportunité recherches-tu ? Quelles sont tes qualités ?</div>
+        </v-flex>
         <v-flex xs12>
           <v-textarea v-model="talent.selfPitch" rows="9" :rules="[rules.maxLength]" :counter="1000"
                       :readonly="loading"></v-textarea>

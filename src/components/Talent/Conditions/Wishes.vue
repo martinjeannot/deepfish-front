@@ -32,7 +32,8 @@
         <span class="subheading" style="font-weight: bold">Où souhaites-tu travailler ?</span>
       </v-flex>
       <v-layout row wrap>
-        <v-flex xs12 sm3 md2 lg1 v-for="citiesByCountry in fixedLocationsByCountry" :key="citiesByCountry.country.id">
+        <v-flex xs12 sm3 md2 lg1 v-for="citiesByCountry in fixedLocationsByCountry" :key="citiesByCountry.country.id"
+                v-show="citiesByCountry.country.enabled">
           <v-checkbox :value="citiesByCountry.country.id" :label="citiesByCountry.country.l10nKey"
                       v-model="selectedLocationIds" :disabled="subLoading" style="font-weight: bold"></v-checkbox>
           <v-checkbox v-for="cities in citiesByCountry.cities" :key="cities.id" :value="cities.id"
