@@ -5,21 +5,21 @@
         <v-progress-circular indeterminate color="primary" :size="70"></v-progress-circular>
       </v-flex>
     </v-layout>
-    <v-layout wrap v-else>
-      <v-flex xs12 class="mb-2">
-        <span class="subheading" style="font-weight: bold">Quel salaire fixe annuel minimum (sans variable) acceptes-tu ?</span>
+    <v-layout row wrap v-else>
+      <v-flex xs12 class="subheading font-weight-bold mb-2">
+        Quel salaire fixe annuel minimum (sans variable) acceptes-tu ?
       </v-flex>
-      <v-flex xs12>
-        <v-form v-model="fixedSalaryValid" ref="fixedSalaryForm" @submit.prevent="submitConditions">
-          <v-flex xs12 sm6 class="d-inline-flex">
-            <v-text-field type="number" v-model="conditions.fixedSalary" label="Montant annuel hors primes" prefix="€"
-                          :rules="[rules.required, rules.positive, rules.minValue]" required></v-text-field>
-            <v-btn type="submit" small color="primary" :disabled="!fixedSalaryValid || subLoading"
-                   :loading="subLoading">
-              Valider
-            </v-btn>
-          </v-flex>
-        </v-form>
+      <v-flex xs12 sm5 md3 lg2 xl2 class="mb-2">
+        <v-text-field
+          type="number"
+          v-model="fixedSalary"
+          ref="fixedSalaryInput"
+          label="Montant annuel hors primes"
+          prefix="€"
+          :rules="[rules.required, rules.positive, rules.minValue]"
+          @input="$emit('update:fixedSalaryValid', $refs.fixedSalaryInput.valid)"
+          @change="onFixedSalaryChange"
+        ></v-text-field>
       </v-flex>
       <v-flex xs12 class="mb-2">
         <span class="subheading" style="font-weight: bold">À quelle date peux-tu démarrer ?</span>
@@ -32,13 +32,16 @@
         <span class="subheading" style="font-weight: bold">Où souhaites-tu travailler ?</span>
       </v-flex>
       <v-layout row wrap>
-        <v-flex xs12 sm3 md2 lg1 v-for="citiesByCountry in fixedLocationsByCountry" :key="citiesByCountry.country.id"
+        <v-flex xs12 v-for="citiesByCountry in fixedLocationsByCountry" :key="citiesByCountry.country.id"
                 v-show="citiesByCountry.country.enabled">
           <v-checkbox :value="citiesByCountry.country.id" :label="citiesByCountry.country.l10nKey"
                       v-model="selectedLocationIds" :disabled="subLoading" style="font-weight: bold"></v-checkbox>
-          <v-checkbox v-for="cities in citiesByCountry.cities" :key="cities.id" :value="cities.id"
-                      :label="cities.l10nKey" v-model="selectedLocationIds" :disabled="subLoading"
-                      class="ml-3"></v-checkbox>
+          <v-layout row wrap>
+            <v-flex xs12 sm4 md3 lg2 v-for="cities in citiesByCountry.cities" :key="cities.id">
+              <v-checkbox :value="cities.id" :label="cities.l10nKey" v-model="selectedLocationIds"
+                          :disabled="subLoading" class="ml-3"></v-checkbox>
+            </v-flex>
+          </v-layout>
         </v-flex>
       </v-layout>
     </v-layout>
@@ -60,7 +63,6 @@
       loading: false,
       subLoading: false,
       conditions: null,
-      fixedSalaryValid: false,
       rules,
       fixedLocations: [],
       fixedLocationsByCountry: [],
@@ -70,6 +72,16 @@
         'api',
         'user',
       ]),
+      fixedSalary: {
+        get() {
+          return this.conditions.fixedSalary ? this.conditions.fixedSalary : '';
+        },
+        set(value) {
+          if (this.$refs.fixedSalaryInput.validate()) {
+            this.conditions.fixedSalary = value;
+          }
+        },
+      },
       selectedLocationIds: {
         get() {
           return this.conditions.fixedLocations.map(fixedLocation => fixedLocation.id);
@@ -149,10 +161,10 @@
         this.loading = false;
         this.subLoading = false;
       },
-      submitConditions() {
-        this
-          .saveConditions()
-          .then(() => this.showSnackbar('OK'));
+      onFixedSalaryChange() {
+        if (this.$refs.fixedSalaryInput.valid) {
+          this.saveConditions();
+        }
       },
       saveConditions() {
         const conditions = Object.assign({}, this.conditions);
@@ -161,10 +173,6 @@
             delete conditions[key];
           }
         });
-        if (!this.conditions.fixedSalary) {
-          delete conditions.fixedSalary;
-        }
-        this.prepareForApiConsumption();
         return this.api
           .patch(this.conditions._links.self.href, conditions)
           .finally(() => this.clearLoading());
@@ -183,7 +191,9 @@
                ]) => {
           this.conditions = conditionsResponse.data;
           if (!this.conditions.fixedSalary) {
-            this.conditions.fixedSalary = '';
+            this.$emit('update:fixedSalaryValid', false);
+          } else {
+            this.$emit('update:fixedSalaryValid', true);
           }
           this.fixedLocations = fixedLocationResponse.data._embedded.fixedLocations;
           this.fixedLocationsByCountry = this.fixedLocations
