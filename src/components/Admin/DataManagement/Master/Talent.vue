@@ -261,7 +261,11 @@
                       :pagination.sync="opportunityTable.pagination"
                       :total-items="opportunityTable.totalItems">
                       <template slot="items" slot-scope="props">
-                        <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
+                        <td>
+                          <router-link :to="{ name: 'AdminDMOpportunity', params: {id: props.item.id} }">
+                            {{ props.item.createdAt | formatDate('LLL') }}
+                          </router-link>
+                        </td>
                         <td>
                           <router-link :to="{ name: 'AdminDMCompany', params: {id: props.item.company.id} }">
                             {{ props.item.company.name }}

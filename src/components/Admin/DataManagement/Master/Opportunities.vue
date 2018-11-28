@@ -7,26 +7,29 @@
       <v-card>
         <v-card-title>
           <v-flex xs12 sm6 class="pr-2">
-            <v-select v-if="!initialLoading" label="Requirement" :items="requirements" v-model="selectedRequirement"
-                      hide-details clearable @input="search = ''; getOpportunities()">
-              <template slot="selection" slot-scope="data">
+            <!-- FIXME : vuetify autocomplete's item-text filter prevent us from searching through company name OR requirement name -->
+            <v-autocomplete v-model="selectedRequirementId" :items="requirements" item-text="company.name"
+                            item-value="id" label="Requirement" :search-input.sync="requirementsSearchInput"
+                            :loading="loading" clearable prepend-icon="assignment"
+                            @change="search = ''; getOpportunities()" hide-details>
+              <template slot="selection" slot-scope="{ item }">
                 <div class="input-group__selections__comma">
-                  {{ data.item.company.name }} - {{ data.item.name }}
+                  {{ item.company.name }} - {{ item.name }}
                 </div>
               </template>
-              <template slot="item" slot-scope="data">
+              <template slot="item" slot-scope="{ item }">
                 <v-list-tile>
                   <v-list-tile-content>
-                    <v-list-tile-title><span style="font-weight: bold">{{ data.item.company.name }}</span>
-                      : {{ data.item.name }}
+                    <v-list-tile-title>
+                      <span style="font-weight: bold">{{ item.company.name }}</span> : {{ item.name }}
                     </v-list-tile-title>
                   </v-list-tile-content>
                 </v-list-tile>
               </template>
-            </v-select>
+            </v-autocomplete>
           </v-flex>
           <v-flex xs12 sm6 class="pl-2">
-            <v-text-field label="Search..." v-model="search" @blur="selectedRequirement = null; getOpportunities()"
+            <v-text-field label="Search..." v-model="search" @blur="selectedRequirementId = null; getOpportunities()"
                           append-icon="search" single-line hide-details></v-text-field>
           </v-flex>
         </v-card-title>
@@ -90,7 +93,8 @@
       },
       search: '',
       requirements: [],
-      selectedRequirement: null,
+      selectedRequirementId: null,
+      requirementsSearchInput: null,
     }),
     computed: {
       ...mapGetters([
@@ -109,6 +113,11 @@
         },
         deep: true,
       },
+      requirementsSearchInput(search) {
+        if (search) {
+          this.searchRequirements(search);
+        }
+      },
     },
     methods: {
       ...mapActions([
@@ -123,9 +132,9 @@
         if (this.search) {
           path += '/search/findByRequirementCompanyNameContainingOrTalentLastNameContainingOrTalentFirstNameContainingAllIgnoreCase';
           queryString += `&companyName=${this.search}&talentLastName=${this.search}&talentFirstName=${this.search}`;
-        } else if (this.selectedRequirement) {
+        } else if (this.selectedRequirementId) {
           path += '/search/findByRequirementId';
-          queryString += `&requirementId=${this.selectedRequirement.id}`;
+          queryString += `&requirementId=${this.selectedRequirementId}`;
         }
         queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';
@@ -138,16 +147,15 @@
           .catch(() => this.showSnackbar('Error'))
           .finally(() => this.clearLoading());
       },
-    },
-    created() {
-      this.prepareForApiConsumption(true);
-      this
-        .api('/requirements?projection=default&size=1000')
-        .then((response) => {
-          this.requirements = response.data._embedded.requirements;
-        })
-        .catch(() => this.showSnackbar('Error loading requirements'))
-        .finally(() => this.clearLoading(true));
+      searchRequirements(search) {
+        this.prepareForApiConsumption();
+        this.api(`/requirements/search/findByStatusIsAndNameContainingOrCompanyNameContainingAllIgnoreCase?projection=default&status=OPEN&name=${search}&companyName=${search}&sort=createdAt,desc`)
+          .then((response) => {
+            this.requirements = response.data._embedded.requirements;
+          })
+          .catch(() => this.showSnackbar('Error'))
+          .finally(() => this.clearLoading());
+      },
     },
   };
 </script>
