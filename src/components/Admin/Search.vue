@@ -469,7 +469,7 @@
         this.api('/jobTypes'),
         this.api('/commodityTypes'),
         this.api('/taskTypes'),
-        this.api('/fixedLocations'),
+        this.api('/fixedLocations?enabled=true'),
       ])
         .then(([
                  companyMaturityLevelsResponse,
