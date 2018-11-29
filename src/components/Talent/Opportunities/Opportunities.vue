@@ -146,13 +146,9 @@
               </v-card-title>
               <v-card-actions>
                 <v-flex xs12 class="text-xs-center">
-                  <v-tooltip top>
-                    <v-btn slot="activator" flat color="primary"
-                           :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
-                      Voir l'opportunité
-                    </v-btn>
-                    <span>L'offre n'est plus d'actualité</span>
-                  </v-tooltip>
+                  <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
+                    Voir l'opportunité
+                  </v-btn>
                 </v-flex>
               </v-card-actions>
             </v-card>
