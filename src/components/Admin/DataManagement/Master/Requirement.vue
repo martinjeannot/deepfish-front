@@ -137,6 +137,9 @@
             case 'text':
               value = answer.text;
               break;
+            case 'choices':
+              value = answer.choices.labels.join(', ');
+              break;
             default:
               value = 'N/A';
           }
