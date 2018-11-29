@@ -185,6 +185,10 @@
           .then((response) => {
             if (response.data.phoneNumber === 'null') {
               response.data.phoneNumber = '';
+              this.setAlertComponent({
+                type: 'success',
+                message: 'Bienvenue chez Deepfish ! Après avoir complété ton profil, tu pourras remplir tes conditions qui nous permettrons de t\'envoyer les meilleurs opportunités qui matcheront avec !',
+              });
             } else {
               this.hasBeenSuccessfullySubmittedOnce = true;
             }
@@ -197,27 +201,10 @@
           .finally(() => this.clearLoading());
       },
     },
-    fetchInitialData() {
-      this.prepareForApiConsumption();
-      this.api(this.user._links.self.href)
-        .then((response) => {
-          if (response.data.phoneNumber === 'null') {
-            response.data.phoneNumber = '';
-          } else {
-            this.hasBeenSuccessfullySubmittedOnce = true;
-          }
-          this.talent = response.data;
-        })
-        .catch((/* error */) => {
-          this.setErrorAfterApiConsumption();
-        })
-        .finally(() => this.clearLoading());
-    },
-
     beforeRouteLeave(to, from, next) {
       if (
         (this.talent.phoneNumber && this.hasBeenSuccessfullySubmittedOnce) ||
-        to.name === 'TalentSignIn'
+        to.name === 'SignIn'
       ) {
         next();
       } else {
