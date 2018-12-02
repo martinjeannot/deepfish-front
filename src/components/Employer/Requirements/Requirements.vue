@@ -106,7 +106,7 @@
           } else if (meetingScheduled) {
             this.setAlertComponent({
               type: 'success',
-              message: 'Votre demande a bien été prise en compte ! N\'oubliez pas d\'ajouter l\'evènement à votre calendrier',
+              message: 'Votre demande a bien été prise en compte ! N\'oubliez pas d\'ajouter l\'évènement à votre calendrier',
             });
           }
         })
