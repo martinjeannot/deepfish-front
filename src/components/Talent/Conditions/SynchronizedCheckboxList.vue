@@ -91,15 +91,6 @@
             return 'Moins de 2000 consultants avec environ 100 profils business';
           case 'Grand groupe':
             return 'Plus de 2000 consultants avec plus de 100 profils business';
-          // Task types
-          case 'Prospection':
-            return 'Prospection ou appel à froid';
-          case 'Ouverture de nouveaux clients':
-            return 'Développement de nouveaux clients/new logo ou nouvelles ventes au sein de client existants';
-          case 'Gestion de comptes clients':
-            return 'Gestion de comptes existants';
-          case 'Management de commerciaux':
-            return 'Management d\'une équipe commerciale';
           default:
             return null;
         }

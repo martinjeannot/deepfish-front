@@ -30,11 +30,12 @@
                   <h3>{{ talent.firstName }} {{ talent.lastName }}</h3>
                 </v-flex>
                 <v-flex xs12 md5 d-flex align-center>
-                  <v-btn key="disable" color="error" v-if="talent.active" @click="deactivationDialog = true"
-                         slot="activator">
-                    Je désactive mon profil
+                  <v-btn v-if="talent.active" key="disable" color="error" @click="deactivationDialog = true">
+                    Désactiver mon profil
                   </v-btn>
-                  <v-btn key="enable" color="success" v-else @click="activateTalent(talent)">J'active mon profil</v-btn>
+                  <v-btn v-else key="enable" color="success" @click="activateTalent(talent)">
+                    Activer mon profil
+                  </v-btn>
                 </v-flex>
                 <v-flex xs12>
                   <v-form v-model="valid" ref="form" @submit.prevent="saveProfile(talent, true)">
@@ -46,38 +47,23 @@
                       <v-text-field label="Numéro mobile" v-model="talent.phoneNumber"
                                     :rules="[rules.required]" type="text" required></v-text-field>
                     </v-flex>
-                    <v-flex xs12>
+                    <v-flex xs12 class="pt-2">
                       <h4>Quel est ton niveau de maturité ?</h4>
-                      <v-radio-group v-model="talent.maturityLevel" row :rules="[rules.required]">
-                        <v-tooltip bottom class="bugfix-vuetify-2171">
-                          <v-radio label="Clear water" value="CLEAR_WATER" slot="activator"
-                                   class="hidden-xs-only"></v-radio>
-                          <v-radio label="Clear" value="CLEAR_WATER" slot="activator"
-                                   class="hidden-sm-and-up"></v-radio>
-                          <div>
-                            Je suis en recherche active d'un nouveau job le
-                            plus vite possible
-                          </div>
-                        </v-tooltip>
-                        <v-tooltip bottom class="bugfix-vuetify-2171">
-                          <v-radio label="Open water" value="OPEN_WATER" slot="activator"
-                                   class="hidden-xs-only"></v-radio>
-                          <v-radio label="Open" value="OPEN_WATER" slot="activator" class="hidden-sm-and-up"></v-radio>
-                          <div>
-                            Je souhaite quitter mon entreprise prochainement<br/>
-                            et attends que les opportunités se présentent à moi
-                          </div>
-                        </v-tooltip>
-                        <v-tooltip bottom class="bugfix-vuetify-2171">
-                          <v-radio label="Deep water" value="DEEP_WATER" slot="activator"
-                                   class="hidden-xs-only"></v-radio>
-                          <v-radio label="Deep" value="DEEP_WATER" slot="activator"
-                                   class="hidden-sm-and-up"></v-radio>
-                          <div>
-                            Je ne souhaite pas changer d'entreprise mais<br/>
-                            si mon job idéal se présente, je saisis l'opportunité
-                          </div>
-                        </v-tooltip>
+                      <v-radio-group v-model="talent.maturityLevel" :rules="[rules.required]">
+                        <v-radio
+                          value="CLEAR_WATER"
+                          label="Clear water : je suis en recherche active d'un nouveau job le plus vite possible"
+                        ></v-radio>
+                        <v-radio
+                          value="OPEN_WATER"
+                          label="Open water : je souhaite quitter mon entreprise prochainement et attends que les opportunités se présentent à moi"
+                          class="pt-3"
+                        ></v-radio>
+                        <v-radio
+                          value="DEEP_WATER"
+                          label="Deep water : je ne souhaite pas changer d'entreprise mais si mon job idéal se présente, je saisis l'opportunité"
+                          class="pt-3"
+                        ></v-radio>
                       </v-radio-group>
                     </v-flex>
                     <v-flex xs12 text-xs-center>
@@ -199,6 +185,10 @@
           .then((response) => {
             if (response.data.phoneNumber === 'null') {
               response.data.phoneNumber = '';
+              this.setAlertComponent({
+                type: 'success',
+                message: 'Bienvenue chez Deepfish ! Après avoir complété ton profil, tu pourras remplir tes conditions qui nous permettrons de t\'envoyer les meilleurs opportunités qui matcheront avec !',
+              });
             } else {
               this.hasBeenSuccessfullySubmittedOnce = true;
             }
@@ -211,27 +201,10 @@
           .finally(() => this.clearLoading());
       },
     },
-    fetchInitialData() {
-      this.prepareForApiConsumption();
-      this.api(this.user._links.self.href)
-        .then((response) => {
-          if (response.data.phoneNumber === 'null') {
-            response.data.phoneNumber = '';
-          } else {
-            this.hasBeenSuccessfullySubmittedOnce = true;
-          }
-          this.talent = response.data;
-        })
-        .catch((/* error */) => {
-          this.setErrorAfterApiConsumption();
-        })
-        .finally(() => this.clearLoading());
-    },
-
     beforeRouteLeave(to, from, next) {
       if (
         (this.talent.phoneNumber && this.hasBeenSuccessfullySubmittedOnce) ||
-        to.name === 'TalentSignIn'
+        to.name === 'SignIn'
       ) {
         next();
       } else {
@@ -249,7 +222,5 @@
 </script>
 
 <style scoped>
-  .bugfix-vuetify-2171 {
-    flex: 1 1 auto;
-  }
+
 </style>

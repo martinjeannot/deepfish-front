@@ -7,21 +7,39 @@
   <v-layout v-else>
     <v-flex xs12>
       <v-layout v-if="alertComponent">
-        <v-flex xs12 sm6 offset-sm3>
+        <v-flex xs12 sm8 offset-sm2>
           <base-alert :type="alertComponent.type" :message="alertComponent.message" :rawHtml="alertComponent.rawHtml"
                       @dismissed="onAlertComponentDismissed"></base-alert>
         </v-flex>
       </v-layout>
       <v-layout>
-        <v-flex xs12 sm6 offset-sm3>
+        <v-flex xs12 sm8 offset-sm2>
           <v-card>
+            <v-card-title>
+              <v-flex xs12 class="text-xs-center">
+                <div class="headline">Déclarer un nouveau besoin</div>
+              </v-flex>
+            </v-card-title>
+            <v-card-title class="text-xs-center">
+              <v-layout row wrap>
+                <v-flex xs12 sm6>
+                  <v-btn color="info" :to="{ name: 'EmployerTypeformRequirement' }" target="_blank">
+                    En ligne
+                    <v-icon right>desktop_windows</v-icon>
+                  </v-btn>
+                </v-flex>
+                <v-flex xs12 class="hidden-sm-and-up mt-3"></v-flex>
+                <v-flex xs12 sm6>
+                  <v-btn color="info" :to="{ name: 'EmployerCalendlyRequirement' }" target="_blank">
+                    Par téléphone
+                    <v-icon right>phone</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
+            </v-card-title>
+          </v-card>
+          <v-card v-if="requirements.length" class="mt-4">
             <v-list three-line>
-              <v-btn fab small color="primary" right absolute :to="{ name: 'EmployerRequirement' }" target="_blank">
-                <v-icon>add</v-icon>
-              </v-btn>
-              <template v-if="!requirements.length">
-                <v-subheader>Mes besoins</v-subheader>
-              </template>
               <template v-for="(requirement, index) in requirements">
                 <v-subheader v-if="index === 0" :key="requirement.id + '-subheader'">Mes besoins</v-subheader>
                 <v-divider :key="requirement.id + '-divider'"></v-divider>
@@ -72,6 +90,7 @@
     async created() {
       this.prepareForApiConsumption();
       const newRequirementCreated = Object.prototype.hasOwnProperty.call(this.$route.query, 'newRequirementCreated');
+      const meetingScheduled = Object.prototype.hasOwnProperty.call(this.$route.query, 'meetingScheduled');
       if (newRequirementCreated) {
         // waiting for the backend to save the newly created requirement in db
         await new Promise(resolve => setTimeout(resolve, 3000));
@@ -84,6 +103,11 @@
               type: 'success',
               message: 'Nouveau besoin enregistré ! Vous serez notifié par mail dès reception d\'un nouveau profil',
             });
+          } else if (meetingScheduled) {
+            this.setAlertComponent({
+              type: 'success',
+              message: 'Votre demande a bien été prise en compte ! N\'oubliez pas d\'ajouter l\'évènement à votre calendrier',
+            });
           }
         })
         .catch(() => this.setErrorAfterApiConsumption())
@@ -93,4 +117,5 @@
 </script>
 
 <style scoped>
+
 </style>

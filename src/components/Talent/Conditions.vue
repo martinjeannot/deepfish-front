@@ -14,9 +14,14 @@
           <v-btn color="primary" @click.native="currentStep++">Suivant</v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
-          <conditions-wishes></conditions-wishes>
+          <conditions-wishes :fixed-salary-valid.sync="fixedSalaryValid"></conditions-wishes>
+          <v-alert :value="!fixedSalaryValid" type="info">
+            Nous avons besoin de tes
+            <v-btn small @click="scrollToTop">prétentions salariales</v-btn>
+            pour t'envoyer des opportunités qui les respectent
+          </v-alert>
           <v-btn flat @click.native="currentStep--">Précédent</v-btn>
-          <v-btn color="primary" @click.native="currentStep++">Suivant</v-btn>
+          <v-btn color="primary" @click.native="currentStep++" :disabled="!fixedSalaryValid">Suivant</v-btn>
         </v-stepper-content>
         <v-stepper-content step="3">
           <conditions-self-pitch></conditions-self-pitch>
@@ -41,6 +46,7 @@
     },
     data: () => ({
       currentStep: 0,
+      fixedSalaryValid: false,
     }),
     methods: {
       scrollToTop() {

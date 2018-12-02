@@ -1,19 +1,17 @@
 <template>
   <v-layout>
-    <v-flex xs12>
-      <v-layout>
-        <v-flex xs12 sm6 offset-sm3>
-          <v-card>
-            <v-card-title>
-              <h2>Créer un nouveau besoin</h2>
-            </v-card-title>
-            <v-card-text>
-              <div class="typeform-widget" :data-url="requirementCreationTypeformUrl + user.id" data-transparency="100"
-                   data-hide-headers="true" data-hide-footer="true" style="width: 100%; height: 500px;"></div>
-            </v-card-text>
-          </v-card>
-        </v-flex>
-      </v-layout>
+    <v-flex xs12 sm8 offset-sm2>
+      <v-card>
+        <v-card-title>
+          <v-flex xs12 class="text-xs-center">
+            <div class="headline">Déclarer un nouveau besoin</div>
+          </v-flex>
+        </v-card-title>
+        <v-card-text>
+          <div class="typeform-widget" :data-url="requirementCreationTypeformUrl + user.id" data-transparency="100"
+               data-hide-headers="true" data-hide-footer="true" style="width: 100%; height: 500px;"></div>
+        </v-card-text>
+      </v-card>
     </v-flex>
   </v-layout>
 </template>
@@ -22,7 +20,7 @@
   import { mapGetters } from 'vuex';
 
   export default {
-    name: 'employer-requirements',
+    name: 'typeform-requirement',
     data: () => ({
       jobTypes: [],
       seniorities: [],
@@ -59,7 +57,5 @@
 </script>
 
 <style scoped>
-  .w-auto {
-    width: auto;
-  }
+
 </style>
