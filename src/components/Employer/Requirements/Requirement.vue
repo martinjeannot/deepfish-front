@@ -63,7 +63,7 @@ const rules = {
 };
 
 export default {
-  name: 'employer-requirements',
+  name: 'employer-requirement',
   data: () => ({
     rules,
     jobTypes: [],

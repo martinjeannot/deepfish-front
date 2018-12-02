@@ -24,6 +24,7 @@ import AdminStatisticsTalentAcquisition from '@/components/Admin/Statistics/Tale
 import EmployerProfile from '@/components/Employer/Profile';
 import EmployerRequirements from '@/components/Employer/Requirements/Requirements';
 import EmployerTypeformRequirement from '@/components/Employer/Requirements/TypeformRequirement';
+import EmployerCalendlyRequirement from '@/components/Employer/Requirements/CalendlyRequirement';
 import EmployerTalents from '@/components/Employer/Talents/Talents';
 import TalentProfile from '@/components/Talent/Profile';
 import TalentConditions from '@/components/Talent/Conditions';
@@ -111,7 +112,7 @@ const router = new Router({
           if (store.getters.user.requirements.length) {
             next('/employer/talents');
           } else {
-            next('/employer/requirements/new');
+            next({ name: 'EmployerRequirements' });
           }
         } else if (store.getters.isUserTalent) {
           if (store.getters.user.phoneNumber !== 'null') {
@@ -253,9 +254,15 @@ const router = new Router({
       meta: { authRequired: true },
     },
     {
-      path: '/employer/requirements/new',
-      name: 'EmployerRequirement',
+      path: '/employer/requirements/online',
+      name: 'EmployerTypeformRequirement',
       component: EmployerTypeformRequirement,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/employer/requirements/call',
+      name: 'EmployerCalendlyRequirement',
+      component: EmployerCalendlyRequirement,
       meta: { authRequired: true },
     },
     {
