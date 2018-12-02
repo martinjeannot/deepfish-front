@@ -128,6 +128,14 @@
                             @input="saveProfile"
                           ></v-select>
                         </v-flex>
+                        <v-flex xs6 class="pr-3">
+                          <v-text-field v-model="talent.numberOfManagedConsultants" label="Nombre de consultants"
+                                        :readonly="true"></v-text-field>
+                        </v-flex>
+                        <v-flex xs6 class="pl-3">
+                          <v-text-field v-model="talent.numberOfManagedProjects" label="Nombre de projets"
+                                        :readonly="true"></v-text-field>
+                        </v-flex>
                         <v-flex xs12 v-if="talent.basicProfile.positions._total">
                           <v-flex xs12 class="pb-2">
                             <h4>Experience</h4>
