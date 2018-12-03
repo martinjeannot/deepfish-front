@@ -91,11 +91,11 @@
       getTalents() {
         this.prepareForApiConsumption();
         let path = '/talents';
-        path += this.search ? '/search/findByEmailContainingOrLastNameContainingOrFirstNameContainingAllIgnoreCase' : '';
+        path += this.search ? '/search/findByEmailContainingOrLastNameContainingOrFirstNameContainingOrPhoneNumberContainingAllIgnoreCase' : '';
         let queryString = '';
         queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';
-        queryString += this.search ? `&email=${this.search}&lastName=${this.search}&firstName=${this.search}` : '';
+        queryString += this.search ? `&email=${this.search}&lastName=${this.search}&firstName=${this.search}&phoneNumber=${this.search}` : '';
         this
           .api(`${path}?${queryString}`)
           .then((response) => {
