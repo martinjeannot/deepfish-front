@@ -168,7 +168,8 @@
           <v-form v-model="employerDeclinationValid" @submit.prevent="declineTalent(selectedOpportunity)">
             <v-layout wrap>
               <v-flex xs12>
-                <h3>Expliquez la raison de votre refus pour améliorer la recherche :</h3>
+                <h3>Expliquez-nous la raison de votre refus pour améliorer nos recherches</h3>
+                <div class="font-italic">(Nous ne communiquons pas cette information au talent)</div>
               </v-flex>
               <v-flex xs12>
                 <v-textarea v-model="selectedOpportunity.employerDeclinationReason" rows="7"
