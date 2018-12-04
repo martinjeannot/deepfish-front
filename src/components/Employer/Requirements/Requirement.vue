@@ -128,13 +128,6 @@ export default {
         this.jobTypes = jobTypesResponse.data._embedded.jobTypes;
         this.seniorities = senioritiesResponse.data._embedded.seniorities;
         this.requirement = this.newRequirement();
-        if (!this.user.requirements.length) {
-          this.setAlertComponent({
-            type: 'success',
-            message:
-              'Bienvenue sur Deepfish ! Vous pouvez dès maintenant nous confier votre premier besoin en recrutement',
-          });
-        }
       })
       .catch(() => this.setErrorAfterApiConsumption())
       .finally(() => this.clearLoading());

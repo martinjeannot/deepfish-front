@@ -108,6 +108,11 @@
               type: 'success',
               message: 'Votre demande a bien été prise en compte ! N\'oubliez pas d\'ajouter l\'évènement à votre calendrier',
             });
+          } else if (!this.requirements.length) {
+            this.setAlertComponent({
+              type: 'success',
+              message: 'Bienvenue chez Deepfish ! Vous pouvez dès maintenant nous confier votre premier besoin en recrutement',
+            });
           }
         })
         .catch(() => this.setErrorAfterApiConsumption())
