@@ -18,9 +18,14 @@
             <div v-if="opportunity.requirement.status === 'CLOSED'">
               <v-chip v-html="'L\'offre n\'est plus d\'actualité'" class="text-xs-center pa-2"></v-chip>
             </div>
+            <div v-else-if="opportunity.talentStatus === 'PENDING'">
+              <v-chip v-html="formatExpirationCountdown(opportunity.expirationCountdown)"
+                      color="red" outline class="text-xs-center pa-2">
+              </v-chip>
+            </div>
             <div v-else-if="opportunity.talentStatus === 'ACCEPTED'">
-              <v-chip :color="getOpportunityStatusColor(opportunity.employerStatus)"
-                      v-html="getLabelFromOpportunityStatus(opportunity.employerStatus)" class="text-xs-center pa-2">
+              <v-chip v-html="getLabelFromOpportunityStatus(opportunity.employerStatus)"
+                      :color="getOpportunityStatusColor(opportunity.employerStatus)" class="text-xs-center pa-2">
               </v-chip>
             </div>
           </v-flex>
@@ -98,6 +103,7 @@
 </template>
 
 <script>
+  import moment from 'moment';
   import { mapGetters, mapState, mapActions } from 'vuex';
 
   const rules = {
@@ -115,6 +121,7 @@
       bulkDeclinationDialog: false,
       bulkDeclinationValid: false,
       bulkDeclinationReason: '',
+      expirationCountdownInterval: null,
     }),
     computed: {
       ...mapGetters([
@@ -140,6 +147,15 @@
         this.api(`/opportunities/${this.id}?projection=talent`)
           .then((response) => {
             this.opportunity = response.data;
+            if (this.opportunity.talentStatus === 'PENDING') {
+              this.opportunity.expirationCountdown = null;
+              if (moment.utc().isBefore(this.opportunity.expiredAt)) {
+                this.opportunity.expirationCountdown =
+                  moment.duration(moment(this.opportunity.expiredAt).diff(moment.utc()));
+                this.expirationCountdownInterval =
+                  setInterval(() => this.updateExpirationCountdown(), 1000);
+              }
+            }
           })
           .finally(() => this.clearLoading());
       },
@@ -189,9 +205,27 @@
             this.showSnackbar('Erreur');
           });
       },
+      updateExpirationCountdown() {
+        if (this.opportunity.expirationCountdown) {
+          this.opportunity.expirationCountdown.subtract(1, 'second');
+        }
+        this.$forceUpdate();
+      },
+      formatExpirationCountdown(expirationCountdown) {
+        if (expirationCountdown) {
+          return `${expirationCountdown.days()} jours ${expirationCountdown.hours()} heures
+          ${expirationCountdown.minutes()} minutes ${expirationCountdown.seconds()} secondes`;
+        }
+        return 'Plus que quelques minutes !';
+      },
     },
     created() {
       this.fetchData();
+    },
+    beforeDestroy() {
+      if (this.expirationCountdownInterval) {
+        clearInterval(this.expirationCountdownInterval);
+      }
     },
   };
 </script>
