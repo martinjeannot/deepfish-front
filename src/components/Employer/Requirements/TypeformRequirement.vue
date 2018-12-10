@@ -5,12 +5,11 @@
         <v-card-title>
           <v-flex xs12 class="text-xs-center">
             <div class="headline">Déclarer un nouveau besoin</div>
+            <div class="font-italic">(~5 min)</div>
           </v-flex>
         </v-card-title>
-        <v-card-text>
-          <div class="typeform-widget" :data-url="requirementCreationTypeformUrl + user.id" data-transparency="100"
-               data-hide-headers="true" data-hide-footer="true" style="width: 100%; height: 500px;"></div>
-        </v-card-text>
+        <div class="typeform-widget" :data-url="requirementCreationTypeformUrl + user.id" data-transparency="100"
+             data-hide-headers="true" data-hide-footer="true" style="width: 100%; height: 500px;"></div>
       </v-card>
     </v-flex>
   </v-layout>
