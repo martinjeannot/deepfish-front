@@ -23,17 +23,23 @@
                     :src="props.item.company.logoURL ? props.item.company.logoURL : 'static/img/placeholder_150.jpg'"
                     alt="logo" max-width="100px"></v-img>
                 </v-flex>
-                <v-flex xs8 sm10 md11>
+                <v-flex xs8 sm4 md7>
                   Deepfish te propose un job chez <span style="font-weight: bold">{{ props.item.company.name }}</span>
+                </v-flex>
+                <v-flex xs12 sm6 md4 class="text-xs-center" pt-3>
+                  Cette opportunité expire dans :
+                  <v-chip v-html="formatExpirationCountdown(props.item.expirationCountdown)"
+                          color="red" outline class="pa-2">
+                  </v-chip>
                 </v-flex>
               </v-card-title>
               <v-card-actions>
                 <v-flex xs12 class="text-xs-center">
                   <v-badge overlap color="red">
+                    <v-icon slot="badge" color="white">priority_high</v-icon>
                     <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
                       Voir l'opportunité
                     </v-btn>
-                    <v-icon slot="badge" color="white">priority_high</v-icon>
                   </v-badge>
                 </v-flex>
               </v-card-actions>
@@ -123,10 +129,10 @@
         </v-data-iterator>
       </v-container>
     </v-flex>
-    <v-flex xs12 v-if="closedOpportunities.length">
+    <v-flex xs12 v-if="voidOpportunities.length">
       <h2>Mes opportunités archivées</h2>
       <v-container fluid grid-list-md>
-        <v-data-iterator content-tag="v-layout" row wrap :items="closedOpportunities"
+        <v-data-iterator content-tag="v-layout" row wrap :items="voidOpportunities"
                          :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card color="brown lighten-4">
@@ -141,7 +147,10 @@
                   <span style="font-weight: bold">{{ props.item.company.name }}</span>
                 </v-flex>
                 <v-flex xs12 sm6 md4 class="text-xs-center" pt-3>
-                  <v-chip color="grey lighten-2" v-html="'L\'offre n\'est plus d\'actualité'" class="pa-2"></v-chip>
+                  <v-chip v-if="closedOpportunities.includes(props.item)" v-html="'L\'offre n\'est plus d\'actualité'"
+                          color="grey lighten-2" class="pa-2"></v-chip>
+                  <v-chip v-else-if="expiredOpportunities.includes(props.item)" v-html="'Trop tard, l\'opportunité a expiré'"
+                          color="grey lighten-2" class="pa-2"></v-chip>
                 </v-flex>
               </v-card-title>
               <v-card-actions>
@@ -181,6 +190,7 @@
 </template>
 
 <script>
+  import moment from 'moment';
   import { mapGetters, mapState, mapActions } from 'vuex';
 
   export default {
@@ -189,9 +199,11 @@
       pendingOpportunities: [],
       acceptedOpportunities: [],
       declinedOpportunities: [],
+      expiredOpportunities: [],
       closedOpportunities: [],
       totalItems: 0,
       qualificationDialog: false,
+      expirationCountdownInterval: null,
     }),
     computed: {
       ...mapGetters([
@@ -205,6 +217,9 @@
         'getOpportunityStatusColor',
         'getLabelFromOpportunityStatus',
       ]),
+      voidOpportunities() {
+        return this.expiredOpportunities.concat(this.closedOpportunities);
+      },
     },
     methods: {
       ...mapActions([
@@ -213,6 +228,21 @@
         'setAlertComponent',
         'onAlertComponentDismissed',
       ]),
+      updateExpirationCountdowns() {
+        this.pendingOpportunities.forEach((opportunity) => {
+          if (opportunity.expirationCountdown) {
+            opportunity.expirationCountdown.subtract(1, 'second');
+          }
+        });
+        this.$forceUpdate();
+      },
+      formatExpirationCountdown(expirationCountdown) {
+        if (expirationCountdown && expirationCountdown.asSeconds() > 0) {
+          return `${expirationCountdown.days()} jours ${expirationCountdown.hours()} heures
+          ${expirationCountdown.minutes()} minutes ${expirationCountdown.seconds()} secondes`;
+        }
+        return 'quelques minutes !';
+      },
     },
     created() {
       this.prepareForApiConsumption();
@@ -226,9 +256,11 @@
             .filter(opportunity => opportunity.talentStatus === 'ACCEPTED' && opportunity.requirement.status === 'OPEN');
           this.declinedOpportunities = response.data._embedded.opportunities
             .filter(opportunity => opportunity.talentStatus === 'DECLINED' && opportunity.requirement.status === 'OPEN');
+          this.expiredOpportunities = response.data._embedded.opportunities
+            .filter(opportunity => opportunity.talentStatus === 'EXPIRED' && opportunity.requirement.status === 'OPEN');
           this.closedOpportunities = response.data._embedded.opportunities
             .filter(opportunity => opportunity.requirement.status === 'CLOSED');
-          // Opportunity accepted
+          // opportunity accepted
           if (Object.prototype.hasOwnProperty.call(this.$route.query, 'opportunityAccepted')) {
             if (this.acceptedOpportunities.length === 1) {
               this.qualificationDialog = true;
@@ -239,8 +271,23 @@
               });
             }
           }
+          // expiration countdown
+          this.pendingOpportunities.forEach((opportunity) => {
+            opportunity.expirationCountdown = null;
+            if (moment.utc().isBefore(opportunity.expiredAt)) {
+              opportunity.expirationCountdown =
+                moment.duration(moment(opportunity.expiredAt).diff(moment.utc()));
+            }
+          });
+          this.expirationCountdownInterval =
+            setInterval(() => this.updateExpirationCountdowns(), 1000);
         })
         .finally(() => this.clearLoading());
+    },
+    beforeDestroy() {
+      if (this.expirationCountdownInterval) {
+        clearInterval(this.expirationCountdownInterval);
+      }
     },
   };
 </script>

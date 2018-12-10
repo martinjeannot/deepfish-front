@@ -185,11 +185,6 @@
                           </v-chip>
                         </v-flex>
                         <v-flex xs12>
-                          <h3>Job Types</h3>
-                          <v-chip v-for="jobType in talent.conditions.jobTypes" :key="jobType.id">{{ jobType.l10nKey }}
-                          </v-chip>
-                        </v-flex>
-                        <v-flex xs12>
                           <h3>Commodity types</h3>
                           <v-chip v-for="commodityType in talent.conditions.commodityTypes" :key="commodityType.id">
                             {{ commodityType.l10nKey }}
@@ -202,9 +197,20 @@
                           </v-chip>
                         </v-flex>
                         <v-flex xs12>
+                          <h3>Industry types</h3>
+                          <v-chip v-for="industryType in talent.conditions.industryTypes" :key="industryType.id">
+                            {{ industryType.l10nKey }}
+                          </v-chip>
+                        </v-flex>
+                        <v-flex xs12>
                           <h3>Locations</h3>
                           <v-chip v-for="fixedLocation in talent.conditions.fixedLocations" :key="fixedLocation.id">
                             {{ fixedLocation.l10nKey }}
+                          </v-chip>
+                        </v-flex>
+                        <v-flex xs12>
+                          <h3>Job Types</h3>
+                          <v-chip v-for="jobType in talent.conditions.jobTypes" :key="jobType.id">{{ jobType.l10nKey }}
                           </v-chip>
                         </v-flex>
                       </v-layout>

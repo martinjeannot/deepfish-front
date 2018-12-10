@@ -28,7 +28,7 @@
         'user',
       ]),
       calendlyUrl() {
-        return `https://calendly.com/deepfish/_requirement?name=${this.user.firstName}%20${this.user.lastName}&email=${this.user.username}&a1=${this.user.phoneNumber}`;
+        return `${process.env.REQUIREMENT_CALENDLY_URL}?name=${this.user.firstName}%20${this.user.lastName}&email=${this.user.username}&a1=${this.user.phoneNumber}`;
       },
     },
     mounted() {

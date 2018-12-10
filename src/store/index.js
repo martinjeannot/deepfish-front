@@ -43,6 +43,8 @@ export default new Vuex.Store({
           return 'orange';
         case 'DECLINED':
           return 'red';
+        case 'EXPIRED':
+          return 'black';
         default:
           return null;
       }
