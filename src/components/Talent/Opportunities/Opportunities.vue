@@ -230,7 +230,7 @@
         this.$forceUpdate();
       },
       formatExpirationCountdown(expirationCountdown) {
-        if (expirationCountdown) {
+        if (expirationCountdown && expirationCountdown.asSeconds() > 0) {
           return `${expirationCountdown.days()} jours ${expirationCountdown.hours()} heures
           ${expirationCountdown.minutes()} minutes ${expirationCountdown.seconds()} secondes`;
         }
