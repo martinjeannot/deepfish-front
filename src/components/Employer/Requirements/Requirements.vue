@@ -22,18 +22,20 @@
             </v-card-title>
             <v-card-title class="text-xs-center">
               <v-layout row wrap>
-                <v-flex xs12 sm6>
+                <v-flex xs12 sm5>
                   <v-btn color="info" :to="{ name: 'EmployerTypeformRequirement' }" target="_blank">
                     En ligne
                     <v-icon right>desktop_windows</v-icon>
                   </v-btn>
+                  <div class="font-italic">(~5 min)</div>
                 </v-flex>
-                <v-flex xs12 class="hidden-sm-and-up mt-3"></v-flex>
-                <v-flex xs12 sm6>
+                <v-flex xs12 sm2 class="py-3 font-weight-bold">OU</v-flex>
+                <v-flex xs12 sm5>
                   <v-btn color="info" :to="{ name: 'EmployerCalendlyRequirement' }" target="_blank">
                     Par téléphone
                     <v-icon right>phone</v-icon>
                   </v-btn>
+                  <div class="font-italic">(~15 min)</div>
                 </v-flex>
               </v-layout>
             </v-card-title>
@@ -111,7 +113,7 @@
           } else if (!this.requirements.length) {
             this.setAlertComponent({
               type: 'success',
-              message: 'Bienvenue chez Deepfish ! Vous pouvez dès maintenant nous confier votre premier besoin en recrutement',
+              message: 'Bienvenue chez Deepfish ! Vous pouvez dès maintenant exprimer votre premier besoin en recrutement',
             });
           }
         })
