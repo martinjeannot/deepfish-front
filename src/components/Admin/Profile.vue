@@ -24,7 +24,7 @@
               </v-flex>
               <v-flex xs12>
                 <v-text-field type="email" label="Email" v-model="admin.username" :rules="[rules.required, rules.email]"
-                              required></v-text-field>
+                              readonly required></v-text-field>
               </v-flex>
               <v-flex xs12>
                 <v-text-field :type="passwordShown ? 'text' : 'password'" label="Nouveau mot de passe"
