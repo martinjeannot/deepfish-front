@@ -129,10 +129,10 @@
         </v-data-iterator>
       </v-container>
     </v-flex>
-    <v-flex xs12 v-if="closedOpportunities.length">
+    <v-flex xs12 v-if="voidOpportunities.length">
       <h2>Mes opportunités archivées</h2>
       <v-container fluid grid-list-md>
-        <v-data-iterator content-tag="v-layout" row wrap :items="closedOpportunities"
+        <v-data-iterator content-tag="v-layout" row wrap :items="voidOpportunities"
                          :hide-actions="true">
           <v-flex slot="item" slot-scope="props" xs12>
             <v-card color="brown lighten-4">
@@ -147,7 +147,10 @@
                   <span style="font-weight: bold">{{ props.item.company.name }}</span>
                 </v-flex>
                 <v-flex xs12 sm6 md4 class="text-xs-center" pt-3>
-                  <v-chip color="grey lighten-2" v-html="'L\'offre n\'est plus d\'actualité'" class="pa-2"></v-chip>
+                  <v-chip v-if="closedOpportunities.includes(props.item)" v-html="'L\'offre n\'est plus d\'actualité'"
+                          color="grey lighten-2" class="pa-2"></v-chip>
+                  <v-chip v-else-if="expiredOpportunities.includes(props.item)" v-html="'Trop tard, l\'opportunité a expiré'"
+                          color="grey lighten-2" class="pa-2"></v-chip>
                 </v-flex>
               </v-card-title>
               <v-card-actions>
@@ -196,6 +199,7 @@
       pendingOpportunities: [],
       acceptedOpportunities: [],
       declinedOpportunities: [],
+      expiredOpportunities: [],
       closedOpportunities: [],
       totalItems: 0,
       qualificationDialog: false,
@@ -213,6 +217,9 @@
         'getOpportunityStatusColor',
         'getLabelFromOpportunityStatus',
       ]),
+      voidOpportunities() {
+        return this.expiredOpportunities.concat(this.closedOpportunities);
+      },
     },
     methods: {
       ...mapActions([
@@ -249,6 +256,8 @@
             .filter(opportunity => opportunity.talentStatus === 'ACCEPTED' && opportunity.requirement.status === 'OPEN');
           this.declinedOpportunities = response.data._embedded.opportunities
             .filter(opportunity => opportunity.talentStatus === 'DECLINED' && opportunity.requirement.status === 'OPEN');
+          this.expiredOpportunities = response.data._embedded.opportunities
+            .filter(opportunity => opportunity.talentStatus === 'EXPIRED' && opportunity.requirement.status === 'OPEN');
           this.closedOpportunities = response.data._embedded.opportunities
             .filter(opportunity => opportunity.requirement.status === 'CLOSED');
           // opportunity accepted

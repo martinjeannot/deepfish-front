@@ -5,7 +5,7 @@
     </v-flex>
   </v-layout>
   <v-layout row wrap v-else>
-    <v-flex xs12 sm6 offset-sm3>
+    <v-flex xs12 sm8 offset-sm2>
       <v-card>
         <v-card-title primary-title>
           <v-flex xs3 lg2>
@@ -27,6 +27,9 @@
               <v-chip v-html="getLabelFromOpportunityStatus(opportunity.employerStatus)"
                       :color="getOpportunityStatusColor(opportunity.employerStatus)" class="text-xs-center pa-2">
               </v-chip>
+            </div>
+            <div v-else-if="opportunity.talentStatus === 'EXPIRED'">
+              <v-chip v-html="'Trop tard, l\'opportunité a expiré'" class="text-xs-center pa-2"></v-chip>
             </div>
           </v-flex>
         </v-card-title>
