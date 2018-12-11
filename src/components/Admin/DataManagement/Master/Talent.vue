@@ -426,10 +426,6 @@
           profileCompletion.items.push('Company maturity levels');
         }
         profileItemCounter += 1;
-        if (!this.talent.conditions.jobTypes.length) {
-          profileCompletion.items.push('Job types');
-        }
-        profileItemCounter += 1;
         if (!this.talent.conditions.commodityTypes.length) {
           profileCompletion.items.push('Commodity types');
         }
