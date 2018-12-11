@@ -308,21 +308,31 @@
                       </template>
                     </v-data-table>
                     <v-flex xs12>
-                      <ul style="list-style: none">
-                        <li
-                          v-for="opportunity in talent.opportunities.filter(opportunity => opportunity.talentDeclinationReason.length || opportunity.employerDeclinationReason.length)">
-                          <v-flex xs12 class="mb-3">
-                            <div v-if="opportunity.talentDeclinationReason.length">
-                              {{talent.firstName }} declined {{ opportunity.company.name
-                              }} => {{ opportunity.talentDeclinationReason }}
-                            </div>
-                            <div v-else>
-                              {{ opportunity.company.name }} declined {{ talent.firstName
-                              }} => {{ opportunity.employerDeclinationReason }}
-                            </div>
-                          </v-flex>
-                        </li>
-                      </ul>
+                      <v-list>
+                        <template
+                          v-for="opportunity in talent.opportunities.filter(opportunity => opportunity.talentDeclinationReason.length || opportunity.employerDeclinationReason.length)"
+                        >
+                          <v-divider :key="opportunity.id + '-divider'"></v-divider>
+                          <v-layout :key="opportunity.id + '-row'" class="pa-3">
+                            <v-flex xs4 v-if="opportunity.talentDeclinationReason.length">
+                              <span class="font-weight-bold blue--text">{{talent.firstName }}</span>
+                              declined
+                              <span class="font-weight-bold red--text">{{ opportunity.company.name }}</span>
+                            </v-flex>
+                            <v-flex xs4 v-else>
+                              <span class="font-weight-bold red--text">{{ opportunity.company.name }}</span>
+                              declined
+                              <span class="font-weight-bold blue--text">{{talent.firstName }}</span>
+                            </v-flex>
+                            <v-flex xs8 v-if="opportunity.talentDeclinationReason.length">
+                              {{ opportunity.talentDeclinationReason }}
+                            </v-flex>
+                            <v-flex xs8 v-else>
+                              {{ opportunity.employerDeclinationReason }}
+                            </v-flex>
+                          </v-layout>
+                        </template>
+                      </v-list>
                     </v-flex>
                   </v-tab-item>
                   <v-tab-item>
