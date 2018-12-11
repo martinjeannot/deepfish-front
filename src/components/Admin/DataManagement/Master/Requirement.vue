@@ -129,15 +129,18 @@
       ...mapGetters(['api', 'initialLoading', 'loading', 'alertComponent']),
       typeformAnswers() {
         return this.requirement.typeform.form_response.answers.map((answer) => {
-          const question = this.requirement.typeform.form_response.definition.fields.find(
-            field => field.id === answer.field.id,
-          ).title;
+          const question =
+            this.requirement.typeform.form_response.definition.fields
+              .find(field => field.id === answer.field.id).title;
           let value = null;
           switch (answer.type) {
             case 'text':
               value = answer.text;
               break;
-            case 'choices':
+            case 'choice': // multiple choice / single selection
+              value = answer.choice.label;
+              break;
+            case 'choices': // multiple choice / multiple selection
               value = answer.choices.labels.join(', ');
               break;
             default:
