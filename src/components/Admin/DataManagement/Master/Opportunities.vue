@@ -44,7 +44,7 @@
             </td>
             <td>
               <router-link :to="{ name: 'AdminDMTalent', params: {id: props.item.talent.id} }">
-                {{ props.item.talent.lastName.toUpperCase() }} {{ props.item.talent.firstName }}
+                {{ props.item.talent.firstName }} {{ props.item.talent.lastName.toUpperCase() }}
               </router-link>
             </td>
             <td>

@@ -33,7 +33,7 @@
                     </v-avatar>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
-                    <h2>{{ talent.lastName.toUpperCase() }} {{ talent.firstName }}</h2>
+                    <h2>{{ talent.firstName }} {{ talent.lastName.toUpperCase() }}</h2>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
                     <h4>{{ talent.basicProfile.headline }}</h4>
@@ -113,7 +113,7 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12 text-xs-center class="pb-3">
-                          <h3>{{ talent.basicProfile.lastName }} {{ talent.basicProfile.firstName }}</h3>
+                          <h3>{{ talent.basicProfile.firstName }} {{ talent.basicProfile.lastName }}</h3>
                           <h4>{{ talent.basicProfile.headline }}</h4>
                           {{ talent.basicProfile.location.name }} | {{ talent.basicProfile.industry }}
                         </v-flex>

@@ -20,8 +20,7 @@
               <v-card>
                 <v-card-text>
                   <v-flex xs12 class="text-xs-center">
-                    <h2>{{ employer.lastName.toUpperCase() }} {{
-                      employer.firstName }}</h2>
+                    <h2>{{ employer.firstName }} {{ employer.lastName.toUpperCase() }}</h2>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center mb-3">
                     <h4>

@@ -174,7 +174,7 @@
                 <v-flex xs6 style="margin: auto">
                   <h4>
                     <router-link :to="{ name: 'AdminDMTalent', params: {id: props.item.id} }" target="_blank">
-                      {{ props.item.lastName.toUpperCase() }} {{ props.item.firstName }}
+                      {{ props.item.firstName }} {{ props.item.lastName.toUpperCase() }}
                     </router-link>
                   </h4>
                   {{ props.item.basicProfile.headline }}
