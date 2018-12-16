@@ -61,6 +61,20 @@ export default new Vuex.Store({
           return 'Ton profil est en cours de validation par Deepfish';
       }
     },
+    getLabelFromCompanyMaturityLevelL10nKey(l10nKey) {
+      switch (l10nKey) {
+        case 'Petite entreprise':
+          return 'Petite entreprise <50';
+        case 'PME':
+          return 'PME [50-250]';
+        case 'ETI':
+          return 'ETI [250-2000]';
+        case 'Grand groupe':
+          return 'Grand groupe >2000';
+        default:
+          return l10nKey;
+      }
+    },
     getTalentLinkedInProfileUrl(basicProfile) {
       if (basicProfile.publicProfileUrl) {
         return basicProfile.publicProfileUrl;

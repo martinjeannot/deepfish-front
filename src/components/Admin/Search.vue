@@ -29,7 +29,7 @@
               <ternary-checkbox v-for="companyMaturityLevel in companyMaturityLevels"
                                 :key="companyMaturityLevel.id"
                                 :value="companyMaturityLevel.id"
-                                :label="companyMaturityLevel.l10nKey"
+                                :label="getLabelFromCompanyMaturityLevelL10nKey(companyMaturityLevel.l10nKey)"
                                 :checked-state-model.sync="criteria.companyMaturityLevels"
                                 :indeterminate-state-model.sync="criteria.companyMaturityLevelsNotIn"
               ></ternary-checkbox>
@@ -303,6 +303,7 @@
       ]),
       ...mapState([
         'getTalentMaturityLevel',
+        'getLabelFromCompanyMaturityLevelL10nKey',
         'getTalentLinkedInProfileUrl',
       ]),
     },

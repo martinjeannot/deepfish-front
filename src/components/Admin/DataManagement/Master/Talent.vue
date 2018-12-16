@@ -181,7 +181,8 @@
                         <v-flex xs12>
                           <h3>Company maturity levels</h3>
                           <v-chip v-for="companyMaturityLevel in talent.conditions.companyMaturityLevels"
-                                  :key="companyMaturityLevel.id">{{ companyMaturityLevel.l10nKey }}
+                                  :key="companyMaturityLevel.id">
+                            {{ getLabelFromCompanyMaturityLevelL10nKey(companyMaturityLevel.l10nKey) }}
                           </v-chip>
                         </v-flex>
                         <v-flex xs12>
@@ -416,6 +417,7 @@
         'getTalentMaturityLevel',
         'getOpportunityStatusColor',
         'getTalentLinkedInProfileUrl',
+        'getLabelFromCompanyMaturityLevelL10nKey',
       ]),
       profileCompletion() {
         const profileCompletion = { value: 100, items: [] };
