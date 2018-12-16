@@ -86,9 +86,9 @@
           case 'Petite entreprise':
             return 'Moins de 50 consultants avec environ 5 profils business';
           case 'PME':
-            return 'Moins de 250 consultants avec environ 15 profils business';
+            return 'Entre 50 et 250 consultants avec entre 5 et 15 profils business';
           case 'ETI':
-            return 'Moins de 2000 consultants avec environ 100 profils business';
+            return 'Entre 250 et 2000 consultants avec entre 15 et 100 profils business';
           case 'Grand groupe':
             return 'Plus de 2000 consultants avec plus de 100 profils business';
           default:

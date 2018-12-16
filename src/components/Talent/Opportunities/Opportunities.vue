@@ -147,9 +147,11 @@
                   <span style="font-weight: bold">{{ props.item.company.name }}</span>
                 </v-flex>
                 <v-flex xs12 sm6 md4 class="text-xs-center" pt-3>
-                  <v-chip v-if="closedOpportunities.includes(props.item)" v-html="'L\'offre n\'est plus d\'actualité'"
+                  <v-chip v-if="closedOpportunities.includes(props.item)"
+                          v-html="'L\'offre n\'est plus d\'actualité'"
                           color="grey lighten-2" class="pa-2"></v-chip>
-                  <v-chip v-else-if="expiredOpportunities.includes(props.item)" v-html="'Trop tard, l\'opportunité a expiré'"
+                  <v-chip v-else-if="expiredOpportunities.includes(props.item)"
+                          v-html="'Trop tard, l\'opportunité a expiré'"
                           color="grey lighten-2" class="pa-2"></v-chip>
                 </v-flex>
               </v-card-title>
@@ -178,7 +180,7 @@
             Mais avant de permettre au recruteur de découvrir ton profil complet (non anonymisé), nous aimerions échanger avec toi par téléphone :
           </v-flex>
           <v-flex xs12 class="text-xs-center mt-3">
-            <v-btn href="https://calendly.com/deepfish/15min" target="_blank" flat color="info"
+            <v-btn :href="calendlyUrl" target="_blank" flat color="info"
                    @click.native="qualificationDialog = false">
               Choisir un créneau
             </v-btn>
@@ -217,6 +219,9 @@
         'getOpportunityStatusColor',
         'getLabelFromOpportunityStatus',
       ]),
+      calendlyUrl() {
+        return `${process.env.TALENT_CALENDLY_URL}?name=${this.user.firstName}%20${this.user.lastName}&email=${this.user.email}&a1=${this.user.phoneNumber}`;
+      },
       voidOpportunities() {
         return this.expiredOpportunities.concat(this.closedOpportunities);
       },

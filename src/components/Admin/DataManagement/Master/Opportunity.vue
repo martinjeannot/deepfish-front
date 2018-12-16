@@ -38,7 +38,7 @@
                   <v-flex xs12 class="mb-3">
                     <span style="font-weight: bold">Sent to</span> :
                     <router-link :to="{ name: 'AdminDMTalent', params: {id: opportunity.talent.id} }">
-                      {{ opportunity.talent.lastName.toUpperCase() }} {{ opportunity.talent.firstName }}
+                      {{ opportunity.talent.firstName }} {{ opportunity.talent.lastName.toUpperCase() }}
                     </router-link>
                   </v-flex>
                   <v-flex xs12 class="mb-3">

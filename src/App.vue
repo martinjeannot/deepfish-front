@@ -59,7 +59,7 @@
     <v-footer app dark height="auto">
       <v-card flat tile width="inherit" class="text-xs-center" color="#3A3A3A">
         <v-card-text class="py-0">
-          <v-btn v-for="link in footerLinks" :key="link.href" icon class="mx-3" :href="link.href" target="_blank">
+          <v-btn v-for="link in footerLinks" :key="link.href" icon class="mx-2" :href="link.href" target="_blank">
             <v-icon size="24px">{{ link.icon }}</v-icon>
           </v-btn>
         </v-card-text>
@@ -84,6 +84,7 @@
         { icon: 'fab fa-twitter', href: 'https://twitter.com/deepfish_co' },
         { icon: 'fab fa-linkedin', href: 'https://www.linkedin.com/company/deepfish' },
         { icon: 'fab fa-instagram', href: 'https://www.instagram.com/deepfish.co/' },
+        { icon: 'fab fa-wordpress', href: 'http://blog.deepfish.co' },
       ],
     }),
     computed: {

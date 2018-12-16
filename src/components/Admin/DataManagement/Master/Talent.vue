@@ -33,7 +33,7 @@
                     </v-avatar>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
-                    <h2>{{ talent.lastName.toUpperCase() }} {{ talent.firstName }}</h2>
+                    <h2>{{ talent.firstName }} {{ talent.lastName.toUpperCase() }}</h2>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
                     <h4>{{ talent.basicProfile.headline }}</h4>
@@ -113,7 +113,7 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12 text-xs-center class="pb-3">
-                          <h3>{{ talent.basicProfile.lastName }} {{ talent.basicProfile.firstName }}</h3>
+                          <h3>{{ talent.basicProfile.firstName }} {{ talent.basicProfile.lastName }}</h3>
                           <h4>{{ talent.basicProfile.headline }}</h4>
                           {{ talent.basicProfile.location.name }} | {{ talent.basicProfile.industry }}
                         </v-flex>
@@ -181,7 +181,8 @@
                         <v-flex xs12>
                           <h3>Company maturity levels</h3>
                           <v-chip v-for="companyMaturityLevel in talent.conditions.companyMaturityLevels"
-                                  :key="companyMaturityLevel.id">{{ companyMaturityLevel.l10nKey }}
+                                  :key="companyMaturityLevel.id">
+                            {{ getLabelFromCompanyMaturityLevelL10nKey(companyMaturityLevel.l10nKey) }}
                           </v-chip>
                         </v-flex>
                         <v-flex xs12>
@@ -308,21 +309,31 @@
                       </template>
                     </v-data-table>
                     <v-flex xs12>
-                      <ul style="list-style: none">
-                        <li
-                          v-for="opportunity in talent.opportunities.filter(opportunity => opportunity.talentDeclinationReason.length || opportunity.employerDeclinationReason.length)">
-                          <v-flex xs12 class="mb-3">
-                            <div v-if="opportunity.talentDeclinationReason.length">
-                              {{talent.firstName }} declined {{ opportunity.company.name
-                              }} => {{ opportunity.talentDeclinationReason }}
-                            </div>
-                            <div v-else>
-                              {{ opportunity.company.name }} declined {{ talent.firstName
-                              }} => {{ opportunity.employerDeclinationReason }}
-                            </div>
-                          </v-flex>
-                        </li>
-                      </ul>
+                      <v-list>
+                        <template
+                          v-for="opportunity in talent.opportunities.filter(opportunity => opportunity.talentDeclinationReason.length || opportunity.employerDeclinationReason.length)"
+                        >
+                          <v-divider :key="opportunity.id + '-divider'"></v-divider>
+                          <v-layout :key="opportunity.id + '-row'" class="pa-3">
+                            <v-flex xs4 v-if="opportunity.talentDeclinationReason.length">
+                              <span class="font-weight-bold blue--text">{{talent.firstName }}</span>
+                              declined
+                              <span class="font-weight-bold red--text">{{ opportunity.company.name }}</span>
+                            </v-flex>
+                            <v-flex xs4 v-else>
+                              <span class="font-weight-bold red--text">{{ opportunity.company.name }}</span>
+                              declined
+                              <span class="font-weight-bold blue--text">{{talent.firstName }}</span>
+                            </v-flex>
+                            <v-flex xs8 v-if="opportunity.talentDeclinationReason.length">
+                              {{ opportunity.talentDeclinationReason }}
+                            </v-flex>
+                            <v-flex xs8 v-else>
+                              {{ opportunity.employerDeclinationReason }}
+                            </v-flex>
+                          </v-layout>
+                        </template>
+                      </v-list>
                     </v-flex>
                   </v-tab-item>
                   <v-tab-item>
@@ -406,6 +417,7 @@
         'getTalentMaturityLevel',
         'getOpportunityStatusColor',
         'getTalentLinkedInProfileUrl',
+        'getLabelFromCompanyMaturityLevelL10nKey',
       ]),
       profileCompletion() {
         const profileCompletion = { value: 100, items: [] };
@@ -424,10 +436,6 @@
         profileItemCounter += 1;
         if (!this.talent.conditions.companyMaturityLevels.length) {
           profileCompletion.items.push('Company maturity levels');
-        }
-        profileItemCounter += 1;
-        if (!this.talent.conditions.jobTypes.length) {
-          profileCompletion.items.push('Job types');
         }
         profileItemCounter += 1;
         if (!this.talent.conditions.commodityTypes.length) {

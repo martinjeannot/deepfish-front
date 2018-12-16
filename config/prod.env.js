@@ -5,4 +5,5 @@ module.exports = {
   LINKEDIN_CLIENT_ID: '"86rw9g7ie1fvw5"',
   REQUIREMENT_CREATION_TYPEFORM_URL: '"https://deepfish.typeform.com/to/Q0TTXm?employer="',
   REQUIREMENT_CALENDLY_URL: '"https://calendly.com/deepfish/_requirement"',
+  TALENT_CALENDLY_URL: '"https://calendly.com/deepfish/_talent"',
 };

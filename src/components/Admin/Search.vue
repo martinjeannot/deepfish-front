@@ -29,7 +29,7 @@
               <ternary-checkbox v-for="companyMaturityLevel in companyMaturityLevels"
                                 :key="companyMaturityLevel.id"
                                 :value="companyMaturityLevel.id"
-                                :label="companyMaturityLevel.l10nKey"
+                                :label="getLabelFromCompanyMaturityLevelL10nKey(companyMaturityLevel.l10nKey)"
                                 :checked-state-model.sync="criteria.companyMaturityLevels"
                                 :indeterminate-state-model.sync="criteria.companyMaturityLevelsNotIn"
               ></ternary-checkbox>
@@ -174,7 +174,7 @@
                 <v-flex xs6 style="margin: auto">
                   <h4>
                     <router-link :to="{ name: 'AdminDMTalent', params: {id: props.item.id} }" target="_blank">
-                      {{ props.item.lastName.toUpperCase() }} {{ props.item.firstName }}
+                      {{ props.item.firstName }} {{ props.item.lastName.toUpperCase() }}
                     </router-link>
                   </h4>
                   {{ props.item.basicProfile.headline }}
@@ -303,6 +303,7 @@
       ]),
       ...mapState([
         'getTalentMaturityLevel',
+        'getLabelFromCompanyMaturityLevelL10nKey',
         'getTalentLinkedInProfileUrl',
       ]),
     },

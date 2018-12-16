@@ -35,8 +35,7 @@
                       <v-list-tile v-for="employer in company.employers" :key="employer.id">
                         <v-list-tile-content>
                           <router-link :to="{ name: 'AdminDMEmployer', params: {id: employer.id} }">
-                            {{ employer.lastName.toUpperCase() + ' ' +
-                            employer.firstName }}
+                            {{ employer.firstName }} {{ employer.lastName.toUpperCase() }}
                           </router-link>
                         </v-list-tile-content>
                       </v-list-tile>
