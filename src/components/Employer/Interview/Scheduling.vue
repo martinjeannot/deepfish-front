@@ -57,18 +57,56 @@
               :items="times"
               :value="selectedTimes[slotIndex]"
               @change="onSelectedTimesChange(slotIndex, $event)"
-              :label="selectedDateTimes[slotIndex].format(displayDateFormat)"
+              :label="selectedDateTimes[slotIndex].format('dddd D MMMM YYYY')"
             ></v-select>
             <v-flex v-else xs12 class="text-xs-center v-text-field placeholder">
               Créneau(x) restant(s) à choisir : {{ numberOfSlots - selectedDateTimes.length }}
             </v-flex>
           </template>
           <v-flex xs12 class="text-xs-center pt-3">
-            <v-btn color="primary" :disabled="selectedDateTimes.length < numberOfSlots">proposer ces créneaux</v-btn>
+            <v-btn
+              color="primary"
+              @click.stop="confirmationDialog = true"
+              :disabled="selectedDateTimes.length < numberOfSlots"
+            >
+              proposer ces créneaux
+            </v-btn>
           </v-flex>
         </v-card-text>
       </v-card>
     </v-flex>
+    <v-dialog v-model="confirmationDialog">
+      <v-card>
+        <v-card-text>
+          <v-layout row wrap>
+            <v-flex xs12>
+              Vous souhaitez proposer au talent les créneaux suivants :
+            </v-flex>
+            <v-list>
+              <template v-for="selectedDateTime in sortedSelectedDateTimes">
+                <v-list-tile>
+                  <v-list-tile-content class="hidden-sm-and-up caption">
+                    {{ selectedDateTime.format('dddd D MMMM YYYY [à] HH:mm') }}
+                  </v-list-tile-content>
+                  <v-list-tile-content class="hidden-xs-only">
+                    {{ selectedDateTime.format('dddd D MMMM YYYY [à] HH:mm') }}
+                  </v-list-tile-content>
+                </v-list-tile>
+              </template>
+            </v-list>
+            <v-flex xs12 class="font-italic pb-3">
+              Vous serez notifié dès que {{ talent.firstName }} acceptera l'un d'entre eux.
+            </v-flex>
+            <v-flex xs6>
+              <v-btn flat color="primary" @click="confirmationDialog = false" :disabled="loading">annuler</v-btn>
+            </v-flex>
+            <v-flex xs6>
+              <v-btn color="primary" @click="scheduleInterview" :loading="loading">confirmer</v-btn>
+            </v-flex>
+          </v-layout>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-layout>
 </template>
 
@@ -102,7 +140,7 @@
       min: moment().add('1', 'days'),
       selectedDateTimes: [],
       datePickerDateFormat: 'YYYY-MM-DD',
-      displayDateFormat: 'dddd D MMMM YYYY',
+      confirmationDialog: false,
     }),
     computed: {
       ...mapGetters([
@@ -144,6 +182,10 @@
       selectedTimes() {
         return this.selectedDateTimes.map(selectedDateTime => selectedDateTime.format('HH:mm'));
       },
+      sortedSelectedDateTimes() {
+        return [...this.selectedDateTimes]
+          .sort((firstDateTime, secondDateTime) => firstDateTime.diff(secondDateTime));
+      },
     },
     methods: {
       ...mapActions([
@@ -152,8 +194,8 @@
         'setErrorAfterApiConsumption',
         'onAlertComponentDismissed',
       ]),
-      moment(...args) { // TODO: needed ?
-        return moment(args[0]);
+      scheduleInterview() {
+        this.prepareForApiConsumption();
       },
       onSelectedTimesChange(slotIndex, value) {
         this.$set(this.selectedDateTimes, slotIndex, moment(`${this.selectedDates[slotIndex]} ${value}`));
