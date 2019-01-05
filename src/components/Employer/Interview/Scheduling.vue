@@ -30,11 +30,11 @@
             <v-select :items="interviewDurations" v-model="duration" label="Durée"></v-select>
           </v-flex>
           <v-flex xs12>
-            <v-select :items="interviewTypes" v-model="type" label="Type"></v-select>
+            <v-select :items="interviewFormats" v-model="format" label="Type"></v-select>
           </v-flex>
           <v-flex xs12>
             <v-text-field
-              v-if="type === 'PHONE'"
+              v-if="format === 'PHONE'"
               v-model="location"
               label="N° de téléphone"
             ></v-text-field>
@@ -101,7 +101,7 @@
               <v-btn flat color="primary" @click="confirmationDialog = false" :disabled="loading">annuler</v-btn>
             </v-flex>
             <v-flex xs6>
-              <v-btn color="primary" @click="scheduleInterview" :loading="loading">confirmer</v-btn>
+              <v-btn color="primary" @click="scheduleInterviews" :loading="loading">confirmer</v-btn>
             </v-flex>
           </v-layout>
         </v-card-text>
@@ -120,7 +120,7 @@
     { text: '1h30', value: 90 },
   ];
 
-  const interviewTypes = [
+  const interviewFormats = [
     { text: 'Téléphone', value: 'PHONE' },
     { text: 'Vidéo', value: 'VIDEO' },
     { text: 'En personne', value: 'IN_PERSON' },
@@ -128,13 +128,13 @@
 
   export default {
     name: 'employer-interview-scheduling',
-    props: ['talentId'],
+    props: ['talentId', 'opportunityId'],
     data: () => ({
       talent: null,
       interviewDurations,
       duration: 30,
-      interviewTypes,
-      type: 'PHONE',
+      interviewFormats,
+      format: 'PHONE',
       location: '',
       numberOfSlots: 3,
       min: moment().add('1', 'days'),
@@ -194,8 +194,26 @@
         'setErrorAfterApiConsumption',
         'onAlertComponentDismissed',
       ]),
-      scheduleInterview() {
+      scheduleInterviews() {
         this.prepareForApiConsumption();
+        const interviews = this.selectedDateTimes
+          .map(selectedDateTime => this.newInterview(selectedDateTime));
+        this.api
+          .post('/interviews/list', { resources: interviews })
+          .then(response => console.log(response))
+          .catch(response => console.log(response))
+          .finally(() => this.clearLoading());
+      },
+      newInterview(startAt) {
+        return {
+          creatorId: this.user.id,
+          opportunity: `/${this.opportunityId}`,
+          startAt,
+          endAt: startAt.add(this.duration, 'minutes'),
+          format: this.format,
+          talent: `/${this.talentId}`,
+          employer: this.user._links.self.href,
+        };
       },
       onSelectedTimesChange(slotIndex, value) {
         this.$set(this.selectedDateTimes, slotIndex, moment(`${this.selectedDates[slotIndex]} ${value}`));

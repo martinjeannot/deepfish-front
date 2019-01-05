@@ -273,10 +273,10 @@ const router = new Router({
       meta: { authRequired: true },
     },
     {
-      path: '/employer/interviews/scheduling/:talentId',
+      path: '/employer/interviews/scheduling',
       name: 'EmployerInterviewScheduling',
       component: EmployerInterviewScheduling,
-      props: true,
+      props: route => ({ talentId: route.query['talent-id'], opportunityId: route.query['opportunity-id'] }),
       meta: { authRequired: true },
     },
     // TALENT ======================================================================================
