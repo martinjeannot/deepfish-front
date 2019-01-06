@@ -147,7 +147,8 @@
       ]),
       fetchData() {
         this.prepareForApiConsumption();
-        this.api(`/opportunities/${this.id}?projection=talent`)
+        return this
+          .api(`/opportunities/${this.id}?projection=talent`)
           .then((response) => {
             this.opportunity = response.data;
             if (this.opportunity.talentStatus === 'PENDING') {
@@ -223,7 +224,14 @@
       },
     },
     created() {
-      this.fetchData();
+      this
+        .fetchData()
+        .then(() => {
+          if (this.opportunity && this.opportunity.talentStatus === 'EXPIRED') {
+            // redirect to opportunities
+            this.$router.push({ name: 'TalentOpportunities' });
+          }
+        });
     },
     beforeDestroy() {
       if (this.expirationCountdownInterval) {
