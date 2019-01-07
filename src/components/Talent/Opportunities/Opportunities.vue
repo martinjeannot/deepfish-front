@@ -140,12 +140,12 @@
                 <v-flex xs4 sm2 md1>
                   <v-img
                     :src="props.item.company.logoURL ? props.item.company.logoURL : 'static/img/placeholder_150.jpg'"
-                    :class="{ blurred: props.item.talentStatus === 'EXPIRED' }"
+                    :class="{ 'blurred-image': props.item.talentStatus === 'EXPIRED' }"
                     alt="logo" max-width="100px"></v-img>
                 </v-flex>
                 <v-flex xs8 sm4 md7>
                   Deepfish t'as proposé un job chez
-                  <span style="font-weight: bold">
+                  <span :class="{ 'blurred-text': props.item.talentStatus === 'EXPIRED' }" style="font-weight: bold">
                     {{ props.item.talentStatus === 'EXPIRED'
                     ? $options.filters.hideText(props.item.company.name)
                     : props.item.company.name }}
@@ -313,8 +313,13 @@
 </script>
 
 <style scoped>
-  .blurred {
-    -webkit-filter: blur(5px);
-    filter: blur(5px);
+  .blurred-image {
+    -webkit-filter: blur(18px);
+    filter: blur(18px);
+  }
+
+  .blurred-text {
+    -webkit-filter: blur(4px);
+    filter: blur(4px);
   }
 </style>
