@@ -53,6 +53,7 @@
         { title: 'Companies', icon: 'dashboard', route: '/admin/data-management/master/companies' },
         { title: 'Requirements', icon: 'dashboard', route: '/admin/data-management/master/requirements' },
         { title: 'Opportunities', icon: 'dashboard', route: '/admin/data-management/master/opportunities' },
+        { title: 'Interviews', icon: 'event', route: { name: 'AdminDMInterviews' } },
         { title: 'Admins', icon: 'dashboard', route: '/admin/data-management/master/users' },
       ],
       referenceDataItems: [
