@@ -166,8 +166,8 @@
         set(selectedDates) {
           if (selectedDates.length <= this.numberOfSlots) {
             if (selectedDates.length > this.selectedDateTimes.length) {
-              // add new selected date (starts at 09:00)
-              this.selectedDateTimes.push(moment(`${selectedDates[selectedDates.length - 1]}T09`));
+              // add new selected date (starts at 18:00)
+              this.selectedDateTimes.push(moment(`${selectedDates[selectedDates.length - 1]}T18`));
             } else {
               // remove existing selected date
               this.selectedDateTimes = this.selectedDateTimes
@@ -193,6 +193,7 @@
         'clearLoading',
         'setErrorAfterApiConsumption',
         'onAlertComponentDismissed',
+        'showSnackbar',
       ]),
       scheduleInterviews() {
         this.prepareForApiConsumption();
@@ -200,8 +201,8 @@
           .map(selectedDateTime => this.newInterview(selectedDateTime));
         this.api
           .post('/interviews/list', { resources: interviews })
-          .then(response => console.log(response))
-          .catch(response => console.log(response))
+          .then(() => this.$router.push({ name: 'EmployerTalents' }))
+          .catch(() => this.showSnackbar('Erreur'))
           .finally(() => this.clearLoading());
       },
       newInterview(startAt) {
