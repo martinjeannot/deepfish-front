@@ -6,7 +6,7 @@
   </v-layout>
   <v-layout row wrap v-else>
     <v-flex xs12 sm8 offset-sm2>
-      <v-card>
+      <v-card class="mb-3">
         <v-card-title primary-title>
           <v-flex xs3 lg2>
             <v-img :src="opportunity.company.logoURL ? opportunity.company.logoURL : 'static/img/placeholder_150.jpg'"
@@ -33,10 +33,28 @@
             </div>
           </v-flex>
         </v-card-title>
+      </v-card>
+      <v-flex xs12 class="mb-3">
+        <h3>Tu as des demandes d'entretien en attente de réponse ! Choisis une proposition parmi les suivantes :</h3>
+      </v-flex>
+      <v-card v-for="interview in interviews" :key="interview.id" class="mb-3">
         <v-card-text>
-          <v-flex xs12 class="pb-2">
-            <span style="font-style: italic">{{ opportunity.company.name }}</span> :
+          <v-flex xs12>
+            <span class="font-weight-bold">{{ opportunity.company.name }}</span> te propose un
+            <span class="font-weight-bold">entretien {{ getLabelFromInterviewFormat(interview.format) }}</span> le
+            <span class="font-weight-bold">
+              {{ interview.startAt | formatDate('dddd') }}
+              {{ interview.startAt | formatDate('LL') }}
+            </span> à
+            <span class="font-weight-bold">{{ interview.startAt | formatDate('LT') }}</span>
           </v-flex>
+          <v-flex xs12 class="text-xs-center">
+            <v-btn color="success" @click="acceptInterview(interview)">accepter ce créneau</v-btn>
+          </v-flex>
+        </v-card-text>
+      </v-card>
+      <v-card>
+        <v-card-text>
           <v-flex xs12 class="pb-3" style="white-space: pre-wrap" v-html="opportunity.company.description"
                   v-linkified></v-flex>
           <v-flex xs12 style="white-space: pre-wrap" v-html="opportunity.pitch" v-linkified></v-flex>
@@ -119,6 +137,7 @@
     data: () => ({
       rules,
       opportunity: null,
+      interviews: [],
       declinationDialog: false,
       declinationValid: false,
       bulkDeclinationDialog: false,
@@ -136,6 +155,7 @@
       ...mapState([
         'getOpportunityStatusColor',
         'getLabelFromOpportunityStatus',
+        'getLabelFromInterviewFormat',
       ]),
     },
     methods: {
@@ -144,6 +164,7 @@
         'clearLoading',
         'showSnackbar',
         'saveOpportunityData',
+        'saveInterviewData',
       ]),
       fetchData() {
         this.prepareForApiConsumption();
@@ -160,6 +181,10 @@
                   setInterval(() => this.updateExpirationCountdown(), 1000);
               }
             }
+            return this.api(`/interviews?opportunity=${this.id}`);
+          })
+          .then((response) => {
+            this.interviews = response.data._embedded.interviews;
           })
           .finally(() => this.clearLoading());
       },
@@ -172,6 +197,11 @@
             this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
             this.$router.push('/talent/opportunities?opportunityAccepted');
           });
+      },
+      acceptInterview(interview) {
+        const previousState = Object.assign({}, interview);
+        interview.talentResponseStatus = 'ACCEPTED';
+        return this.saveInterview(interview, previousState);
       },
       decline(opportunity) {
         const previousState = Object.assign({}, opportunity);
@@ -187,6 +217,15 @@
       saveOpportunity(opportunity, previousState) {
         return this
           .saveOpportunityData({ opportunity, previousState })
+          .then(() => this.showSnackbar('Opération terminée avec succès'))
+          .catch(() => {
+            this.showSnackbar('Erreur');
+            this.fetchData();
+          });
+      },
+      saveInterview(interview, previousState) {
+        return this
+          .saveInterviewData({ interview, previousState })
           .then(() => this.showSnackbar('Opération terminée avec succès'))
           .catch(() => {
             this.showSnackbar('Erreur');

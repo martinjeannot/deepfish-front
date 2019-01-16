@@ -84,7 +84,7 @@
         { icon: 'fab fa-twitter', href: 'https://twitter.com/deepfish_co' },
         { icon: 'fab fa-linkedin', href: 'https://www.linkedin.com/company/deepfish' },
         { icon: 'fab fa-instagram', href: 'https://www.instagram.com/deepfish.co/' },
-        { icon: 'fab fa-wordpress', href: 'http://blog.deepfish.co' },
+        { icon: 'fab fa-wordpress', href: 'https://blog.deepfish.co' },
       ],
     }),
     computed: {
@@ -129,9 +129,24 @@
             ];
           } else {
             menuItems = [
-              { key: 'conditions', icon: 'speaker_notes', title: 'Mes conditions', route: '/talent/conditions' },
-              { key: 'opportunities', icon: 'assignment', title: 'Mes opportunités', route: '/talent/opportunities' },
-              { key: 'profile', icon: 'account_circle', title: 'Mon profil', route: '/talent/profile' },
+              {
+                key: 'conditions',
+                icon: 'speaker_notes',
+                title: 'Mes conditions',
+                route: { name: 'TalentConditions' },
+              },
+              {
+                key: 'opportunities',
+                icon: 'assignment',
+                title: 'Mes opportunités',
+                route: { name: 'TalentOpportunities' },
+              },
+              {
+                key: 'profile',
+                icon: 'account_circle',
+                title: 'Mon profil',
+                route: { name: 'TalentProfile' },
+              },
             ];
           }
         }

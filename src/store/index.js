@@ -75,6 +75,18 @@ export default new Vuex.Store({
           return l10nKey;
       }
     },
+    getLabelFromInterviewFormat(interviewFormat) {
+      switch (interviewFormat) {
+        case 'PHONE':
+          return 'téléphonique';
+        case 'VIDEO':
+          return 'vidéo';
+        case 'IN_PERSON':
+          return 'en physique';
+        default:
+          return interviewFormat;
+      }
+    },
     getTalentLinkedInProfileUrl(basicProfile) {
       if (basicProfile.publicProfileUrl) {
         return basicProfile.publicProfileUrl;
@@ -229,6 +241,15 @@ export default new Vuex.Store({
       // nested maps deletion (to avoid merging)
       delete requirementData.typeform;
       return getters.api.patch(requirement._links.self.href, requirementData);
+    },
+    saveInterviewData({ getters }, { interview, previousState }) {
+      const interviewData = Object.assign({}, interview);
+      // linked refs deletion
+      if (previousState) {
+        interviewData.previousState = previousState;
+        // linked refs deletion
+      }
+      return getters.api.patch(interview._links.self.href, interviewData);
     },
     requestAccessToken({ getters }, payload) {
       // https://github.com/axios/axios/issues/1195
