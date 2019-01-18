@@ -61,6 +61,7 @@
     computed: {
       ...mapGetters([
         'api',
+        'menuBadges',
       ]),
       ...mapState([
         'getLabelFromInterviewFormat',
@@ -87,7 +88,10 @@
         interview.talentResponseStatus = 'ACCEPTED';
         return this
           .saveInterview(interview, previousState)
-          .then(() => this.getInterviews())
+          .then(() => {
+            this.menuBadges.opportunities -= 1;
+            return this.getInterviews();
+          })
           .then(() => this.clearLoading());
       },
       saveInterview(interview, previousState) {
