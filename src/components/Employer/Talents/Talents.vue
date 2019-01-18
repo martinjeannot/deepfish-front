@@ -119,7 +119,7 @@
               <v-card-actions v-if="isTalentAccepted(props.item)">
                 <v-layout row wrap>
                   <v-flex xs12 sm4 class="text-xs-center">
-                    <v-btn flat color="success" :loading="loading" :disabled="loading"
+                    <v-btn flat color="success" :loading="loading" :disabled="loading || !!props.item.interviews.length"
                            @click.native.stop="scheduleInterview(props.item)">
                       rencontrer ce talent
                     </v-btn>
