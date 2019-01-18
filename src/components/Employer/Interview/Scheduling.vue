@@ -201,7 +201,10 @@
           .map(selectedDateTime => this.newInterview(selectedDateTime));
         this.api
           .post('/interviews/list', { resources: interviews })
-          .then(() => this.$router.push({ name: 'EmployerTalents' }))
+          .then(() => {
+            this.showSnackbar('Opération terminée avec succès');
+            this.$router.push({ name: 'EmployerTalents' });
+          })
           .catch(() => this.showSnackbar('Erreur'))
           .finally(() => this.clearLoading());
       },
