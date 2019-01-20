@@ -212,8 +212,8 @@
         return {
           creatorId: this.user.id,
           opportunity: `/${this.opportunityId}`,
-          startAt,
-          endAt: startAt.add(this.duration, 'minutes'),
+          startAt: startAt.format(),
+          endAt: moment(startAt).add(this.duration, 'minutes').format(),
           format: this.format,
           talent: `/${this.talentId}`,
           employer: this.user._links.self.href,
