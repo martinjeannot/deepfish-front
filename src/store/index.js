@@ -87,6 +87,16 @@ export default new Vuex.Store({
           return interviewFormat;
       }
     },
+    getLabelFromInterviewDuration(interviewDuration) {
+      switch (interviewDuration) {
+        case 60:
+          return '1h';
+        case 90:
+          return '1h30';
+        default:
+          return `${interviewDuration} min`;
+      }
+    },
     getTalentLinkedInProfileUrl(basicProfile) {
       if (basicProfile.publicProfileUrl) {
         return basicProfile.publicProfileUrl;

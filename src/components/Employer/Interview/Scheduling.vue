@@ -208,6 +208,7 @@
         return {
           creatorId: this.user.id,
           opportunity: `/${this.opportunityId}`,
+          location: this.location,
           startAt: startAt.format(),
           endAt: moment(startAt).add(this.duration, 'minutes').format(),
           format: this.format,
