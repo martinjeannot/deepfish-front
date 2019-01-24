@@ -99,7 +99,7 @@
                   <v-flex xs12 sm4 class="text-xs-center">
                     <v-btn color="success" :loading="loading" :disabled="loading"
                            @click.native.stop="scheduleInterview(props.item)">
-                      rencontrer ce talent
+                      planifier un entretien
                     </v-btn>
                   </v-flex>
                   <v-flex xs12 sm4 class="text-xs-center">
@@ -121,7 +121,7 @@
                   <v-flex xs12 sm4 class="text-xs-center">
                     <v-btn flat color="success" :loading="loading" :disabled="loading || !!props.item.interviews.length"
                            @click.native.stop="scheduleInterview(props.item)">
-                      rencontrer ce talent
+                      planifier un entretien
                     </v-btn>
                     <div class="font-italic">{{ getInterviewProcessStatusLabel(props.item.interviews) }}</div>
                   </v-flex>

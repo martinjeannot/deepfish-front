@@ -23,78 +23,74 @@
         <h5 class="headline align-self-center pl-3">{{ talent.firstName }} {{ talent.lastName }}</h5>
       </v-flex>
     </v-flex>
-    <v-flex xs12 class="pt-3">
-      <v-card>
-        <v-card-text>
-          <v-flex xs12>
-            <v-select :items="interviewDurations" v-model="duration" label="Durée"></v-select>
-          </v-flex>
-          <v-flex xs12>
-            <v-select :items="interviewFormats" v-model="format" label="Type"></v-select>
-          </v-flex>
-          <v-flex xs12>
-            <v-text-field
-              v-if="format === 'PHONE'"
-              v-model="location"
-              label="N° de téléphone"
-            ></v-text-field>
-            <v-textarea
-              v-else
-              v-model="location"
-              label="Lieu"
-            ></v-textarea>
-          </v-flex>
-          <v-flex xs12>
-            <div class="body-2">Veuillez choisir 3 créneaux à proposer au talent :</div>
-          </v-flex>
-          <v-flex xs12 class="text-xs-center my-3">
-            <v-date-picker v-model="selectedDates" multiple
-                           :min="min.format(datePickerDateFormat)"></v-date-picker>
-          </v-flex>
-          <template v-for="(slotNumber, slotIndex) in numberOfSlots">
-            <v-select
-              v-if="slotIndex < selectedDateTimes.length"
-              :items="times"
-              :value="selectedTimes[slotIndex]"
-              @change="onSelectedTimesChange(slotIndex, $event)"
-              :label="selectedDateTimes[slotIndex].format('dddd D MMMM YYYY')"
-            ></v-select>
-            <v-flex v-else xs12 class="text-xs-center v-text-field placeholder">
-              Créneau(x) restant(s) à choisir : {{ numberOfSlots - selectedDateTimes.length }}
-            </v-flex>
-          </template>
-          <v-flex xs12 class="text-xs-center pt-3">
-            <v-btn
-              color="primary"
-              @click.stop="confirmationDialog = true"
-              :disabled="selectedDateTimes.length < numberOfSlots"
-            >
-              proposer ces créneaux
-            </v-btn>
-          </v-flex>
-        </v-card-text>
-      </v-card>
-    </v-flex>
-    <v-dialog v-model="confirmationDialog">
+    <v-flex xs12 sm9 md8 offset-md2 :class="['pt-3', {'offset-sm1-5': $vuetify.breakpoint.smOnly}]">
       <v-card>
         <v-card-text>
           <v-layout row wrap>
-            <v-flex xs12>
+            <v-flex xs12 sm4 :class="{'px-2': $vuetify.breakpoint.smAndUp}">
+              <v-select :items="interviewDurations" v-model="duration" label="Durée"></v-select>
+            </v-flex>
+            <v-flex xs12 sm4 :class="{'px-2': $vuetify.breakpoint.smAndUp}">
+              <v-select :items="interviewFormats" v-model="format" label="Type"></v-select>
+            </v-flex>
+            <v-flex xs12 sm4 :class="{'px-2': $vuetify.breakpoint.smAndUp}">
+              <v-text-field
+                v-if="format === 'PHONE'"
+                v-model="location"
+                label="N° de téléphone"
+              ></v-text-field>
+              <v-textarea
+                v-else
+                v-model="location"
+                label="Lieu"
+              ></v-textarea>
+            </v-flex>
+            <v-flex xs12 class="text-xs-center">
+              <h6 class="title">Veuillez choisir 3 créneaux à proposer au talent</h6>
+            </v-flex>
+            <v-flex xs12 class="text-xs-center my-3">
+              <v-date-picker v-model="selectedDates" multiple
+                             :min="min.format(datePickerDateFormat)"></v-date-picker>
+            </v-flex>
+            <v-flex xs12 sm4 v-for="(slotNumber, slotIndex) in numberOfSlots" :key="'slot-' + slotNumber"
+                    :class="[{'py-1': $vuetify.breakpoint.xsOnly}, {'px-2': $vuetify.breakpoint.smAndUp}]">
+              <v-select
+                v-if="slotIndex < selectedDateTimes.length"
+                :items="times"
+                :value="selectedTimes[slotIndex]"
+                @change="onSelectedTimesChange(slotIndex, $event)"
+                :label="selectedDateTimes[slotIndex].format('dddd D MMMM YYYY')"
+              ></v-select>
+              <v-flex v-else xs12 class="text-xs-center v-text-field placeholder">
+                Créneau(x) restant(s) à choisir : {{ numberOfSlots - selectedDateTimes.length }}
+              </v-flex>
+            </v-flex>
+            <v-flex xs12 class="text-xs-center pt-3">
+              <v-btn
+                color="primary"
+                @click.stop="confirmationDialog = true"
+                :disabled="selectedDateTimes.length < numberOfSlots"
+              >
+                proposer ces créneaux
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-card-text>
+      </v-card>
+    </v-flex>
+    <v-dialog v-model="confirmationDialog" max-width="650px">
+      <v-card>
+        <v-card-text>
+          <v-layout row wrap class="text-xs-center">
+            <v-flex xs12 class="pb-2">
               Vous souhaitez proposer au talent les créneaux suivants :
             </v-flex>
-            <v-list>
-              <template v-for="selectedDateTime in sortedSelectedDateTimes">
-                <v-list-tile>
-                  <v-list-tile-content class="hidden-sm-and-up caption">
-                    {{ selectedDateTime.format('dddd D MMMM YYYY [à] HH:mm') }}
-                  </v-list-tile-content>
-                  <v-list-tile-content class="hidden-xs-only">
-                    {{ selectedDateTime.format('dddd D MMMM YYYY [à] HH:mm') }}
-                  </v-list-tile-content>
-                </v-list-tile>
-              </template>
-            </v-list>
-            <v-flex xs12 class="font-italic pb-3">
+            <v-flex xs12 class="py-2"
+                    v-for="selectedDateTime in sortedSelectedDateTimes"
+                    :key="'selectedDateTime-' + selectedDateTime">
+              {{ selectedDateTime.format('dddd D MMMM YYYY [à] HH:mm') }}
+            </v-flex>
+            <v-flex xs12 class="font-italic py-3">
               Vous serez notifié dès que {{ talent.firstName }} acceptera l'un d'entre eux.
             </v-flex>
             <v-flex xs6>
@@ -151,11 +147,11 @@
         'alertComponent',
       ]),
       times() {
-        const startHour = 9;
-        const endHour = 18;
+        const startHour = 8;
+        const endHour = 20;
         const times = Array
           .from({ length: (endHour - startHour) + 1 }, (x, i) => `0${i + startHour}`.slice(-2))
-          .map(hour => ['00', '15', '30', '45'].map(minutes => `${hour}:${minutes}`));
+          .map(hour => ['00', '30'].map(minutes => `${hour}:${minutes}`));
         return [].concat(...times); // flatten times
       },
       selectedDates: {
@@ -237,10 +233,14 @@
 </script>
 
 <style scoped>
+  .offset-sm1-5 {
+    margin-left: 12.5%;
+  }
+
   .placeholder {
     height: 64px;
     border: solid #1976D2;
     border-radius: 1em;
-    padding-top: 18px;
+    padding-top: 14px;
   }
 </style>
