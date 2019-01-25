@@ -20,7 +20,7 @@
             alt="picture"
           ></v-img>
         </v-avatar>
-        <h5 class="headline align-self-center pl-3">{{ talent.firstName }} {{ talent.lastName }}</h5>
+        <h5 class="headline align-self-center pl-3">{{ talent.firstName }} {{ talent.lastName[0] }}.</h5>
       </v-flex>
     </v-flex>
     <v-flex xs12 sm9 md8 offset-md2 :class="['pt-3', {'offset-sm1-5': $vuetify.breakpoint.smOnly}]">

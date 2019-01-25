@@ -32,7 +32,7 @@
             <v-icon>timer</v-icon>
             {{ getLabelFromInterviewDuration(getInterviewDuration(interview).asMinutes()) }}
           </v-flex>
-          <v-flex xs12>
+          <v-flex xs12 style="white-space: pre-line">
             <v-icon v-if="interview.format === 'PHONE'">phone</v-icon>
             <v-icon v-else-if="interview.format === 'VIDEO'">videocam</v-icon>
             <v-icon v-else-if="interview.format === 'IN_PERSON'">place</v-icon>
@@ -70,7 +70,7 @@
             <v-icon>timer</v-icon>
             {{ getLabelFromInterviewDuration(getInterviewDuration(interview).asMinutes()) }}
           </v-flex>
-          <v-flex xs12>
+          <v-flex xs12 style="white-space: pre-line">
             <v-icon v-if="interview.format === 'PHONE'">phone</v-icon>
             <v-icon v-else-if="interview.format === 'VIDEO'">videocam</v-icon>
             <v-icon v-else-if="interview.format === 'IN_PERSON'">place</v-icon>
@@ -84,7 +84,7 @@
       <v-card>
         <v-card-title primary-title>
           <v-flex xs12 class="title">
-            Accepter cet entretien ?
+            En route vers ton nouveau job !
           </v-flex>
         </v-card-title>
         <v-card-text>
