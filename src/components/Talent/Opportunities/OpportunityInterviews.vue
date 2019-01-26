@@ -32,7 +32,7 @@
             <v-icon>timer</v-icon>
             {{ getLabelFromInterviewDuration(getInterviewDuration(interview).asMinutes()) }}
           </v-flex>
-          <v-flex xs12 style="white-space: pre-line">
+          <v-flex xs12 :class="{'white-space-pre-line': interview.format !== 'PHONE'}">
             <v-icon v-if="interview.format === 'PHONE'">phone</v-icon>
             <v-icon v-else-if="interview.format === 'VIDEO'">videocam</v-icon>
             <v-icon v-else-if="interview.format === 'IN_PERSON'">place</v-icon>
@@ -70,7 +70,7 @@
             <v-icon>timer</v-icon>
             {{ getLabelFromInterviewDuration(getInterviewDuration(interview).asMinutes()) }}
           </v-flex>
-          <v-flex xs12 style="white-space: pre-line">
+          <v-flex xs12 :class="{'white-space-pre-line': interview.format !== 'PHONE'}">
             <v-icon v-if="interview.format === 'PHONE'">phone</v-icon>
             <v-icon v-else-if="interview.format === 'VIDEO'">videocam</v-icon>
             <v-icon v-else-if="interview.format === 'IN_PERSON'">place</v-icon>
@@ -195,5 +195,7 @@
 </script>
 
 <style scoped>
-
+  .white-space-pre-line {
+    white-space: pre-line;
+  }
 </style>
