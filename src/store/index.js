@@ -75,6 +75,28 @@ export default new Vuex.Store({
           return l10nKey;
       }
     },
+    getLabelFromInterviewFormat(interviewFormat) {
+      switch (interviewFormat) {
+        case 'PHONE':
+          return 'téléphonique';
+        case 'VIDEO':
+          return 'vidéo';
+        case 'IN_PERSON':
+          return 'en physique';
+        default:
+          return interviewFormat;
+      }
+    },
+    getLabelFromInterviewDuration(interviewDuration) {
+      switch (interviewDuration) {
+        case 60:
+          return '1h';
+        case 90:
+          return '1h30';
+        default:
+          return `${interviewDuration} min`;
+      }
+    },
     getTalentLinkedInProfileUrl(basicProfile) {
       if (basicProfile.publicProfileUrl) {
         return basicProfile.publicProfileUrl;
@@ -230,6 +252,15 @@ export default new Vuex.Store({
       delete requirementData.typeform;
       return getters.api.patch(requirement._links.self.href, requirementData);
     },
+    saveInterviewData({ getters }, { interview, previousState }) {
+      const interviewData = Object.assign({}, interview);
+      // linked refs deletion
+      if (previousState) {
+        interviewData.previousState = previousState;
+        // linked refs deletion
+      }
+      return getters.api.patch(interview._links.self.href, interviewData);
+    },
     requestAccessToken({ getters }, payload) {
       // https://github.com/axios/axios/issues/1195
       return getters.api.post('/oauth/token', payload, {
@@ -322,10 +353,18 @@ export default new Vuex.Store({
         .then((response) => {
           commit(types.SET_USER, response.data);
           // get pending opportunities for menu badge
-          return getters.api(`/opportunities?talent=${accessToken.user_id}&talentStatus=PENDING&requirement.status=OPEN`);
+          return getters.api(`/opportunities?projection=talent-interviews&talent=${accessToken.user_id}&talentStatus=PENDING&talentStatus=ACCEPTED&requirement.status=OPEN`);
         })
-        .then((pendingOpportunitiesResponse) => {
-          dispatch('setMenuBadges', { opportunities: pendingOpportunitiesResponse.data._embedded.opportunities.length });
+        .then((opportunitiesResponse) => {
+          let opportunitiesBadge = opportunitiesResponse.data._embedded.opportunities
+            .filter(opportunity => opportunity.talentStatus === 'PENDING').length;
+          opportunitiesResponse.data._embedded.opportunities.forEach((opportunity) => {
+            if (opportunity.talentStatus === 'ACCEPTED'
+              && opportunity.interviews.some(interview => interview.talentResponseStatus === 'NEEDS_ACTION')) {
+              opportunitiesBadge += 1;
+            }
+          });
+          dispatch('setMenuBadges', { opportunities: opportunitiesBadge });
           return getters.api
             .patch(getters.user._links.self.href, { lastSignedInAt: moment().utc().format() });
         })

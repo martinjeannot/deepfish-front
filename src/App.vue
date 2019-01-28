@@ -84,7 +84,7 @@
         { icon: 'fab fa-twitter', href: 'https://twitter.com/deepfish_co' },
         { icon: 'fab fa-linkedin', href: 'https://www.linkedin.com/company/deepfish' },
         { icon: 'fab fa-instagram', href: 'https://www.instagram.com/deepfish.co/' },
-        { icon: 'fab fa-wordpress', href: 'http://blog.deepfish.co' },
+        { icon: 'fab fa-wordpress', href: 'https://blog.deepfish.co' },
       ],
     }),
     computed: {
@@ -99,19 +99,39 @@
       ]),
       menuItems() {
         let menuItems = [
-          { key: 'sign-up', icon: 'exit_to_app', title: 'Inscription', route: '/sign-up' },
-          { key: 'sign-in', icon: 'power_settings_new', title: 'Connexion', route: '/sign-in' },
+          {
+            key: 'sign-up',
+            icon: 'exit_to_app',
+            title: 'Inscription',
+            route: { name: 'SignUp' },
+          },
+          {
+            key: 'sign-in',
+            icon: 'power_settings_new',
+            title: 'Connexion',
+            route: { name: 'SignIn' },
+          },
         ];
         if (this.isUserAuthenticated) {
           if (this.isUserAdmin) {
             menuItems = [
-              { key: 'dashboard', icon: 'dashboard', title: 'Dashboard', route: '/admin' },
-              { key: 'search', icon: 'search', title: 'Search', route: '/admin/search' },
+              {
+                key: 'dashboard',
+                icon: 'dashboard',
+                title: 'Dashboard',
+                route: { name: 'AdminDashboard' },
+              },
+              {
+                key: 'search',
+                icon: 'search',
+                title: 'Search',
+                route: { name: 'AdminSearch' },
+              },
               {
                 key: 'data-management',
                 icon: 'list',
                 title: 'Data Management',
-                route: '/admin/data-management/master/talents',
+                route: { name: 'AdminDMTalents' },
               },
               {
                 key: 'statistics',
@@ -119,19 +139,54 @@
                 title: 'Statistics',
                 route: { name: 'AdminStatisticsOpportunities' },
               },
-              { key: 'profile', icon: 'account_circle', title: 'Profile', route: '/admin/profile' },
+              {
+                key: 'profile',
+                icon: 'account_circle',
+                title: 'Profile',
+                route: { name: 'AdminProfile' },
+              },
             ];
           } else if (this.isUserEmployer) {
             menuItems = [
-              { key: 'requirements', icon: 'work', title: 'Mes besoins', route: '/employer/requirements' },
-              { key: 'talents', icon: 'people', title: 'Mes talents', route: '/employer/talents' },
-              { key: 'profile', icon: 'account_circle', title: 'Mon profil', route: '/employer/profile' },
+              {
+                key: 'requirements',
+                icon: 'work',
+                title: 'Besoins',
+                route: { name: 'EmployerRequirements' },
+              },
+              {
+                key: 'talents',
+                icon: 'people',
+                title: 'Talents',
+                route: { name: 'EmployerTalents' },
+              },
+              {
+                key: 'profile',
+                icon: 'account_circle',
+                title: 'Profil',
+                route: { name: 'EmployerProfile' },
+              },
             ];
           } else {
             menuItems = [
-              { key: 'conditions', icon: 'speaker_notes', title: 'Mes conditions', route: '/talent/conditions' },
-              { key: 'opportunities', icon: 'assignment', title: 'Mes opportunités', route: '/talent/opportunities' },
-              { key: 'profile', icon: 'account_circle', title: 'Mon profil', route: '/talent/profile' },
+              {
+                key: 'conditions',
+                icon: 'speaker_notes',
+                title: 'Conditions',
+                route: { name: 'TalentConditions' },
+              },
+              {
+                key: 'opportunities',
+                icon: 'assignment',
+                title: 'Opportunités',
+                route: { name: 'TalentOpportunities' },
+              },
+              {
+                key: 'profile',
+                icon: 'account_circle',
+                title: 'Profil',
+                route: { name: 'TalentProfile' },
+              },
             ];
           }
         }

@@ -97,13 +97,10 @@
               <v-card-title v-if="isTalentPending(props.item)">
                 <v-layout row wrap>
                   <v-flex xs12 sm4 class="text-xs-center">
-                    <v-tooltip top>
-                      <v-btn slot="activator" color="success" :loading="loading" :disabled="loading"
-                             @click.native.stop="acceptTalent(props.item)">
-                        J'accepte ce talent
-                      </v-btn>
-                      <span>En acceptant ce talent, vous accédez à ses coordonnées</span>
-                    </v-tooltip>
+                    <v-btn color="success" :loading="loading" :disabled="loading"
+                           @click.native.stop="scheduleInterview(props.item)">
+                      planifier un entretien
+                    </v-btn>
                   </v-flex>
                   <v-flex xs12 sm4 class="text-xs-center">
                     <v-btn color="info" :loading="loading" :disabled="loading"
@@ -112,25 +109,32 @@
                     </v-btn>
                   </v-flex>
                   <v-flex xs12 sm4 class="text-xs-center">
-                    <v-btn color="error"
+                    <v-btn color="error" :loading="loading" :disabled="loading"
                            @click.native.stop="selectedOpportunity = props.item; declinationDialog = true">
-                      Je refuse ce talent
+                      refuser ce talent
                     </v-btn>
                   </v-flex>
                 </v-layout>
               </v-card-title>
               <v-card-actions v-if="isTalentAccepted(props.item)">
                 <v-layout row wrap>
-                  <v-flex xs12 sm4 offset-sm4 class="text-xs-center">
+                  <v-flex xs12 sm4 class="text-xs-center">
+                    <v-btn flat color="success" :loading="loading" :disabled="loading || !!props.item.interviews.length"
+                           @click.native.stop="scheduleInterview(props.item)">
+                      planifier un entretien
+                    </v-btn>
+                    <div class="font-italic">{{ getInterviewProcessStatusLabel(props.item.interviews) }}</div>
+                  </v-flex>
+                  <v-flex xs12 sm4 class="text-xs-center">
                     <v-btn flat color="info" :loading="loading" :disabled="loading"
                            @click.native.stop="selectedOpportunity = props.item; contactDialog = true">
                       J'ai une question sur ce talent
                     </v-btn>
                   </v-flex>
                   <v-flex xs12 sm4 class="text-xs-center">
-                    <v-btn flat color="error"
+                    <v-btn flat color="error" :loading="loading" :disabled="loading"
                            @click.native.stop="selectedOpportunity = props.item; declinationDialog = true">
-                      Je ne retiens plus ce profil
+                      ne plus retenir ce talent
                     </v-btn>
                   </v-flex>
                 </v-layout>
@@ -252,7 +256,13 @@
           ],
         };
       },
-      acceptTalent(opportunity) {
+      scheduleInterview(opportunity) {
+        if (opportunity.employerStatus === 'ACCEPTED') {
+          return this.$router.push({
+            name: 'EmployerInterviewScheduling',
+            query: { 'talent-id': opportunity.talent.id, 'opportunity-id': opportunity.id },
+          });
+        }
         this.prepareForApiConsumption();
         const previousState = Object.assign({}, opportunity);
         opportunity.employerStatus = 'ACCEPTED';
@@ -260,7 +270,10 @@
           .saveOpportunity(opportunity, previousState)
           .then(() => {
             this.menuBadges.talents = this.menuBadges.talents - 1;
-            this.showSnackbar('Vous pouvez désormais contacter ce talent par téléphone ou mail');
+            return this.$router.push({
+              name: 'EmployerInterviewScheduling',
+              query: { 'talent-id': opportunity.talent.id, 'opportunity-id': opportunity.id },
+            });
           })
           .catch(error => this.handleOpportunitySavingError(opportunity, previousState, error))
           .finally(() => this.clearLoading());
@@ -316,6 +329,16 @@
           })
           .catch(() => this.showSnackbar('Erreur'))
           .finally(() => this.clearLoading());
+      },
+      getInterviewProcessStatusLabel(interviews) {
+        if (interviews.length) {
+          const confirmedInterview = interviews.find(interview => interview.status === 'CONFIRMED');
+          if (confirmedInterview) {
+            return `Entretien prévu le ${this.$options.filters.formatDate(confirmedInterview.startAt, 'LLL')}`;
+          }
+          return 'Demandes d\'entretien en attente de réponse';
+        }
+        return 'Continuez le processus de recrutement en programmant un entretien';
       },
     },
     created() {

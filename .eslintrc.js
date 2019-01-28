@@ -50,6 +50,7 @@ module.exports = {
         'state', // for vuex mutations, see https://stackoverflow.com/questions/44657142,
         'opportunity',
         'talent',
+        'interview',
       ],
     }],
     // no-underscore-dangle override

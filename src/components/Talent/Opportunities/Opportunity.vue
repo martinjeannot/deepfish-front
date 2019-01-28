@@ -6,7 +6,7 @@
   </v-layout>
   <v-layout row wrap v-else>
     <v-flex xs12 sm8 offset-sm2>
-      <v-card>
+      <v-card class="mb-3">
         <v-card-title primary-title>
           <v-flex xs3 lg2>
             <v-img :src="opportunity.company.logoURL ? opportunity.company.logoURL : 'static/img/placeholder_150.jpg'"
@@ -33,10 +33,10 @@
             </div>
           </v-flex>
         </v-card-title>
+      </v-card>
+      <opportunity-interviews :opportunity="opportunity"></opportunity-interviews>
+      <v-card>
         <v-card-text>
-          <v-flex xs12 class="pb-2">
-            <span style="font-style: italic">{{ opportunity.company.name }}</span> :
-          </v-flex>
           <v-flex xs12 class="pb-3" style="white-space: pre-wrap" v-html="opportunity.company.description"
                   v-linkified></v-flex>
           <v-flex xs12 style="white-space: pre-wrap" v-html="opportunity.pitch" v-linkified></v-flex>
@@ -108,6 +108,7 @@
 <script>
   import moment from 'moment';
   import { mapGetters, mapState, mapActions } from 'vuex';
+  import OpportunityInterviews from './OpportunityInterviews';
 
   const rules = {
     required: value => !!value || 'This field is required',
@@ -115,6 +116,7 @@
 
   export default {
     name: 'opportunity',
+    components: { OpportunityInterviews },
     props: ['id'],
     data: () => ({
       rules,

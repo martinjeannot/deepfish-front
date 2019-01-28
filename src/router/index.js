@@ -16,6 +16,7 @@ import AdminDMRequirements from '@/components/Admin/DataManagement/Master/Requir
 import AdminDMRequirement from '@/components/Admin/DataManagement/Master/Requirement';
 import AdminDMOpportunities from '@/components/Admin/DataManagement/Master/Opportunities';
 import AdminDMOpportunity from '@/components/Admin/DataManagement/Master/Opportunity';
+import AdminDMInterviews from '@/components/Admin/DataManagement/Master/Interviews';
 import AdminDMUsers from '@/components/Admin/DataManagement/Master/Users';
 import AdminDMNewUser from '@/components/Admin/DataManagement/Master/NewUser';
 import AdminCompanyMaturityLevelDataManagement from '@/components/Admin/DataManagement/ReferenceData/CompanyMaturityLevelDataManagement';
@@ -26,6 +27,7 @@ import EmployerRequirements from '@/components/Employer/Requirements/Requirement
 import EmployerTypeformRequirement from '@/components/Employer/Requirements/TypeformRequirement';
 import EmployerCalendlyRequirement from '@/components/Employer/Requirements/CalendlyRequirement';
 import EmployerTalents from '@/components/Employer/Talents/Talents';
+import EmployerInterviewScheduling from '@/components/Employer/Interview/Scheduling';
 import TalentProfile from '@/components/Talent/Profile';
 import TalentConditions from '@/components/Talent/Conditions';
 import TalentOpportunities from '@/components/Talent/Opportunities/Opportunities';
@@ -209,6 +211,12 @@ const router = new Router({
       meta: { authRequired: true },
     },
     {
+      path: '/admin/data-management/master/interviews',
+      name: 'AdminDMInterviews',
+      component: AdminDMInterviews,
+      meta: { authRequired: true },
+    },
+    {
       path: '/admin/data-management/master/users',
       name: 'AdminDMUsers',
       component: AdminDMUsers,
@@ -269,6 +277,13 @@ const router = new Router({
       path: '/employer/talents',
       name: 'EmployerTalents',
       component: EmployerTalents,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/employer/interviews/scheduling',
+      name: 'EmployerInterviewScheduling',
+      component: EmployerInterviewScheduling,
+      props: route => ({ talentId: route.query['talent-id'], opportunityId: route.query['opportunity-id'] }),
       meta: { authRequired: true },
     },
     // TALENT ======================================================================================

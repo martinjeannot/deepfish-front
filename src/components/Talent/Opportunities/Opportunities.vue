@@ -80,9 +80,12 @@
               </v-card-title>
               <v-card-actions>
                 <v-flex xs12 class="text-xs-center">
-                  <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
-                    Voir l'opportunité
-                  </v-btn>
+                  <v-badge overlap color="red">
+                    <v-icon v-if="props.item.badged" slot="badge" color="white">priority_high</v-icon>
+                    <v-btn flat color="primary" :to="{name: 'TalentOpportunity', params: {id: props.item.id}}">
+                      Voir l'opportunité
+                    </v-btn>
+                  </v-badge>
                 </v-flex>
               </v-card-actions>
             </v-card>
@@ -266,7 +269,7 @@
     },
     created() {
       this.prepareForApiConsumption();
-      this.api(`/opportunities?projection=talent&talent=${this.user.id}&sort=createdAt,desc`)
+      this.api(`/opportunities?projection=talent-interviews&talent=${this.user.id}&sort=createdAt,desc`)
         .then((response) => {
           this.totalItems = response.data.page.totalElements;
           this.pendingOpportunities = response.data._embedded.opportunities
@@ -274,6 +277,12 @@
           this.menuBadges.opportunities = this.pendingOpportunities.length;
           this.acceptedOpportunities = response.data._embedded.opportunities
             .filter(opportunity => opportunity.talentStatus === 'ACCEPTED' && opportunity.requirement.status === 'OPEN');
+          this.acceptedOpportunities.forEach((opportunity) => {
+            if (opportunity.interviews.some(interview => interview.talentResponseStatus === 'NEEDS_ACTION')) {
+              opportunity.badged = true;
+              this.menuBadges.opportunities += 1;
+            }
+          });
           this.declinedOpportunities = response.data._embedded.opportunities
             .filter(opportunity => opportunity.talentStatus === 'DECLINED' && opportunity.requirement.status === 'OPEN');
           this.expiredOpportunities = response.data._embedded.opportunities
