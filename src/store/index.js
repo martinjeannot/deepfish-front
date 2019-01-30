@@ -233,12 +233,14 @@ export default new Vuex.Store({
       delete opportunityData.talent;
       delete opportunityData.requirement;
       delete opportunityData.company;
+      delete opportunityData.interviews;
       if (previousState) {
         opportunityData.previousState = previousState;
         // linked refs deletion
         delete opportunityData.previousState.talent;
         delete opportunityData.previousState.requirement;
         delete opportunityData.previousState.company;
+        delete opportunityData.previousState.interviews;
       }
       return getters.api.patch(opportunity._links.self.href, opportunityData);
     },
