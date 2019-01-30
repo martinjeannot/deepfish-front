@@ -70,15 +70,29 @@
                     </v-card-text>
                   </v-tab-item>
                   <v-tab-item>
-                    <v-list three-line>
-                      <template v-for="opportunity in opportunities">
+                    <v-list v-if="declinedOpportunities.length">
+                      <template v-for="opportunity in declinedOpportunities">
                         <v-divider :key="opportunity.id + '-divider'"></v-divider>
-                        <v-list-tile :key="opportunity.id + '-list-tile'">
-                          <v-list-tile-content v-html="formattedDeclinationReason(opportunity)">
-                          </v-list-tile-content>
-                        </v-list-tile>
+                        <v-layout :key="opportunity.id + '-row'" class="pa-3">
+                          <v-flex xs4>
+                            <span class="font-weight-bold red--text">{{ opportunity.company.name }}</span>
+                            declined
+                            <span class="font-weight-bold blue--text">
+                              {{ opportunity.talent.firstName }}
+                              {{ opportunity.talent.lastName }}
+                            </span>
+                          </v-flex>
+                          <v-flex xs8>
+                            {{ opportunity.employerDeclinationReason }}
+                          </v-flex>
+                        </v-layout>
                       </template>
                     </v-list>
+                    <v-flex xs12 v-else class="text-xs-center pa-3">
+                      <h3>
+                        Aucun talent refusé pour ce besoin
+                      </h3>
+                    </v-flex>
                   </v-tab-item>
                 </v-tabs>
               </v-card>
@@ -122,7 +136,7 @@
     data: () => ({
       requirement: null,
       opportunitiesCounts: null,
-      opportunities: null,
+      declinedOpportunities: null,
       alertDialog: false,
     }),
     computed: {
@@ -201,12 +215,12 @@
       Promise.all([
         this.api(`/requirements/${this.id}?projection=admin`),
         this.api(`/opportunities/counts?requirementId=${this.id}`),
-        this.api(`/opportunities?requirement=${this.id}&employerStatus=DECLINED&projection=admin`),
+        this.api(`/opportunities?projection=admin&requirement=${this.id}&employerStatus=DECLINED`),
       ])
-        .then(([requirementResponse, opportunitiesCountsResponse, currentRequirementResponse]) => {
+        .then(([requirementResponse, opportunitiesCountsResponse, declinedOpportunitiesResponse]) => {
           this.requirement = requirementResponse.data;
           this.opportunitiesCounts = opportunitiesCountsResponse.data;
-          this.opportunities = currentRequirementResponse.data._embedded.opportunities;
+          this.declinedOpportunities = declinedOpportunitiesResponse.data._embedded.opportunities;
         })
         .catch(() => this.setErrorAfterApiConsumption())
         .finally(() => this.clearLoading(true));

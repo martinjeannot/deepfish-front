@@ -316,14 +316,14 @@
                           <v-divider :key="opportunity.id + '-divider'"></v-divider>
                           <v-layout :key="opportunity.id + '-row'" class="pa-3">
                             <v-flex xs4 v-if="opportunity.talentDeclinationReason.length">
-                              <span class="font-weight-bold blue--text">{{talent.firstName }}</span>
+                              <span class="font-weight-bold blue--text">{{ talent.firstName }}</span>
                               declined
                               <span class="font-weight-bold red--text">{{ opportunity.company.name }}</span>
                             </v-flex>
                             <v-flex xs4 v-else>
                               <span class="font-weight-bold red--text">{{ opportunity.company.name }}</span>
                               declined
-                              <span class="font-weight-bold blue--text">{{talent.firstName }}</span>
+                              <span class="font-weight-bold blue--text">{{ talent.firstName }}</span>
                             </v-flex>
                             <v-flex xs8 v-if="opportunity.talentDeclinationReason.length">
                               {{ opportunity.talentDeclinationReason }}
