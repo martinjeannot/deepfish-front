@@ -19,10 +19,14 @@
                 {{ props.item.talent.firstName }} {{ props.item.talent.lastName.toUpperCase() }}
               </router-link>
             </td>
-            <td>{{ props.item.status }}</td>
+            <td>
+              <span :class="[`${getInterviewStatusColor(props.item.status)}--text`, 'font-weight-bold']">
+                {{ props.item.status }}
+              </span>
+            </td>
             <td>{{ props.item.startAt | formatDate('LLL') }}</td>
             <td class="justify-center layout">
-              <v-btn icon disabled>
+              <v-btn icon color="primary" :to="{ name: 'AdminDMInterview', params: {id: props.item.id} }">
                 <v-icon>visibility</v-icon>
               </v-btn>
             </td>
@@ -34,7 +38,7 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapGetters, mapActions, mapState } from 'vuex';
   import DataManagementNavigation from '../Navigation';
 
   export default {
@@ -60,6 +64,9 @@
       ...mapGetters([
         'api',
         'loading',
+      ]),
+      ...mapState([
+        'getInterviewStatusColor',
       ]),
     },
     watch: {

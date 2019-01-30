@@ -75,6 +75,30 @@ export default new Vuex.Store({
           return l10nKey;
       }
     },
+    getInterviewStatusColor(status) {
+      switch (status) {
+        case 'TENTATIVE':
+          return 'orange';
+        case 'CONFIRMED':
+          return 'green';
+        case 'CANCELLED':
+          return 'red';
+        default:
+          return null;
+      }
+    },
+    getInterviewParticipationStatusColor(participationStatus) {
+      switch (participationStatus) {
+        case 'NEEDS_ACTION':
+          return 'orange';
+        case 'ACCEPTED':
+          return 'green';
+        case 'DECLINED':
+          return 'red';
+        default:
+          return null;
+      }
+    },
     getLabelFromInterviewFormat(interviewFormat) {
       switch (interviewFormat) {
         case 'PHONE':
