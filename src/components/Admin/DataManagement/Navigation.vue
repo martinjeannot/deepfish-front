@@ -48,13 +48,13 @@
     name: 'data-management-navigation',
     data: () => ({
       masterDataItems: [
-        { title: 'Talents', icon: 'dashboard', route: '/admin/data-management/master/talents' },
-        { title: 'Employers', icon: 'dashboard', route: '/admin/data-management/master/employers' },
-        { title: 'Companies', icon: 'dashboard', route: '/admin/data-management/master/companies' },
-        { title: 'Requirements', icon: 'dashboard', route: '/admin/data-management/master/requirements' },
-        { title: 'Opportunities', icon: 'dashboard', route: '/admin/data-management/master/opportunities' },
+        { title: 'Talents', icon: 'people', route: { name: 'AdminDMTalents' } },
+        { title: 'Employers', icon: 'people_outline', route: { name: 'AdminDMEmployers' } },
+        { title: 'Companies', icon: 'business', route: { name: 'AdminDMCompanies' } },
+        { title: 'Requirements', icon: 'work', route: { name: 'AdminDMRequirements' } },
+        { title: 'Opportunities', icon: 'assignment', route: { name: 'AdminDMOpportunities' } },
         { title: 'Interviews', icon: 'event', route: { name: 'AdminDMInterviews' } },
-        { title: 'Admins', icon: 'dashboard', route: '/admin/data-management/master/users' },
+        { title: 'Admins', icon: 'supervisor_account', route: { name: 'AdminDMUsers' } },
       ],
       referenceDataItems: [
         {

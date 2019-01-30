@@ -25,6 +25,16 @@
                              v-html="'S\'inscrire en tant que commercial'" large>
                       </v-btn>
                     </v-flex>
+                    <v-flex xs12 class="text-xs-center pt-2 grey--text text--darken-2">
+                      100% confidentiel
+                      <v-tooltip bottom>
+                        <v-icon slot="activator">help</v-icon>
+                        <div>
+                          Nous utilisons uniquement : nom, prénom, email, photo de profil.<br/>
+                          Aucun accès à vos contacts ni aucune modification sur votre profil.
+                        </div>
+                      </v-tooltip>
+                    </v-flex>
                     <v-flex xs12 class="mt-2 text-xs-center">
                       <router-link :to="{ name: 'SignIn' }">Déjà inscrit ?</router-link>
                     </v-flex>

@@ -75,6 +75,30 @@ export default new Vuex.Store({
           return l10nKey;
       }
     },
+    getInterviewStatusColor(status) {
+      switch (status) {
+        case 'TENTATIVE':
+          return 'orange';
+        case 'CONFIRMED':
+          return 'green';
+        case 'CANCELLED':
+          return 'red';
+        default:
+          return null;
+      }
+    },
+    getInterviewParticipationStatusColor(participationStatus) {
+      switch (participationStatus) {
+        case 'NEEDS_ACTION':
+          return 'orange';
+        case 'ACCEPTED':
+          return 'green';
+        case 'DECLINED':
+          return 'red';
+        default:
+          return null;
+      }
+    },
     getLabelFromInterviewFormat(interviewFormat) {
       switch (interviewFormat) {
         case 'PHONE':
@@ -233,12 +257,14 @@ export default new Vuex.Store({
       delete opportunityData.talent;
       delete opportunityData.requirement;
       delete opportunityData.company;
+      delete opportunityData.interviews;
       if (previousState) {
         opportunityData.previousState = previousState;
         // linked refs deletion
         delete opportunityData.previousState.talent;
         delete opportunityData.previousState.requirement;
         delete opportunityData.previousState.company;
+        delete opportunityData.previousState.interviews;
       }
       return getters.api.patch(opportunity._links.self.href, opportunityData);
     },

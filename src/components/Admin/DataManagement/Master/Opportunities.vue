@@ -48,12 +48,12 @@
               </router-link>
             </td>
             <td>
-              <span :class="`${getOpportunityStatusColor(props.item.talentStatus)}--text`" style="font-weight: bold">
+              <span :class="[`${getOpportunityStatusColor(props.item.talentStatus)}--text`, 'font-weight-bold']">
                 {{ props.item.talentStatus }}
               </span>
             </td>
             <td>
-              <span :class="`${getOpportunityStatusColor(props.item.employerStatus)}--text`" style="font-weight: bold">
+              <span :class="[`${getOpportunityStatusColor(props.item.employerStatus)}--text`, 'font-weight-bold']">
                 {{ props.item.employerStatus }}
               </span>
             </td>
