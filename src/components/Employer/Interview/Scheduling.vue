@@ -28,10 +28,10 @@
         <v-card-text>
           <v-layout row wrap>
             <v-flex xs12 sm4 :class="{'px-2': $vuetify.breakpoint.smAndUp}">
-              <v-select :items="interviewDurations" v-model="duration" label="Durée"></v-select>
+              <v-select :items="interviewFormats" v-model="format" label="Type"></v-select>
             </v-flex>
             <v-flex xs12 sm4 :class="{'px-2': $vuetify.breakpoint.smAndUp}">
-              <v-select :items="interviewFormats" v-model="format" label="Type"></v-select>
+              <v-select :items="interviewDurations" v-model="duration" label="Durée"></v-select>
             </v-flex>
             <v-flex xs12 sm4 :class="{'px-2': $vuetify.breakpoint.smAndUp}">
               <v-text-field
@@ -78,12 +78,16 @@
         </v-card-text>
       </v-card>
     </v-flex>
-    <v-dialog v-model="confirmationDialog" max-width="650px">
+    <v-dialog v-model="confirmationDialog" max-width="700px">
       <v-card>
         <v-card-text>
           <v-layout row wrap class="text-xs-center">
             <v-flex xs12 class="pb-2">
-              Vous souhaitez proposer au talent les créneaux suivants :
+              Vous souhaitez proposer au talent un entretien
+              <span class="font-weight-bold">{{ getLabelFromInterviewFormat(format) }}</span>
+              d'environ
+              <span class="font-weight-bold">{{ getLabelFromInterviewDuration(duration) }}</span>
+              sur les créneaux suivants :
             </v-flex>
             <v-flex xs12 class="py-2"
                     v-for="selectedDateTime in sortedSelectedDateTimes"
@@ -108,7 +112,7 @@
 
 <script>
   import moment from 'moment';
-  import { mapGetters, mapActions } from 'vuex';
+  import { mapGetters, mapActions, mapState } from 'vuex';
 
   const interviewDurations = [
     { text: '30 min', value: 30 },
@@ -145,6 +149,10 @@
         'initialLoading',
         'loading',
         'alertComponent',
+      ]),
+      ...mapState([
+        'getLabelFromInterviewFormat',
+        'getLabelFromInterviewDuration',
       ]),
       times() {
         const startHour = 8;
