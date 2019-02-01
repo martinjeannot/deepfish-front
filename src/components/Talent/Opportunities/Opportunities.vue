@@ -24,7 +24,10 @@
                     alt="logo" max-width="100px"></v-img>
                 </v-flex>
                 <v-flex xs8 sm4 md7>
-                  Deepfish te propose un job chez <span style="font-weight: bold">{{ props.item.company.name }}</span>
+                  Deepfish te propose un job de
+                  <span class="font-weight-bold">{{ props.item.requirement.name }}</span>
+                  chez
+                  <span class="font-weight-bold">{{ props.item.company.name }}</span>
                 </v-flex>
                 <v-flex xs12 sm6 md4 class="text-xs-center" pt-3>
                   Cette opportunité expire dans :
