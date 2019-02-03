@@ -14,7 +14,9 @@
           </v-flex>
           <v-flex xs9 lg10 pl-3>
             <div class="headline">{{ opportunity.company.name }}</div>
-            <div class="grey--text">Salaire fixe et localisation : ils respectent tes conditions</div>
+            <div :class="['grey--text', 'text--darken-2', {title: $vuetify.breakpoint.smAndUp}]">
+              {{ opportunity.requirement.name }}
+            </div>
             <div v-if="opportunity.requirement.status === 'CLOSED'">
               <v-chip v-html="'L\'offre n\'est plus d\'actualité'" class="text-xs-center pa-2"></v-chip>
             </div>
