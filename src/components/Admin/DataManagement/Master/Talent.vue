@@ -340,7 +340,7 @@
                       </v-list>
                     </v-flex>
                   </v-tab-item>
-                  <v-tab-item>
+                  <v-tab-item lazy>
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12>
@@ -484,6 +484,7 @@
       ]),
       activateProfile() {
         this.talent.active = true;
+        this.talent.reactivatedOn = null;
         this.saveProfile();
       },
       saveProfile() {

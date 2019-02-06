@@ -8,10 +8,41 @@
           </v-flex>
         </v-card-title>
         <v-card-text>
-          <v-flex xs12 class="subheading grey--text text--darken-2">
-            Please tell us why:
+          <v-flex xs12 class="subheading">
+            Why?
             <v-form v-model="valid" ref="form">
-              <v-textarea v-model="deactivationReason" :rules="[rules.required]"></v-textarea>
+              <v-textarea v-model="deactivationReason" label="Deactivation reason*"
+                          :rules="[rules.required]"></v-textarea>
+              <v-flex xs12>
+                Do you want {{ talent.firstName }} to be
+                <span class="font-weight-bold">reactivated later</span>?
+              </v-flex>
+              <v-menu
+                v-model="reactivationMenu"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
+                <v-text-field
+                  slot="activator"
+                  :value="formattedReactivatedOn"
+                  label="Reactivated on (optional)"
+                  prepend-icon="event"
+                  readonly
+                  clearable
+                  @click:clear="clearReactivatedOn"
+                ></v-text-field>
+                <v-date-picker
+                  v-model="talent.reactivatedOn"
+                  @input="reactivationMenu = false"
+                  :no-title="true"
+                  :min="now.format()"
+                ></v-date-picker>
+              </v-menu>
             </v-form>
           </v-flex>
         </v-card-text>
@@ -45,6 +76,8 @@
       loading: false,
       valid: false,
       deactivationReason: '',
+      reactivationMenu: false,
+      now: moment(),
     }),
     computed: {
       ...mapGetters([
@@ -58,6 +91,9 @@
           this.$emit('update:value', value);
         },
       },
+      formattedReactivatedOn() {
+        return this.talent.reactivatedOn ? moment(this.talent.reactivatedOn).format('LL') : '';
+      },
     },
     methods: {
       ...mapActions([
@@ -69,7 +105,9 @@
         if (this.$refs.form.validate()) {
           this.prepareForApiConsumption();
           talent.active = false;
-          const comment = `[${moment().format('ll')} - ${this.user.firstName}] talent désactivé => ${deactivationReason.trim()}`;
+          const comment = `[${moment().format('ll')} - ${this.user.firstName}] talent désactivé \
+${this.talent.reactivatedOn ? `(reactivated on ${moment(this.talent.reactivatedOn).format('ll')}) ` : ''}\
+=> ${deactivationReason.trim()}`;
           talent.notes = `${talent.notes.trim()}\n\n${comment.trim()}`;
           return this
             .saveTalentData(talent)
@@ -82,6 +120,9 @@
             .finally(() => this.clearLoading());
         }
         return Promise.resolve();
+      },
+      clearReactivatedOn() {
+        this.talent.reactivatedOn = null;
       },
       prepareForApiConsumption() {
         this.loading = true;

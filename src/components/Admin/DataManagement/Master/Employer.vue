@@ -59,7 +59,7 @@
                 <v-tabs grow>
                   <v-tab>Notes</v-tab>
                   <v-tab>Requirements</v-tab>
-                  <v-tab-item>
+                  <v-tab-item lazy>
                     <v-card-text>
                       <v-textarea label="Notes" v-model="employer.notes" prepend-inner-icon="lock" rows="20"
                                   auto-grow></v-textarea>
