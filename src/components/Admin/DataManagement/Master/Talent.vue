@@ -2,6 +2,8 @@
   <v-layout>
     <admin-opportunity-sending-dialog :value.sync="opportunityDialog" :talent="talent"
                                       @opportunity-sent="getOpportunities"></admin-opportunity-sending-dialog>
+    <admin-talent-deactivation-dialog :value.sync="deactivationDialog"
+                                      :talent="talent"></admin-talent-deactivation-dialog>
     <v-flex xs2 class="pr-3">
       <data-management-navigation></data-management-navigation>
     </v-flex>
@@ -94,7 +96,9 @@
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
                     <v-btn @click="signInAs(talent.username)" dark>Sign in as</v-btn>
-                    <v-btn v-if="talent.active" @click="deactivateProfile" color="error">Deactivate</v-btn>
+                    <v-btn v-if="talent.active" @click.native.stop="deactivationDialog = true" color="error">
+                      deactivate
+                    </v-btn>
                     <v-btn v-else @click="activateProfile" color="success">Activate</v-btn>
                   </v-flex>
                 </v-layout>
@@ -340,8 +344,8 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12>
-                          <v-textarea label="Notes" v-model="talent.notes" prepend-inner-icon="lock"
-                                      rows="16"></v-textarea>
+                          <v-textarea label="Notes" v-model="talent.notes" prepend-inner-icon="lock" rows="20"
+                                      auto-grow></v-textarea>
                           <div class="text-xs-right">
                             <v-btn icon fab small color="primary" @click="saveProfile">
                               <v-icon>done</v-icon>
@@ -379,16 +383,19 @@
   import { mapGetters, mapActions, mapState } from 'vuex';
   import DataManagementNavigation from '../Navigation';
   import AdminOpportunitySendingDialog from '../../Utilities/OpportunitySendingDialog';
+  import AdminTalentDeactivationDialog from '../../Utilities/TalentDeactivationDialog';
 
   export default {
     name: 'talent',
     components: {
       DataManagementNavigation,
       AdminOpportunitySendingDialog,
+      AdminTalentDeactivationDialog,
     },
     data: () => ({
       talent: null,
       opportunityDialog: false,
+      deactivationDialog: false,
       opportunityTable: {
         headers: [
           { text: 'Sent at', value: 'createdAt' },
@@ -477,10 +484,6 @@
       ]),
       activateProfile() {
         this.talent.active = true;
-        this.saveProfile();
-      },
-      deactivateProfile() {
-        this.talent.active = false;
         this.saveProfile();
       },
       saveProfile() {
