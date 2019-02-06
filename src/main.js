@@ -34,7 +34,7 @@ Vue.config.productionTip = !isProduction;
 Vue.use(Vuetify);
 Vue.use(filters);
 Vue.use(VueAnalytics, {
-  id: ['UA-90375031-1', 'UA-118984586-1'],
+  id: 'UA-118984586-1',
   router,
   debug: {
     // enabled: !isProduction,
