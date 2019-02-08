@@ -18,8 +18,9 @@
               <span class="font-weight-bold">20%</span>
               du
               <span class="font-weight-bold">salaire fixe</span>
+              *
             </div>
-            <span class="grey--text text--darken-2">Paiement en 3 tiers *</span>
+            <span class="grey--text text--darken-2">Paiement en 3 tiers **</span>
           </v-flex>
         </v-card-title>
         <v-card-text>
@@ -40,7 +41,10 @@
             </div>
           </v-flex>
           <v-flex xs12 class="grey--text text--darken-2">
-            * 1/3 à l'accord, 1/3 au démarrage, 1/3 à validation des 4 mois d'essai
+            * salaire fixe annuel hors variable
+          </v-flex>
+          <v-flex xs12 class="grey--text text--darken-2">
+            ** 1/3 à l'accord, 1/3 au démarrage, 1/3 à validation des 4 mois d'essai
           </v-flex>
         </v-card-text>
       </v-card>
@@ -63,6 +67,7 @@
               <span class="font-weight-bold">2%/mois</span>
               du
               <span class="font-weight-bold">salaire fixe</span>
+              *
             </div>
             <span class="grey--text text--darken-2">Pendant 12 mois</span>
           </v-flex>
@@ -84,8 +89,11 @@
               <v-icon color="success">done</v-icon>
             </div>
           </v-flex>
+          <v-flex xs12 class="grey--text text--darken-2">
+            * salaire fixe annuel hors variable
+          </v-flex>
           <v-flex xs12 class="white--text">
-            * 1/3 à l'accord, 1/3 au démarrage, 1/3 à validation des 4 mois d'essai
+            ** 1/3 à l'accord, 1/3 au démarrage, 1/3 à validation des 4 mois d'essai
           </v-flex>
         </v-card-text>
       </v-card>
