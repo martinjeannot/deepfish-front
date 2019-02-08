@@ -166,6 +166,12 @@
                 title: 'Profil',
                 route: { name: 'EmployerProfile' },
               },
+              {
+                key: 'pricing',
+                icon: 'monetization_on',
+                title: 'Tarifs',
+                route: { name: 'EmployerPricing' },
+              },
             ];
           } else {
             menuItems = [

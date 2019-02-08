@@ -29,6 +29,7 @@ import EmployerTypeformRequirement from '@/components/Employer/Requirements/Type
 import EmployerCalendlyRequirement from '@/components/Employer/Requirements/CalendlyRequirement';
 import EmployerTalents from '@/components/Employer/Talents/Talents';
 import EmployerInterviewScheduling from '@/components/Employer/Interview/Scheduling';
+import EmployerPricing from '@/components/Employer/Pricing';
 import TalentProfile from '@/components/Talent/Profile';
 import TalentConditions from '@/components/Talent/Conditions';
 import TalentOpportunities from '@/components/Talent/Opportunities/Opportunities';
@@ -292,6 +293,12 @@ const router = new Router({
       name: 'EmployerInterviewScheduling',
       component: EmployerInterviewScheduling,
       props: route => ({ talentId: route.query['talent-id'], opportunityId: route.query['opportunity-id'] }),
+      meta: { authRequired: true },
+    },
+    {
+      path: '/employer/pricing',
+      name: 'EmployerPricing',
+      component: EmployerPricing,
       meta: { authRequired: true },
     },
     // TALENT ======================================================================================
