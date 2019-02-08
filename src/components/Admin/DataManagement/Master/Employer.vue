@@ -13,7 +13,7 @@
         <v-flex xs12>
           <v-flex xs12 v-if="alertComponent">
             <base-alert :type="alertComponent.type" :message="alertComponent.message"
-              @dismissed="onAlertComponentDismissed"></base-alert>
+                        @dismissed="onAlertComponentDismissed"></base-alert>
           </v-flex>
           <v-layout v-if="employer">
             <v-flex xs4 class="pr-3">
@@ -59,10 +59,10 @@
                 <v-tabs grow>
                   <v-tab>Notes</v-tab>
                   <v-tab>Requirements</v-tab>
-                  <v-tab-item>
+                  <v-tab-item lazy>
                     <v-card-text>
-                      <v-textarea label="Notes" v-model="employer.notes"
-                        prepend-inner-icon="lock" rows="20"></v-textarea>
+                      <v-textarea label="Notes" v-model="employer.notes" prepend-inner-icon="lock" rows="20"
+                                  auto-grow></v-textarea>
                       <div class="text-xs-right">
                         <v-btn icon fab small color="primary" @click="saveEmployer">
                           <v-icon>done</v-icon>
@@ -94,63 +94,63 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import DataManagementNavigation from '../Navigation';
+  import { mapGetters, mapActions } from 'vuex';
+  import DataManagementNavigation from '../Navigation';
 
-export default {
-  name: 'data-management-employer',
-  components: { DataManagementNavigation },
-  props: ['id'],
-  data: () => ({
-    employer: null,
-    requirements: null,
-    headers: [
-      { text: 'Received at', value: 'createdAt' },
-      { text: 'Name', value: 'name' },
-      { text: 'Actions', value: 'id', sortable: false },
-    ],
-  }),
-  computed: {
-    ...mapGetters(['api', 'initialLoading', 'loading', 'alertComponent']),
-  },
-  methods: {
-    ...mapActions([
-      'prepareForApiConsumption',
-      'clearLoading',
-      'showSnackbar',
-      'showSuccessSnackbar',
-      'setErrorAfterApiConsumption',
-      'onAlertComponentDismissed',
-      'signInAs',
-    ]),
-    saveEmployer() {
-      const employerData = Object.assign({}, this.employer);
-      // linked refs deletion
-      delete employerData.company;
-      this.api
-        .patch(this.employer._links.self.href, employerData)
-        .then(() => this.showSnackbar('Success'))
-        .catch(() => this.showSnackbar('Error'));
+  export default {
+    name: 'data-management-employer',
+    components: { DataManagementNavigation },
+    props: ['id'],
+    data: () => ({
+      employer: null,
+      requirements: null,
+      headers: [
+        { text: 'Received at', value: 'createdAt' },
+        { text: 'Name', value: 'name' },
+        { text: 'Actions', value: 'id', sortable: false },
+      ],
+    }),
+    computed: {
+      ...mapGetters(['api', 'initialLoading', 'loading', 'alertComponent']),
     },
-  },
-  created() {
-    this.prepareForApiConsumption(true);
-    return Promise.all([
-      this.api(`/employers/${this.id}`),
-      this.api(`/requirements?createdBy=${this.id}`),
-    ])
-      .then(([employerResponse, requirementsResponse]) => {
-        this.employer = employerResponse.data;
-        this.requirements = requirementsResponse.data._embedded.requirements;
-        return this.api(this.employer._links.company.href);
-      })
-      .then((response) => {
-        this.employer.company = response.data;
-      })
-      .catch(() => this.setErrorAfterApiConsumption())
-      .finally(() => this.clearLoading(true));
-  },
-};
+    methods: {
+      ...mapActions([
+        'prepareForApiConsumption',
+        'clearLoading',
+        'showSnackbar',
+        'showSuccessSnackbar',
+        'setErrorAfterApiConsumption',
+        'onAlertComponentDismissed',
+        'signInAs',
+      ]),
+      saveEmployer() {
+        const employerData = Object.assign({}, this.employer);
+        // linked refs deletion
+        delete employerData.company;
+        this.api
+          .patch(this.employer._links.self.href, employerData)
+          .then(() => this.showSnackbar('Success'))
+          .catch(() => this.showSnackbar('Error'));
+      },
+    },
+    created() {
+      this.prepareForApiConsumption(true);
+      return Promise.all([
+        this.api(`/employers/${this.id}`),
+        this.api(`/requirements?createdBy=${this.id}`),
+      ])
+        .then(([employerResponse, requirementsResponse]) => {
+          this.employer = employerResponse.data;
+          this.requirements = requirementsResponse.data._embedded.requirements;
+          return this.api(this.employer._links.company.href);
+        })
+        .then((response) => {
+          this.employer.company = response.data;
+        })
+        .catch(() => this.setErrorAfterApiConsumption())
+        .finally(() => this.clearLoading(true));
+    },
+  };
 </script>
 
 <style scoped>
