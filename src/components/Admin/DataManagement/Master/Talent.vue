@@ -344,8 +344,8 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12>
-                          <v-textarea label="Notes" v-model="talent.notes" prepend-inner-icon="lock" rows="20"
-                                      auto-grow></v-textarea>
+                          <v-textarea label="Notes" v-model="talent.notes" prepend-inner-icon="lock"
+                                      rows="25"></v-textarea>
                           <div class="text-xs-right">
                             <v-btn icon fab small color="primary" @click="saveProfile">
                               <v-icon>done</v-icon>
