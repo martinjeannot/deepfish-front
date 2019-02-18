@@ -13,14 +13,14 @@
         </v-flex>
       </v-layout>
       <v-layout v-if="talent !== null">
-        <v-flex xs12 sm6 offset-sm3>
+        <v-flex xs12 sm8 offset-sm2 md6 offset-md3>
           <v-card>
             <v-card-text>
               <v-layout row wrap>
                 <v-flex xs6 md3 class="text-xs-center">
                   <v-avatar size="80">
                     <v-img
-                      :src="talent.basicProfile.pictureUrl"
+                      :src="talent.profilePictureUrl"
                       lazy-src="static/img/avatar.png"
                       alt="picture"
                     ></v-img>
