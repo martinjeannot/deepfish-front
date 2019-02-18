@@ -16,7 +16,7 @@
             <td>
               <v-avatar size="46">
                 <v-img
-                  :src="props.item.basicProfile.pictureUrl"
+                  :src="props.item.profilePictureUrl"
                   lazy-src="static/img/avatar.png"
                   alt="picture"
                 ></v-img>
@@ -53,7 +53,7 @@
     data: () => ({
       talents: [],
       headers: [
-        { text: '', value: 'pictureUrl', sortable: false },
+        { text: '', value: 'profilePictureUrl', sortable: false },
         { text: 'Last name', value: 'lastName' },
         { text: 'First name', value: 'firstName' },
         { text: 'Email', value: 'email' },

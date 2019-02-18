@@ -121,11 +121,15 @@ export default new Vuex.Store({
           return `${interviewDuration} min`;
       }
     },
-    getTalentLinkedInProfileUrl(basicProfile) {
-      if (basicProfile.publicProfileUrl) {
-        return basicProfile.publicProfileUrl;
-      } else if (basicProfile.siteStandardProfileRequest) {
-        return basicProfile.siteStandardProfileRequest.url;
+    getTalentLinkedInProfileUrl(talent) {
+      if (talent.publicProfileUrl) {
+        return talent.publicProfileUrl;
+      } else if (talent.basicProfile) {
+        if (talent.basicProfile.publicProfileUrl) {
+          return talent.basicProfile.publicProfileUrl;
+        } else if (talent.basicProfile.siteStandardProfileRequest) {
+          return talent.basicProfile.siteStandardProfileRequest.url;
+        }
       }
       return null;
     },
