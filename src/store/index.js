@@ -464,7 +464,7 @@ export default new Vuex.Store({
         redirect_uri: `${process.env.DEEPFISH_BACK_BASE_URL}/auth/linkedin/callback`,
         // eslint-disable-next-line no-bitwise
         state: ([1e7] + 1e3 + 4e3 + 8e3 + 1e11).replace(/[018]/g, c => (((c ^ crypto.getRandomValues(new Uint8Array(1))[0]) & 15) >> c / 4).toString(16)),
-        scope: 'r_basicprofile r_emailaddress',
+        scope: 'r_liteprofile r_emailaddress',
       };
       const queryString = Object.keys(queryParams).map(k => `${k}=${encodeURIComponent(queryParams[k])}`).join('&');
       return `https://www.linkedin.com/oauth/v2/authorization?${queryString}`;
