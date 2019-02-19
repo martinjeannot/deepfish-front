@@ -16,6 +16,17 @@
               <v-card>
                 <v-card-text>
                   <v-layout wrap>
+                    <v-flex xs12>
+                      <v-alert
+                        :value="true"
+                        type="info"
+                      >
+                        <span class="font-weight-bold">LinkedIn</span>
+                        ayant mis à jour sa politique de sécurité, vous devrez
+                        <span class="font-weight-bold">réautoriser Deepfish à vous identifier</span>
+                        via LinkedIn (lors de votre prochaine connexion uniquement).
+                      </v-alert>
+                    </v-flex>
                     <v-flex xs12 class="text-xs-center">
                       <h2>Connexion en tant que Commercial via LinkedIn</h2>
                     </v-flex>
