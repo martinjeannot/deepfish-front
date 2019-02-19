@@ -29,7 +29,7 @@
                 <v-flex xs4 md4 d-flex align-center text-xs-center text-md-left>
                   <h3>{{ talent.firstName }} {{ talent.lastName }}</h3>
                 </v-flex>
-                <v-flex xs12 md5 d-flex align-center>
+                <v-flex xs12 md5 v-if="hasBeenSuccessfullySubmittedOnce" d-flex align-center>
                   <v-btn v-if="talent.active" key="disable" color="error" @click="deactivationDialog = true">
                     Désactiver mon profil
                   </v-btn>
