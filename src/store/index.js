@@ -122,8 +122,8 @@ export default new Vuex.Store({
       }
     },
     getTalentLinkedInProfileUrl(talent) {
-      if (talent.publicProfileUrl) {
-        return talent.publicProfileUrl;
+      if (talent.linkedinPublicProfileUrl) {
+        return talent.linkedinPublicProfileUrl;
       } else if (talent.basicProfile) {
         if (talent.basicProfile.publicProfileUrl) {
           return talent.basicProfile.publicProfileUrl;
