@@ -39,7 +39,7 @@
                 <v-flex xs4 sm2 class="text-xs-center">
                   <v-avatar size="80" class="mr-2">
                     <v-img
-                      :src="props.item.talent.basicProfile.pictureUrl"
+                      :src="props.item.talent.profilePictureUrl"
                       lazy-src="static/img/avatar.png"
                       alt="picture"
                     ></v-img>
@@ -59,12 +59,12 @@
                     <v-icon>email</v-icon>
                     {{ props.item.talent.email }}
                   </h4>
-                  <div v-if="props.item.talent.basicProfile.positions._total">
+                  <div v-if="props.item.talent.basicProfile && props.item.talent.basicProfile.positions._total">
                     {{ props.item.talent.basicProfile.positions.values[0].title
                     }} chez {{ props.item.talent.basicProfile.positions.values[0].company.name }}
                   </div>
-                  <div v-if="getTalentLinkedInProfileUrl(props.item.talent.basicProfile)">
-                    <a :href="getTalentLinkedInProfileUrl(props.item.talent.basicProfile)"
+                  <div v-if="getTalentLinkedInProfileUrl(props.item.talent)">
+                    <a :href="getTalentLinkedInProfileUrl(props.item.talent)"
                        target="_blank">Voir le profil complet</a>
                   </div>
                 </v-flex>
