@@ -16,11 +16,22 @@
               <v-card>
                 <v-card-text>
                   <v-layout wrap>
+                    <v-flex xs12>
+                      <v-alert
+                        :value="true"
+                        type="info"
+                      >
+                        <span class="font-weight-bold">LinkedIn</span>
+                        ayant mis à jour sa politique de sécurité, vous devrez
+                        <span class="font-weight-bold">réautoriser Deepfish à vous identifier</span>
+                        via LinkedIn (lors de votre prochaine connexion uniquement).
+                      </v-alert>
+                    </v-flex>
                     <v-flex xs12 class="text-xs-center">
                       <h2>Connexion en tant que Commercial via LinkedIn</h2>
                     </v-flex>
                     <v-flex xs12 class="text-xs-center">
-                      <v-btn color="info" :href="linkedInAuthEndpoint" :disabled="loading" :loading="loading"
+                      <v-btn color="info" :href="linkedInAuthEndpoint('sign-in')" :disabled="loading" :loading="loading"
                              @click="prepareForApiConsumption()" v-html="'Se connecter en tant que commercial'" large>
                       </v-btn>
                     </v-flex>
@@ -155,10 +166,17 @@
       if (Object.prototype.hasOwnProperty.call(this.$route.query, 'employer')) {
         this.activeTabIndex = 1;
       }
+      // TODO still useful ?
       if (Object.prototype.hasOwnProperty.call(this.$route.query, 'employer-sign-up-success')) {
         this.setAlertComponent({
           type: 'success',
           message: 'Félicitations ! Vous allez recevoir un mail avec vos identifiants de connexion',
+        });
+      }
+      if (Object.prototype.hasOwnProperty.call(this.$route.query, 'error')) {
+        this.setAlertComponent({
+          type: 'error',
+          message: 'Une erreur est survenue lors de l\'authentification. Si le problème persiste, n\'hésitez pas à nous contacter',
         });
       }
     },

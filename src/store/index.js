@@ -23,6 +23,21 @@ export default new Vuex.Store({
     snackbar: { show: false, text: '' },
     error: null,
     alertComponent: null,
+    getLinkedInAuthEndpoint(origin) {
+      const queryParams = {
+        response_type: 'code',
+        client_id: `${process.env.LINKEDIN_CLIENT_ID}`,
+        redirect_uri: `${process.env.DEEPFISH_BACK_BASE_URL}/auth/linkedin/callback`,
+        state: JSON.stringify({
+          origin,
+          // eslint-disable-next-line no-bitwise
+          'csrf-token': ([1e7] + 1e3 + 4e3 + 8e3 + 1e11).replace(/[018]/g, c => (((c ^ crypto.getRandomValues(new Uint8Array(1))[0]) & 15) >> c / 4).toString(16)),
+        }),
+        scope: 'r_liteprofile r_emailaddress',
+      };
+      const queryString = Object.keys(queryParams).map(k => `${k}=${encodeURIComponent(queryParams[k])}`).join('&');
+      return `https://www.linkedin.com/oauth/v2/authorization?${queryString}`;
+    },
     getTalentMaturityLevel(maturityLevel) {
       switch (maturityLevel) {
         case 'CLEAR_WATER':
@@ -121,11 +136,15 @@ export default new Vuex.Store({
           return `${interviewDuration} min`;
       }
     },
-    getTalentLinkedInProfileUrl(basicProfile) {
-      if (basicProfile.publicProfileUrl) {
-        return basicProfile.publicProfileUrl;
-      } else if (basicProfile.siteStandardProfileRequest) {
-        return basicProfile.siteStandardProfileRequest.url;
+    getTalentLinkedInProfileUrl(talent) {
+      if (talent.linkedinPublicProfileUrl) {
+        return talent.linkedinPublicProfileUrl;
+      } else if (talent.basicProfile) {
+        if (talent.basicProfile.publicProfileUrl) {
+          return talent.basicProfile.publicProfileUrl;
+        } else if (talent.basicProfile.siteStandardProfileRequest) {
+          return talent.basicProfile.siteStandardProfileRequest.url;
+        }
       }
       return null;
     },
@@ -457,17 +476,8 @@ export default new Vuex.Store({
     alertComponent(state) {
       return state.alertComponent;
     },
-    linkedInAuthEndpoint() {
-      const queryParams = {
-        response_type: 'code',
-        client_id: `${process.env.LINKEDIN_CLIENT_ID}`,
-        redirect_uri: `${process.env.DEEPFISH_BACK_BASE_URL}/auth/linkedin/callback`,
-        // eslint-disable-next-line no-bitwise
-        state: ([1e7] + 1e3 + 4e3 + 8e3 + 1e11).replace(/[018]/g, c => (((c ^ crypto.getRandomValues(new Uint8Array(1))[0]) & 15) >> c / 4).toString(16)),
-        scope: 'r_basicprofile r_emailaddress',
-      };
-      const queryString = Object.keys(queryParams).map(k => `${k}=${encodeURIComponent(queryParams[k])}`).join('&');
-      return `https://www.linkedin.com/oauth/v2/authorization?${queryString}`;
+    linkedInAuthEndpoint(state) {
+      return origin => state.getLinkedInAuthEndpoint(origin);
     },
     user(state) {
       return state.user;

@@ -25,8 +25,14 @@
         <span class="subheading" style="font-weight: bold">À quelle date peux-tu démarrer ?</span>
       </v-flex>
       <v-flex xs12 class="mb-2">
-        <v-date-picker v-model="conditions.canStartOn" locale="fr-fr" :first-day-of-week="1"
-                       @input="saveConditions" :readonly="subLoading"></v-date-picker>
+        <v-date-picker
+          v-model="conditions.canStartOn"
+          locale="fr-fr"
+          :first-day-of-week="1"
+          :min="minDate.format(datePickerDateFormat)"
+          @input="saveConditions"
+          :readonly="subLoading"
+        ></v-date-picker>
       </v-flex>
       <v-flex xs12 class="mb-2">
         <span class="subheading" style="font-weight: bold">Où souhaites-tu travailler ?</span>
@@ -49,6 +55,7 @@
 </template>
 
 <script>
+  import moment from 'moment';
   import { mapGetters, mapActions } from 'vuex';
 
   const rules = {
@@ -66,6 +73,7 @@
       rules,
       fixedLocations: [],
       fixedLocationsByCountry: [],
+      datePickerDateFormat: 'YYYY-MM-DD',
     }),
     computed: {
       ...mapGetters([
@@ -147,6 +155,11 @@
             })
             .finally(() => this.clearLoading());
         },
+      },
+      minDate() {
+        const canStartOn = moment(this.conditions.canStartOn);
+        const now = moment();
+        return canStartOn.isBefore(now) ? canStartOn : now;
       },
     },
     methods: {

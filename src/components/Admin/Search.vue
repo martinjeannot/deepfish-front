@@ -162,8 +162,7 @@
                     <v-avatar size="60" class="light-blue">
                       <v-avatar size="50">
                         <v-img
-                          :src="props.item.basicProfile.pictureUrl"
-                          lazy-src="static/img/avatar.png"
+                          :src="props.item.profilePictureUrl"
                           alt="picture"
                           style="margin-top: 2px"
                         ></v-img>
@@ -177,7 +176,7 @@
                       {{ props.item.firstName }} {{ props.item.lastName.toUpperCase() }}
                     </router-link>
                   </h4>
-                  {{ props.item.basicProfile.headline }}
+                  {{ props.item.basicProfile ? props.item.basicProfile.headline : 'N/A' }}
                 </v-flex>
                 <v-flex xs3 class="text-xs-right">
                   <v-btn fab small color="primary"
@@ -198,12 +197,12 @@
                   <v-divider></v-divider>
                 </v-flex>
                 <v-flex xs12 justify-center>
-                  <v-btn v-if="getTalentLinkedInProfileUrl(props.item.basicProfile)" flat icon
-                         :href="getTalentLinkedInProfileUrl(props.item.basicProfile)" target="_blank"
+                  <v-btn v-if="getTalentLinkedInProfileUrl(props.item)" flat icon
+                         :href="getTalentLinkedInProfileUrl(props.item)" target="_blank"
                          color="light-blue darken-3">
                     <v-icon>fab fa-linkedin</v-icon>
                   </v-btn>
-                  <span v-if="props.item.basicProfile.positions._total">
+                  <span v-if="props.item.basicProfile && props.item.basicProfile.positions._total">
                     {{ props.item.basicProfile.positions.values[0].title }}
                     at {{ props.item.basicProfile.positions.values[0].company.name }}
                   </span>

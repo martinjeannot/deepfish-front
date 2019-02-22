@@ -28,7 +28,7 @@
                   <v-flex xs12 class="text-xs-center">
                     <v-avatar size="140">
                       <v-img
-                        :src="talent.basicProfile.pictureUrl"
+                        :src="talent.profilePictureUrl"
                         lazy-src="static/img/avatar.png"
                         alt="picture"
                       ></v-img>
@@ -38,7 +38,39 @@
                     <h2>{{ talent.firstName }} {{ talent.lastName.toUpperCase() }}</h2>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
-                    <h4>{{ talent.basicProfile.headline }}</h4>
+                    <h4>{{ talent.basicProfile ? talent.basicProfile.headline : 'N/A' }}</h4>
+                  </v-flex>
+                  <v-flex xs12 v-show="linkedinPublicProfileUrlEdit">
+                    <v-form
+                      v-model="linkedinPublicProfileUrlValid"
+                      ref="linkedinPublicProfileUrlForm"
+                    >
+                      <v-text-field
+                        v-model="talent.linkedinPublicProfileUrl"
+                        label="LinkedIn public profile URL"
+                        placeholder="https://www.linkedin.com/in/elon-musk"
+                        :rules="[rules.required]"
+                        prepend-icon="fab fa-linkedin"
+                        append-outer-icon="done"
+                        @click:append-outer="submitLinkedinPublicProfileUrlForm"
+                        required
+                      ></v-text-field>
+                    </v-form>
+                  </v-flex>
+                  <v-flex xs12 v-if="!linkedinPublicProfileUrlEdit" class="d-flex">
+                    <v-icon color="light-blue darken-3" class="mr-2">
+                      fab fa-linkedin
+                    </v-icon>
+                    <a
+                      :href="getTalentLinkedInProfileUrl(talent)"
+                      target="_blank"
+                      class="truncate"
+                    >
+                      {{ getTalentLinkedInProfileUrl(talent) }}
+                    </a>
+                    <v-icon @click="linkedinPublicProfileUrlEdit = true" class="ml-2">
+                      edit
+                    </v-icon>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
                     <v-btn color="info" @click.native.stop="opportunityDialog = true">
@@ -75,17 +107,6 @@
                       : {{ getTalentMaturityLevel(talent.maturityLevel) }}
                     </p>
                   </v-flex>
-                  <v-flex xs12 v-if="getTalentLinkedInProfileUrl(talent.basicProfile)">
-                    <p>
-                      <span style="font-weight: bold">LinkedIn</span> :
-                      <v-btn flat icon :href="getTalentLinkedInProfileUrl(talent.basicProfile)" target="_blank"
-                             color="light-blue darken-3">
-                        <v-icon>fab fa-linkedin</v-icon>
-                      </v-btn>
-                      {{ talent.basicProfile.numConnections }}{{ talent.basicProfile.numConnectionsCapped ? '+' : ''
-                      }} connections
-                    </p>
-                  </v-flex>
                   <v-flex xs12>
                     <div class="mb-3">
                       <span style="font-weight: bold">Profile completion</span> : {{ profileCompletion.value }}%
@@ -117,12 +138,17 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12 text-xs-center class="pb-3">
-                          <h3>{{ talent.basicProfile.firstName }} {{ talent.basicProfile.lastName }}</h3>
-                          <h4>{{ talent.basicProfile.headline }}</h4>
-                          {{ talent.basicProfile.location.name }} | {{ talent.basicProfile.industry }}
+                          <h3>{{ talent.firstName }} {{ talent.lastName }}</h3>
+                          <h4>{{ talent.basicProfile ? talent.basicProfile.headline : 'N/A' }}</h4>
+                          <div v-if="talent.basicProfile">
+                            {{ talent.basicProfile.location.name }} | {{ talent.basicProfile.industry }}
+                          </div>
+                          <div v-else>
+                            N/A
+                          </div>
                         </v-flex>
                         <v-flex xs12 class="pb-3">
-                          {{ talent.basicProfile.summary }}
+                          {{ talent.basicProfile ? talent.basicProfile.summary : 'N/A' }}
                         </v-flex>
                         <v-flex xs12>
                           <v-select
@@ -140,7 +166,7 @@
                           <v-text-field v-model="talent.numberOfManagedProjects" label="Nombre de projets"
                                         :readonly="true"></v-text-field>
                         </v-flex>
-                        <v-flex xs12 v-if="talent.basicProfile.positions._total">
+                        <v-flex xs12 v-if="talent.basicProfile && talent.basicProfile.positions._total">
                           <v-flex xs12 class="pb-2">
                             <h4>Experience</h4>
                           </v-flex>
@@ -385,6 +411,10 @@
   import AdminOpportunitySendingDialog from '../../Utilities/OpportunitySendingDialog';
   import AdminTalentDeactivationDialog from '../../Utilities/TalentDeactivationDialog';
 
+  const rules = {
+    required: value => !!value || 'This field is required',
+  };
+
   export default {
     name: 'talent',
     components: {
@@ -393,6 +423,7 @@
       AdminTalentDeactivationDialog,
     },
     data: () => ({
+      rules,
       talent: null,
       opportunityDialog: false,
       deactivationDialog: false,
@@ -410,6 +441,8 @@
           descending: true,
         },
       },
+      linkedinPublicProfileUrlEdit: false,
+      linkedinPublicProfileUrlValid: false,
     }),
     props: ['id'],
     computed: {
@@ -487,8 +520,21 @@
         this.talent.reactivatedOn = null;
         this.saveProfile();
       },
+      submitLinkedinPublicProfileUrlForm() {
+        if (this.$refs.linkedinPublicProfileUrlForm.validate()) {
+          return this.saveLinkedinPublicProfileUrl();
+        }
+        return Promise.resolve();
+      },
+      saveLinkedinPublicProfileUrl() {
+        return this
+          .saveProfile()
+          .then(() => {
+            this.linkedinPublicProfileUrlEdit = !this.talent.linkedinPublicProfileUrl;
+          });
+      },
       saveProfile() {
-        this.saveTalentData(this.talent)
+        return this.saveTalentData(this.talent)
           .then(() => this.showSnackbar('OK'))
           .catch(() => {
             this.showSnackbar('Error');
@@ -554,6 +600,7 @@
                    talentResponse,
                  ]) => {
             this.talent = talentResponse.data;
+            this.linkedinPublicProfileUrlEdit = !this.talent.linkedinPublicProfileUrl;
             return Promise.all([
               this.api(`${this.talent._links.conditions.href}?projection=default`),
               this.api(this.talent._links.qualification.href),
@@ -581,5 +628,9 @@
 </script>
 
 <style scoped>
-
+  .truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 </style>
