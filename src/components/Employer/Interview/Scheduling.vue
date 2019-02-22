@@ -15,7 +15,7 @@
       <v-flex xs12 class="d-inline-flex">
         <v-avatar size="80">
           <v-img
-            :src="talent.basicProfile.pictureUrl"
+            :src="talent.profilePictureUrl"
             lazy-src="static/img/avatar.png"
             alt="picture"
           ></v-img>
