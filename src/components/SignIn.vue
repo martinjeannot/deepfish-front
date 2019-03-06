@@ -31,8 +31,9 @@
                       <h2>Connexion en tant que Commercial via LinkedIn</h2>
                     </v-flex>
                     <v-flex xs12 class="text-xs-center">
-                      <v-btn color="info" :href="linkedInAuthEndpoint('sign-in')" :disabled="loading" :loading="loading"
-                             @click="prepareForApiConsumption()" v-html="'Se connecter en tant que commercial'" large>
+                      <v-btn color="info" :href="signInLinkedInAuthEndpoint"
+                             :disabled="loading" :loading="loading" @click="prepareForApiConsumption()"
+                             v-html="'Se connecter en tant que commercial'" large>
                       </v-btn>
                     </v-flex>
                     <v-flex xs12 class="mt-2 text-xs-center">
@@ -115,6 +116,9 @@
         'isUserAuthenticated',
         'linkedInAuthEndpoint',
       ]),
+      signInLinkedInAuthEndpoint() {
+        return this.linkedInAuthEndpoint('sign-in');
+      },
     },
     watch: {
       isUserAuthenticated: {
@@ -163,6 +167,9 @@
       },
     },
     created() {
+      if (Object.prototype.hasOwnProperty.call(this.$route.query, 'utm_id')) {
+        localStorage.setItem('df_utm_id', this.$route.query.utm_id);
+      }
       if (Object.prototype.hasOwnProperty.call(this.$route.query, 'employer')) {
         this.activeTabIndex = 1;
       }
