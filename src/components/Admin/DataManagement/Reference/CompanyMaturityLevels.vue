@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-flex xs2>
+    <v-flex xs2 class="pr-3">
       <data-management-navigation></data-management-navigation>
     </v-flex>
     <v-flex xs10>
