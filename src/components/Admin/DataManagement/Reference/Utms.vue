@@ -96,6 +96,14 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
+            flat
+            color="error"
+            :disabled="loading"
+            @click="deletionDialog = false"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
             color="error"
             :loading="loading"
             @click="confirmItemDeletion(selectedItem)"
