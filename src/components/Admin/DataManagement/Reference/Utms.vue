@@ -184,6 +184,7 @@
           .finally(() => this.clearLoading());
       },
       deleteItem(item) {
+        this.selectedIndex = this.utms.indexOf(item);
         this.selectedItem = Object.assign({}, item);
         this.deletionDialog = true;
       },
@@ -192,7 +193,7 @@
         return this.api
           .delete(item._links.self.href)
           .then(() => {
-            this.utms.splice(this.utms.indexOf(item), 1);
+            this.utms.splice(this.selectedIndex, 1);
             this.deletionDialog = false;
             this.showSnackbar('Item deleted');
           })
