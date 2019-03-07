@@ -19,7 +19,7 @@
 
   export default {
     components: { DataManagementNavigation },
-    name: 'company-maturity-level-data-management',
+    name: 'data-management-company-maturity-levels',
     data: () => ({
       headers: [
         { text: 'Company maturity level', value: 'l10nKey' },

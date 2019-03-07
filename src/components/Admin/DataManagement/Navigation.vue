@@ -57,11 +57,8 @@
         { title: 'Admins', icon: 'supervisor_account', route: { name: 'AdminDMUsers' } },
       ],
       referenceDataItems: [
-        {
-          title: 'Company maturity levels',
-          icon: 'dashboard',
-          route: '/admin/data-management/reference/company-maturity-levels',
-        },
+        { title: 'Company maturity levels', icon: 'business', route: { name: 'AdminDMCompanyMaturityLevels' } },
+        { title: 'UTMs', icon: 'device_hub', route: { name: 'AdminDMUtms' } },
       ],
     }),
   };
