@@ -20,8 +20,8 @@
                       <h2>Inscription en tant que Commercial via LinkedIn</h2>
                     </v-flex>
                     <v-flex xs12 class="text-xs-center">
-                      <v-btn color="info" :href="linkedInAuthEndpoint('sign-up')" :disabled="loading"
-                             :loading="loading" @click="prepareForApiConsumption()"
+                      <v-btn color="info" :href="signUpLinkedInAuthEndpoint"
+                             :disabled="loading" :loading="loading" @click="prepareForApiConsumption()"
                              v-html="'S\'inscrire en tant que commercial'" large>
                       </v-btn>
                     </v-flex>
@@ -132,6 +132,9 @@
         'alertComponent',
         'linkedInAuthEndpoint',
       ]),
+      signUpLinkedInAuthEndpoint() {
+        return this.linkedInAuthEndpoint('sign-up');
+      },
     },
     methods: {
       ...mapActions([
@@ -160,6 +163,9 @@
       },
     },
     created() {
+      if (Object.prototype.hasOwnProperty.call(this.$route.query, 'utm_id')) {
+        localStorage.setItem('df_utm_id', this.$route.query.utm_id);
+      }
       if (Object.prototype.hasOwnProperty.call(this.$route.query, 'employer')) {
         this.activeTabIndex = 1;
       }

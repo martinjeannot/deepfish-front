@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-flex xs2>
+    <v-flex xs2 class="pr-3">
       <data-management-navigation></data-management-navigation>
     </v-flex>
     <v-flex xs10>
@@ -19,7 +19,7 @@
 
   export default {
     components: { DataManagementNavigation },
-    name: 'company-maturity-level-data-management',
+    name: 'data-management-company-maturity-levels',
     data: () => ({
       headers: [
         { text: 'Company maturity level', value: 'l10nKey' },

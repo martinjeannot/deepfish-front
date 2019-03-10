@@ -242,10 +242,6 @@
   import { mapGetters, mapActions, mapState } from 'vuex';
   import AdminOpportunitySendingDialog from './Utilities/OpportunitySendingDialog';
 
-  const rules = {
-    required: value => !!value || 'This field is required',
-  };
-
   const talentMaturityLevels = [
     { key: 'CLEAR_WATER', label: 'Clear water' },
     { key: 'OPEN_WATER', label: 'Open water' },
@@ -258,7 +254,6 @@
       AdminOpportunitySendingDialog,
     },
     data: () => ({
-      rules,
       talents: [],
       totalItems: 0,
       pagination: {},
