@@ -48,9 +48,11 @@
                 <v-flex xs8 sm4>
                   <h4>{{ props.item.talent.firstName }} {{ props.item.talent.lastName[0] }}.</h4>
                   <v-tooltip top>
-                    <v-chip slot="activator" v-if="isTalentPending(props.item)" color="red" text-color="white">
-                      Nouveau profil à traiter
-                    </v-chip>
+                    <template #activator="{ on }">
+                      <v-chip v-if="isTalentPending(props.item)" color="red" text-color="white" v-on="on">
+                        Nouveau profil à traiter
+                      </v-chip>
+                    </template>
                     <span>Il faut nous donner une réponse pour ce profil (accepté ou refusé ?)</span>
                   </v-tooltip>
                   <h4 v-if="isTalentAccepted(props.item)" class="red--text">
