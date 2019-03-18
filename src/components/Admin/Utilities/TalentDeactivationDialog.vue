@@ -27,15 +27,17 @@
                 full-width
                 min-width="290px"
               >
-                <v-text-field
-                  slot="activator"
-                  :value="formattedReactivatedOn"
-                  label="Reactivated on (optional)"
-                  prepend-icon="event"
-                  readonly
-                  clearable
-                  @click:clear="clearReactivatedOn"
-                ></v-text-field>
+                <template #activator="{ on }">
+                  <v-text-field
+                    :value="formattedReactivatedOn"
+                    label="Reactivated on (optional)"
+                    prepend-icon="event"
+                    readonly
+                    clearable
+                    @click:clear="clearReactivatedOn"
+                    v-on="on"
+                  ></v-text-field>
+                </template>
                 <v-date-picker
                   v-model="talent.reactivatedOn"
                   @input="reactivationMenu = false"

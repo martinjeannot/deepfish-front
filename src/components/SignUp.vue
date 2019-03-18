@@ -28,7 +28,9 @@
                     <v-flex xs12 class="text-xs-center pt-2 grey--text text--darken-2">
                       100% confidentiel
                       <v-tooltip bottom>
-                        <v-icon slot="activator">help</v-icon>
+                        <template #activator="{ on }">
+                          <v-icon v-on="on">help</v-icon>
+                        </template>
                         <div>
                           Nous utilisons uniquement : nom, prénom, email, photo de profil.<br/>
                           Aucun accès à vos contacts ni aucune modification sur votre profil.
