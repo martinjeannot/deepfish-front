@@ -267,8 +267,9 @@ export default new Vuex.Store({
       delete talentData.conditions;
       delete talentData.qualification;
       delete talentData.opportunities;
-      // nested maps deletion (to avoid merging)
+      // nested maps deletion (to avoid merging of "values" arrays especially)
       delete talentData.basicProfile;
+      delete talentData.fullProfile;
       return getters.api.patch(talent._links.self.href, talentData);
     },
     saveOpportunityData({ getters }, { opportunity, previousState }) {
@@ -294,7 +295,7 @@ export default new Vuex.Store({
       delete requirementData.company;
       delete requirementData.jobType;
       delete requirementData.seniority;
-      // nested maps deletion (to avoid merging)
+      // nested maps deletion (to avoid merging of "values" arrays especially)
       delete requirementData.typeform;
       return getters.api.patch(requirement._links.self.href, requirementData);
     },
