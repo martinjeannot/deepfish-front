@@ -38,7 +38,7 @@
                     <h2>{{ talent.firstName }} {{ talent.lastName.toUpperCase() }}</h2>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
-                    <h4>{{ talent.basicProfile ? talent.basicProfile.headline : 'N/A' }}</h4>
+                    <h4>{{ talent.fullProfile ? talent.fullProfile.general.headline : 'N/A' }}</h4>
                   </v-flex>
                   <v-flex xs12 v-show="linkedinPublicProfileUrlEdit">
                     <v-form
@@ -139,16 +139,17 @@
                       <v-layout row wrap>
                         <v-flex xs12 text-xs-center class="pb-3">
                           <h3>{{ talent.firstName }} {{ talent.lastName }}</h3>
-                          <h4>{{ talent.basicProfile ? talent.basicProfile.headline : 'N/A' }}</h4>
-                          <div v-if="talent.basicProfile">
-                            {{ talent.basicProfile.location.name }} | {{ talent.basicProfile.industry }}
+                          <h4>{{ talent.fullProfile ? talent.fullProfile.general.headline : 'N/A' }}</h4>
+                          <div v-if="talent.fullProfile">
+                            <v-icon>business</v-icon>
+                            {{ talent.fullProfile.general.company }}
                           </div>
                           <div v-else>
                             N/A
                           </div>
                         </v-flex>
                         <v-flex xs12 class="pb-3">
-                          {{ talent.basicProfile ? talent.basicProfile.summary : 'N/A' }}
+                          {{ talent.fullProfile ? talent.fullProfile.general.description : 'N/A' }}
                         </v-flex>
                         <v-flex xs12>
                           <v-select
