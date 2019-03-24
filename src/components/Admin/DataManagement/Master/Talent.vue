@@ -38,7 +38,7 @@
                     <h2>{{ talent.firstName }} {{ talent.lastName.toUpperCase() }}</h2>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
-                    <h4>{{ talent.basicProfile ? talent.basicProfile.headline : 'N/A' }}</h4>
+                    <h4>{{ talent.fullProfile ? talent.fullProfile.general.headline : 'N/A' }}</h4>
                   </v-flex>
                   <v-flex xs12 v-show="linkedinPublicProfileUrlEdit">
                     <v-form
