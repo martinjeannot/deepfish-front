@@ -89,7 +89,8 @@
         </v-card-title>
         <v-card-text>
           <v-flex xs12 class="subheading grey--text text--darken-2">
-            Confirmes-tu cet entretien avec {{ opportunity.company.name }}
+            Confirmes-tu cet entretien {{ getLabelFromInterviewFormat(selectedInterview.format) }}
+            avec {{ opportunity.company.name }}
             le {{ selectedInterview.startAt | formatDate('dddd') }} {{ selectedInterview.startAt | formatDate('LL') }}
             à {{ selectedInterview.startAt | formatDate('LT') }} ?
           </v-flex>
