@@ -223,6 +223,7 @@
         'user',
         'alertComponent',
         'menuBadges',
+        'interviewFormat',
       ]),
       ...mapState([
         'getTalentLinkedInProfileUrl',
@@ -336,7 +337,7 @@
         if (interviews.length) {
           const confirmedInterview = interviews.find(interview => interview.status === 'CONFIRMED');
           if (confirmedInterview) {
-            return `Entretien prévu le ${this.$options.filters.formatDate(confirmedInterview.startAt, 'LLL')}`;
+            return `Entretien ${this.interviewFormat(confirmedInterview.format).text} prévu le ${this.$options.filters.formatDate(confirmedInterview.startAt, 'LLL')}`;
           }
           return 'Demandes d\'entretien en attente de réponse';
         }
