@@ -8,16 +8,26 @@
         <v-card-title>
           <v-flex xs12 sm6 class="pr-2">
             <!-- FIXME : vuetify autocomplete's item-text filter prevent us from searching through company name OR requirement name -->
-            <v-autocomplete v-model="selectedRequirementId" :items="requirements" item-text="company.name"
-                            item-value="id" label="Requirement" :search-input.sync="requirementsSearchInput"
-                            :loading="loading" clearable prepend-icon="assignment"
-                            @change="search = ''; getOpportunities()" hide-details>
-              <template slot="selection" slot-scope="{ item }">
+            <!-- See https://github.com/vuetifyjs/vuetify/issues/4497 for potential fix -->
+            <v-autocomplete
+              v-model="selectedRequirementId"
+              :items="requirements"
+              item-text="company.name"
+              item-value="id"
+              label="Requirement"
+              :search-input.sync="requirementsSearchInput"
+              :loading="loading"
+              clearable
+              prepend-icon="assignment"
+              hide-details
+              @input="search = ''; getOpportunities()"
+            >
+              <template #selection="{ item }">
                 <div class="input-group__selections__comma">
                   {{ item.company.name }} - {{ item.name }}
                 </div>
               </template>
-              <template slot="item" slot-scope="{ item }">
+              <template #item="{ item }">
                 <v-list-tile>
                   <v-list-tile-content>
                     <v-list-tile-title>
