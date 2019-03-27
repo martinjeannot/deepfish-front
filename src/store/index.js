@@ -115,18 +115,6 @@ export default new Vuex.Store({
           return null;
       }
     },
-    getLabelFromInterviewFormat(interviewFormat) {
-      switch (interviewFormat) {
-        case 'PHONE':
-          return 'téléphonique';
-        case 'VIDEO':
-          return 'vidéo';
-        case 'IN_PERSON':
-          return 'en physique';
-        default:
-          return interviewFormat;
-      }
-    },
     interviewFormats: [
       { value: 'PHONE', text: 'téléphonique' },
       { value: 'VIDEO', text: 'vidéo' },

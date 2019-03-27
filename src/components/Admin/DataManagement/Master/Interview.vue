@@ -24,7 +24,7 @@
                   </span>
                   a proposé un entretien
                   <span class="font-weight-bold">
-                    {{ getLabelFromInterviewFormat(interview.format) }}
+                    {{ interviewFormat(interview.format).text }}
                   </span>
                   à
                   <span class="font-weight-bold">
@@ -98,11 +98,11 @@
         'loading',
         'initialLoading',
         'alertComponent',
+        'interviewFormat',
       ]),
       ...mapState([
         'getInterviewStatusColor',
         'getInterviewParticipationStatusColor',
-        'getLabelFromInterviewFormat',
         'getLabelFromInterviewDuration',
       ]),
     },
