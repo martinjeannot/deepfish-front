@@ -18,7 +18,7 @@
         <v-card-text>
           <v-flex xs12 class="pb-3">
             <span class="font-weight-bold">{{ opportunity.company.name }}</span> te propose un
-            <span class="font-weight-bold">entretien {{ getLabelFromInterviewFormat(interview.format) }}</span>
+            <span class="font-weight-bold">entretien {{ interviewFormat(interview.format).text }}</span>
           </v-flex>
           <v-flex xs12>
             <v-icon>event</v-icon>
@@ -54,7 +54,7 @@
       <v-card>
         <v-card-text>
           <v-flex xs12 class="pb-3">
-            Ton <span class="font-weight-bold">entretien {{ getLabelFromInterviewFormat(interview.format) }}</span>
+            Ton <span class="font-weight-bold">entretien {{ interviewFormat(interview.format).text }}</span>
             avec <span class="font-weight-bold">{{ opportunity.company.name }}</span> est
             <span class="font-weight-bold success--text">confirmé</span>.
           </v-flex>
@@ -89,7 +89,8 @@
         </v-card-title>
         <v-card-text>
           <v-flex xs12 class="subheading grey--text text--darken-2">
-            Confirmes-tu cet entretien avec {{ opportunity.company.name }}
+            Confirmes-tu cet entretien {{ interviewFormat(selectedInterview.format).text }}
+            avec {{ opportunity.company.name }}
             le {{ selectedInterview.startAt | formatDate('dddd') }} {{ selectedInterview.startAt | formatDate('LL') }}
             à {{ selectedInterview.startAt | formatDate('LT') }} ?
           </v-flex>
@@ -125,9 +126,9 @@
       ...mapGetters([
         'api',
         'menuBadges',
+        'interviewFormat',
       ]),
       ...mapState([
-        'getLabelFromInterviewFormat',
         'getLabelFromInterviewDuration',
       ]),
     },

@@ -84,7 +84,7 @@
           <v-layout row wrap class="text-xs-center">
             <v-flex xs12 class="pb-2">
               Vous souhaitez proposer au talent un entretien
-              <span class="font-weight-bold">{{ getLabelFromInterviewFormat(format) }}</span>
+              <span class="font-weight-bold">{{ interviewFormat(format).text }}</span>
               d'environ
               <span class="font-weight-bold">{{ getLabelFromInterviewDuration(duration) }}</span>
               sur les créneaux suivants :
@@ -120,12 +120,6 @@
     { text: '1h30', value: 90 },
   ];
 
-  const interviewFormats = [
-    { text: 'Téléphone', value: 'PHONE' },
-    { text: 'Vidéo', value: 'VIDEO' },
-    { text: 'En personne', value: 'IN_PERSON' },
-  ];
-
   export default {
     name: 'employer-interview-scheduling',
     props: ['talentId', 'opportunityId'],
@@ -133,7 +127,6 @@
       talent: null,
       interviewDurations,
       duration: 30,
-      interviewFormats,
       format: 'PHONE',
       location: '',
       numberOfSlots: 3,
@@ -149,11 +142,15 @@
         'initialLoading',
         'loading',
         'alertComponent',
+        'interviewFormat',
       ]),
       ...mapState([
-        'getLabelFromInterviewFormat',
         'getLabelFromInterviewDuration',
       ]),
+      interviewFormats() {
+        return this.$store.state.interviewFormats.map(
+          ({ value, text }) => ({ value, text: `${text.charAt(0).toUpperCase()}${text.slice(1)}` }));
+      },
       times() {
         const startHour = 8;
         const endHour = 20;

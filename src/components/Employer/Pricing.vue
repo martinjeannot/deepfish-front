@@ -39,12 +39,17 @@
               Intéressés pour vous rejoindre
               <v-icon color="success">done</v-icon>
             </div>
+            <v-divider></v-divider>
+            <div class="pa-2 headline">
+              Garantie de remplacement durant les 4 premiers mois d'essai
+              <v-icon color="success">done</v-icon>
+            </div>
           </v-flex>
           <v-flex xs12 class="grey--text text--darken-2">
             * salaire fixe annuel hors variable
           </v-flex>
           <v-flex xs12 class="grey--text text--darken-2">
-            ** 1/3 à l'accord, 1/3 au démarrage, 1/3 à validation des 4 mois d'essai
+            ** 1/3 à l'accord de recrutement, 1/3 au démarrage, 1/3 à validation des 4 mois d'essai
           </v-flex>
         </v-card-text>
       </v-card>
@@ -88,12 +93,17 @@
               Intéressés pour vous rejoindre
               <v-icon color="success">done</v-icon>
             </div>
+            <v-divider></v-divider>
+            <div class="pa-2 headline">
+              Garantie de remplacement durant les 4 premiers mois d'essai
+              <v-icon color="success">done</v-icon>
+            </div>
           </v-flex>
           <v-flex xs12 class="grey--text text--darken-2">
             * salaire fixe annuel hors variable
           </v-flex>
           <v-flex xs12 class="white--text">
-            ** 1/3 à l'accord, 1/3 au démarrage, 1/3 à validation des 4 mois d'essai
+            ** 1/3 à l'accord de recrutement, 1/3 au démarrage, 1/3 à validation des 4 mois d'essai
           </v-flex>
         </v-card-text>
       </v-card>

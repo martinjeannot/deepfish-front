@@ -176,7 +176,7 @@
                       {{ props.item.firstName }} {{ props.item.lastName.toUpperCase() }}
                     </router-link>
                   </h4>
-                  {{ props.item.basicProfile ? props.item.basicProfile.headline : 'N/A' }}
+                  {{ props.item.fullProfile ? props.item.fullProfile.general.headline : 'N/A' }}
                 </v-flex>
                 <v-flex xs3 class="text-xs-right">
                   <v-btn fab small color="primary"
@@ -202,9 +202,10 @@
                          color="light-blue darken-3">
                     <v-icon>fab fa-linkedin</v-icon>
                   </v-btn>
-                  <span v-if="props.item.basicProfile && props.item.basicProfile.positions._total">
-                    {{ props.item.basicProfile.positions.values[0].title }}
-                    at {{ props.item.basicProfile.positions.values[0].company.name }}
+                  <span v-if="props.item.fullProfile && props.item.fullProfile.jobs">
+                    {{ props.item.fullProfile.jobs[0].jobTitle }}
+                    <span class="font-weight-bold">at</span>
+                    {{ props.item.fullProfile.jobs[0].companyName }}
                   </span>
                   <span v-else>N/A</span>
                 </v-flex>

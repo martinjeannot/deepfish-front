@@ -115,18 +115,11 @@ export default new Vuex.Store({
           return null;
       }
     },
-    getLabelFromInterviewFormat(interviewFormat) {
-      switch (interviewFormat) {
-        case 'PHONE':
-          return 'téléphonique';
-        case 'VIDEO':
-          return 'vidéo';
-        case 'IN_PERSON':
-          return 'en physique';
-        default:
-          return interviewFormat;
-      }
-    },
+    interviewFormats: [
+      { value: 'PHONE', text: 'téléphonique' },
+      { value: 'VIDEO', text: 'vidéo' },
+      { value: 'IN_PERSON', text: 'en physique' },
+    ],
     getLabelFromInterviewDuration(interviewDuration) {
       switch (interviewDuration) {
         case 60:
@@ -498,6 +491,11 @@ export default new Vuex.Store({
     },
     isUserTalent(state, getters) {
       return getters.isUserAuthenticated ? getters.user.authorities.some(authority => authority.authority === 'ROLE_TALENT') : false;
+    },
+    // INTERVIEW
+    interviewFormat(state) {
+      return value => state.interviewFormats
+        .find(interviewFormat => interviewFormat.value === value);
     },
     // REFERENCE DATA
     talentRankingReferenceData(state) {
