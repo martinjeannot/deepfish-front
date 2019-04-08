@@ -129,11 +129,11 @@
               <v-card>
                 <v-tabs grow>
                   <v-tab>Profile</v-tab>
+                  <v-tab>LKD profile</v-tab>
                   <v-tab>Conditions</v-tab>
                   <v-tab>Qualification</v-tab>
                   <v-tab>Opportunities</v-tab>
                   <v-tab>Notes</v-tab>
-                  <v-tab>LKD Profile</v-tab>
                   <v-tab-item>
                     <v-container>
                       <v-layout row wrap>
@@ -196,6 +196,21 @@
                           <div style="white-space: pre-wrap">{{ talent.selfPitch }}</div>
                         </v-flex>
                       </v-layout>
+                    </v-container>
+                  </v-tab-item>
+                  <v-tab-item>
+                    <v-container v-if="talent.fullProfile">
+                      <talent-profile-experience-timeline
+                        :jobs="talent.fullProfile.jobs"
+                      ></talent-profile-experience-timeline>
+                      <talent-profile-education-timeline
+                        :schools="talent.fullProfile.schools"
+                      ></talent-profile-education-timeline>
+                      <talent-profile-skill
+                        v-for="(skill, i) in talent.fullProfile.skills"
+                        :key="i"
+                        :skill="skill"
+                      ></talent-profile-skill>
                     </v-container>
                   </v-tab-item>
                   <v-tab-item>
@@ -382,20 +397,6 @@
                       </v-layout>
                     </v-container>
                   </v-tab-item>
-                  <v-tab-item>
-                    <v-container>
-                      <v-layout row wrap>
-                        <v-flex xs12>
-                          <v-textarea v-model="talent.fullProfileText" prepend-inner-icon="lock" rows="16"></v-textarea>
-                          <div class="text-xs-right">
-                            <v-btn icon fab small color="primary" @click="saveProfile">
-                              <v-icon>done</v-icon>
-                            </v-btn>
-                          </div>
-                        </v-flex>
-                      </v-layout>
-                    </v-container>
-                  </v-tab-item>
                 </v-tabs>
               </v-card>
             </v-flex>
@@ -411,6 +412,9 @@
   import DataManagementNavigation from '../Navigation';
   import AdminOpportunitySendingDialog from '../../Utilities/OpportunitySendingDialog';
   import AdminTalentDeactivationDialog from '../../Utilities/TalentDeactivationDialog';
+  import TalentProfileExperienceTimeline from '../../../Talent/Profile/ExperienceTimeline';
+  import TalentProfileEducationTimeline from '../../../Talent/Profile/EducationTimeline';
+  import TalentProfileSkill from '../../../Talent/Profile/Skill';
 
   const rules = {
     required: value => !!value || 'This field is required',
@@ -422,6 +426,9 @@
       DataManagementNavigation,
       AdminOpportunitySendingDialog,
       AdminTalentDeactivationDialog,
+      TalentProfileExperienceTimeline,
+      TalentProfileEducationTimeline,
+      TalentProfileSkill,
     },
     data: () => ({
       rules,
