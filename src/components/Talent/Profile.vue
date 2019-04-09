@@ -1,5 +1,5 @@
 <template>
-  <v-layout row v-if="loading">
+  <v-layout v-if="loading">
     <v-flex xs12 class="text-xs-center">
       <v-progress-circular indeterminate color="primary" :size="70"></v-progress-circular>
     </v-flex>
@@ -7,13 +7,13 @@
   <v-layout v-else>
     <v-flex xs12>
       <v-layout v-if="alertComponent">
-        <v-flex xs12 sm6 offset-sm3>
+        <v-flex xs12 sm8 offset-sm2 lg6 offset-lg3>
           <base-alert :type="alertComponent.type" :message="alertComponent.message"
                       @dismissed="onAlertComponentDismissed"></base-alert>
         </v-flex>
       </v-layout>
       <v-layout v-if="talent !== null">
-        <v-flex xs12 sm8 offset-sm2 md6 offset-md3>
+        <v-flex xs12 sm8 offset-sm2 lg6 offset-lg3>
           <v-card>
             <v-card-text>
               <v-layout row wrap>
