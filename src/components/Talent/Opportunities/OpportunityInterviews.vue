@@ -50,7 +50,7 @@
       </v-card>
     </v-flex>
 
-    <v-flex xs12 v-for="interview in acceptedInterviews" :key="interview.id" class="pb-3">
+    <v-flex xs12 v-for="interview in confirmedInterviews" :key="interview.id" class="pb-3">
       <v-card>
         <v-card-text>
           <v-flex xs12 class="pb-3">
@@ -118,7 +118,7 @@
       loading: false,
       interviews: [],
       pendingInterviews: [],
-      acceptedInterviews: [],
+      confirmedInterviews: [],
       confirmationDialog: false,
       selectedInterview: null,
     }),
@@ -139,11 +139,11 @@
       ]),
       getInterviews() {
         return this
-          .api(`/interviews?opportunity=${this.opportunity.id}&talentResponseStatus=NEEDS_ACTION&talentResponseStatus=ACCEPTED`)
+          .api(`/interviews/search/findByOpportunityIdAndCurrentlyTalentPendingOrConfirmed?opportunityId=${this.opportunity.id}&startAfter=${moment.utc().format()}`)
           .then((response) => {
             this.interviews = response.data._embedded.interviews;
             this.pendingInterviews = this.interviews.filter(interview => interview.talentResponseStatus === 'NEEDS_ACTION');
-            this.acceptedInterviews = this.interviews.filter(interview => interview.talentResponseStatus === 'ACCEPTED');
+            this.confirmedInterviews = this.interviews.filter(interview => interview.status === 'CONFIRMED');
           })
           .catch(() => this.showSnackbar('Error : could not retrieve interviews'));
       },

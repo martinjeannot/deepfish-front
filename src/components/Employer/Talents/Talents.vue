@@ -121,7 +121,8 @@
               <v-card-actions v-if="isTalentAccepted(props.item)">
                 <v-layout row wrap>
                   <v-flex xs12 sm4 class="text-xs-center">
-                    <v-btn flat color="success" :loading="loading" :disabled="loading || !!props.item.interviews.length"
+                    <v-btn flat color="success" :loading="loading"
+                           :disabled="loading || isInterviewSchedulingDisabled(props.item.interviews)"
                            @click.native.stop="scheduleInterview(props.item)">
                       planifier un entretien
                     </v-btn>
@@ -196,6 +197,7 @@
 </template>
 
 <script>
+  import moment from 'moment';
   import { mapGetters, mapActions, mapState } from 'vuex';
 
   const rules = {
@@ -333,15 +335,30 @@
           .catch(() => this.showSnackbar('Erreur'))
           .finally(() => this.clearLoading());
       },
+      isInterviewSchedulingDisabled(interviews) {
+        const now = moment();
+        return interviews.some(interview => now.isBefore(interview.startAt)
+        && (interview.status === 'CONFIRMED'
+        || (interview.status === 'TENTATIVE' && interview.talentResponseStatus === 'NEEDS_ACTION')));
+      },
       getInterviewProcessStatusLabel(interviews) {
-        if (interviews.length) {
-          const confirmedInterview = interviews.find(interview => interview.status === 'CONFIRMED');
-          if (confirmedInterview) {
-            return `Entretien ${this.interviewFormat(confirmedInterview.format).text} prévu le ${this.$options.filters.formatDate(confirmedInterview.startAt, 'LLL')}`;
-          }
-          return 'Demandes d\'entretien en attente de réponse';
+        const now = moment();
+        if (!interviews.length) {
+          return 'Continuez le processus de recrutement en programmant un entretien';
         }
-        return 'Continuez le processus de recrutement en programmant un entretien';
+        const pendingOrConfirmedInterview = interviews
+          .find(interview => now.isBefore(interview.startAt)
+          && (interview.status === 'CONFIRMED'
+          || (interview.status === 'TENTATIVE' && interview.talentResponseStatus === 'NEEDS_ACTION')));
+        if (pendingOrConfirmedInterview) {
+          if (pendingOrConfirmedInterview.talentResponseStatus === 'NEEDS_ACTION') {
+            return 'Demandes d\'entretien en attente de réponse';
+          }
+          if (pendingOrConfirmedInterview.status === 'CONFIRMED') {
+            return `Entretien ${this.interviewFormat(pendingOrConfirmedInterview.format).text} prévu le ${this.$options.filters.formatDate(pendingOrConfirmedInterview.startAt, 'LLL')}`;
+          }
+        }
+        return 'Continuez le processus de recrutement en programmant un nouvel entretien';
       },
     },
     created() {
