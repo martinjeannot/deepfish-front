@@ -337,7 +337,9 @@
       },
       isInterviewSchedulingDisabled(interviews) {
         const now = moment();
-        return interviews.some(interview => now.isBefore(interview.startAt) && (interview.status === 'CONFIRMED' || interview.talentResponseStatus === 'NEEDS_ACTION'));
+        return interviews.some(interview => now.isBefore(interview.startAt)
+        && (interview.status === 'CONFIRMED'
+        || (interview.status === 'TENTATIVE' && interview.talentResponseStatus === 'NEEDS_ACTION')));
       },
       getInterviewProcessStatusLabel(interviews) {
         const now = moment();
@@ -345,7 +347,9 @@
           return 'Continuez le processus de recrutement en programmant un entretien';
         }
         const pendingOrConfirmedInterview = interviews
-          .find(interview => now.isBefore(interview.startAt) && (interview.status === 'CONFIRMED' || interview.talentResponseStatus === 'NEEDS_ACTION'));
+          .find(interview => now.isBefore(interview.startAt)
+          && (interview.status === 'CONFIRMED'
+          || (interview.status === 'TENTATIVE' && interview.talentResponseStatus === 'NEEDS_ACTION')));
         if (pendingOrConfirmedInterview) {
           if (pendingOrConfirmedInterview.talentResponseStatus === 'NEEDS_ACTION') {
             return 'Demandes d\'entretien en attente de réponse';
