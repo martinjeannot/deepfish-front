@@ -129,9 +129,14 @@
                     <div class="font-italic">{{ getInterviewProcessStatusLabel(props.item.interviews) }}</div>
                   </v-flex>
                   <v-flex xs12 sm4 class="text-xs-center">
-                    <v-btn flat color="info" :loading="loading" :disabled="loading"
+                    <v-btn v-if="isAskingAboutTalentButtonShown(props.item)"
+                           flat color="info" :loading="loading" :disabled="loading"
                            @click.native.stop="selectedOpportunity = props.item; contactDialog = true">
                       J'ai une question sur ce talent
+                    </v-btn>
+                    <v-btn v-else flat color="info" :loading="loading" :disabled="loading"
+                           @click.native.stop="selectedOpportunity = props.item; followUpDialog = true">
+                      Faire mon retour sur ce talent
                     </v-btn>
                   </v-flex>
                   <v-flex xs12 sm4 class="text-xs-center">
@@ -147,6 +152,7 @@
         </v-data-iterator>
       </v-container>
     </v-flex>
+
     <v-dialog v-model="contactDialog" v-if="selectedOpportunity" max-width="650px">
       <v-card>
         <v-card-text>
@@ -169,6 +175,37 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="followUpDialog" v-if="selectedOpportunity" max-width="650px">
+      <v-card>
+        <v-card-title>
+          <v-flex xs12 class="title">
+            Mon retour sur {{ selectedOpportunity.talent.firstName }}
+          </v-flex>
+        </v-card-title>
+        <v-form v-model="followUpFormValid" @submit.prevent="sendFollowUpMessage(selectedOpportunity)">
+          <v-card-text>
+            <v-flex xs12 class="subheading grey--text text--darken-2">
+              Facilitez nos échanges en nous communiquant directement votre avis sur ce talent (visible uniquement par Deepfish) :
+              <v-textarea
+                v-model="followUpMessage"
+                rows="9"
+                :rules="[rules.required]"
+              ></v-textarea>
+            </v-flex>
+          </v-card-text>
+          <v-card-actions>
+            <v-flex xs12 class="text-xs-right">
+              <v-btn flat color="primary" @click="followUpDialog = false">Annuler</v-btn>
+              <v-btn type="submit" flat color="primary" :disabled="!followUpFormValid" :loading="loading">
+                Envoyer
+              </v-btn>
+            </v-flex>
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </v-dialog>
+
     <v-dialog v-model="declinationDialog" v-if="selectedOpportunity" max-width="650px">
       <v-card>
         <v-card-text>
@@ -213,6 +250,9 @@
       contactDialog: false,
       contactFormValid: false,
       contactMessage: '',
+      followUpDialog: false,
+      followUpFormValid: false,
+      followUpMessage: '',
       declinationDialog: false,
       employerDeclinationValid: false,
       reRenderingVersion: 0,
@@ -334,6 +374,26 @@
           })
           .catch(() => this.showSnackbar('Erreur'))
           .finally(() => this.clearLoading());
+      },
+      sendFollowUpMessage(opportunity) {
+        this.prepareForApiConsumption();
+        this.api
+          .post('/employers/follow-up', {
+            employerId: this.user.id,
+            talentId: opportunity.talent.id,
+            message: this.followUpMessage,
+          })
+          .then(() => {
+            this.followUpDialog = false;
+            this.followUpMessage = '';
+            this.showSnackbar('Merci, nous revenons vers vous sous peu');
+          })
+          .catch(() => this.showSnackbar('Erreur'))
+          .finally(() => this.clearLoading());
+      },
+      isAskingAboutTalentButtonShown(opportunity) {
+        const now = moment();
+        return opportunity.interviews.some(interview => interview.status !== 'CONFIRMED' || now.isBefore(interview.startAt));
       },
       isInterviewSchedulingDisabled(interviews) {
         const now = moment();
