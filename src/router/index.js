@@ -3,7 +3,7 @@ import Router from 'vue-router';
 import SignIn from '@/components/SignIn';
 import SignUp from '@/components/SignUp';
 import PasswordReset from '@/components/PasswordReset';
-import AdminDashboard from '@/components/Admin/Dashboard';
+import AdminDashboard from '@/components/Admin/Dashboard/Dashboard';
 import AdminProfile from '@/components/Admin/Profile';
 import AdminSearch from '@/components/Admin/Search';
 import AdminDMTalents from '@/components/Admin/DataManagement/Master/Talents';
