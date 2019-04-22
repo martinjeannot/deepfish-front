@@ -393,7 +393,7 @@
       },
       isAskingAboutTalentButtonShown(opportunity) {
         const now = moment();
-        return opportunity.interviews.some(interview => interview.status !== 'CONFIRMED' || now.isBefore(interview.startAt));
+        return !opportunity.interviews.some(interview => interview.status === 'CONFIRMED' && now.isAfter(interview.startAt));
       },
       isInterviewSchedulingDisabled(interviews) {
         const now = moment();
