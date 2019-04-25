@@ -5,155 +5,68 @@
     </v-flex>
   </v-layout>
   <v-layout v-else wrap>
-    <v-flex xs12>
+    <!-- Talent acquisition reporting card -->
+    <v-flex
+      xs12
+      sm6
+      :class="['pb-3', {'pr-2': $vuetify.breakpoint.smAndUp}]"
+    >
       <reporting-card
         title="Talent acquisition"
         icon="people"
-        color="primary"
+        color="blue"
         entity-name="Talents"
         :weekly-statistics="weeklyTalentAcquisitionStatistics"
         :monthly-statistics="monthlyTalentAcquisitionStatistics"
       ></reporting-card>
     </v-flex>
 
-    <v-flex xs12 sm6 offset-sm3>
-      <v-card class="mb-2">
-        <v-card-title>
-          <v-icon
-            large
-            color="primary"
-            class="pr-3"
-          >
-            people
-          </v-icon>
-          <div class="text-uppercase pr-2">
-            Talent acquisition
-          </div>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-icon v-on="on">info</v-icon>
-            </template>
-            <span>{{ statisticsInfo }}</span>
-          </v-tooltip>
-        </v-card-title>
-        <v-sparkline
-          :value="weeklyTalentAcquisitionStatistics.map(point => point[1])"
-          show-labels
-          color="primary"
-          :width="chartWidth"
-          :padding="chartPadding"
-          :smooth="chartSmoothing"
-          stroke-linecap="round"
-          auto-draw
-        ></v-sparkline>
-      </v-card>
-      <v-card class="mb-2">
-        <v-card-title>
-          <v-icon
-            large
-            color="grey"
-            class="pr-3"
-          >
-            assignment
-          </v-icon>
-          <div class="text-uppercase pr-2">
-            Sent opportunities
-          </div>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-icon v-on="on">info</v-icon>
-            </template>
-            <span>{{ statisticsInfo }}</span>
-          </v-tooltip>
-        </v-card-title>
-        <v-sparkline
-          :value="opportunitiesStatistics.map(point => point[1])"
-          show-labels
-          color="grey"
-          :width="chartWidth"
-          :padding="chartPadding"
-          :smooth="chartSmoothing"
-          stroke-linecap="round"
-          auto-draw
-        ></v-sparkline>
-      </v-card>
-      <v-card class="mb-2">
-        <v-card-title>
-          <v-icon
-            large
-            color="green lighten-2"
-            class="pr-3"
-          >
-            assignment
-          </v-icon>
-          <div class="text-uppercase pr-2">
-            Talent accepted opportunities
-          </div>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-icon v-on="on">info</v-icon>
-            </template>
-            <span>{{ statisticsInfo }}</span>
-          </v-tooltip>
-        </v-card-title>
-        <v-sparkline
-          :value="talentAcceptedOpportunitiesStatistics.map(point => point[1])"
-          show-labels
-          color="green lighten-2"
-          :width="chartWidth"
-          :padding="chartPadding"
-          :smooth="chartSmoothing"
-          stroke-linecap="round"
-          auto-draw
-        ></v-sparkline>
-      </v-card>
-      <v-card class="mb-2">
-        <v-card-title>
-          <v-icon
-            large
-            color="green darken-2"
-            class="pr-3"
-          >
-            assignment
-          </v-icon>
-          <div class="text-uppercase pr-2">
-            Employer accepted opportunities
-          </div>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-icon v-on="on">info</v-icon>
-            </template>
-            <span>{{ statisticsInfo }}</span>
-          </v-tooltip>
-        </v-card-title>
-        <v-sparkline
-          :value="employerAcceptedOpportunitiesStatistics.map(point => point[1])"
-          show-labels
-          color="green darken-2"
-          :width="chartWidth"
-          :padding="chartPadding"
-          :smooth="chartSmoothing"
-          stroke-linecap="round"
-          auto-draw
-        ></v-sparkline>
-      </v-card>
-      <v-card class="mb-2">
-        <v-card-title>
-          <v-icon
-            large
-            color="green accent-4"
-            class="pr-3"
-          >
-            event
-          </v-icon>
-          <div class="text-uppercase">
-            Scheduled interviews
-          </div>
-        </v-card-title>
-        <div class="pb-3 text-xs-center font-italic">
-          COMING SOON
-        </div>
-      </v-card>
+    <!-- Sent opportunities reporting card -->
+    <v-flex
+      xs12
+      sm6
+      :class="['pb-3', {'pl-2': $vuetify.breakpoint.smAndUp}]"
+    >
+      <reporting-card
+        title="Sent opportunities"
+        icon="assignment"
+        color="orange"
+        entity-name="Opportunities"
+        :weekly-statistics="weeklyOpportunitiesStatistics"
+        :monthly-statistics="monthlyOpportunitiesStatistics"
+      ></reporting-card>
+    </v-flex>
+
+    <!-- Talent accepted opportunities reporting card -->
+    <v-flex
+      xs12
+      sm6
+      :class="['pb-3', {'pr-2': $vuetify.breakpoint.smAndUp}]"
+    >
+      <reporting-card
+        title="Talent accepted opportunities"
+        icon="assignment"
+        color="light-green"
+        entity-name="Opportunities"
+        :weekly-statistics="weeklyTalentAcceptedOpportunitiesStatistics"
+        :monthly-statistics="monthlyTalentAcceptedOpportunitiesStatistics"
+      ></reporting-card>
+    </v-flex>
+
+    <!-- Employer accepted opportunities reporting card -->
+    <v-flex
+      xs12
+      sm6
+      :class="['pb-3', {'pl-2': $vuetify.breakpoint.smAndUp}]"
+    >
+      <reporting-card
+        title="Employer accepted talents"
+        icon="event"
+        color="green"
+        entity-name="Talents"
+        :weekly-statistics="weeklyEmployerAcceptedOpportunitiesStatistics"
+        :monthly-statistics="monthlyEmployerAcceptedOpportunitiesStatistics"
+      ></reporting-card>
     </v-flex>
   </v-layout>
 </template>
@@ -171,13 +84,12 @@
     data: () => ({
       weeklyTalentAcquisitionStatistics: [],
       monthlyTalentAcquisitionStatistics: [],
-      opportunitiesStatistics: [],
-      talentAcceptedOpportunitiesStatistics: [],
-      employerAcceptedOpportunitiesStatistics: [],
-      statisticsInfo: 'Weekly statistics over the last 3 months',
-      chartWidth: 400,
-      chartPadding: 16,
-      chartSmoothing: 4,
+      weeklyOpportunitiesStatistics: [],
+      monthlyOpportunitiesStatistics: [],
+      weeklyTalentAcceptedOpportunitiesStatistics: [],
+      monthlyTalentAcceptedOpportunitiesStatistics: [],
+      weeklyEmployerAcceptedOpportunitiesStatistics: [],
+      monthlyEmployerAcceptedOpportunitiesStatistics: [],
     }),
     computed: {
       ...mapGetters([
@@ -201,23 +113,34 @@
         this.api(`/talents/statistics?created-at-after=${startOfWeek3MonthsAgo}&created-at-before=${now}&group-by=week`),
         this.api(`/talents/statistics?created-at-after=${startOfMonth4MonthsAgo}&created-at-before=${now}&group-by=month`),
         this.api(`/opportunities/statistics?created-at-after=${startOfWeek3MonthsAgo}&created-at-before=${now}&group-by=week`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfMonth4MonthsAgo}&created-at-before=${now}&group-by=month`),
         this.api(`/opportunities/statistics?created-at-after=${startOfWeek3MonthsAgo}&created-at-before=${now}&group-by=week&talent-status=ACCEPTED`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfMonth4MonthsAgo}&created-at-before=${now}&group-by=month&talent-status=ACCEPTED`),
         this.api(`/opportunities/statistics?created-at-after=${startOfWeek3MonthsAgo}&created-at-before=${now}&group-by=week&employer-status=ACCEPTED`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfMonth4MonthsAgo}&created-at-before=${now}&group-by=month&employer-status=ACCEPTED`),
       ])
         .then(([
                  weeklyTalentAcquisitionStatisticsResponse,
                  monthlyTalentAcquisitionStatisticsResponse,
-                 opportunitiesStatisticsResponse,
-                 talentAcceptedOpportunitiesStatisticsResponse,
-                 employerAcceptedOpportunitiesStatisticsResponse,
+                 weeklyOpportunitiesStatisticsResponse,
+                 monthlyOpportunitiesStatisticsResponse,
+                 weeklyTalentAcceptedOpportunitiesStatisticsResponse,
+                 monthlyTalentAcceptedOpportunitiesStatisticsResponse,
+                 weeklyEmployerAcceptedOpportunitiesStatisticsResponse,
+                 monthlyEmployerAcceptedOpportunitiesStatisticsResponse,
                ]) => {
           this.weeklyTalentAcquisitionStatistics = weeklyTalentAcquisitionStatisticsResponse.data;
           this.monthlyTalentAcquisitionStatistics = monthlyTalentAcquisitionStatisticsResponse.data;
-          this.opportunitiesStatistics = opportunitiesStatisticsResponse.data;
-          this.talentAcceptedOpportunitiesStatistics =
-            talentAcceptedOpportunitiesStatisticsResponse.data;
-          this.employerAcceptedOpportunitiesStatistics =
-            employerAcceptedOpportunitiesStatisticsResponse.data;
+          this.weeklyOpportunitiesStatistics = weeklyOpportunitiesStatisticsResponse.data;
+          this.monthlyOpportunitiesStatistics = monthlyOpportunitiesStatisticsResponse.data;
+          this.weeklyTalentAcceptedOpportunitiesStatistics =
+            weeklyTalentAcceptedOpportunitiesStatisticsResponse.data;
+          this.monthlyTalentAcceptedOpportunitiesStatistics =
+            monthlyTalentAcceptedOpportunitiesStatisticsResponse.data;
+          this.weeklyEmployerAcceptedOpportunitiesStatistics =
+            weeklyEmployerAcceptedOpportunitiesStatisticsResponse.data;
+          this.monthlyEmployerAcceptedOpportunitiesStatistics =
+            monthlyEmployerAcceptedOpportunitiesStatisticsResponse.data;
         })
         .catch(() => this.showSnackbar('Error'))
         .finally(() => this.clearLoading(true));

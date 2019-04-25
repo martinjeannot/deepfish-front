@@ -12,6 +12,7 @@
         :value="weeklyStatistics.map(point => point[1])"
         color="white"
         :padding="trendLinePadding"
+        :auto-draw="true"
       ></v-sparkline>
       <v-flex
         xs12
