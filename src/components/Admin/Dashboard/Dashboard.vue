@@ -5,9 +5,17 @@
     </v-flex>
   </v-layout>
   <v-layout v-else wrap>
-    <v-flex xs12 class="text-xs-center">
-      <h1>Admin dashboard</h1>
+    <v-flex xs12>
+      <reporting-card
+        title="Talent acquisition"
+        icon="people"
+        color="primary"
+        entity-name="Talents"
+        :weekly-statistics="weeklyTalentAcquisitionStatistics"
+        :monthly-statistics="monthlyTalentAcquisitionStatistics"
+      ></reporting-card>
     </v-flex>
+
     <v-flex xs12 sm6 offset-sm3>
       <v-card class="mb-2">
         <v-card-title>
@@ -29,7 +37,7 @@
           </v-tooltip>
         </v-card-title>
         <v-sparkline
-          :value="talentAcquisitionStatistics.map(point => point[1])"
+          :value="weeklyTalentAcquisitionStatistics.map(point => point[1])"
           show-labels
           color="primary"
           :width="chartWidth"
@@ -153,11 +161,16 @@
 <script>
   import moment from 'moment';
   import { mapGetters, mapActions } from 'vuex';
+  import ReportingCard from './ReportingCard';
 
   export default {
     name: 'admin-dashboard',
+    components: {
+      ReportingCard,
+    },
     data: () => ({
-      talentAcquisitionStatistics: [],
+      weeklyTalentAcquisitionStatistics: [],
+      monthlyTalentAcquisitionStatistics: [],
       opportunitiesStatistics: [],
       talentAcceptedOpportunitiesStatistics: [],
       employerAcceptedOpportunitiesStatistics: [],
@@ -181,21 +194,25 @@
     },
     created() {
       this.prepareForApiConsumption(true);
-      const before = moment().format('YYYY-MM-DD');
-      const after = moment().subtract(3, 'months').startOf('isoWeek').format('YYYY-MM-DD');
+      const now = moment().format('YYYY-MM-DD');
+      const startOfWeek3MonthsAgo = moment().subtract(3, 'months').startOf('isoWeek').format('YYYY-MM-DD');
+      const startOfMonth4MonthsAgo = moment().subtract(4, 'months').startOf('month').format('YYYY-MM-DD');
       return Promise.all([
-        this.api(`/talents/statistics?created-at-after=${after}&created-at-before=${before}&group-by=week`),
-        this.api(`/opportunities/statistics?created-at-after=${after}&created-at-before=${before}&group-by=week`),
-        this.api(`/opportunities/statistics?created-at-after=${after}&created-at-before=${before}&group-by=week&talent-status=ACCEPTED`),
-        this.api(`/opportunities/statistics?created-at-after=${after}&created-at-before=${before}&group-by=week&employer-status=ACCEPTED`),
+        this.api(`/talents/statistics?created-at-after=${startOfWeek3MonthsAgo}&created-at-before=${now}&group-by=week`),
+        this.api(`/talents/statistics?created-at-after=${startOfMonth4MonthsAgo}&created-at-before=${now}&group-by=month`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfWeek3MonthsAgo}&created-at-before=${now}&group-by=week`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfWeek3MonthsAgo}&created-at-before=${now}&group-by=week&talent-status=ACCEPTED`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfWeek3MonthsAgo}&created-at-before=${now}&group-by=week&employer-status=ACCEPTED`),
       ])
         .then(([
-                 talentAcquisitionStatisticsResponse,
+                 weeklyTalentAcquisitionStatisticsResponse,
+                 monthlyTalentAcquisitionStatisticsResponse,
                  opportunitiesStatisticsResponse,
                  talentAcceptedOpportunitiesStatisticsResponse,
                  employerAcceptedOpportunitiesStatisticsResponse,
                ]) => {
-          this.talentAcquisitionStatistics = talentAcquisitionStatisticsResponse.data;
+          this.weeklyTalentAcquisitionStatistics = weeklyTalentAcquisitionStatisticsResponse.data;
+          this.monthlyTalentAcquisitionStatistics = monthlyTalentAcquisitionStatisticsResponse.data;
           this.opportunitiesStatistics = opportunitiesStatisticsResponse.data;
           this.talentAcceptedOpportunitiesStatistics =
             talentAcceptedOpportunitiesStatisticsResponse.data;
