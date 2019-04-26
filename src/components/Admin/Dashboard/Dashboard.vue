@@ -9,6 +9,7 @@
     <v-flex
       xs12
       sm6
+      xl5 offset-xl1
       :class="['pb-3', {'pr-2': $vuetify.breakpoint.smAndUp}]"
     >
       <reporting-card
@@ -25,6 +26,7 @@
     <v-flex
       xs12
       sm6
+      xl5
       :class="['pb-3', {'pl-2': $vuetify.breakpoint.smAndUp}]"
     >
       <reporting-card
@@ -41,6 +43,7 @@
     <v-flex
       xs12
       sm6
+      xl5 offset-xl1
       :class="['pb-3', {'pr-2': $vuetify.breakpoint.smAndUp}]"
     >
       <reporting-card
@@ -57,6 +60,7 @@
     <v-flex
       xs12
       sm6
+      xl5
       :class="['pb-3', {'pl-2': $vuetify.breakpoint.smAndUp}]"
     >
       <reporting-card
