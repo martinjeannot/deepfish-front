@@ -45,7 +45,12 @@
         </v-card-text>
         <v-card-actions v-if="opportunity.talentStatus === 'PENDING'">
           <v-layout row wrap class="text-xs-center" v-if="opportunity.requirement.status === 'OPEN'">
-            <v-flex xs12 sm4>
+            <v-flex
+              xs12
+              sm6
+              :class="['pb-3']"
+              style="padding-left: 45px"
+            >
               <v-btn color="success" @click="accept(opportunity)">Accepter</v-btn>
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
@@ -61,16 +66,61 @@
                 <span>Accepter l'opportunité et poursuivre le processus de recrutement</span>
               </v-tooltip>
             </v-flex>
-            <v-flex xs12 sm4>
+            <v-flex
+              xs12
+              sm6
+              :class="['pb-3']"
+            >
+              <v-btn color="primary" @click="questionDialog = true">Poser une question</v-btn>
+            </v-flex>
+            <v-flex
+              xs12
+              sm6
+              :class="['pb-3']"
+            >
               <v-btn color="warning" @click="declinationDialog = true">Refuser</v-btn>
             </v-flex>
-            <v-flex xs12 sm4>
+            <v-flex
+              xs12
+              sm6
+              :class="['pb-3']"
+            >
               <v-btn color="error" @click="bulkDeclinationDialog = true">Se désactiver</v-btn>
             </v-flex>
           </v-layout>
         </v-card-actions>
       </v-card>
     </v-flex>
+
+    <v-dialog v-model="questionDialog" max-width="650px">
+      <v-card>
+        <v-card-title>
+          <v-flex xs12 class="title">
+            Poser une question
+          </v-flex>
+        </v-card-title>
+        <v-form v-model="questionFormValid" @submit.prevent="askQuestion(opportunity)">
+          <v-card-text>
+            <v-flex xs12 class="subheading grey--text text--darken-2">
+              Pose-nous ta/tes question(s) et Deepfish reviendra rapidement vers toi :
+              <v-textarea
+                v-model="questionContent"
+                :rules="[rules.required]"
+              ></v-textarea>
+            </v-flex>
+          </v-card-text>
+          <v-card-actions>
+            <v-flex xs12 class="text-xs-right">
+              <v-btn flat color="primary" @click="questionDialog = false">Annuler</v-btn>
+              <v-btn type="submit" color="primary" :disabled="!questionFormValid" :loading="loading">
+                Envoyer
+              </v-btn>
+            </v-flex>
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </v-dialog>
+
     <v-dialog v-model="declinationDialog" max-width="650px">
       <v-container style="background-color: white">
         <v-form v-model="declinationValid" @submit.prevent="decline(opportunity)">
@@ -91,6 +141,7 @@
         </v-form>
       </v-container>
     </v-dialog>
+
     <v-dialog v-model="bulkDeclinationDialog" max-width="650px">
       <v-container style="background-color: white">
         <v-form v-model="bulkDeclinationValid" @submit.prevent="declineInBulk(opportunity)">
@@ -136,6 +187,9 @@
     data: () => ({
       rules,
       opportunity: null,
+      questionDialog: false,
+      questionFormValid: false,
+      questionContent: '',
       declinationDialog: false,
       declinationValid: false,
       bulkDeclinationDialog: false,
@@ -209,6 +263,20 @@
             this.showSnackbar('Erreur');
             this.fetchData();
           });
+      },
+      askQuestion(opportunity) {
+        this.prepareForApiConsumption();
+        this.api
+          .post(`/opportunities/${opportunity.id}/ask-question`, {
+            question: this.questionContent,
+          })
+          .then(() => {
+            this.questionDialog = false;
+            this.questionContent = '';
+            this.showSnackbar('Merci, nous revenons vers toi sous peu');
+          })
+          .catch(() => this.showSnackbar('Erreur'))
+          .finally(() => this.clearLoading());
       },
       declineInBulk() {
         this.bulkDeclinationDialog = false;
