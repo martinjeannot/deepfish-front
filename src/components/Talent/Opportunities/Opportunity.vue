@@ -46,13 +46,26 @@
         <v-card-actions v-if="opportunity.talentStatus === 'PENDING'">
           <v-layout row wrap class="text-xs-center" v-if="opportunity.requirement.status === 'OPEN'">
             <v-flex xs12 sm4>
-              <v-btn flat color="success" @click="accept(opportunity)">J'accepte</v-btn>
+              <v-btn color="success" @click="accept(opportunity)">Accepter</v-btn>
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    large
+                    v-on="on"
+                    class="pl-2"
+                    style="margin-bottom: -10px"
+                  >
+                    help
+                  </v-icon>
+                </template>
+                <span>Accepter l'opportunité et poursuivre le processus de recrutement</span>
+              </v-tooltip>
             </v-flex>
             <v-flex xs12 sm4>
-              <v-btn flat color="warning" @click="declinationDialog = true">Je refuse</v-btn>
+              <v-btn color="warning" @click="declinationDialog = true">Refuser</v-btn>
             </v-flex>
             <v-flex xs12 sm4>
-              <v-btn flat color="error" @click="bulkDeclinationDialog = true">Je me désactive</v-btn>
+              <v-btn color="error" @click="bulkDeclinationDialog = true">Se désactiver</v-btn>
             </v-flex>
           </v-layout>
         </v-card-actions>
