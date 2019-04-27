@@ -142,7 +142,8 @@
           .api(`/interviews/search/findByOpportunityIdAndCurrentlyTalentPendingOrConfirmed?opportunityId=${this.opportunity.id}&startAfter=${moment.utc().format()}`)
           .then((response) => {
             this.interviews = response.data._embedded.interviews;
-            this.pendingInterviews = this.interviews.filter(interview => interview.talentResponseStatus === 'NEEDS_ACTION');
+            // pending itw order is reversed because results are ordered by startDateTime DESC
+            this.pendingInterviews = this.interviews.filter(interview => interview.talentResponseStatus === 'NEEDS_ACTION').reverse();
             this.confirmedInterviews = this.interviews.filter(interview => interview.status === 'CONFIRMED');
           })
           .catch(() => this.showSnackbar('Error : could not retrieve interviews'));
