@@ -23,10 +23,7 @@
                     <h2>{{ requirement.name }}</h2>
                   </v-flex>
                   <v-flex v-if="requirement.typeform" xs12>
-                    <v-flex xs12 v-for="(answer, index) in typeformAnswers" :key="index" class="mt-2">
-                      <div class="font-weight-bold">{{ answer.question }}</div>
-                      <div>{{ answer.value }}</div>
-                    </v-flex>
+                    <typeform-answers :typeform="requirement.typeform"></typeform-answers>
                   </v-flex>
                   <v-flex v-else xs12 class="mb-3">
                     Since the <span style="font-weight: bold">{{ requirement.createdAt | formatDate('LLL') }}</span>
@@ -128,10 +125,11 @@
 <script>
   import { mapGetters, mapActions } from 'vuex';
   import DataManagementNavigation from '../Navigation';
+  import TypeformAnswers from '../../../Employer/Requirements/TypeformAnswers';
 
   export default {
     name: 'data-management-requirement',
-    components: { DataManagementNavigation },
+    components: { DataManagementNavigation, TypeformAnswers },
     props: ['id'],
     data: () => ({
       requirement: null,
@@ -140,29 +138,12 @@
       alertDialog: false,
     }),
     computed: {
-      ...mapGetters(['api', 'initialLoading', 'loading', 'alertComponent']),
-      typeformAnswers() {
-        return this.requirement.typeform.form_response.answers.map((answer) => {
-          const question =
-            this.requirement.typeform.form_response.definition.fields
-              .find(field => field.id === answer.field.id).title;
-          let value = null;
-          switch (answer.type) {
-            case 'text':
-              value = answer.text;
-              break;
-            case 'choice': // multiple choice / single selection
-              value = answer.choice.label;
-              break;
-            case 'choices': // multiple choice / multiple selection
-              value = answer.choices.labels.join(', ');
-              break;
-            default:
-              value = 'N/A';
-          }
-          return { question, value };
-        });
-      },
+      ...mapGetters([
+        'api',
+        'initialLoading',
+        'loading',
+        'alertComponent',
+      ]),
       doughnutChartData() {
         return {
           labels: ['Accepted', 'Pending', 'Declined'],

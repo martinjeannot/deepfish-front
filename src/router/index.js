@@ -26,6 +26,7 @@ import AdminStatisticsOpportunities from '@/components/Admin/Statistics/Opportun
 import AdminStatisticsTalentAcquisition from '@/components/Admin/Statistics/TalentAcquisition';
 import EmployerProfile from '@/components/Employer/Profile';
 import EmployerRequirements from '@/components/Employer/Requirements/Requirements';
+import EmployerRequirement from '@/components/Employer/Requirements/Requirement';
 import EmployerTypeformRequirement from '@/components/Employer/Requirements/TypeformRequirement';
 import EmployerCalendlyRequirement from '@/components/Employer/Requirements/CalendlyRequirement';
 import EmployerTalents from '@/components/Employer/Talents/Talents';
@@ -275,6 +276,13 @@ const router = new Router({
       path: '/employer/requirements',
       name: 'EmployerRequirements',
       component: EmployerRequirements,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/employer/requirements/:id',
+      name: 'EmployerRequirement',
+      component: EmployerRequirement,
+      props: true,
       meta: { authRequired: true },
     },
     {

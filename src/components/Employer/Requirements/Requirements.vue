@@ -47,7 +47,11 @@
                 <v-divider :key="requirement.id + '-divider'"></v-divider>
                 <v-list-tile :key="requirement.id + '-list-tile'">
                   <v-list-tile-content>
-                    <v-list-tile-title>{{ requirement.name }}</v-list-tile-title>
+                    <v-list-tile-title>
+                      <router-link :to="{name: 'EmployerRequirement', params: {id: requirement.id}}">
+                        {{ requirement.name }}
+                      </router-link>
+                    </v-list-tile-title>
                     <v-list-tile-sub-title v-if="requirement.jobType">
                       Je recrute un profil {{ requirement.jobType.l10nKey
                       }} avec une expérience {{ requirement.seniority.l10nKey }} sur {{ requirement.location

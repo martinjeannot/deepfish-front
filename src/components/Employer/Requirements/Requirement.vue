@@ -1,142 +1,85 @@
 <template>
-  <v-layout v-if="loading || requirement == null">
+  <v-layout v-if="loading">
     <v-flex xs12 class="text-xs-center">
       <v-progress-circular indeterminate color="primary" :size="70"></v-progress-circular>
     </v-flex>
   </v-layout>
   <v-layout v-else>
-    <v-flex xs12>
-      <v-layout v-if="alertComponent">
-        <v-flex xs12 sm6 offset-sm3>
-          <base-alert :type="alertComponent.type" :message="alertComponent.message" @dismissed="onAlertComponentDismissed"></base-alert>
-        </v-flex>
-      </v-layout>
-      <v-layout>
-        <v-flex xs12 sm6 offset-sm3>
-          <v-card>
-            <v-form v-model="requirementValid" ref="requirementForm" @submit.prevent="saveRequirement">
-              <v-card-title class="d-block">
-                <v-layout row wrap>
-                  <v-flex xs12>
-                    <h2 class="pb-2">Créer un nouveau besoin</h2>
-                  </v-flex>
-                </v-layout>
-                <v-text-field v-model="requirement.name" hide-details label="Nom du besoin"></v-text-field>
-              </v-card-title>
-              <v-card-text>
-                <span>Je recrute un profil&nbsp;</span>
-                <v-select :items="jobTypes" v-model="requirement.jobType" item-value="_links.self.href"
-                  item-text="l10nKey" hide-details append-icon="" class="d-inline-flex w-auto"></v-select>
-                <span>avec une expérience&nbsp;</span>
-                <v-select :items="seniorities" v-model="requirement.seniority" item-value="_links.self.href"
-                  item-text="l10nKey" hide-details append-icon="" class="d-inline-flex w-auto"></v-select>
-                <span>sur&nbsp;</span>
-                <v-text-field placeholder="Paris" v-model="requirement.location" :rules="[rules.required]"
-                  hide-details class="d-inline-flex" style="width: 8rem"></v-text-field>
-                <span>pour un salaire fixe maxi de&nbsp;</span>
-                <span style="white-space: nowrap">
-                  <v-text-field type="number" placeholder="45" v-model="fixedSalaryInK" :rules="[rules.positive]"
-                    hide-details class="d-inline-flex" style="width: 4rem"></v-text-field>
-                  K€
-                </span>
-                <v-flex xs12 class="text-xs-right">
-                  <v-btn type="submit" fab small color="success" :disabled="!requirementValid">
-                    <v-icon>done</v-icon>
-                  </v-btn>
-                </v-flex>
-              </v-card-text>
-            </v-form>
-          </v-card>
-        </v-flex>
-      </v-layout>
+    <v-flex v-if="alertComponent" xs12 sm8 offset-sm2>
+      <base-alert :type="alertComponent.type" :message="alertComponent.message"
+                  @dismissed="onAlertComponentDismissed"></base-alert>
+    </v-flex>
+    <v-flex v-if="requirement" xs12 sm8 offset-sm2>
+      <v-card>
+        <v-card-title :primary-title="true">
+          <div class="headline">
+            {{ requirement.name }}
+          </div>
+        </v-card-title>
+        <v-card-text>
+          <v-flex v-if="requirement.typeform" xs12>
+            <typeform-answers :typeform="requirement.typeform"></typeform-answers>
+          </v-flex>
+          <v-flex v-else xs12>
+            <v-flex xs12 class="pb-3">
+              <span class="font-weight-bold">Fonction</span> : {{ requirement.jobType.l10nKey }}
+            </v-flex>
+            <v-flex xs12 class="pb-3">
+              <span class="font-weight-bold">Expérience</span> : {{ requirement.seniority.l10nKey }}
+            </v-flex>
+            <v-flex xs12 class="pb-3">
+              <span class="font-weight-bold">Localisation</span> : {{ requirement.location }}
+            </v-flex>
+            <v-flex xs12>
+              <span class="font-weight-bold">Salaire fixe maximum</span>
+              : {{ requirement.fixedSalary | formatMonetaryAmount }} €
+            </v-flex>
+          </v-flex>
+        </v-card-text>
+      </v-card>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
+  import TypeformAnswers from './TypeformAnswers';
 
-const rules = {
-  required: value => !!value || 'Ce champ est obligatoire',
-  positive: value => value > 0 || 'La valeur doit être supérieure à 0',
-  passwordLength: value => !value || (value && value.length >= 6) || 'Au moins 6 caractères',
-};
-
-export default {
-  name: 'employer-requirement',
-  data: () => ({
-    rules,
-    jobTypes: [],
-    seniorities: [],
-    requirement: null,
-    requirementValid: false,
-  }),
-  computed: {
-    ...mapGetters(['api', 'loading', 'alertComponent', 'user']),
-    fixedSalaryInK: {
-      get() {
-        return this.requirement.fixedSalary ? this.requirement.fixedSalary / 1000 : '';
-      },
-      set(fixedSalaryInK) {
-        this.requirement.fixedSalary = fixedSalaryInK * 1000;
-      },
+  export default {
+    name: 'employer-requirement',
+    components: { TypeformAnswers },
+    props: ['id'],
+    data: () => ({
+      requirement: null,
+    }),
+    computed: {
+      ...mapGetters([
+        'api',
+        'loading',
+        'alertComponent',
+        'typeformAnswers',
+      ]),
     },
-  },
-  methods: {
-    ...mapActions([
-      'prepareForApiConsumption',
-      'setErrorAfterApiConsumption',
-      'onAlertComponentDismissed',
-      'clearLoading',
-      'setAlertComponent',
-    ]),
-    newRequirement() {
-      return {
-        createdBy: this.user.id,
-        company: `/${this.user.company.id}`,
-        name: 'Mon nouveau besoin',
-        jobType: this.jobTypes[1]._links.self.href,
-        seniority: this.seniorities[0]._links.self.href,
-        location: '',
-        fixedSalary: 0,
-      };
+    methods: {
+      ...mapActions([
+        'prepareForApiConsumption',
+        'setErrorAfterApiConsumption',
+        'clearLoading',
+      ]),
     },
-    saveRequirement() {
-      if (this.$refs.requirementForm.validate()) {
-        this.prepareForApiConsumption();
-        this.api
-          .post('/requirements', this.requirement)
-          .then((response) => {
-            this.user.requirements.push(response.data);
-            this.$router.push('/employer/requirements');
-            this.setAlertComponent({
-              type: 'success',
-              message:
-                'Nouveau besoin enregistré ! <a href="https://calendly.com/deepfish/15min/" target="_blank" style="color: white; font-weight: bold">Veuillez choisir un créneau d\'échange pour valider votre besoin en cliquant ici</a>',
-              rawHtml: true,
-            });
-          })
-          .catch(() => this.setErrorAfterApiConsumption())
-          .finally(() => this.clearLoading());
-      }
+    created() {
+      this.prepareForApiConsumption();
+      return this
+        .api(`/requirements/${this.id}?projection=employer`)
+        .then((response) => {
+          this.requirement = response.data;
+        })
+        .catch(() => this.setErrorAfterApiConsumption())
+        .finally(() => this.clearLoading());
     },
-  },
-  created() {
-    this.prepareForApiConsumption();
-    Promise.all([this.api('/jobTypes'), this.api('/seniorities')])
-      .then(([jobTypesResponse, senioritiesResponse]) => {
-        this.jobTypes = jobTypesResponse.data._embedded.jobTypes;
-        this.seniorities = senioritiesResponse.data._embedded.seniorities;
-        this.requirement = this.newRequirement();
-      })
-      .catch(() => this.setErrorAfterApiConsumption())
-      .finally(() => this.clearLoading());
-  },
-};
+  };
 </script>
 
 <style scoped>
-.w-auto {
-  width: auto;
-}
+
 </style>
