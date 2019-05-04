@@ -354,9 +354,9 @@
       saveOpportunity(opportunity, previousState) {
         return this
           .saveOpportunityData({ opportunity, previousState })
-          .then(() => this.showSnackbar('Opération terminée avec succès'))
+          .then(() => this.showSnackbar(['Opération terminée avec succès', 'success']))
           .catch((error) => {
-            this.showSnackbar('Erreur');
+            this.showSnackbar(['Erreur', 'error']);
             return Promise.reject(error);
           });
       },
@@ -370,9 +370,9 @@
           })
           .then(() => {
             this.contactDialog = false;
-            this.showSnackbar('Merci, nous revenons vers vous sous peu');
+            this.showSnackbar(['Merci, nous revenons vers vous sous peu', 'success']);
           })
-          .catch(() => this.showSnackbar('Erreur'))
+          .catch(() => this.showSnackbar(['Erreur', 'error']))
           .finally(() => this.clearLoading());
       },
       sendFollowUpMessage(opportunity) {
@@ -386,9 +386,9 @@
           .then(() => {
             this.followUpDialog = false;
             this.followUpMessage = '';
-            this.showSnackbar('Merci, nous revenons vers vous sous peu');
+            this.showSnackbar(['Merci, nous revenons vers vous sous peu', 'success']);
           })
-          .catch(() => this.showSnackbar('Erreur'))
+          .catch(() => this.showSnackbar(['Erreur', 'error']))
           .finally(() => this.clearLoading());
       },
       isAskingAboutTalentButtonShown(opportunity) {

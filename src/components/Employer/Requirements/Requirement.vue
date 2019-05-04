@@ -113,15 +113,15 @@
       sendRequirementUpdate() {
         this.prepareForApiConsumption();
         return this.api
-          .post(`/requirements/${this.requirement.id}/send-update`, {
+          .post(`/requirements/${this.requirement.id}/send-updatee`, {
             message: this.requirementUpdateMessage,
           })
           .then(() => {
             this.requirementUpdateDialog = false;
             this.requirementUpdateMessage = '';
-            this.showSnackbar('Merci, nous reviendrons vers vous si besoin');
+            this.showSnackbar(['Merci, nous reviendrons vers vous si besoin', 'success']);
           })
-          .catch(() => this.showSnackbar('Erreur'))
+          .catch(() => this.showSnackbar(['Erreur', 'error']))
           .finally(() => this.clearLoading());
       },
     },

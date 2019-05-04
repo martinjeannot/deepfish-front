@@ -122,9 +122,9 @@ export default {
       delete company.employers;
       this.api
         .patch(this.company._links.self.href, company)
-        .then(() => this.showSnackbar('Success'))
+        .then(() => this.showSnackbar(['Success', 'success']))
         .catch(() => {
-          this.showSnackbar('Error');
+          this.showSnackbar(['Error', 'error']);
           this.fetchInitialData();
         });
     },

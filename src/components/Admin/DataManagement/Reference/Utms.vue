@@ -175,9 +175,9 @@
             .then((response) => {
               this.utms.push(response.data);
               this.editionDialog = false;
-              this.showSnackbar('New item created');
+              this.showSnackbar(['New item created', 'success']);
             })
-            .catch(() => this.showSnackbar('Error'))
+            .catch(() => this.showSnackbar(['Error', 'error']))
             .finally(() => this.clearLoading());
         }
         // item edition
@@ -186,9 +186,9 @@
           .then((response) => {
             this.utms.splice(this.selectedIndex, 1, response.data);
             this.editionDialog = false;
-            this.showSnackbar('Item saved');
+            this.showSnackbar(['Item saved', 'success']);
           })
-          .catch(() => this.showSnackbar('Error'))
+          .catch(() => this.showSnackbar(['Error', 'error']))
           .finally(() => this.clearLoading());
       },
       deleteItem(item) {
@@ -203,9 +203,9 @@
           .then(() => {
             this.utms.splice(this.selectedIndex, 1);
             this.deletionDialog = false;
-            this.showSnackbar('Item deleted');
+            this.showSnackbar(['Item deleted', 'success']);
           })
-          .catch(() => this.showSnackbar('Error'))
+          .catch(() => this.showSnackbar(['Error', 'error']))
           .finally(() => this.clearLoading());
       },
     },

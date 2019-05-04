@@ -172,8 +172,8 @@
       ]),
       saveRequirement(requirement) {
         this.saveRequirementData(requirement)
-          .then(() => this.showSnackbar('Success'))
-          .catch(() => this.showSnackbar('Error'));
+          .then(() => this.showSnackbar(['Success', 'success']))
+          .catch(() => this.showSnackbar(['Error', 'error']));
       },
       formattedDeclinationReason(opportunity) {
         return `<span style="display: contents; font-weight: bold">${opportunity.talent.firstName} ${opportunity.talent.lastName}</span> &mdash; ${opportunity.employerDeclinationReason}`;

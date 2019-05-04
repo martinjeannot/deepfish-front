@@ -543,9 +543,9 @@
       },
       saveProfile() {
         return this.saveTalentData(this.talent)
-          .then(() => this.showSnackbar('OK'))
+          .then(() => this.showSnackbar(['OK', 'success']))
           .catch(() => {
-            this.showSnackbar('Error');
+            this.showSnackbar(['Error', 'error']);
             this.fetchInitialData();
           });
       },
@@ -553,7 +553,7 @@
         this.api
           .patch(this.talent.qualification._links.self.href, this.talent.qualification)
           .then(() => this.showSuccessSnackbar())
-          .catch(() => this.showSnackbar('Error'));
+          .catch(() => this.showSnackbar(['Error', 'error']));
       },
       forwardTalent(opportunity) {
         const previousState = Object.assign({}, opportunity);
@@ -573,12 +573,12 @@
             const opportunityIndex = this.talent.opportunities
               .findIndex(opport => opport.id === opportunityResponse.data.id);
             this.talent.opportunities[opportunityIndex] = opportunityResponse.data;
-            this.showSnackbar('Success');
+            this.showSnackbar(['Success', 'success']);
             this.$forceUpdate();
           })
           .catch(() => {
             this.fetchInitialData();
-            this.showSnackbar('Error');
+            this.showSnackbar(['Error', 'error']);
           });
       },
       getOpportunitiesPromise() {
@@ -595,7 +595,7 @@
             this.talent.opportunities = response.data._embedded.opportunities;
             this.opportunityTable.totalItems = response.data.page.totalElements;
           })
-          .catch(() => this.showSnackbar('Error while retrieving opportunities'))
+          .catch(() => this.showSnackbar(['Error while retrieving opportunities', 'error']))
           .finally(() => this.clearLoading());
       },
       fetchInitialData() {

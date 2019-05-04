@@ -60,7 +60,7 @@
         .then((response) => {
           this.users = response.data._embedded.users;
         })
-        .catch(() => this.showSnackbar('Error'))
+        .catch(() => this.showSnackbar(['Error', 'error']))
         .finally(() => this.clearLoading());
     },
   };

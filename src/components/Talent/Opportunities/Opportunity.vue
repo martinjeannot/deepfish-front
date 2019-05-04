@@ -258,9 +258,9 @@
       saveOpportunity(opportunity, previousState) {
         return this
           .saveOpportunityData({ opportunity, previousState })
-          .then(() => this.showSnackbar('Opération terminée avec succès'))
+          .then(() => this.showSnackbar(['Opération terminée avec succès', 'success']))
           .catch(() => {
-            this.showSnackbar('Erreur');
+            this.showSnackbar(['Erreur', 'error']);
             this.fetchData();
           });
       },
@@ -273,9 +273,9 @@
           .then(() => {
             this.questionDialog = false;
             this.questionContent = '';
-            this.showSnackbar('Merci, nous revenons vers toi sous peu');
+            this.showSnackbar(['Merci, nous revenons vers toi sous peu', 'success']);
           })
-          .catch(() => this.showSnackbar('Erreur'))
+          .catch(() => this.showSnackbar(['Erreur', 'error']))
           .finally(() => this.clearLoading());
       },
       declineInBulk() {
@@ -287,11 +287,11 @@
           .then(() => {
             this.menuBadges.opportunities = 0;
             this.$router.push('/talent/opportunities'); // refresh data
-            this.showSnackbar('Opération terminée avec succès');
+            this.showSnackbar(['Opération terminée avec succès', 'success']);
           })
           .catch(() => {
             this.fetchData();
-            this.showSnackbar('Erreur');
+            this.showSnackbar(['Erreur', 'error']);
           });
       },
       updateExpirationCountdown() {

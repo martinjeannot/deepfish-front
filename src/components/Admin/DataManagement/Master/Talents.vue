@@ -102,7 +102,7 @@
             this.talents = response.data._embedded.talents;
             this.totalItems = response.data.page.totalElements;
           })
-          .catch(() => this.showSnackbar('Error'))
+          .catch(() => this.showSnackbar(['Error', 'error']))
           .finally(() => this.clearLoading());
       },
     },

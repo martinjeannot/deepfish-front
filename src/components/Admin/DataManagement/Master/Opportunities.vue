@@ -154,7 +154,7 @@
             this.opportunities = response.data._embedded.opportunities;
             this.totalItems = response.data.page.totalElements;
           })
-          .catch(() => this.showSnackbar('Error'))
+          .catch(() => this.showSnackbar(['Error', 'error']))
           .finally(() => this.clearLoading());
       },
       searchRequirements(search) {
@@ -163,7 +163,7 @@
           .then((response) => {
             this.requirements = response.data._embedded.requirements;
           })
-          .catch(() => this.showSnackbar('Error'))
+          .catch(() => this.showSnackbar(['Error', 'error']))
           .finally(() => this.clearLoading());
       },
     },
