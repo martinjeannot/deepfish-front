@@ -16,8 +16,13 @@
         <v-card-text>
           <v-layout wrap>
             <v-flex xs12 sm6 class="text-xs-center" style="padding-top: 5%">
-              <h3 class="pb-2 headline font-weight-bold"><span style="text-decoration: underline;">Votre besoin</span>
-                : {{ requirement.name }}</h3>
+              <h3 class="pb-2 headline font-weight-bold">
+                <span style="text-decoration: underline;">Votre besoin</span>
+                :
+                <router-link :to="{name: 'EmployerRequirement', params: {id: requirement.id}}">
+                  {{ requirement.name }}
+                </router-link>
+              </h3>
               <div>Nombre de talents Deepfish contactés pour ce besoin : <span
                 style="font-weight: bold">{{ requirement.opportunitiesCounts.total }}</span></div>
             </v-flex>
