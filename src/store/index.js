@@ -234,7 +234,7 @@ export default new Vuex.Store({
       });
     },
     showSuccessSnackbar({ dispatch }) {
-      dispatch('showSnackbar', 'OK');
+      dispatch('showSnackbar', ['OK', 'success']);
     },
     setError({ commit }, error) {
       const errorObject = error || { message: 'Une erreur est survenue :(' };
