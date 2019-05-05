@@ -113,7 +113,7 @@
       sendRequirementUpdate() {
         this.prepareForApiConsumption();
         return this.api
-          .post(`/requirements/${this.requirement.id}/send-updatee`, {
+          .post(`/requirements/${this.requirement.id}/send-update`, {
             message: this.requirementUpdateMessage,
           })
           .then(() => {
