@@ -129,8 +129,8 @@
         delete employerData.company;
         this.api
           .patch(this.employer._links.self.href, employerData)
-          .then(() => this.showSnackbar('Success'))
-          .catch(() => this.showSnackbar('Error'));
+          .then(() => this.showSnackbar(['Success', 'success']))
+          .catch(() => this.showSnackbar(['Error', 'error']));
       },
     },
     created() {

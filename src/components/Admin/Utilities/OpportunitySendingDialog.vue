@@ -120,7 +120,7 @@
           .then((response) => {
             this.requirements = response.data._embedded.requirements;
           })
-          .catch(() => this.showSnackbar('Error'))
+          .catch(() => this.showSnackbar(['Error', 'error']))
           .finally(() => this.clearLoading());
       },
       sendOpportunity(opportunity) {
@@ -134,7 +134,7 @@
             }
             return this.confirmOpportunitySending(opportunity);
           })
-          .catch(() => this.showSnackbar('Error'))
+          .catch(() => this.showSnackbar(['Error', 'error']))
           .finally(() => this.clearLoading());
       },
       confirmOpportunitySending(opportunity) {
@@ -144,10 +144,10 @@
           .then((/* response */) => {
             this.dialog = false;
             this.confirmationDialog = false;
-            this.showSnackbar('Opportunity sent');
+            this.showSnackbar(['Opportunity sent', 'success']);
             this.$emit('opportunity-sent');
           })
-          .catch(() => this.showSnackbar('Error'))
+          .catch(() => this.showSnackbar(['Error', 'error']))
           .finally(() => this.clearLoading());
       },
       newOpportunity() {
@@ -169,7 +169,7 @@
               this.pitch = response.data._embedded.opportunities[0].pitch;
             }
           })
-          .catch(() => this.showSnackbar('Error'))
+          .catch(() => this.showSnackbar(['Error', 'error']))
           .finally(() => this.clearLoading());
       },
     },

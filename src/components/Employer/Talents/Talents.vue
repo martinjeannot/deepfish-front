@@ -16,8 +16,13 @@
         <v-card-text>
           <v-layout wrap>
             <v-flex xs12 sm6 class="text-xs-center" style="padding-top: 5%">
-              <h3 class="pb-2 headline font-weight-bold"><span style="text-decoration: underline;">Votre besoin</span>
-                : {{ requirement.name }}</h3>
+              <h3 class="pb-2 headline font-weight-bold">
+                <span style="text-decoration: underline;">Votre besoin</span>
+                :
+                <router-link :to="{name: 'EmployerRequirement', params: {id: requirement.id}}">
+                  {{ requirement.name }}
+                </router-link>
+              </h3>
               <div>Nombre de talents Deepfish contactés pour ce besoin : <span
                 style="font-weight: bold">{{ requirement.opportunitiesCounts.total }}</span></div>
             </v-flex>
@@ -354,9 +359,9 @@
       saveOpportunity(opportunity, previousState) {
         return this
           .saveOpportunityData({ opportunity, previousState })
-          .then(() => this.showSnackbar('Opération terminée avec succès'))
+          .then(() => this.showSnackbar(['Opération terminée avec succès', 'success']))
           .catch((error) => {
-            this.showSnackbar('Erreur');
+            this.showSnackbar(['Erreur', 'error']);
             return Promise.reject(error);
           });
       },
@@ -370,9 +375,9 @@
           })
           .then(() => {
             this.contactDialog = false;
-            this.showSnackbar('Merci, nous revenons vers vous sous peu');
+            this.showSnackbar(['Merci, nous revenons vers vous sous peu', 'success']);
           })
-          .catch(() => this.showSnackbar('Erreur'))
+          .catch(() => this.showSnackbar(['Erreur', 'error']))
           .finally(() => this.clearLoading());
       },
       sendFollowUpMessage(opportunity) {
@@ -386,9 +391,9 @@
           .then(() => {
             this.followUpDialog = false;
             this.followUpMessage = '';
-            this.showSnackbar('Merci, nous revenons vers vous sous peu');
+            this.showSnackbar(['Merci, nous revenons vers vous sous peu', 'success']);
           })
-          .catch(() => this.showSnackbar('Erreur'))
+          .catch(() => this.showSnackbar(['Erreur', 'error']))
           .finally(() => this.clearLoading());
       },
       isAskingAboutTalentButtonShown(opportunity) {

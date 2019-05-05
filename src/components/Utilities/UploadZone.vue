@@ -34,8 +34,8 @@
       onRemovedFileEvent() {
         this.api
           .delete(this.dropzoneOptions.url)
-          .then(() => this.showSnackbar('OK'))
-          .catch(() => this.showSnackbar('Error'));
+          .then(() => this.showSnackbar(['OK', 'success']))
+          .catch(() => this.showSnackbar(['Error', 'error']));
       },
     },
     mounted() {

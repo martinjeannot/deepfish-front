@@ -93,7 +93,7 @@
               this.showSuccessSnackbar();
             })
             .catch((/* error */) => {
-              this.showSnackbar('Error');
+              this.showSnackbar(['Error', 'error']);
             })
             .finally(() => this.clearLoading());
         }

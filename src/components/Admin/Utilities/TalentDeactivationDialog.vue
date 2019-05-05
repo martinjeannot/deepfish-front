@@ -118,7 +118,7 @@ ${this.talent.reactivatedOn ? `(reactivated on ${moment(this.talent.reactivatedO
               this.deactivationReason = '';
               this.showSuccessSnackbar();
             })
-            .catch(() => this.showSnackbar('Error'))
+            .catch(() => this.showSnackbar(['Error', 'error']))
             .finally(() => this.clearLoading());
         }
         return Promise.resolve();

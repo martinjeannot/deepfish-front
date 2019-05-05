@@ -226,11 +226,15 @@ export default new Vuex.Store({
     setMenuBadges({ commit }, menuBadges) {
       commit(types.SET_MENU_BADGES, menuBadges);
     },
-    showSnackbar({ commit }, text) {
-      commit(types.SET_SNACKBAR, { show: true, text });
+    showSnackbar({ commit }, [text, color]) {
+      commit(types.SET_SNACKBAR, {
+        show: true,
+        text,
+        color,
+      });
     },
     showSuccessSnackbar({ dispatch }) {
-      dispatch('showSnackbar', 'OK');
+      dispatch('showSnackbar', ['OK', 'success']);
     },
     setError({ commit }, error) {
       const errorObject = error || { message: 'Une erreur est survenue :(' };

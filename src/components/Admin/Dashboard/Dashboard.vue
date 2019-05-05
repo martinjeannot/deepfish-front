@@ -146,7 +146,7 @@
           this.monthlyEmployerAcceptedOpportunitiesStatistics =
             monthlyEmployerAcceptedOpportunitiesStatisticsResponse.data;
         })
-        .catch(() => this.showSnackbar('Error'))
+        .catch(() => this.showSnackbar(['Error', 'error']))
         .finally(() => this.clearLoading(true));
     },
   };

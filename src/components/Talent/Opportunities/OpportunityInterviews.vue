@@ -146,7 +146,7 @@
             this.pendingInterviews = this.interviews.filter(interview => interview.talentResponseStatus === 'NEEDS_ACTION').reverse();
             this.confirmedInterviews = this.interviews.filter(interview => interview.status === 'CONFIRMED');
           })
-          .catch(() => this.showSnackbar('Error : could not retrieve interviews'));
+          .catch(() => this.showSnackbar(['Error : could not retrieve interviews', 'error']));
       },
       acceptInterview(interview) {
         this.prepareForApiConsumption();
@@ -166,8 +166,8 @@
       saveInterview(interview, previousState) {
         return this
           .saveInterviewData({ interview, previousState })
-          .then(() => this.showSnackbar('Opération terminée avec succès'))
-          .catch(() => this.showSnackbar('Error : could not save interview'));
+          .then(() => this.showSnackbar(['Opération terminée avec succès', 'success']))
+          .catch(() => this.showSnackbar(['Error : could not save interview', 'error']));
       },
       getInterviewDuration(interview) {
         return moment.duration(moment(interview.endAt).diff(interview.startAt));

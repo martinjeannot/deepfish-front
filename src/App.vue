@@ -53,7 +53,11 @@
         <router-view></router-view>
       </v-container>
     </v-content>
-    <v-snackbar v-model="snackbar.show" :timeout="3500">
+    <v-snackbar
+      v-model="snackbar.show"
+      :color="snackbar.color"
+      :timeout="3500"
+    >
       {{ snackbar.text }}
     </v-snackbar>
     <v-footer app dark height="auto">

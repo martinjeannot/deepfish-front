@@ -203,10 +203,10 @@
         this.api
           .post('/interviews/list', { resources: interviews })
           .then(() => {
-            this.showSnackbar('Opération terminée avec succès');
+            this.showSnackbar(['Opération terminée avec succès', 'success']);
             this.$router.push({ name: 'EmployerTalents' });
           })
-          .catch(() => this.showSnackbar('Erreur'))
+          .catch(() => this.showSnackbar(['Erreur', 'error']))
           .finally(() => this.clearLoading());
       },
       newInterview(startAt) {

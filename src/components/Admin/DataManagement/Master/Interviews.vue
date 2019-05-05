@@ -95,7 +95,7 @@
             this.interviews = response.data._embedded.interviews;
             this.totalItems = response.data.page.totalElements;
           })
-          .catch(() => this.showSnackbar('Error'))
+          .catch(() => this.showSnackbar(['Error', 'error']))
           .finally(() => this.clearLoading());
       },
     },

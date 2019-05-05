@@ -135,7 +135,7 @@
           .saveProfile()
           .then(() => {
             this.$router.push('/talent/opportunities');
-            this.showSnackbar('Tes conditions ont été sauvegardées');
+            this.showSnackbar(['Tes conditions ont été sauvegardées', 'success']);
             this.setAlertComponent({
               type: 'success',
               message: 'Merci, tu recevras un email de notification pour chaque nouvelle opportunité reçue. À bientôt !',

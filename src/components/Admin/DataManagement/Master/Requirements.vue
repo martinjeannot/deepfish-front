@@ -94,7 +94,7 @@
             this.requirements = response.data._embedded.requirements;
             this.totalItems = response.data.page.totalElements;
           })
-          .catch(() => this.showSnackbar('Error'))
+          .catch(() => this.showSnackbar(['Error', 'error']))
           .finally(() => this.clearLoading());
       },
     },
