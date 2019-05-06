@@ -110,13 +110,13 @@
       <v-card>
         <v-card-title>
           <v-flex xs12 class="title">
-            Poser une question
+            Pour faire le bon choix
           </v-flex>
         </v-card-title>
         <v-form v-model="questionFormValid" @submit.prevent="askQuestion(opportunity)">
           <v-card-text>
             <v-flex xs12 class="subheading grey--text text--darken-2">
-              Pose-nous ta/tes question(s) et Deepfish reviendra rapidement vers toi :
+              Des questions à propos de l'opportunité ou de l'entreprise ? On te répond au plus vite !
               <v-textarea
                 v-model="questionContent"
                 :rules="[rules.required]"
