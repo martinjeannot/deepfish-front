@@ -30,10 +30,9 @@
                   <span class="font-weight-bold">{{ props.item.company.name }}</span>
                 </v-flex>
                 <v-flex xs12 sm6 md4 class="text-xs-center" pt-3>
-                  Cette opportunité expire dans :
-                  <v-chip v-html="formatExpirationCountdown(props.item.expirationCountdown)"
-                          color="red" outline class="pa-2">
-                  </v-chip>
+                  <v-chip color="red" outline class="pa-3"
+                          v-html="'En attente d\'une réponse de ta part'"
+                  ></v-chip>
                 </v-flex>
               </v-card-title>
               <v-card-actions>
@@ -207,7 +206,6 @@
 </template>
 
 <script>
-  import moment from 'moment';
   import { mapGetters, mapState, mapActions } from 'vuex';
 
   export default {
@@ -220,7 +218,6 @@
       closedOpportunities: [],
       totalItems: 0,
       qualificationDialog: false,
-      expirationCountdownInterval: null,
     }),
     computed: {
       ...mapGetters([
@@ -248,21 +245,6 @@
         'setAlertComponent',
         'onAlertComponentDismissed',
       ]),
-      updateExpirationCountdowns() {
-        this.pendingOpportunities.forEach((opportunity) => {
-          if (opportunity.expirationCountdown) {
-            opportunity.expirationCountdown.subtract(1, 'second');
-          }
-        });
-        this.$forceUpdate();
-      },
-      formatExpirationCountdown(expirationCountdown) {
-        if (expirationCountdown && expirationCountdown.asSeconds() > 0) {
-          return `${expirationCountdown.days()} jours ${expirationCountdown.hours()} heures
-          ${expirationCountdown.minutes()} minutes ${expirationCountdown.seconds()} secondes`;
-        }
-        return 'quelques minutes !';
-      },
     },
     filters: {
       hideText(value) {
@@ -303,23 +285,8 @@
               });
             }
           }
-          // expiration countdown
-          this.pendingOpportunities.forEach((opportunity) => {
-            opportunity.expirationCountdown = null;
-            if (moment.utc().isBefore(opportunity.expiredAt)) {
-              opportunity.expirationCountdown =
-                moment.duration(moment(opportunity.expiredAt).diff(moment.utc()));
-            }
-          });
-          this.expirationCountdownInterval =
-            setInterval(() => this.updateExpirationCountdowns(), 1000);
         })
         .finally(() => this.clearLoading());
-    },
-    beforeDestroy() {
-      if (this.expirationCountdownInterval) {
-        clearInterval(this.expirationCountdownInterval);
-      }
     },
   };
 </script>
