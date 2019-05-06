@@ -77,8 +77,22 @@
               xs12
               sm6
               :class="['pb-3']"
+              style="padding-left: 45px"
             >
               <v-btn color="warning" @click="declinationDialog = true">Refuser</v-btn>
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    large
+                    v-on="on"
+                    class="pl-2"
+                    style="margin-bottom: -10px"
+                  >
+                    help
+                  </v-icon>
+                </template>
+                <span>Refus visible uniquement par Deepfish, tes raisons de refus améliorent le matching</span>
+              </v-tooltip>
             </v-flex>
             <v-flex
               xs12
