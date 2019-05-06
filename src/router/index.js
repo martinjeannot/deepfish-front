@@ -286,13 +286,13 @@ const router = new Router({
       meta: { authRequired: true },
     },
     {
-      path: '/employer/requirements/online',
+      path: '/employer/new-requirement/online',
       name: 'EmployerTypeformRequirement',
       component: EmployerTypeformRequirement,
       meta: { authRequired: true },
     },
     {
-      path: '/employer/requirements/call',
+      path: '/employer/new-requirement/call',
       name: 'EmployerCalendlyRequirement',
       component: EmployerCalendlyRequirement,
       meta: { authRequired: true },
