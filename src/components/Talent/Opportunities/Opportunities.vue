@@ -261,7 +261,19 @@
             .filter(opportunity => opportunity.talentStatus === 'PENDING' && opportunity.requirement.status === 'OPEN');
           this.menuBadges.opportunities = this.pendingOpportunities.length;
           this.acceptedOpportunities = response.data._embedded.opportunities
-            .filter(opportunity => opportunity.talentStatus === 'ACCEPTED' && opportunity.requirement.status === 'OPEN');
+            .filter(opportunity => opportunity.talentStatus === 'ACCEPTED' && opportunity.requirement.status === 'OPEN')
+            .sort((opport1, opport2) => {
+              if (opport1.employerStatus === opport2.employerStatus) {
+                return 0;
+              } else if (opport1.employerStatus === 'DECLINED') {
+                return 1;
+              } else if (opport1.employerStatus === null && ['PENDING', 'ACCEPTED'].includes(opport2.employerStatus)) {
+                return 1;
+              } else if (opport1.employerStatus === 'PENDING' && opport2.employerStatus === 'ACCEPTED') {
+                return 1;
+              }
+              return -1;
+            });
           this.acceptedOpportunities.forEach((opportunity) => {
             if (opportunity.interviews.some(interview => interview.talentResponseStatus === 'NEEDS_ACTION')) {
               opportunity.badged = true;
