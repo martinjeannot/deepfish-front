@@ -4,7 +4,10 @@
       <v-progress-circular indeterminate color="primary" :size="70"></v-progress-circular>
     </v-flex>
   </v-layout>
-  <v-layout row wrap v-else>
+  <talent-opportunities-welcome
+    v-else-if="!totalItems"
+  ></talent-opportunities-welcome>
+  <v-layout v-else row wrap>
     <v-layout v-if="alertComponent">
       <v-flex xs12 sm6 offset-sm3>
         <base-alert :type="alertComponent.type" :message="alertComponent.message"
@@ -207,9 +210,11 @@
 
 <script>
   import { mapGetters, mapState, mapActions } from 'vuex';
+  import TalentOpportunitiesWelcome from './Welcome';
 
   export default {
     name: 'talent-opportunities',
+    components: { TalentOpportunitiesWelcome },
     data: () => ({
       pendingOpportunities: [],
       acceptedOpportunities: [],
