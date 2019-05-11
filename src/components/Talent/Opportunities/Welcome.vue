@@ -141,7 +141,7 @@
       >
         Parrainer un collègue commercial
       </v-btn>
-      <div class="font-weight-bold">500€ à gagner</div>
+      <div class="font-weight-bold">500€ à gagner !</div>
     </v-flex>
   </v-layout>
 </template>
