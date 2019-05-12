@@ -4,7 +4,10 @@
       <v-progress-circular indeterminate color="primary" :size="70"></v-progress-circular>
     </v-flex>
   </v-layout>
-  <v-layout row wrap v-else>
+  <talent-opportunities-welcome
+    v-else-if="!totalItems"
+  ></talent-opportunities-welcome>
+  <v-layout v-else row wrap>
     <v-layout v-if="alertComponent">
       <v-flex xs12 sm6 offset-sm3>
         <base-alert :type="alertComponent.type" :message="alertComponent.message"
@@ -30,10 +33,9 @@
                   <span class="font-weight-bold">{{ props.item.company.name }}</span>
                 </v-flex>
                 <v-flex xs12 sm6 md4 class="text-xs-center" pt-3>
-                  Cette opportunité expire dans :
-                  <v-chip v-html="formatExpirationCountdown(props.item.expirationCountdown)"
-                          color="red" outline class="pa-2">
-                  </v-chip>
+                  <v-chip color="red" outline class="pa-3"
+                          v-html="'En attente d\'une réponse de ta part'"
+                  ></v-chip>
                 </v-flex>
               </v-card-title>
               <v-card-actions>
@@ -207,11 +209,12 @@
 </template>
 
 <script>
-  import moment from 'moment';
   import { mapGetters, mapState, mapActions } from 'vuex';
+  import TalentOpportunitiesWelcome from './Welcome';
 
   export default {
     name: 'talent-opportunities',
+    components: { TalentOpportunitiesWelcome },
     data: () => ({
       pendingOpportunities: [],
       acceptedOpportunities: [],
@@ -220,7 +223,6 @@
       closedOpportunities: [],
       totalItems: 0,
       qualificationDialog: false,
-      expirationCountdownInterval: null,
     }),
     computed: {
       ...mapGetters([
@@ -248,21 +250,6 @@
         'setAlertComponent',
         'onAlertComponentDismissed',
       ]),
-      updateExpirationCountdowns() {
-        this.pendingOpportunities.forEach((opportunity) => {
-          if (opportunity.expirationCountdown) {
-            opportunity.expirationCountdown.subtract(1, 'second');
-          }
-        });
-        this.$forceUpdate();
-      },
-      formatExpirationCountdown(expirationCountdown) {
-        if (expirationCountdown && expirationCountdown.asSeconds() > 0) {
-          return `${expirationCountdown.days()} jours ${expirationCountdown.hours()} heures
-          ${expirationCountdown.minutes()} minutes ${expirationCountdown.seconds()} secondes`;
-        }
-        return 'quelques minutes !';
-      },
     },
     filters: {
       hideText(value) {
@@ -279,7 +266,19 @@
             .filter(opportunity => opportunity.talentStatus === 'PENDING' && opportunity.requirement.status === 'OPEN');
           this.menuBadges.opportunities = this.pendingOpportunities.length;
           this.acceptedOpportunities = response.data._embedded.opportunities
-            .filter(opportunity => opportunity.talentStatus === 'ACCEPTED' && opportunity.requirement.status === 'OPEN');
+            .filter(opportunity => opportunity.talentStatus === 'ACCEPTED' && opportunity.requirement.status === 'OPEN')
+            .sort((opport1, opport2) => {
+              if (opport1.employerStatus === opport2.employerStatus) {
+                return 0;
+              } else if (opport1.employerStatus === 'DECLINED') {
+                return 1;
+              } else if (opport1.employerStatus === null && ['PENDING', 'ACCEPTED'].includes(opport2.employerStatus)) {
+                return 1;
+              } else if (opport1.employerStatus === 'PENDING' && opport2.employerStatus === 'ACCEPTED') {
+                return 1;
+              }
+              return -1;
+            });
           this.acceptedOpportunities.forEach((opportunity) => {
             if (opportunity.interviews.some(interview => interview.talentResponseStatus === 'NEEDS_ACTION')) {
               opportunity.badged = true;
@@ -303,23 +302,8 @@
               });
             }
           }
-          // expiration countdown
-          this.pendingOpportunities.forEach((opportunity) => {
-            opportunity.expirationCountdown = null;
-            if (moment.utc().isBefore(opportunity.expiredAt)) {
-              opportunity.expirationCountdown =
-                moment.duration(moment(opportunity.expiredAt).diff(moment.utc()));
-            }
-          });
-          this.expirationCountdownInterval =
-            setInterval(() => this.updateExpirationCountdowns(), 1000);
         })
         .finally(() => this.clearLoading());
-    },
-    beforeDestroy() {
-      if (this.expirationCountdownInterval) {
-        clearInterval(this.expirationCountdownInterval);
-      }
     },
   };
 </script>

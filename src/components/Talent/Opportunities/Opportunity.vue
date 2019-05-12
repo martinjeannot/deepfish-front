@@ -20,10 +20,10 @@
             <div v-if="opportunity.requirement.status === 'CLOSED'">
               <v-chip v-html="'L\'offre n\'est plus d\'actualité'" class="text-xs-center pa-2"></v-chip>
             </div>
-            <div v-else-if="opportunity.talentStatus === 'PENDING'">
-              <v-chip v-html="formatExpirationCountdown(opportunity.expirationCountdown)"
-                      color="red" outline class="text-xs-center pa-2">
-              </v-chip>
+            <div v-else-if="opportunity.talentStatus === 'PENDING'" class="pt-1">
+              <v-chip color="red" outline class="text-xs-center pa-3"
+                      v-html="'En attente d\'une réponse de ta part'"
+              ></v-chip>
             </div>
             <div v-else-if="opportunity.talentStatus === 'ACCEPTED'">
               <v-chip v-html="getLabelFromOpportunityStatus(opportunity.employerStatus)"
@@ -77,8 +77,22 @@
               xs12
               sm6
               :class="['pb-3']"
+              style="padding-left: 45px"
             >
               <v-btn color="warning" @click="declinationDialog = true">Refuser</v-btn>
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    large
+                    v-on="on"
+                    class="pl-2"
+                    style="margin-bottom: -10px"
+                  >
+                    help
+                  </v-icon>
+                </template>
+                <span>Refus visible uniquement par Deepfish, tes raisons de refus améliorent le matching</span>
+              </v-tooltip>
             </v-flex>
             <v-flex
               xs12
@@ -96,13 +110,13 @@
       <v-card>
         <v-card-title>
           <v-flex xs12 class="title">
-            Poser une question
+            Pour faire le bon choix
           </v-flex>
         </v-card-title>
         <v-form v-model="questionFormValid" @submit.prevent="askQuestion(opportunity)">
           <v-card-text>
             <v-flex xs12 class="subheading grey--text text--darken-2">
-              Pose-nous ta/tes question(s) et Deepfish reviendra rapidement vers toi :
+              Des questions à propos de l'opportunité ou de l'entreprise ? On te répond au plus vite !
               <v-textarea
                 v-model="questionContent"
                 :rules="[rules.required]"
@@ -172,7 +186,6 @@
 </template>
 
 <script>
-  import moment from 'moment';
   import { mapGetters, mapState, mapActions } from 'vuex';
   import OpportunityInterviews from './OpportunityInterviews';
 
@@ -195,7 +208,6 @@
       bulkDeclinationDialog: false,
       bulkDeclinationValid: false,
       bulkDeclinationReason: '',
-      expirationCountdownInterval: null,
     }),
     computed: {
       ...mapGetters([
@@ -222,15 +234,6 @@
           .api(`/opportunities/${this.id}?projection=talent`)
           .then((response) => {
             this.opportunity = response.data;
-            if (this.opportunity.talentStatus === 'PENDING') {
-              this.opportunity.expirationCountdown = null;
-              if (moment.utc().isBefore(this.opportunity.expiredAt)) {
-                this.opportunity.expirationCountdown =
-                  moment.duration(moment(this.opportunity.expiredAt).diff(moment.utc()));
-                this.expirationCountdownInterval =
-                  setInterval(() => this.updateExpirationCountdown(), 1000);
-              }
-            }
           })
           .finally(() => this.clearLoading());
       },
@@ -294,19 +297,6 @@
             this.showSnackbar(['Erreur', 'error']);
           });
       },
-      updateExpirationCountdown() {
-        if (this.opportunity.expirationCountdown) {
-          this.opportunity.expirationCountdown.subtract(1, 'second');
-        }
-        this.$forceUpdate();
-      },
-      formatExpirationCountdown(expirationCountdown) {
-        if (expirationCountdown && expirationCountdown.asSeconds() > 0) {
-          return `${expirationCountdown.days()} jours ${expirationCountdown.hours()} heures
-          ${expirationCountdown.minutes()} minutes ${expirationCountdown.seconds()} secondes`;
-        }
-        return 'Plus que quelques minutes !';
-      },
     },
     created() {
       this
@@ -317,11 +307,6 @@
             this.$router.push({ name: 'TalentOpportunities' });
           }
         });
-    },
-    beforeDestroy() {
-      if (this.expirationCountdownInterval) {
-        clearInterval(this.expirationCountdownInterval);
-      }
     },
   };
 </script>

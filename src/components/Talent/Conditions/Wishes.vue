@@ -22,7 +22,12 @@
         ></v-text-field>
       </v-flex>
       <v-flex xs12 class="mb-2">
-        <span class="subheading" style="font-weight: bold">À quelle date peux-tu démarrer ?</span>
+        <span
+          class="subheading"
+          style="font-weight: bold"
+        >
+          Quand souhaites-tu recevoir tes premières opportunités ?
+        </span>
       </v-flex>
       <v-flex xs12 class="mb-2">
         <v-date-picker
@@ -61,7 +66,7 @@
   const rules = {
     required: value => !!value || 'Ce champ est obligatoire',
     positive: value => value > 0 || 'La valeur doit être supérieure à 0',
-    minValue: value => value > 10000 || 'Le montant est annuel (ex: 45 000€)',
+    minValue: value => value > 10000 || 'Le montant est annuel (ex: 45000€)',
   };
 
   export default {
