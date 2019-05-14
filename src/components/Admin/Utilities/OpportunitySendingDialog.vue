@@ -16,15 +16,24 @@
                 </v-flex>
               </v-layout>
               <!-- FIXME : vuetify autocomplete's item-text filter prevent us from searching through company name OR requirement name -->
-              <v-autocomplete v-model="selectedRequirementId" :items="requirements" item-text="company.name"
-                              item-value="id" label="Requirement" :search-input.sync="requirementsSearchInput"
-                              :loading="loading" clearable :rules="[rules.required]" prepend-icon="assignment">
-                <template slot="selection" slot-scope="{ item }">
+              <v-autocomplete
+                v-model="selectedRequirementId"
+                :items="requirements"
+                item-text="company.name"
+                item-value="id"
+                label="Requirement"
+                :search-input.sync="requirementsSearchInput"
+                :loading="loading"
+                clearable
+                :rules="[rules.required]"
+                prepend-icon="assignment"
+              >
+                <template #selection="{ item }">
                   <div class="input-group__selections__comma">
                     {{ item.company.name }} - {{ item.name }}
                   </div>
                 </template>
-                <template slot="item" slot-scope="{ item }">
+                <template #item="{ item }">
                   <v-list-tile>
                     <v-list-tile-content>
                       <v-list-tile-title>
@@ -116,7 +125,7 @@
       ]),
       searchRequirements(search) {
         this.prepareForApiConsumption();
-        this.api(`/requirements/search/findByStatusIsAndNameContainingOrCompanyNameContainingAllIgnoreCase?projection=default&status=OPEN&name=${search}&companyName=${search}&sort=createdAt,desc`)
+        this.api(`/requirements/search/findByStatusAndCompanyNameContainingIgnoreCaseOrderByCompanyNameAsc?projection=default&status=OPEN&companyName=${encodeURIComponent(search)}`)
           .then((response) => {
             this.requirements = response.data._embedded.requirements;
           })
