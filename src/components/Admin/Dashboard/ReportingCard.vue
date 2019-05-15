@@ -9,7 +9,7 @@
       max-width="calc(100% - 32px)"
     >
       <v-sparkline
-        :value="weeklyStatistics.map(point => point[1])"
+        :value="trendLineValues"
         color="white"
         :padding="trendLinePadding"
         :auto-draw="true"
@@ -85,6 +85,12 @@
       trendLinePadding: 8,
     }),
     computed: {
+      trendLineValues() {
+        const values = this.weeklyStatistics.map(point => point[1]);
+        // last element = current week element (always at 0 at the beginning of the week)
+        values.pop(); // improved morale
+        return values;
+      },
       weeklyDataTableHeaders() {
         return [
           { text: 'Week', value: 'text', sortable: false },
