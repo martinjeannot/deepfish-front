@@ -286,6 +286,12 @@ export default new Vuex.Store({
       }
       return getters.api.patch(opportunity._links.self.href, opportunityData);
     },
+    saveCompanyData({ getters }, company) {
+      const companyData = Object.assign({}, company);
+      // linked refs deletion
+      delete companyData.employers;
+      return getters.api.patch(company._links.self.href, companyData);
+    },
     saveRequirementData({ getters }, requirement) {
       const requirementData = Object.assign({}, requirement);
       // linked refs deletion
