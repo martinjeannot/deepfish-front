@@ -159,7 +159,7 @@
       },
       searchRequirements(search) {
         this.prepareForApiConsumption();
-        this.api(`/requirements/search/findByStatusIsAndNameContainingOrCompanyNameContainingAllIgnoreCase?projection=default&status=OPEN&name=${search}&companyName=${search}&sort=createdAt,desc`)
+        this.api(`/requirements/search/findByStatusAndCompanyNameContainingIgnoreCaseOrderByCompanyNameAsc?projection=default&status=OPEN&companyName=${encodeURIComponent(search)}`)
           .then((response) => {
             this.requirements = response.data._embedded.requirements;
           })

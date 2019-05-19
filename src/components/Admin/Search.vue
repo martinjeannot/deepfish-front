@@ -328,7 +328,7 @@
         // Search query
         if (this.criteria.searchQuery) {
           talentQueryString += talentQueryString ? '&' : '';
-          talentQueryString += `searchQuery=${this.criteria.searchQuery}`;
+          talentQueryString += `searchQuery=${encodeURIComponent(this.criteria.searchQuery)}`;
         }
         // Company maturity levels criterion
         if (this.criteria.companyMaturityLevels.length) {

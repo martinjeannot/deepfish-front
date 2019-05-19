@@ -1,6 +1,11 @@
 <template>
-  <vue-dropzone :id="id" :ref="id" :options="dropzoneOptions"
-                :destroyDropzone="false" @vdropzone-removed-file="onRemovedFileEvent">
+  <vue-dropzone
+    :id="id"
+    :ref="id"
+    :options="dropzoneOptions"
+    :destroyDropzone="false"
+    @vdropzone-removed-file="onRemovedFileEvent"
+  >
   </vue-dropzone>
 </template>
 
