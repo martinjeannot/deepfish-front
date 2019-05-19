@@ -22,7 +22,7 @@
                   <v-flex xs12 class="text-xs-center mb-3">
                     <h2>{{ company.name }}</h2>
                   </v-flex>
-                  <v-flex v-if="company.logoURI" xs12 class="text-xs-center mb-3">
+                  <v-flex v-if="company.logoURL" xs12 class="text-xs-center mb-3">
                     <v-img :src="company.logoURL"></v-img>
                   </v-flex>
                   <v-flex xs12 class="mb-3">
@@ -41,10 +41,6 @@
                       </v-list-tile>
                     </v-list>
                   </v-flex>
-                  <v-flex xs12 class="mb-3">
-                    <upload-zone :id="'dropzone'" :uri="`/companies/${company.id}/upload-logo`"
-                                 :files="company.logoURI ? [{file: {}, url: company.logoURL}] : []"></upload-zone>
-                  </v-flex>
                 </v-card-text>
               </v-card>
             </v-flex>
@@ -53,6 +49,7 @@
                 <v-tabs grow>
                   <v-tab>Profile</v-tab>
                   <v-tab>Description</v-tab>
+                  <v-tab>Images</v-tab>
                   <v-tab>Requirements</v-tab>
                   <v-tab-item>
                     <v-form v-model="companyProfileFormValid" @submit.prevent="saveCompany(company)">
@@ -173,6 +170,50 @@
                           Save
                         </v-btn>
                       </div>
+                    </v-card-text>
+                  </v-tab-item>
+                  <v-tab-item>
+                    <v-card-text>
+                      <v-flex xs12>
+                        <h6 class="title">Logo</h6>
+                      </v-flex>
+                      <v-flex xs12 class="pb-3">
+                        <upload-zone
+                          :id="'logo-dropzone'"
+                          :uri="`/companies/${company.id}/upload-logo`"
+                          :files="company.logoURL ? [{file: {}, url: company.logoURL}] : []"
+                        ></upload-zone>
+                      </v-flex>
+                      <v-flex xs12>
+                        <h6 class="title">Cover image</h6>
+                      </v-flex>
+                      <v-flex xs12 class="pb-3">
+                        <upload-zone
+                          :id="'cover-dropzone'"
+                          :uri="`/companies/${company.id}/upload-cover`"
+                          :files="company.coverImageUrl ? [{file: {}, url: company.coverImageUrl}] : []"
+                        ></upload-zone>
+                      </v-flex>
+                      <v-flex xs12>
+                        <h6 class="title">Top image</h6>
+                      </v-flex>
+                      <v-flex xs12 class="pb-3">
+                        <upload-zone
+                          :id="'top-dropzone'"
+                          :uri="`/companies/${company.id}/upload-top`"
+                          :files="company.topImageUrl ? [{file: {}, url: company.topImageUrl}] : []"
+                        ></upload-zone>
+                      </v-flex>
+                      <v-flex xs12>
+                        <h6 class="title">Bottom image</h6>
+                      </v-flex>
+                      <v-flex xs12>
+                        <upload-zone
+                          :id="'bottom-dropzone'"
+                          :uri="`/companies/${company.id}/upload-bottom`"
+                          :files="company.bottomImageUrl ? [{file: {}, url: company.bottomImageUrl}] : []"
+                        ></upload-zone>
+                      </v-flex>
                     </v-card-text>
                   </v-tab-item>
                   <v-tab-item>
