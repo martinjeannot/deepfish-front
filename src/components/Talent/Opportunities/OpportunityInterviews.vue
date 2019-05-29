@@ -10,7 +10,7 @@
     <v-flex xs12 md4
             v-for="(interview, index) in pendingInterviews"
             :key="interview.id"
-            :class="['pb-3', {'px-1': $vuetify.breakpoint.mdAndUp}]">
+            :class="['pb-3', {'pl-2': $vuetify.breakpoint.mdAndUp && index !== 0}, {'pr-2': $vuetify.breakpoint.mdAndUp && index !== pendingInterviews.length - 1}]">
       <v-flex xs12 v-if="$vuetify.breakpoint.smAndDown && index !== 0" class="text-xs-center pb-3">
         <h3>ou</h3>
       </v-flex>

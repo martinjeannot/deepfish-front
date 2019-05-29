@@ -51,6 +51,10 @@
       </v-flex>
     </v-flex>
 
+    <opportunity-interviews
+      :opportunity="opportunity"
+    ></opportunity-interviews>
+
     <v-flex
       xs12 sm7
       :class="['pb-3', {'pr-3': $vuetify.breakpoint.smAndUp}]"
