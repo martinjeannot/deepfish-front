@@ -26,7 +26,7 @@
       <v-img
         :src="opportunity.company.topImageUrl"
         height="100%"
-        max-height="373px"
+        max-height="362px"
       ></v-img>
     </v-flex>
     <v-flex
@@ -39,21 +39,31 @@
         ></opportunity-company-stats>
       </v-flex>
       <v-flex xs12>
-        <opportunity-actions
-          v-if="opportunity.talentStatus === 'PENDING'"
+        <opportunity-status-line
           :opportunity="opportunity"
-          @opportunity-refresh="getOpportunity(id)"
-        ></opportunity-actions>
-        <opportunity-status
-          v-else
-          :opportunity="opportunity"
-        ></opportunity-status>
+        ></opportunity-status-line>
       </v-flex>
     </v-flex>
 
-    <opportunity-interviews
-      :opportunity="opportunity"
-    ></opportunity-interviews>
+    <v-flex
+      v-if="opportunity.talentStatus === 'PENDING'"
+      xs12
+      class="pb-3"
+    >
+      <opportunity-actions
+        :opportunity="opportunity"
+        @opportunity-refresh="getOpportunity(id)"
+      ></opportunity-actions>
+    </v-flex>
+
+    <v-flex
+      v-if="opportunity.employerStatus === 'ACCEPTED'"
+      xs12
+    >
+      <opportunity-interviews
+        :opportunity="opportunity"
+      ></opportunity-interviews>
+    </v-flex>
 
     <v-flex
       xs12 sm7
@@ -114,8 +124,8 @@
   import { mapGetters, mapActions } from 'vuex';
   import OpportunityCover from './OpportunityCover';
   import OpportunityCompanyStats from './OpportunityCompanyStats';
+  import OpportunityStatusLine from './OpportunityStatusLine';
   import OpportunityActions from './OpportunityActions';
-  import OpportunityStatus from './OpportunityStatus';
   import OpportunityInterviews from './OpportunityInterviews';
   import OpportunitySocialMedia from './OpportunitySocialMedia';
   import OpportunityMap from './OpportunityMap';
@@ -129,8 +139,8 @@
     components: {
       OpportunityCover,
       OpportunityCompanyStats,
+      OpportunityStatusLine,
       OpportunityActions,
-      OpportunityStatus,
       OpportunityInterviews,
       OpportunitySocialMedia,
       OpportunityMap,

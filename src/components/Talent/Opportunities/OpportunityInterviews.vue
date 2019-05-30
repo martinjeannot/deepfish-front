@@ -41,7 +41,7 @@
         </v-card-text>
         <v-card-actions>
           <v-flex xs12 class="text-xs-center">
-            <v-btn flat color="success" :loading="loading" :disabled="loading"
+            <v-btn color="success" :loading="loading" :disabled="loading"
                    @click="selectedInterview = interview; confirmationDialog = true">
               accepter
             </v-btn>

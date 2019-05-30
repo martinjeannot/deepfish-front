@@ -7,8 +7,8 @@
           class="text-xs-center"
         >
           <v-flex
-            xs12 sm6
-            class="pb-3"
+            xs12 sm6 md3
+            :class="[{'pb-3': $vuetify.breakpoint.smAndDown}]"
             :style="[$vuetify.breakpoint.xsOnly ? {paddingLeft: '45px'} : '']"
           >
             <v-btn
@@ -33,8 +33,8 @@
             </v-tooltip>
           </v-flex>
           <v-flex
-            xs12 sm6
-            class="pb-3"
+            xs12 sm6 md3
+            :class="[{'pb-3': $vuetify.breakpoint.smAndDown}]"
           >
             <v-btn
               color="primary"
@@ -44,7 +44,7 @@
             </v-btn>
           </v-flex>
           <v-flex
-            xs12 sm6
+            xs12 sm6 md3
             :class="[{'pb-3': $vuetify.breakpoint.xsOnly}]"
             :style="[$vuetify.breakpoint.xsOnly ? {paddingLeft: '45px'} : '']"
           >
@@ -68,7 +68,7 @@
               <span>Refus visible uniquement par Deepfish, tes raisons de refus améliorent le matching</span>
             </v-tooltip>
           </v-flex>
-          <v-flex xs12 sm6>
+          <v-flex xs12 sm6 md3>
             <v-btn
               color="error"
               @click="deactivationDialog = true"
