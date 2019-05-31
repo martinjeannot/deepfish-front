@@ -100,7 +100,7 @@
       :class="[{'pb-3': $vuetify.breakpoint.xsOnly}, {'pr-3': $vuetify.breakpoint.smAndUp}]"
     >
       <v-img
-        :src="opportunity.company.topImageUrl"
+        :src="opportunity.company.bottomImageUrl"
         height="100%"
       ></v-img>
     </v-flex>
