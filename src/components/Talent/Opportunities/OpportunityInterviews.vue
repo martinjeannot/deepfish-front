@@ -10,7 +10,7 @@
     <v-flex xs12 md4
             v-for="(interview, index) in pendingInterviews"
             :key="interview.id"
-            :class="['pb-3', {'px-1': $vuetify.breakpoint.mdAndUp}]">
+            :class="['pb-3', {'pl-2': $vuetify.breakpoint.mdAndUp && index !== 0}, {'pr-2': $vuetify.breakpoint.mdAndUp && index !== pendingInterviews.length - 1}]">
       <v-flex xs12 v-if="$vuetify.breakpoint.smAndDown && index !== 0" class="text-xs-center pb-3">
         <h3>ou</h3>
       </v-flex>
@@ -41,7 +41,7 @@
         </v-card-text>
         <v-card-actions>
           <v-flex xs12 class="text-xs-center">
-            <v-btn flat color="success" :loading="loading" :disabled="loading"
+            <v-btn color="success" :loading="loading" :disabled="loading"
                    @click="selectedInterview = interview; confirmationDialog = true">
               accepter
             </v-btn>
@@ -98,7 +98,13 @@
         <v-card-actions>
           <v-flex xs12 class="text-xs-right">
             <v-btn flat color="primary" @click="confirmationDialog = false" :disabled="loading">annuler</v-btn>
-            <v-btn color="primary" @click="acceptInterview(selectedInterview)" :loading="loading">confirmer</v-btn>
+            <v-btn color="primary"
+                   :disabled="!isUserTalent"
+                   :loading="loading"
+                   @click="acceptInterview(selectedInterview)"
+            >
+              Confirmer
+            </v-btn>
           </v-flex>
         </v-card-actions>
       </v-card>
@@ -125,6 +131,7 @@
     computed: {
       ...mapGetters([
         'api',
+        'isUserTalent',
         'menuBadges',
         'interviewFormat',
       ]),

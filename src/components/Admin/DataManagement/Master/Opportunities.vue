@@ -71,6 +71,9 @@
               <v-btn icon color="primary" :to="{ name: 'AdminDMOpportunity', params: {id: props.item.id} }">
                 <v-icon>visibility</v-icon>
               </v-btn>
+              <v-btn icon color="primary" :to="{ name: 'AdminDMOpportunityView', params: {id: props.item.id} }">
+                <v-icon>pageview</v-icon>
+              </v-btn>
             </td>
           </template>
         </v-data-table>

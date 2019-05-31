@@ -1,224 +1,161 @@
 <template>
-  <v-layout v-if="loading">
+  <v-layout v-if="initialLoading">
     <v-flex xs12 class="text-xs-center">
       <v-progress-circular indeterminate color="primary" :size="70"></v-progress-circular>
     </v-flex>
   </v-layout>
-  <v-layout row wrap v-else>
-    <v-flex xs12 sm8 offset-sm2>
-      <v-card class="mb-3">
-        <v-card-title primary-title>
-          <v-flex xs3 lg2>
-            <v-img :src="opportunity.company.logoURL ? opportunity.company.logoURL : 'static/img/placeholder_150.jpg'"
-                   alt="logo"></v-img>
-          </v-flex>
-          <v-flex xs9 lg10 pl-3>
-            <div class="headline">{{ opportunity.company.name }}</div>
-            <div :class="['grey--text', 'text--darken-2', {title: $vuetify.breakpoint.smAndUp}]">
-              {{ opportunity.requirement.name }}
-            </div>
-            <div v-if="opportunity.requirement.status === 'CLOSED'">
-              <v-chip v-html="'L\'offre n\'est plus d\'actualité'" class="text-xs-center pa-2"></v-chip>
-            </div>
-            <div v-else-if="opportunity.talentStatus === 'PENDING'" class="pt-1">
-              <v-chip color="red" outline class="text-xs-center pa-3"
-                      v-html="'En attente d\'une réponse de ta part'"
-              ></v-chip>
-            </div>
-            <div v-else-if="opportunity.talentStatus === 'ACCEPTED'">
-              <v-chip v-html="getLabelFromOpportunityStatus(opportunity.employerStatus)"
-                      :color="getOpportunityStatusColor(opportunity.employerStatus)" class="text-xs-center pa-2">
-              </v-chip>
-            </div>
-            <div v-else-if="opportunity.talentStatus === 'EXPIRED'">
-              <v-chip v-html="'Trop tard, l\'opportunité a expiré'" class="text-xs-center pa-2"></v-chip>
-            </div>
-          </v-flex>
-        </v-card-title>
-      </v-card>
-      <opportunity-interviews :opportunity="opportunity"></opportunity-interviews>
-      <v-card>
-        <v-card-text>
-          <v-flex xs12 class="pb-3" style="white-space: pre-wrap" v-html="opportunity.company.description"
-                  v-linkified></v-flex>
-          <v-flex xs12 style="white-space: pre-wrap" v-html="opportunity.pitch" v-linkified></v-flex>
-        </v-card-text>
-        <v-card-actions v-if="opportunity.talentStatus === 'PENDING'">
-          <v-layout row wrap class="text-xs-center" v-if="opportunity.requirement.status === 'OPEN'">
-            <v-flex
-              xs12
-              sm6
-              :class="['pb-3']"
-              style="padding-left: 45px"
-            >
-              <v-btn color="success" @click="accept(opportunity)">Accepter</v-btn>
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon
-                    large
-                    v-on="on"
-                    class="pl-2"
-                    style="margin-bottom: -10px"
-                  >
-                    help
-                  </v-icon>
-                </template>
-                <span>Accepter l'opportunité et poursuivre le processus de recrutement</span>
-              </v-tooltip>
-            </v-flex>
-            <v-flex
-              xs12
-              sm6
-              :class="['pb-3']"
-            >
-              <v-btn color="primary" @click="questionDialog = true">Poser une question</v-btn>
-            </v-flex>
-            <v-flex
-              xs12
-              sm6
-              :class="['pb-3']"
-              style="padding-left: 45px"
-            >
-              <v-btn color="warning" @click="declinationDialog = true">Refuser</v-btn>
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon
-                    large
-                    v-on="on"
-                    class="pl-2"
-                    style="margin-bottom: -10px"
-                  >
-                    help
-                  </v-icon>
-                </template>
-                <span>Refus visible uniquement par Deepfish, tes raisons de refus améliorent le matching</span>
-              </v-tooltip>
-            </v-flex>
-            <v-flex
-              xs12
-              sm6
-              :class="['pb-3']"
-            >
-              <v-btn color="error" @click="bulkDeclinationDialog = true">Se désactiver</v-btn>
-            </v-flex>
-          </v-layout>
-        </v-card-actions>
-      </v-card>
+  <v-layout v-else wrap>
+    <v-flex xs12 v-if="alertComponent">
+      <base-alert
+        :type="alertComponent.type"
+        :message="alertComponent.message"
+        @dismissed="onAlertComponentDismissed"
+      ></base-alert>
     </v-flex>
 
-    <v-dialog v-model="questionDialog" max-width="650px">
+    <v-flex xs12 class="pb-3">
+      <opportunity-cover
+        :opportunity="opportunity"
+      ></opportunity-cover>
+    </v-flex>
+
+    <v-flex
+      xs12 sm5
+      :class="['pb-3', {'pr-3': $vuetify.breakpoint.smAndUp}]"
+    >
+      <v-img
+        :src="opportunity.company.topImageUrl"
+        height="100%"
+        max-height="362px"
+      ></v-img>
+    </v-flex>
+    <v-flex
+      xs12 sm7
+      class="pb-3"
+    >
+      <v-flex xs12 class="pb-3">
+        <opportunity-company-stats
+          :company="opportunity.company"
+        ></opportunity-company-stats>
+      </v-flex>
+      <v-flex xs12>
+        <opportunity-status-line
+          :opportunity="opportunity"
+        ></opportunity-status-line>
+      </v-flex>
+    </v-flex>
+
+    <v-flex
+      v-if="opportunity.talentStatus === 'PENDING'"
+      xs12
+      class="pb-3"
+    >
+      <opportunity-actions
+        :opportunity="opportunity"
+        @opportunity-refresh="getOpportunity(id)"
+      ></opportunity-actions>
+    </v-flex>
+
+    <v-flex
+      v-if="opportunity.employerStatus === 'ACCEPTED'"
+      xs12
+    >
+      <opportunity-interviews
+        :opportunity="opportunity"
+      ></opportunity-interviews>
+    </v-flex>
+
+    <v-flex
+      xs12 sm7
+      :class="['pb-3', {'pr-3': $vuetify.breakpoint.smAndUp}]"
+    >
       <v-card>
-        <v-card-title>
-          <v-flex xs12 class="title">
-            Pour faire le bon choix
-          </v-flex>
-        </v-card-title>
-        <v-form v-model="questionFormValid" @submit.prevent="askQuestion(opportunity)">
-          <v-card-text>
-            <v-flex xs12 class="subheading grey--text text--darken-2">
-              Des questions à propos de l'opportunité ou de l'entreprise ? On te répond au plus vite !
-              <v-textarea
-                v-model="questionContent"
-                :rules="[rules.required]"
-              ></v-textarea>
-            </v-flex>
-          </v-card-text>
-          <v-card-actions>
-            <v-flex xs12 class="text-xs-right">
-              <v-btn flat color="primary" @click="questionDialog = false">Annuler</v-btn>
-              <v-btn type="submit" color="primary" :disabled="!questionFormValid" :loading="loading">
-                Envoyer
-              </v-btn>
-            </v-flex>
-          </v-card-actions>
-        </v-form>
+        <v-card-text>
+          <div
+            v-html="opportunity.company.description"
+            v-linkified
+            style="white-space: pre-wrap"
+          ></div>
+        </v-card-text>
       </v-card>
-    </v-dialog>
+    </v-flex>
+    <v-flex
+      xs12 sm5
+      class="pb-3"
+    >
+      <v-flex xs12 class="pb-3">
+        <opportunity-social-media
+          :company="opportunity.company"
+        ></opportunity-social-media>
+      </v-flex>
+      <v-flex xs12 style="height: calc(100% - 96px)">
+        <opportunity-map
+          :opportunity="opportunity"
+        ></opportunity-map>
+      </v-flex>
+    </v-flex>
 
-    <v-dialog v-model="declinationDialog" max-width="650px">
-      <v-container style="background-color: white">
-        <v-form v-model="declinationValid" @submit.prevent="decline(opportunity)">
-          <v-layout row wrap>
-            <v-flex xs12>
-              <h4>Explique-nous la raison de ton refus en quelques mots</h4>
-            </v-flex>
-            <v-flex xs12>
-              <v-textarea v-model="opportunity.talentDeclinationReason"
-                          multi-line rows="7" :rules="[rules.required]"></v-textarea>
-            </v-flex>
-            <v-flex xs12 class="text-xs-right">
-              <v-btn type="submit" fab small color="primary" :disabled="!declinationValid">
-                <v-icon>done</v-icon>
-              </v-btn>
-            </v-flex>
-          </v-layout>
-        </v-form>
-      </v-container>
-    </v-dialog>
-
-    <v-dialog v-model="bulkDeclinationDialog" max-width="650px">
-      <v-container style="background-color: white">
-        <v-form v-model="bulkDeclinationValid" @submit.prevent="declineInBulk(opportunity)">
-          <v-layout row wrap>
-            <v-flex xs1>
-              <v-icon>warning</v-icon>
-            </v-flex>
-            <v-flex xs11>
-              <h3>
-                Attention, cette action entraînera le refus de toutes tes
-                opportunités en attente et la désactivation de ton profil
-              </h3>
-            </v-flex>
-            <v-flex xs12 class="mt-3">
-              <h4>Explique-nous la raison de ton refus en quelques mots</h4>
-            </v-flex>
-            <v-flex xs12>
-              <v-textarea v-model="bulkDeclinationReason" multi-line rows="7" :rules="[rules.required]"></v-textarea>
-            </v-flex>
-            <v-flex xs12 class="text-xs-center">
-              <v-btn type="submit" flat color="error" :disabled="!bulkDeclinationValid">Je confirme cette action</v-btn>
-            </v-flex>
-          </v-layout>
-        </v-form>
-      </v-container>
-    </v-dialog>
+    <v-flex
+      xs12 sm6
+      :class="[{'pb-3': $vuetify.breakpoint.xsOnly}, {'pr-3': $vuetify.breakpoint.smAndUp}]"
+    >
+      <v-img
+        :src="opportunity.company.topImageUrl"
+        height="100%"
+      ></v-img>
+    </v-flex>
+    <v-flex
+      xs12 sm6
+    >
+      <v-card style="height: 100%">
+        <v-card-text>
+          <div
+            v-html="opportunity.pitch"
+            v-linkified
+            style="white-space: pre-wrap"
+          ></div>
+        </v-card-text>
+      </v-card>
+    </v-flex>
   </v-layout>
 </template>
 
 <script>
-  import { mapGetters, mapState, mapActions } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
+  import OpportunityCover from './OpportunityCover';
+  import OpportunityCompanyStats from './OpportunityCompanyStats';
+  import OpportunityStatusLine from './OpportunityStatusLine';
+  import OpportunityActions from './OpportunityActions';
   import OpportunityInterviews from './OpportunityInterviews';
+  import OpportunitySocialMedia from './OpportunitySocialMedia';
+  import OpportunityMap from './OpportunityMap';
 
   const rules = {
     required: value => !!value || 'This field is required',
   };
 
   export default {
-    name: 'opportunity',
-    components: { OpportunityInterviews },
+    name: 'TalentOpportunity',
+    components: {
+      OpportunityCover,
+      OpportunityCompanyStats,
+      OpportunityStatusLine,
+      OpportunityActions,
+      OpportunityInterviews,
+      OpportunitySocialMedia,
+      OpportunityMap,
+    },
     props: ['id'],
     data: () => ({
       rules,
       opportunity: null,
-      questionDialog: false,
-      questionFormValid: false,
-      questionContent: '',
-      declinationDialog: false,
-      declinationValid: false,
-      bulkDeclinationDialog: false,
-      bulkDeclinationValid: false,
-      bulkDeclinationReason: '',
     }),
     computed: {
       ...mapGetters([
         'api',
+        'initialLoading',
         'loading',
-        'user',
-        'menuBadges',
-      ]),
-      ...mapState([
-        'getOpportunityStatusColor',
-        'getLabelFromOpportunityStatus',
+        'alertComponent',
       ]),
     },
     methods: {
@@ -226,90 +163,31 @@
         'prepareForApiConsumption',
         'clearLoading',
         'showSnackbar',
-        'saveOpportunityData',
+        'setErrorAfterApiConsumption',
+        'onAlertComponentDismissed',
       ]),
-      fetchData() {
-        this.prepareForApiConsumption();
+      getOpportunity(opportunityId) {
         return this
-          .api(`/opportunities/${this.id}?projection=talent`)
+          .api(`/opportunities/${opportunityId}?projection=talent`)
           .then((response) => {
             this.opportunity = response.data;
+            // TODO REMOVE
+            // this.opportunity.company.coverImageUrl = 'https://cdn.welcometothejungle.co/uploads/website_organization/cover_image/wttj_fr/small_fr-certinergy.jpg';
+            // this.opportunity.company.logoURL = 'https://deepfish-static.s3.amazonaws.com/companies/11c74751-4e24-4268-bf7d-01c2927c9e6a/logo.png';
+            // this.opportunity.company.topImageUrl = 'https://cdn.welcometothejungle.co/uploads/image/file/8974/154902/small_b1b03f9b-094b-44b4-8a8e-aa413cee32e7.jpg';
           })
-          .finally(() => this.clearLoading());
-      },
-      accept(opportunity) {
-        const previousState = Object.assign({}, opportunity);
-        opportunity.talentStatus = 'ACCEPTED';
-        return this
-          .saveOpportunity(opportunity, previousState)
-          .then(() => {
-            this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
-            this.$router.push('/talent/opportunities?opportunityAccepted');
-          });
-      },
-      decline(opportunity) {
-        const previousState = Object.assign({}, opportunity);
-        opportunity.talentStatus = 'DECLINED';
-        this.declinationDialog = false;
-        return this
-          .saveOpportunity(opportunity, previousState)
-          .then(() => {
-            this.menuBadges.opportunities = this.menuBadges.opportunities - 1;
-            this.$router.push('/talent/opportunities');
-          });
-      },
-      saveOpportunity(opportunity, previousState) {
-        return this
-          .saveOpportunityData({ opportunity, previousState })
-          .then(() => this.showSnackbar(['Opération terminée avec succès', 'success']))
-          .catch(() => {
-            this.showSnackbar(['Erreur', 'error']);
-            this.fetchData();
-          });
-      },
-      askQuestion(opportunity) {
-        this.prepareForApiConsumption();
-        this.api
-          .post(`/opportunities/${opportunity.id}/ask-question`, {
-            question: this.questionContent,
-          })
-          .then(() => {
-            this.questionDialog = false;
-            this.questionContent = '';
-            this.showSnackbar(['Merci, nous revenons vers toi sous peu', 'success']);
-          })
-          .catch(() => this.showSnackbar(['Erreur', 'error']))
-          .finally(() => this.clearLoading());
-      },
-      declineInBulk() {
-        this.bulkDeclinationDialog = false;
-        this.api
-          .post(`/talents/${this.user.id}/opportunities/bulk-declination`, {
-            bulkDeclinationReason: this.bulkDeclinationReason,
-          })
-          .then(() => {
-            this.menuBadges.opportunities = 0;
-            this.$router.push('/talent/opportunities'); // refresh data
-            this.showSnackbar(['Opération terminée avec succès', 'success']);
-          })
-          .catch(() => {
-            this.fetchData();
-            this.showSnackbar(['Erreur', 'error']);
-          });
+          .catch(() => this.setErrorAfterApiConsumption());
       },
     },
     created() {
-      this
-        .fetchData()
-        .then(() => {
-          if (this.opportunity && this.opportunity.talentStatus === 'EXPIRED') {
-            // redirect to opportunities
-            this.$router.push({ name: 'TalentOpportunities' });
-          }
-        });
+      this.prepareForApiConsumption(true);
+      return this
+        .getOpportunity(this.id)
+        .finally(() => this.clearLoading(true));
     },
   };
 </script>
 
 <style scoped>
+
 </style>

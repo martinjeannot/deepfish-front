@@ -215,6 +215,13 @@ const router = new Router({
       meta: { authRequired: true },
     },
     {
+      path: '/admin/data-management/master/opportunities/:id/view',
+      name: 'AdminDMOpportunityView',
+      component: TalentOpportunity,
+      props: true,
+      meta: { authRequired: true },
+    },
+    {
       path: '/admin/data-management/master/interviews',
       name: 'AdminDMInterviews',
       component: AdminDMInterviews,

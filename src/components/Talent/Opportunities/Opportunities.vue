@@ -1,5 +1,5 @@
 <template>
-  <v-layout v-if="loading">
+  <v-layout v-if="initialLoading">
     <v-flex xs12 class="text-xs-center">
       <v-progress-circular indeterminate color="primary" :size="70"></v-progress-circular>
     </v-flex>
@@ -227,7 +227,7 @@
     computed: {
       ...mapGetters([
         'api',
-        'loading',
+        'initialLoading',
         'alertComponent',
         'user',
         'menuBadges',
@@ -258,7 +258,7 @@
       },
     },
     created() {
-      this.prepareForApiConsumption();
+      this.prepareForApiConsumption(true);
       this.api(`/opportunities?projection=talent-interviews&talent=${this.user.id}&sort=createdAt,desc`)
         .then((response) => {
           this.totalItems = response.data.page.totalElements;
@@ -292,7 +292,7 @@
           this.closedOpportunities = response.data._embedded.opportunities
             .filter(opportunity => opportunity.requirement.status === 'CLOSED');
           // opportunity accepted
-          if (Object.prototype.hasOwnProperty.call(this.$route.query, 'opportunityAccepted')) {
+          if (Object.prototype.hasOwnProperty.call(this.$route.query, 'opportunity-accepted')) {
             if (this.acceptedOpportunities.length === 1) {
               this.qualificationDialog = true;
             } else {
@@ -303,7 +303,7 @@
             }
           }
         })
-        .finally(() => this.clearLoading());
+        .finally(() => this.clearLoading(true));
     },
   };
 </script>
