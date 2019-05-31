@@ -59,7 +59,7 @@
 
       <v-stepper-content step="2">
         <div v-if="opportunity.talentStatus !== 'ACCEPTED'">
-          Si tu acceptes cette opportunité, Deepfish s'assurera une dernière fois du matching et présentera ton profil au recruteur pour validation de sa part
+          Après acceptation de l'opportunité, Deepfish échangera avec toi afin de mettre en avant ton profil pour le recruteur
         </div>
         <div v-else>
           <div v-if="opportunity.employerStatus === null">
@@ -79,7 +79,7 @@
 
       <v-stepper-content step="3">
         <div v-if="opportunity.employerStatus !== 'ACCEPTED'">
-          Si le recruteur valide ton profil, il te proposera des créneaux d'entretiens parmi lesquels tu pourras choisir
+          Après validation de ton profil par le recruteur, tu pourras choisir un créneau d'échange avec lui parmi 3 propositions de sa part
         </div>
         <div v-else>
           Tu peux désormais choisir parmi les créneaux proposés et passer les entretiens avec le recruteur

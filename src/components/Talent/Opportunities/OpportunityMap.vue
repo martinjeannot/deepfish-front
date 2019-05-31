@@ -3,7 +3,7 @@
     <v-card-text>
       <v-layout wrap class="text-xs-center">
         <v-flex xs12 class="caption grey--text text--darken-2">
-          SI&Egrave;GE SOCIAL
+          LIEU DE TRAVAIL
         </v-flex>
         <v-flex xs1 align-self-center class="hidden-sm-and-up">
           <v-icon>location_on</v-icon>
