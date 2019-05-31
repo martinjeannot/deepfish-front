@@ -98,7 +98,13 @@
         <v-card-actions>
           <v-flex xs12 class="text-xs-right">
             <v-btn flat color="primary" @click="confirmationDialog = false" :disabled="loading">annuler</v-btn>
-            <v-btn color="primary" @click="acceptInterview(selectedInterview)" :loading="loading">confirmer</v-btn>
+            <v-btn color="primary"
+                   :disabled="!isUserTalent"
+                   :loading="loading"
+                   @click="acceptInterview(selectedInterview)"
+            >
+              Confirmer
+            </v-btn>
           </v-flex>
         </v-card-actions>
       </v-card>
@@ -125,6 +131,7 @@
     computed: {
       ...mapGetters([
         'api',
+        'isUserTalent',
         'menuBadges',
         'interviewFormat',
       ]),

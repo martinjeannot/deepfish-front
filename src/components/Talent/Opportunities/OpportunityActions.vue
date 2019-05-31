@@ -14,6 +14,7 @@
             <v-btn
               color="success"
               :loading="loading"
+              :disabled="!isUserTalent"
               @click="accept(opportunity)"
             >
               Accepter
@@ -100,7 +101,10 @@
           <v-card-actions>
             <v-flex xs12 class="text-xs-right">
               <v-btn flat color="primary" @click="questionDialog = false">Annuler</v-btn>
-              <v-btn type="submit" color="primary" :disabled="!questionFormValid" :loading="loading">
+              <v-btn type="submit" color="primary"
+                     :disabled="!questionFormValid || !isUserTalent"
+                     :loading="loading"
+              >
                 Envoyer
               </v-btn>
             </v-flex>
@@ -130,7 +134,10 @@
           <v-card-actions>
             <v-flex xs12 class="text-xs-right">
               <v-btn flat color="warning" @click="declinationDialog = false">Annuler</v-btn>
-              <v-btn type="submit" color="warning" :disabled="!declinationFormValid" :loading="loading">
+              <v-btn type="submit" color="warning"
+                     :disabled="!declinationFormValid || !isUserTalent"
+                     :loading="loading"
+              >
                 Refuser
               </v-btn>
             </v-flex>
@@ -162,7 +169,10 @@
           <v-card-actions>
             <v-flex xs12 class="text-xs-right">
               <v-btn flat color="error" @click="deactivationDialog = false">Annuler</v-btn>
-              <v-btn type="submit" color="error" :disabled="!deactivationFormValid" :loading="loading">
+              <v-btn type="submit" color="error"
+                     :disabled="!deactivationFormValid || !isUserTalent"
+                     :loading="loading"
+              >
                 Se désactiver
               </v-btn>
             </v-flex>
@@ -200,6 +210,7 @@
         'api',
         'loading',
         'user',
+        'isUserTalent',
       ]),
     },
     methods: {
