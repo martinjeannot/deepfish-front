@@ -23,8 +23,13 @@
                   {{ requirement.name }}
                 </router-link>
               </h3>
-              <div>Nombre de talents Deepfish contactés pour ce besoin : <span
-                style="font-weight: bold">{{ requirement.opportunitiesCounts.total }}</span></div>
+              <div class="pb-2">
+                Nombre de talents Deepfish contactés pour ce besoin :
+                <span style="font-weight: bold">{{ requirement.opportunitiesCounts.total }}</span>
+              </div>
+              <div class="font-italic">
+                Les profils ayant acceptés votre opportunité mais non encore visibles sur votre espace sont soit en cours de qualification, soit non retenus après qualification
+              </div>
             </v-flex>
             <v-flex xs12 sm6 class="text-xs-center">
               <v-flex xs12 sm6 offset-sm3 lg4 offset-lg4>
