@@ -122,6 +122,7 @@
         'prepareForApiConsumption',
         'clearLoading',
         'showSnackbar',
+        'setSnackbar',
       ]),
       searchRequirements(search) {
         this.prepareForApiConsumption();
@@ -150,10 +151,20 @@
         this.prepareForApiConsumption();
         return this.api
           .post('/opportunities', opportunity)
-          .then((/* response */) => {
+          .then((response) => {
             this.dialog = false;
             this.confirmationDialog = false;
-            this.showSnackbar(['Opportunity sent', 'success']);
+            this.setSnackbar({
+              show: true,
+              text: 'Opportunity sent',
+              color: 'success',
+              button: {
+                color: 'black',
+                target: '_blank',
+                text: 'show',
+                to: { name: 'AdminDMOpportunityView', params: { id: response.data.id } },
+              },
+            });
             this.$emit('opportunity-sent');
           })
           .catch(() => this.showSnackbar(['Error', 'error']))

@@ -59,6 +59,15 @@
       :timeout="3500"
     >
       {{ snackbar.text }}
+      <v-btn
+        v-if="snackbar.button"
+        :color="snackbar.button.color"
+        flat
+        :target="snackbar.button.target"
+        :to="snackbar.button.to"
+      >
+        {{ snackbar.button.text }}
+      </v-btn>
     </v-snackbar>
     <v-footer app dark height="auto">
       <v-card flat tile width="inherit" class="text-xs-center" color="#3A3A3A">
