@@ -21,6 +21,16 @@
           @change="onFixedSalaryChange"
         ></v-text-field>
       </v-flex>
+      <v-flex xs12>
+        Es-tu en recherhe de stage ou d'alternance ?
+      </v-flex>
+      <v-flex xs12>
+        <v-checkbox
+          v-model="conditions.internship"
+          label="Stage / Alternance"
+          @change="saveConditions"
+        ></v-checkbox>
+      </v-flex>
       <v-flex xs12 class="mb-2">
         <span
           class="subheading"
