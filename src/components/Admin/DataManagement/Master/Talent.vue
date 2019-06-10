@@ -259,9 +259,17 @@
                           </v-chip>
                         </v-flex>
                         <v-flex xs12>
-                          <h3>Industry types</h3>
+                          <h3>Industry types (expertise being sold)</h3>
                           <v-chip v-for="industryType in talent.conditions.industryTypes" :key="industryType.id">
                             {{ industryType.l10nKey }}
+                          </v-chip>
+                        </v-flex>
+                        <v-flex xs12>
+                          <h3>Client industry types (who is it sold to)</h3>
+                          <v-chip v-for="clientIndustryType in talent.conditions.clientIndustryTypes"
+                                  :key="clientIndustryType.id"
+                          >
+                            {{ clientIndustryType.l10nKey }}
                           </v-chip>
                         </v-flex>
                         <v-flex xs12>
