@@ -90,6 +90,13 @@
                     </p>
                   </v-flex>
                   <v-flex xs12>
+                    <v-checkbox
+                      v-model="talent.qualification.hasBeenQualified"
+                      label="Talent qualifié"
+                      @change="saveQualification"
+                    ></v-checkbox>
+                  </v-flex>
+                  <v-flex xs12>
                     <p>
                       <v-icon>email</v-icon>
                       {{ talent.email }}
@@ -386,8 +393,12 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12>
-                          <v-textarea label="Notes" v-model="talent.notes" prepend-inner-icon="lock"
-                                      rows="25"></v-textarea>
+                          <v-textarea
+                            v-model="talent.notes"
+                            label="Notes"
+                            prepend-inner-icon="lock"
+                            rows="25"
+                          ></v-textarea>
                           <div class="text-xs-right">
                             <v-btn icon fab small color="primary" @click="saveProfile">
                               <v-icon>done</v-icon>
