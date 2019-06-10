@@ -196,7 +196,6 @@
         }
       },
       onInternshipChange() {
-        this.fixedSalary = 0;
         this.$emit('update:fixedSalaryValid', this.conditions.internship);
         return this.saveConditions();
       },
