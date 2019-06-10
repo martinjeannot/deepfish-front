@@ -29,7 +29,7 @@
         <v-checkbox
           v-model="conditions.internship"
           label="Stage / Alternance"
-          @change="fixedSalary = 0; saveConditions"
+          @change="onInternshipChange"
         ></v-checkbox>
       </v-flex>
       <v-flex xs12 class="mb-2">
@@ -195,6 +195,11 @@
           this.saveConditions();
         }
       },
+      onInternshipChange() {
+        this.fixedSalary = 0;
+        this.$emit('update:fixedSalaryValid', this.conditions.internship);
+        return this.saveConditions();
+      },
       saveConditions() {
         const conditions = Object.assign({}, this.conditions);
         Object.entries(this.conditions).forEach(([key, value]) => {
@@ -219,7 +224,7 @@
                  fixedLocationResponse,
                ]) => {
           this.conditions = conditionsResponse.data;
-          if (!this.conditions.fixedSalary) {
+          if (!this.conditions.fixedSalary && !this.conditions.internship) {
             this.$emit('update:fixedSalaryValid', false);
           } else {
             this.$emit('update:fixedSalaryValid', true);
