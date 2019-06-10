@@ -16,7 +16,8 @@
           ref="fixedSalaryInput"
           label="Montant annuel hors primes"
           prefix="€"
-          :rules="[rules.required, rules.positive, rules.minValue]"
+          :disabled="conditions.internship"
+          :rules="conditions.internship ? [] : [rules.required, rules.positive, rules.minValue]"
           @input="$emit('update:fixedSalaryValid', $refs.fixedSalaryInput.valid)"
           @change="onFixedSalaryChange"
         ></v-text-field>
@@ -28,7 +29,7 @@
         <v-checkbox
           v-model="conditions.internship"
           label="Stage / Alternance"
-          @change="saveConditions"
+          @change="fixedSalary = 0; saveConditions"
         ></v-checkbox>
       </v-flex>
       <v-flex xs12 class="mb-2">
