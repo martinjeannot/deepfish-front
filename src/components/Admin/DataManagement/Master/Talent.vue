@@ -90,6 +90,13 @@
                     </p>
                   </v-flex>
                   <v-flex xs12>
+                    <v-checkbox
+                      v-model="talent.qualification.hasBeenQualified"
+                      label="Talent qualifié"
+                      @change="saveQualification"
+                    ></v-checkbox>
+                  </v-flex>
+                  <v-flex xs12>
                     <p>
                       <v-icon>email</v-icon>
                       {{ talent.email }}
@@ -216,11 +223,19 @@
                   <v-tab-item>
                     <v-container>
                       <v-layout row wrap>
-                        <v-flex xs6>
+                        <v-flex xs4>
                           <h3>Fixed salary</h3>
                           {{ talent.conditions.fixedSalary }} €
                         </v-flex>
-                        <v-flex xs6>
+                        <v-flex xs4>
+                          <v-chip
+                            v-if="talent.conditions.internship"
+                            color="warning"
+                          >
+                            Internship
+                          </v-chip>
+                        </v-flex>
+                        <v-flex xs4>
                           <h3>Can start on</h3>
                           {{ talent.conditions.canStartOn | formatDate('LL') }}
                         </v-flex>
@@ -244,9 +259,17 @@
                           </v-chip>
                         </v-flex>
                         <v-flex xs12>
-                          <h3>Industry types</h3>
+                          <h3>Industry types (expertise being sold)</h3>
                           <v-chip v-for="industryType in talent.conditions.industryTypes" :key="industryType.id">
                             {{ industryType.l10nKey }}
+                          </v-chip>
+                        </v-flex>
+                        <v-flex xs12>
+                          <h3>Client industry types (who is it sold to)</h3>
+                          <v-chip v-for="clientIndustryType in talent.conditions.clientIndustryTypes"
+                                  :key="clientIndustryType.id"
+                          >
+                            {{ clientIndustryType.l10nKey }}
                           </v-chip>
                         </v-flex>
                         <v-flex xs12>
@@ -386,8 +409,12 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12>
-                          <v-textarea label="Notes" v-model="talent.notes" prepend-inner-icon="lock"
-                                      rows="25"></v-textarea>
+                          <v-textarea
+                            v-model="talent.notes"
+                            label="Notes"
+                            prepend-inner-icon="lock"
+                            rows="25"
+                          ></v-textarea>
                           <div class="text-xs-right">
                             <v-btn icon fab small color="primary" @click="saveProfile">
                               <v-icon>done</v-icon>

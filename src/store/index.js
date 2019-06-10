@@ -233,6 +233,9 @@ export default new Vuex.Store({
         color,
       });
     },
+    setSnackbar({ commit }, snackbar) {
+      commit(types.SET_SNACKBAR, snackbar);
+    },
     showSuccessSnackbar({ dispatch }) {
       dispatch('showSnackbar', ['OK', 'success']);
     },

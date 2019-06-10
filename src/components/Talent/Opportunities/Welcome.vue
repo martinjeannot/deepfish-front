@@ -12,7 +12,9 @@
     <v-flex xs12 sm4 offset-sm2
             :class="['pb-4', {'pr-2': $vuetify.breakpoint.smAndUp}]"
     >
-      <v-card>
+      <v-card
+        class="height-100"
+      >
         <v-card-text>
           <v-flex xs12 class="text-xs-center" style="margin-top: -36px">
             <v-chip color="indigo darken-2" dark class="font-weight-bold">
@@ -40,7 +42,7 @@
               </template>
               <span>Tu peux mettre à jour tes conditions à tout moment et t'assurer de recevoir les opportunités qui te correspondent le mieux</span>
             </v-tooltip>
-            Tu recevras un email de notification à chaque nouvelle opportunité reçue.
+            Le matching peut prendre plusieurs heures, tu recevras un email de notification à chaque nouvelle opportunité reçue.
           </v-flex>
         </v-card-text>
       </v-card>
@@ -49,7 +51,9 @@
     <v-flex xs12 sm4
             :class="['pb-4', {'pl-2': $vuetify.breakpoint.smAndUp}]"
     >
-      <v-card>
+      <v-card
+        class="height-100"
+      >
         <v-card-text>
           <v-flex xs12 class="text-xs-center" style="margin-top: -36px">
             <v-chip color="indigo darken-2" dark class="font-weight-bold">
@@ -69,7 +73,7 @@
           </v-flex>
           <v-flex xs12 class="text-xs-center grey--text text--darken-2">
             Tu acceptes ou non chaque opportunité en découvrant les détails sur l'entreprise et le poste.
-            Tes raisons de refus, accessibles uniquement à Deepfish, nous permettent d'augmenter la pertinence de tes opportunités futures !
+            Tes raisons de refus, accessibles uniquement à Deepfish, nous permettent d'augmenter la pertinence des opportunités que tu recevras par la suite !
           </v-flex>
         </v-card-text>
       </v-card>
@@ -78,7 +82,9 @@
     <v-flex xs12 sm4 offset-sm2
             :class="['pb-4', {'pr-2': $vuetify.breakpoint.smAndUp}]"
     >
-      <v-card>
+      <v-card
+        class="height-100"
+      >
         <v-card-text>
           <v-flex xs12 class="text-xs-center" style="margin-top: -36px">
             <v-chip color="indigo darken-2" dark class="font-weight-bold">
@@ -107,7 +113,9 @@
     <v-flex xs12 sm4
             :class="['pb-4', {'pl-2': $vuetify.breakpoint.smAndUp}]"
     >
-      <v-card>
+      <v-card
+        class="height-100"
+      >
         <v-card-text>
           <v-flex xs12 class="text-xs-center" style="margin-top: -36px">
             <v-chip color="indigo darken-2" dark class="font-weight-bold">
@@ -173,5 +181,7 @@
 </script>
 
 <style scoped>
-
+  .height-100 {
+    height: 100%;
+  }
 </style>

@@ -6,9 +6,10 @@
         :value="domainObject.id"
         :label="domainObject.l10nKey"
         v-model="domainObjectsModel"
-        :disabled="loading"
+        :disabled="loading || isDisabled(domainObject)"
         v-show="domainObject.enabled"
         :hide-details="true"
+        :class="[{'font-italic': ['c4da34ee-abe5-48f7-833b-3cb24f93dd7a'].includes(domainObject.id)}]"
       ></v-checkbox>
       <div v-if="getDescriptionFromL10nKey(domainObject.l10nKey)" class="pl-4 font-italic">
         {{ getDescriptionFromL10nKey(domainObject.l10nKey) }}
@@ -22,7 +23,12 @@
 
   export default {
     name: 'synchronized-checkbox-list',
-    props: ['conditions', 'title', 'referenceDomainObjects', 'associationResourceName'],
+    props: [
+      'conditions',
+      'title',
+      'referenceDomainObjects',
+      'associationResourceName',
+    ],
     data: () => ({
       loading: false,
     }),
@@ -79,6 +85,16 @@
       },
       clearLoading() {
         this.loading = false;
+      },
+      isDisabled(domainObject) {
+        const clientIndustryTypesWithoutAnyPreference =
+          this.associationResourceName === 'clientIndustryTypes'
+          && domainObject.id !== 'c4da34ee-abe5-48f7-833b-3cb24f93dd7a'
+          && this.conditions.clientIndustryTypes.find(clientIndustryType => clientIndustryType.id === 'c4da34ee-abe5-48f7-833b-3cb24f93dd7a');
+        if (clientIndustryTypesWithoutAnyPreference) {
+          return true;
+        }
+        return false;
       },
       getDescriptionFromL10nKey(l10nKey) {
         switch (l10nKey) {

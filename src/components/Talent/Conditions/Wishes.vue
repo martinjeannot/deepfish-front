@@ -16,10 +16,21 @@
           ref="fixedSalaryInput"
           label="Montant annuel hors primes"
           prefix="€"
-          :rules="[rules.required, rules.positive, rules.minValue]"
+          :disabled="conditions.internship"
+          :rules="conditions.internship ? [] : [rules.required, rules.positive, rules.minValue]"
           @input="$emit('update:fixedSalaryValid', $refs.fixedSalaryInput.valid)"
           @change="onFixedSalaryChange"
         ></v-text-field>
+      </v-flex>
+      <v-flex xs12>
+        Es-tu en recherhe de stage ou d'alternance ?
+      </v-flex>
+      <v-flex xs12>
+        <v-checkbox
+          v-model="conditions.internship"
+          label="Stage / Alternance"
+          @change="onInternshipChange"
+        ></v-checkbox>
       </v-flex>
       <v-flex xs12 class="mb-2">
         <span
@@ -184,6 +195,10 @@
           this.saveConditions();
         }
       },
+      onInternshipChange() {
+        this.$emit('update:fixedSalaryValid', this.conditions.internship);
+        return this.saveConditions();
+      },
       saveConditions() {
         const conditions = Object.assign({}, this.conditions);
         Object.entries(this.conditions).forEach(([key, value]) => {
@@ -208,7 +223,7 @@
                  fixedLocationResponse,
                ]) => {
           this.conditions = conditionsResponse.data;
-          if (!this.conditions.fixedSalary) {
+          if (!this.conditions.fixedSalary && !this.conditions.internship) {
             this.$emit('update:fixedSalaryValid', false);
           } else {
             this.$emit('update:fixedSalaryValid', true);
