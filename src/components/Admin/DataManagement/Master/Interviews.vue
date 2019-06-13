@@ -4,35 +4,51 @@
       <data-management-navigation></data-management-navigation>
     </v-flex>
     <v-flex xs10>
-      <v-card>
-        <v-data-table :items="interviews" :headers="headers" :pagination.sync="pagination" :total-items="totalItems"
-                      :loading="loading">
-          <template slot="items" slot-scope="props">
-            <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
-            <td>
-              <router-link :to="{ name: 'AdminDMCompany', params: {id: props.item.company.id} }">
-                {{ props.item.company.name }}
-              </router-link>
-            </td>
-            <td>
-              <router-link :to="{ name: 'AdminDMTalent', params: {id: props.item.talent.id} }">
-                {{ props.item.talent.firstName }} {{ props.item.talent.lastName.toUpperCase() }}
-              </router-link>
-            </td>
-            <td>
+      <v-flex xs12 class="pb-3">
+        <v-card>
+          <requirement-select
+            v-model="requirement"
+            @input="getInterviews"
+            class="pa-3"
+          ></requirement-select>
+        </v-card>
+      </v-flex>
+      <v-flex xs12>
+        <v-card>
+          <v-data-table
+            :headers="headers"
+            :items="interviews"
+            :loading="loading"
+            :pagination.sync="pagination"
+            :total-items="totalItems"
+          >
+            <template slot="items" slot-scope="props">
+              <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
+              <td>
+                <router-link :to="{ name: 'AdminDMCompany', params: {id: props.item.company.id} }">
+                  {{ props.item.company.name }}
+                </router-link>
+              </td>
+              <td>
+                <router-link :to="{ name: 'AdminDMTalent', params: {id: props.item.talent.id} }">
+                  {{ props.item.talent.firstName }} {{ props.item.talent.lastName.toUpperCase() }}
+                </router-link>
+              </td>
+              <td>
               <span :class="[`${getInterviewStatusColor(props.item.status)}--text`, 'font-weight-bold']">
                 {{ props.item.status }}
               </span>
-            </td>
-            <td>{{ props.item.startAt | formatDate('LLL') }}</td>
-            <td class="justify-center layout">
-              <v-btn icon color="primary" :to="{ name: 'AdminDMInterview', params: {id: props.item.id} }">
-                <v-icon>visibility</v-icon>
-              </v-btn>
-            </td>
-          </template>
-        </v-data-table>
-      </v-card>
+              </td>
+              <td>{{ props.item.startAt | formatDate('LLL') }}</td>
+              <td class="justify-center layout">
+                <v-btn icon color="primary" :to="{ name: 'AdminDMInterview', params: {id: props.item.id} }">
+                  <v-icon>visibility</v-icon>
+                </v-btn>
+              </td>
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-flex>
     </v-flex>
   </v-layout>
 </template>
@@ -40,10 +56,14 @@
 <script>
   import { mapGetters, mapActions, mapState } from 'vuex';
   import DataManagementNavigation from '../Navigation';
+  import RequirementSelect from '../../Utilities/RequirementSelect';
 
   export default {
     name: 'data-management-interviews',
-    components: { DataManagementNavigation },
+    components: {
+      DataManagementNavigation,
+      RequirementSelect,
+    },
     data: () => ({
       interviews: [],
       headers: [
@@ -59,6 +79,7 @@
         sortBy: 'createdAt',
         descending: true,
       },
+      requirement: null,
     }),
     computed: {
       ...mapGetters([
@@ -87,6 +108,9 @@
         this.prepareForApiConsumption();
         const path = '/interviews';
         let queryString = 'projection=admin-item';
+        if (this.requirement) {
+          queryString += `&opportunity.requirement=${this.requirement.id}`;
+        }
         queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';
         this

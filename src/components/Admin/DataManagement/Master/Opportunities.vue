@@ -18,7 +18,7 @@
               :search-input.sync="requirementsSearchInput"
               :loading="loading"
               clearable
-              prepend-icon="assignment"
+              prepend-icon="work"
               hide-details
               @input="search = ''; getOpportunities()"
             >

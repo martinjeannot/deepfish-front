@@ -26,7 +26,7 @@
                 :loading="loading"
                 clearable
                 :rules="[rules.required]"
-                prepend-icon="assignment"
+                prepend-icon="work"
               >
                 <template #selection="{ item }">
                   <div class="input-group__selections__comma">
