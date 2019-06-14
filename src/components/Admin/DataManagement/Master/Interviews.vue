@@ -103,6 +103,9 @@
       ...mapState([
         'getInterviewStatusColor',
       ]),
+      encodedSearchInput() {
+        return encodeURIComponent(this.searchInput);
+      },
     },
     watch: {
       pagination: {
@@ -126,7 +129,7 @@
           queryString += `&opportunity.requirement=${this.requirement.id}`;
         } else if (this.searchInput) {
           path += '/search/findByTalentLastNameContainingOrTalentFirstNameContainingAllIgnoreCase';
-          queryString += `&talentLastName=${this.searchInput}&talentFirstName=${this.searchInput}`;
+          queryString += `&talentLastName=${this.encodedSearchInput}&talentFirstName=${this.encodedSearchInput}`;
         }
         queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';

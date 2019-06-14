@@ -111,6 +111,9 @@
       ...mapState([
         'getOpportunityStatusColor',
       ]),
+      encodedSearchInput() {
+        return encodeURIComponent(this.searchInput);
+      },
     },
     watch: {
       pagination: {
@@ -132,7 +135,7 @@
         let queryString = 'projection=admin-item';
         if (this.searchInput) {
           path += '/search/findByRequirementCompanyNameContainingOrTalentLastNameContainingOrTalentFirstNameContainingAllIgnoreCase';
-          queryString += `&companyName=${this.searchInput}&talentLastName=${this.searchInput}&talentFirstName=${this.searchInput}`;
+          queryString += `&companyName=${this.encodedSearchInput}&talentLastName=${this.encodedSearchInput}&talentFirstName=${this.encodedSearchInput}`;
         } else if (this.requirement) {
           path += '/search/findByRequirementId';
           queryString += `&requirementId=${this.requirement.id}`;
