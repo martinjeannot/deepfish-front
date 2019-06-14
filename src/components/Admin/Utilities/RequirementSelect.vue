@@ -1,4 +1,6 @@
 <template>
+  <!-- FIXME : vuetify autocomplete's item-text filter prevent us from searching through company name OR requirement name -->
+  <!-- See https://github.com/vuetifyjs/vuetify/issues/4497 for potential fix -->
   <v-autocomplete
     v-model="requirement"
     clearable
@@ -55,9 +57,9 @@
       },
     },
     watch: {
-      searchInput(search) {
-        if (search) {
-          return this.searchRequirements(search);
+      searchInput(value) {
+        if (value) {
+          return this.searchRequirements(value);
         }
         return null;
       },
@@ -66,9 +68,10 @@
       ...mapActions([
         'showSnackbar',
       ]),
-      searchRequirements(search) {
+      searchRequirements(searchInput) {
         this.loading = true;
-        return this.api(`/requirements/search/findByStatusAndCompanyNameContainingIgnoreCaseOrderByCompanyNameAsc?projection=default&status=OPEN&companyName=${encodeURIComponent(search)}`)
+        return this
+          .api(`/requirements/search/findByStatusAndCompanyNameContainingIgnoreCaseOrderByCompanyNameAsc?projection=default&status=OPEN&companyName=${encodeURIComponent(searchInput)}`)
           .then((response) => {
             this.requirements = response.data._embedded.requirements;
           })
