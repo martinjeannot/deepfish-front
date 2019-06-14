@@ -23,7 +23,7 @@
         ></v-text-field>
       </v-flex>
       <v-flex xs12>
-        Es-tu en recherhe de stage ou d'alternance ?
+        Es-tu en recherche de stage ou d'alternance ?
       </v-flex>
       <v-flex xs12>
         <v-checkbox
