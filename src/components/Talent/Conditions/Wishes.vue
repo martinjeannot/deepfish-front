@@ -81,7 +81,7 @@
   };
 
   export default {
-    name: 'conditions-wishes',
+    name: 'ConditionsWishes',
     data: () => ({
       loading: false,
       subLoading: false,

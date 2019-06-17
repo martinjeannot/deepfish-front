@@ -125,7 +125,7 @@
   };
 
   export default {
-    name: 'data-management-utms',
+    name: 'DataManagementUtms',
     components: { DataManagementNavigation },
     data: () => ({
       rules,

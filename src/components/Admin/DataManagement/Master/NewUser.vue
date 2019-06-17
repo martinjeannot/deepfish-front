@@ -52,7 +52,7 @@
   };
 
   export default {
-    name: 'data-management-new-user',
+    name: 'DataManagementNewUser',
     components: { DataManagementNavigation },
     data: () => ({
       rules,

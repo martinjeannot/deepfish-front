@@ -252,7 +252,7 @@
   };
 
   export default {
-    name: 'employer-talents',
+    name: 'EmployerTalents',
     data: () => ({
       rules,
       requirements: [],

@@ -113,7 +113,7 @@
 
 <script>
   export default {
-    name: 'employer-pricing',
+    name: 'EmployerPricing',
     data: () => ({}),
   };
 </script>

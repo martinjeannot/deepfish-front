@@ -56,7 +56,7 @@
   import SearchBox from '../../Utilities/SearchBox';
 
   export default {
-    name: 'data-management-requirements',
+    name: 'DataManagementRequirements',
     components: {
       DataManagementNavigation,
       SearchBox,

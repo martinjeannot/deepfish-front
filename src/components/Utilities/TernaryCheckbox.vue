@@ -5,7 +5,7 @@
 
 <script>
   export default {
-    name: 'ternary-checkbox',
+    name: 'TernaryCheckbox',
     props: ['label', 'value', 'unchecked-state-model', 'checked-state-model', 'indeterminate-state-model'],
     data: () => ({
       state: 0,

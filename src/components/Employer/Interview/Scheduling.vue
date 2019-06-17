@@ -121,7 +121,7 @@
   ];
 
   export default {
-    name: 'employer-interview-scheduling',
+    name: 'EmployerInterviewScheduling',
     props: ['talentId', 'opportunityId'],
     data: () => ({
       talent: null,

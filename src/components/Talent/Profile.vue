@@ -122,7 +122,7 @@
 
 
   export default {
-    name: 'talent-profile',
+    name: 'TalentProfile',
     data: () => ({
       valid: false,
       rules,

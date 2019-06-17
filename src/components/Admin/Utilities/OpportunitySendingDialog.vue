@@ -73,7 +73,7 @@
   };
 
   export default {
-    name: 'admin-opportunity-sending-dialog',
+    name: 'AdminOpportunitySendingDialog',
     props: ['value', 'talent'],
     data: () => ({
       rules,

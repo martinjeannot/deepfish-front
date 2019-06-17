@@ -13,7 +13,7 @@
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
-    name: 'upload-zone',
+    name: 'UploadZone',
     props: ['id', 'uri', 'files'],
     data: () => ({}),
     computed: {

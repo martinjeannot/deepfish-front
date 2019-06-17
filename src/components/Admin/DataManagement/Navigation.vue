@@ -45,7 +45,7 @@
 
 <script>
   export default {
-    name: 'data-management-navigation',
+    name: 'DataManagementNavigation',
     data: () => ({
       masterDataItems: [
         { title: 'Talents', icon: 'people', route: { name: 'AdminDMTalents' } },

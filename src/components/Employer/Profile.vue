@@ -66,7 +66,7 @@
   };
 
   export default {
-    name: 'employer-profile',
+    name: 'EmployerProfile',
     data: () => ({
       valid: false,
       rules,

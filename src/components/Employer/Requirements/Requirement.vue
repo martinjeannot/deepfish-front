@@ -83,7 +83,7 @@
   };
 
   export default {
-    name: 'employer-requirement',
+    name: 'EmployerRequirement',
     components: { TypeformAnswers },
     props: ['id'],
     data: () => ({

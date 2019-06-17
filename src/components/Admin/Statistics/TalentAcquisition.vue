@@ -64,7 +64,7 @@
   import StatisticsNavigation from './Navigation';
 
   export default {
-    name: 'statistics-talent-acquisition',
+    name: 'StatisticsTalentAcquisition',
     components: { StatisticsNavigation },
     data: () => ({
       createdAtAfter: moment()

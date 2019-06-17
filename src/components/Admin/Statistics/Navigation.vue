@@ -15,7 +15,7 @@
 
 <script>
   export default {
-    name: 'statistics-navigation',
+    name: 'StatisticsNavigation',
     data: () => ({
       items: [
         { title: 'Opportunities', icon: 'dashboard', route: { name: 'AdminStatisticsOpportunities' } },

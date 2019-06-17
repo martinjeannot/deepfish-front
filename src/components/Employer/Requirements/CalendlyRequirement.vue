@@ -21,7 +21,7 @@
   import { mapGetters } from 'vuex';
 
   export default {
-    name: 'calendly-requirement',
+    name: 'CalendlyRequirement',
     data: () => ({}),
     computed: {
       ...mapGetters([

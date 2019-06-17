@@ -86,7 +86,7 @@
   import DataManagementNavigation from '../Navigation';
 
   export default {
-    name: 'data-management-interview',
+    name: 'DataManagementInterview',
     components: { DataManagementNavigation },
     props: ['id'],
     data: () => ({

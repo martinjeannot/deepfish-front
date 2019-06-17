@@ -71,7 +71,7 @@
   import SearchBox from '../../Utilities/SearchBox';
 
   export default {
-    name: 'data-management-interviews',
+    name: 'DataManagementInterviews',
     components: {
       DataManagementNavigation,
       RequirementSelect,

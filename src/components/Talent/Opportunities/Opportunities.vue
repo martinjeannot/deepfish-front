@@ -213,7 +213,7 @@
   import TalentOpportunitiesWelcome from './Welcome';
 
   export default {
-    name: 'talent-opportunities',
+    name: 'TalentOpportunities',
     components: { TalentOpportunitiesWelcome },
     data: () => ({
       pendingOpportunities: [],

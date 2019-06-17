@@ -38,7 +38,7 @@
   import ConditionsSelfPitch from './Conditions/SelfPitch';
 
   export default {
-    name: 'talent-conditions',
+    name: 'TalentConditions',
     components: {
       ConditionsPosition,
       ConditionsWishes,

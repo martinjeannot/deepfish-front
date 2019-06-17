@@ -248,7 +248,7 @@
   };
 
   export default {
-    name: 'data-management-company',
+    name: 'DataManagementCompany',
     components: { DataManagementNavigation },
     props: ['id'],
     data: () => ({

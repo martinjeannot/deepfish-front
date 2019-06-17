@@ -98,7 +98,7 @@
   };
 
   export default {
-    name: 'sign-in',
+    name: 'SignIn',
     data: () => ({
       rules,
       activeTabIndex: 0,
