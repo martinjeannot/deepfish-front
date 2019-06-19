@@ -56,70 +56,81 @@
                   </span>
                 </v-flex>
 
-                <v-flex xs4 class="pr-2">
-                  <v-menu
-                    v-model="datePickerMenu"
-                    :close-on-content-click="false"
-                    full-width
-                    max-width="290"
-                  >
-                    <template #activator="{ on }">
+                <v-form v-model="interviewDetailsFormValid" @submit.prevent="saveInterview(interview)">
+                  <v-layout wrap>
+                    <v-flex xs4 class="pr-2">
+                      <v-menu
+                        v-model="datePickerMenu"
+                        :close-on-content-click="false"
+                        full-width
+                        max-width="290"
+                      >
+                        <template #activator="{ on }">
+                          <v-text-field
+                            :value="startAtDate"
+                            :label="datePickerLabel"
+                            prepend-icon="event"
+                            readonly
+                            v-on="on"
+                            :rules="[rules.required]"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          v-model="startAtDate"
+                          @change="datePickerMenu = false"
+                        ></v-date-picker>
+                      </v-menu>
+                      <v-select
+                        v-model="startAtTime"
+                        :items="times"
+                        label="Time"
+                        prepend-icon="access_time"
+                        :rules="[rules.required]"
+                      ></v-select>
+                    </v-flex>
+                    <v-flex xs4 class="px-2">
+                      <v-select
+                        v-model="interview.format"
+                        :items="interviewFormats"
+                        label="Format"
+                        :rules="[rules.required]"
+                      ></v-select>
+                      <v-select
+                        v-model="duration"
+                        :items="interviewDurations"
+                        label="Duration"
+                        prepend-icon="timer"
+                        :rules="[rules.required]"
+                      ></v-select>
+                    </v-flex>
+                    <v-flex xs4 class="pl-2">
                       <v-text-field
-                        :value="startAtDate"
-                        :label="datePickerLabel"
-                        prepend-icon="event"
-                        readonly
-                        v-on="on"
+                        v-if="interview.format === 'PHONE'"
+                        v-model="interview.location"
+                        label="Location"
+                        :prepend-icon="locationIcon"
+                        :rules="[rules.required]"
                       ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      v-model="startAtDate"
-                      @change="datePickerMenu = false"
-                    ></v-date-picker>
-                  </v-menu>
-                  <v-select
-                    v-model="startAtTime"
-                    :items="times"
-                    label="Time"
-                    prepend-icon="access_time"
-                  ></v-select>
-                </v-flex>
-                <v-flex xs4 class="px-2">
-                  <v-select
-                    v-model="interview.format"
-                    :items="interviewFormats"
-                    label="Format"
-                  ></v-select>
-                  <v-select
-                    v-model="duration"
-                    :items="interviewDurations"
-                    label="Duration"
-                    prepend-icon="timer"
-                  ></v-select>
-                </v-flex>
-                <v-flex xs4 class="pl-2">
-                  <v-text-field
-                    v-if="interview.format === 'PHONE'"
-                    v-model="interview.location"
-                    label="Location"
-                    :prepend-icon="locationIcon"
-                  ></v-text-field>
-                  <v-textarea
-                    v-else
-                    v-model="interview.location"
-                    label="Location"
-                    :prepend-icon="locationIcon"
-                  ></v-textarea>
-                </v-flex>
-
-                <v-flex xs12 class="text-xs-center">
-                  <v-btn
-                    color="primary"
-                    @click="saveInterview(interview)"
-                  >
-                    Save
-                  </v-btn>
-                </v-flex>
+                      <v-textarea
+                        v-else
+                        v-model="interview.location"
+                        label="Location"
+                        :prepend-icon="locationIcon"
+                        :rules="[rules.required]"
+                      ></v-textarea>
+                    </v-flex>
+                    <v-flex xs12 class="text-xs-center">
+                      <v-btn
+                        type="submit"
+                        color="primary"
+                        :disabled="!interviewDetailsFormValid"
+                        :loading="loading"
+                      >
+                        Save
+                      </v-btn>
+                    </v-flex>
+                  </v-layout>
+                </v-form>
               </v-layout>
             </v-card-text>
           </v-card>
@@ -134,6 +145,10 @@
   import { mapGetters, mapActions, mapState } from 'vuex';
   import DataManagementNavigation from '../Navigation';
 
+  const rules = {
+    required: value => !!value || 'This field is required',
+  };
+
   const interviewDurations = [
     { text: '30 min', value: 30 },
     { text: '1h', value: 60 },
@@ -145,8 +160,10 @@
     components: { DataManagementNavigation },
     props: ['id'],
     data: () => ({
+      rules,
       interviewDurations,
       interview: null,
+      interviewDetailsFormValid: false,
       datePickerDateFormat: 'YYYY-MM-DD',
       datePickerMenu: false,
       cachedDuration: 0,
