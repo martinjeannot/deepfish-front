@@ -38,6 +38,13 @@
                   <span :class="[`${getInterviewStatusColor(interview.status)}--text`, 'font-weight-bold']">
                     {{ interview.status }}
                   </span>
+                  <v-btn
+                    color="error"
+                    :disabled="interview.status === 'CANCELLED'"
+                    @click="cancellationDialog = true"
+                  >
+                    Cancel
+                  </v-btn>
                 </v-flex>
                 <v-flex xs6 class="text-xs-right pr-2 pb-3">
                   Employer response :
@@ -57,7 +64,7 @@
                 </v-flex>
 
                 <v-flex xs12>
-                  <v-form v-model="interviewDetailsFormValid" @submit.prevent="saveInterview(interview)">
+                  <v-form v-model="detailsFormValid" @submit.prevent="saveInterview(interview)">
                     <v-layout wrap>
                       <v-flex xs4 class="pr-2">
                         <v-menu
@@ -124,7 +131,7 @@
                         <v-btn
                           type="submit"
                           color="primary"
-                          :disabled="!interviewDetailsFormValid"
+                          :disabled="!detailsFormValid"
                           :loading="loading"
                         >
                           Save
@@ -136,6 +143,41 @@
               </v-layout>
             </v-card-text>
           </v-card>
+
+          <v-dialog v-model="cancellationDialog" maxWidth="650px">
+            <v-card>
+              <v-card-title>
+                <v-flex xs12 class="title">
+                  Cancel this interview ?
+                </v-flex>
+              </v-card-title>
+              <v-form v-model="cancellationFormValid" @submit.prevent="cancelInterview(interview, cancellationSide)">
+                <v-card-text>
+                  <v-flex xs12 class="subheading grey--text text--darken-2">
+                    Which side could not make it on schedule ?
+                    <v-select
+                      v-model="cancellationSide"
+                      :items="['TALENT', 'EMPLOYER']"
+                      :rules="[rules.required]"
+                    ></v-select>
+                  </v-flex>
+                </v-card-text>
+                <v-card-actions>
+                  <v-flex xs12 class="text-xs-right">
+                    <v-btn
+                      type="submit"
+                      color="error"
+                      :disabled="!cancellationFormValid"
+                      flat
+                      :loading="loading"
+                    >
+                      Cancel
+                    </v-btn>
+                  </v-flex>
+                </v-card-actions>
+              </v-form>
+            </v-card>
+          </v-dialog>
         </v-flex>
       </v-layout>
     </v-flex>
@@ -165,10 +207,13 @@
       rules,
       interviewDurations,
       interview: null,
-      interviewDetailsFormValid: false,
+      detailsFormValid: false,
       datePickerDateFormat: 'YYYY-MM-DD',
       datePickerMenu: false,
       cachedDuration: 0,
+      cancellationDialog: false,
+      cancellationFormValid: false,
+      cancellationSide: '',
     }),
     computed: {
       ...mapGetters([
@@ -265,6 +310,36 @@
         'saveInterviewData',
         'showSnackbar',
       ]),
+      getInterview(interviewId) {
+        return this.api(`/interviews/${interviewId}?projection=admin`);
+      },
+      cancelInterview(interview, cancellationSide) {
+        this.prepareForApiConsumption();
+        const previousState = Object.assign({}, interview);
+        switch (cancellationSide) {
+          case 'TALENT':
+            interview.talentResponseStatus = 'DECLINED';
+            break;
+          case 'EMPLOYER':
+            interview.employerResponseStatus = 'DECLINED';
+            break;
+          default:
+            return null;
+        }
+        return this
+          .saveInterviewData({ interview, previousState })
+          .then(() => {
+            this.cancellationDialog = false;
+            this.showSnackbar(['Success', 'success']);
+          })
+          .catch(() => this.showSnackbar(['Error', 'error']))
+          .then(() => this.getInterview(this.id))
+          .then((response) => {
+            this.interview = response.data;
+          })
+          .catch(() => this.setErrorAfterApiConsumption())
+          .finally(() => this.clearLoading());
+      },
       saveInterview(interview) {
         this.prepareForApiConsumption();
         return this
@@ -276,8 +351,8 @@
     },
     created() {
       this.prepareForApiConsumption(true);
-      this
-        .api(`/interviews/${this.id}?projection=admin`)
+      return this
+        .getInterview(this.id)
         .then((response) => {
           this.interview = response.data;
         })
