@@ -1,5 +1,6 @@
 <template>
   <!-- FIXME : vuetify autocomplete's item-text filter prevent us from searching through company name OR requirement name -->
+  <!-- FIXME solution : use a custom filer function -->
   <!-- See https://github.com/vuetifyjs/vuetify/issues/4497 for potential fix -->
   <v-autocomplete
     v-model="requirement"
