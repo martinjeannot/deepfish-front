@@ -27,6 +27,7 @@
 </template>
 
 <script>
+  import { debounce } from 'lodash';
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
@@ -55,7 +56,7 @@
     watch: {
       searchInput(value) {
         if (value && value.length >= 3) {
-          return this.searchTalents(value);
+          return this.debouncedSearchTalents(value);
         }
         return null;
       },
@@ -83,6 +84,9 @@
         return lastName.indexOf(lowerCaseQueryText) > -1
           || firstName.indexOf(lowerCaseQueryText) > -1;
       },
+    },
+    created() {
+      this.debouncedSearchTalents = debounce(this.searchTalents, 600);
     },
   };
 </script>
