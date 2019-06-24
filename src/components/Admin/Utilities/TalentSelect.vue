@@ -3,12 +3,12 @@
     v-model="talent"
     clearable
     :filter="fullNameFilter"
-    hide-details
     :items="talents"
     label="Talent"
     :loading="loading"
     prepend-icon="people"
     return-object
+    :rules="rules"
     :search-input.sync="searchInput"
   >
     <template #selection="{ item }">
@@ -34,6 +34,7 @@
     name: 'TalentSelect',
     props: [
       'value',
+      'rules',
     ],
     data: () => ({
       talents: [],

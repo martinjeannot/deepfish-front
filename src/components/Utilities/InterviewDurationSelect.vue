@@ -4,6 +4,7 @@
     :items="durations"
     label="Duration"
     prepend-icon="timer"
+    :rules="rules"
   ></v-select>
 </template>
 
@@ -12,6 +13,7 @@
     name: 'InterviewDurationSelect',
     props: [
       'value',
+      'rules',
     ],
     data: () => ({
       durations: [

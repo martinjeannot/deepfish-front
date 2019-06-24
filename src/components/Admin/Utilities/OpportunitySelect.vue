@@ -3,13 +3,13 @@
     v-model="opportunity"
     clearable
     :disabled="!talent"
-    hide-details
     item-text="company.name"
     :items="opportunities"
     label="Opportunity"
     :loading="loading"
     prepend-icon="assignment"
     return-object
+    :rules="rules"
     :search-input.sync="searchInput"
   ></v-autocomplete>
 </template>
@@ -23,6 +23,7 @@
     props: [
       'value',
       'talent',
+      'rules',
     ],
     data: () => ({
       opportunities: [],

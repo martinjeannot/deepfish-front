@@ -4,6 +4,7 @@
     :items="times"
     :label="label"
     prepend-icon="access_time"
+    :rules="rules"
   ></v-select>
 </template>
 
@@ -13,6 +14,7 @@
     props: [
       'value',
       'label',
+      'rules',
     ],
     data: () => ({
       startHour: 8,

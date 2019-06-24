@@ -3,6 +3,7 @@
     v-model="format"
     :items="formats"
     label="Format"
+    :rules="rules"
   ></v-select>
 </template>
 
@@ -11,6 +12,7 @@
     name: 'InterviewFormatSelect',
     props: [
       'value',
+      'rules',
     ],
     data: () => ({
       formats: [

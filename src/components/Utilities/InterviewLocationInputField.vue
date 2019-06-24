@@ -4,12 +4,14 @@
     v-model="location"
     label="Phone number"
     :prepend-icon="locationIcon"
+    :rules="rules"
   ></v-text-field>
   <v-textarea
     v-else
     v-model="location"
     label="Location"
     :prepend-icon="locationIcon"
+    :rules="rules"
   ></v-textarea>
 </template>
 
@@ -19,6 +21,7 @@
     props: [
       'value',
       'format',
+      'rules',
     ],
     data: () => ({}),
     computed: {

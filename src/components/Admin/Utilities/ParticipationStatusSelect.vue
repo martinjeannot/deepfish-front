@@ -4,6 +4,7 @@
     :items="participationStatuses"
     :label="label"
     :readonly="readonly"
+    :rules="rules"
   >
     <template #selection="{ item }">
       <div :class="[`${item.color}--text`]">
@@ -25,6 +26,7 @@
       'value',
       'label',
       'readonly',
+      'rules',
     ],
     data: () => ({
       participationStatuses: [

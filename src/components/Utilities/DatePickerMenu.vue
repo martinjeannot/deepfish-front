@@ -10,6 +10,7 @@
         :value="formattedDate"
         :label="label"
         prepend-icon="event"
+        :rules="rules"
         v-on="on"
       ></v-text-field>
     </template>
@@ -30,6 +31,7 @@
       'value',
       'label',
       'no-title',
+      'rules',
     ],
     data: () => ({
       menu: false,
