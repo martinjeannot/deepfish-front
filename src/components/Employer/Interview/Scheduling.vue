@@ -201,7 +201,7 @@
         const interviews = this.selectedDateTimes
           .map(selectedDateTime => this.newInterview(selectedDateTime));
         this.api
-          .post('/interviews/list', { resources: interviews })
+          .post('/interviews/create-resources', { resources: interviews })
           .then(() => {
             this.showSnackbar(['Opération terminée avec succès', 'success']);
             this.$router.push({ name: 'EmployerTalents' });
