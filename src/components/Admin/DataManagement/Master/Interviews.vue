@@ -14,7 +14,7 @@
             ></requirement-select>
           </v-card>
         </v-flex>
-        <v-flex xs6 class="pb-3">
+        <v-flex xs5 class="pb-3">
           <v-card>
             <search-box
               v-model="searchInput"
@@ -22,6 +22,15 @@
               class="pa-3"
             ></search-box>
           </v-card>
+        </v-flex>
+        <v-flex xs1 class="pb-3 text-xs-right">
+          <v-btn
+            color="primary"
+            fab
+            :to="{ name: 'AdminDMNewInterview' }"
+          >
+            <v-icon>add</v-icon>
+          </v-btn>
         </v-flex>
         <v-flex xs12>
           <v-card>

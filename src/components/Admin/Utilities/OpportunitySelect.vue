@@ -45,7 +45,7 @@
     },
     watch: {
       searchInput(value) {
-        if (value && value.length >= 3) {
+        if (value && value.length >= 2) {
           return this.debouncedSearchOpportunities(value);
         }
         return null;
