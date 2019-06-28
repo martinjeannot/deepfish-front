@@ -151,15 +151,24 @@
                   Cancel this interview ?
                 </v-flex>
               </v-card-title>
-              <v-form v-model="cancellationFormValid" @submit.prevent="cancelInterview(interview, cancellationSide)">
+              <v-form
+                v-model="cancellationFormValid"
+                @submit.prevent="cancelInterview(interview, cancelledBy, cancelLinkedInterviews)"
+              >
                 <v-card-text>
                   <v-flex xs12 class="subheading grey--text text--darken-2">
                     Which side could not make it on schedule ?
                     <v-select
-                      v-model="cancellationSide"
+                      v-model="cancelledBy"
                       :items="['TALENT', 'EMPLOYER']"
                       :rules="[rules.required]"
+                      class="pb-2"
                     ></v-select>
+                    Would you like to cancel all linked interviews as well ?
+                    <v-checkbox
+                      v-model="cancelLinkedInterviews"
+                      label="Cancel linked interviews"
+                    ></v-checkbox>
                   </v-flex>
                 </v-card-text>
                 <v-card-actions>
@@ -171,7 +180,7 @@
                       flat
                       :loading="loading"
                     >
-                      Cancel
+                      {{ cancelLinkedInterviews ? 'Cancel all' : 'Cancel' }}
                     </v-btn>
                   </v-flex>
                 </v-card-actions>
@@ -213,7 +222,8 @@
       cachedDuration: 0,
       cancellationDialog: false,
       cancellationFormValid: false,
-      cancellationSide: '',
+      cancelledBy: '',
+      cancelLinkedInterviews: false,
     }),
     computed: {
       ...mapGetters([
@@ -313,21 +323,13 @@
       getInterview(interviewId) {
         return this.api(`/interviews/${interviewId}?projection=admin`);
       },
-      cancelInterview(interview, cancellationSide) {
+      cancelInterview(interview, cancelledBy, cancelLinkedInterviews) {
         this.prepareForApiConsumption();
-        const previousState = Object.assign({}, interview);
-        switch (cancellationSide) {
-          case 'TALENT':
-            interview.talentResponseStatus = 'DECLINED';
-            break;
-          case 'EMPLOYER':
-            interview.employerResponseStatus = 'DECLINED';
-            break;
-          default:
-            return null;
-        }
-        return this
-          .saveInterviewData({ interview, previousState })
+        this.api
+          .post(`${interview._links.self.href}/cancel`, {
+            cancelledBy,
+            cancelLinkedInterviews,
+          })
           .then(() => {
             this.cancellationDialog = false;
             this.showSnackbar(['Success', 'success']);
