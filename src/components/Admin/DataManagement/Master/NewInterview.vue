@@ -41,9 +41,10 @@
                   :rules="[rules.required]"
                 ></participation-status-select>
               </v-flex>
+              <!-- 1ST SLOT -->
               <v-flex xs6 class="pb-3 pr-2">
                 <date-picker-menu
-                  v-model="startDate"
+                  v-model="startDates[0]"
                   label="Start date"
                   no-title
                   :rules="[rules.required]"
@@ -51,10 +52,85 @@
               </v-flex>
               <v-flex xs6 class="pb-3 pl-2">
                 <interview-time-select
-                  v-model="startTime"
+                  v-model="startTimes[0]"
                   label="Start time"
                   :rules="[rules.required]"
                 ></interview-time-select>
+              </v-flex>
+              <!-- 2ND SLOT -->
+              <v-flex xs12 v-if="!secondSlot">
+                <v-btn
+                  color="primary"
+                  :disabled="talentResponseStatus !== 'NEEDS_ACTION' || !startDates[0] || !startTimes[0]"
+                  @click="secondSlot = true"
+                >
+                  New slot
+                </v-btn>
+              </v-flex>
+              <v-flex xs12 v-else>
+                <v-layout wrap>
+                  <v-flex xs5 class="pb-3 pr-2">
+                    <date-picker-menu
+                      v-model="startDates[1]"
+                      label="Start date #2"
+                      no-title
+                      :rules="[rules.required]"
+                    ></date-picker-menu>
+                  </v-flex>
+                  <v-flex xs5 class="pb-3 px-2">
+                    <interview-time-select
+                      v-model="startTimes[1]"
+                      label="Start time #2"
+                      :rules="[rules.required]"
+                    ></interview-time-select>
+                  </v-flex>
+                  <v-flex xs2 class="pb-3 pl-2 text-xs-center">
+                    <v-btn
+                      color="primary"
+                      :disabled="thirdSlot"
+                      @click="clearLastSlot"
+                    >
+                      Delete
+                    </v-btn>
+                  </v-flex>
+                  <v-flex xs12 v-if="!thirdSlot">
+                    <v-btn
+                      color="primary"
+                      :disabled="talentResponseStatus !== 'NEEDS_ACTION' || !startDates[1] || !startTimes[1]"
+                      @click="thirdSlot = true"
+                    >
+                      New slot
+                    </v-btn>
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+              <!-- 3RD SLOT -->
+              <v-flex xs12 v-if="thirdSlot">
+                <v-layout wrap>
+                  <v-flex xs5 class="pb-3 pr-2">
+                    <date-picker-menu
+                      v-model="startDates[2]"
+                      label="Start date #3"
+                      no-title
+                      :rules="[rules.required]"
+                    ></date-picker-menu>
+                  </v-flex>
+                  <v-flex xs5 class="pb-3 px-2">
+                    <interview-time-select
+                      v-model="startTimes[2]"
+                      label="Start time #3"
+                      :rules="[rules.required]"
+                    ></interview-time-select>
+                  </v-flex>
+                  <v-flex xs2 class="pb-3 pl-2 text-xs-center">
+                    <v-btn
+                      color="primary"
+                      @click="clearLastSlot"
+                    >
+                      Delete
+                    </v-btn>
+                  </v-flex>
+                </v-layout>
               </v-flex>
               <v-flex xs4 class="pb-3 pr-2">
                 <interview-format-select
@@ -130,8 +206,10 @@
       opportunity: null,
       talentResponseStatus: null,
       employerResponseStatus: 'ACCEPTED',
-      startDate: null,
-      startTime: null,
+      startDates: [],
+      startTimes: [],
+      secondSlot: false,
+      thirdSlot: false,
       format: 'PHONE',
       duration: 30,
       location: '',
@@ -150,9 +228,15 @@
         'showSnackbar',
       ]),
       scheduleInterviews() {
+        if (this.startDates.length !== this.startTimes.length) {
+          return this.showSnackbar(['Error', 'error']);
+        }
         this.prepareForApiConsumption();
-        const interviews = [this.newInterview()];
-        this.api
+        const interviews = [];
+        for (let i = 0; i < this.startDates.length; i += 1) {
+          interviews.push(this.newInterview(this.startDates[i], this.startTimes[i]));
+        }
+        return this.api
           .post('/interviews/admin/create-resources', { resources: interviews })
           .then(() => {
             this.showSnackbar(['Success', 'success']);
@@ -161,8 +245,8 @@
           .catch(() => this.showSnackbar(['Error', 'error']))
           .finally(() => this.clearLoading());
       },
-      newInterview() {
-        const startAt = moment(`${this.startDate} ${this.startTime}`);
+      newInterview(startDate, startTime) {
+        const startAt = moment(`${startDate} ${startTime}`);
         return {
           creatorId: this.user._links.self.href.split('/').pop(),
           opportunity: `/${this.opportunity.id}`,
@@ -174,6 +258,25 @@
           talentResponseStatus: this.talentResponseStatus,
           employerResponseStatus: this.employerResponseStatus,
         };
+      },
+      clearLastSlot() {
+        const slotNumber = this.thirdSlot ? 3 : 2;
+        if (this.startDates[slotNumber - 1]) {
+          this.startDates.pop();
+        }
+        if (this.startTimes[slotNumber - 1]) {
+          this.startTimes.pop();
+        }
+        switch (slotNumber) {
+          case 2:
+            this.secondSlot = false;
+            break;
+          case 3:
+            this.thirdSlot = false;
+            break;
+          default:
+            break;
+        }
       },
     },
   };
