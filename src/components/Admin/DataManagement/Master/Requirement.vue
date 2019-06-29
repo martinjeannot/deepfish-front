@@ -128,7 +128,7 @@
   import TypeformAnswers from '../../../Employer/Requirements/TypeformAnswers';
 
   export default {
-    name: 'data-management-requirement',
+    name: 'DataManagementRequirement',
     components: { DataManagementNavigation, TypeformAnswers },
     props: ['id'],
     data: () => ({

@@ -9,7 +9,7 @@
 
 <script>
   export default {
-    name: 'base-alert',
+    name: 'BaseAlert',
     props: ['type', 'message', 'rawHtml'],
     methods: {
       onDismiss() {

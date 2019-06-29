@@ -86,7 +86,7 @@
   };
 
   export default {
-    name: 'conditions-self-pitch',
+    name: 'ConditionsSelfPitch',
     data: () => ({
       initialLoading: false,
       loading: false,

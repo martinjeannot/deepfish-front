@@ -308,9 +308,15 @@ export default new Vuex.Store({
     saveInterviewData({ getters }, { interview, previousState }) {
       const interviewData = Object.assign({}, interview);
       // linked refs deletion
+      delete interviewData.talent;
+      delete interviewData.employer;
+      delete interviewData.opportunity;
       if (previousState) {
         interviewData.previousState = previousState;
         // linked refs deletion
+        delete interviewData.previousState.talent;
+        delete interviewData.previousState.employer;
+        delete interviewData.previousState.opportunity;
       }
       return getters.api.patch(interview._links.self.href, interviewData);
     },

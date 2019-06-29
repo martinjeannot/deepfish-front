@@ -18,6 +18,7 @@ import AdminDMOpportunities from '@/components/Admin/DataManagement/Master/Oppor
 import AdminDMOpportunity from '@/components/Admin/DataManagement/Master/Opportunity';
 import AdminDMInterviews from '@/components/Admin/DataManagement/Master/Interviews';
 import AdminDMInterview from '@/components/Admin/DataManagement/Master/Interview';
+import AdminDMNewInterview from '@/components/Admin/DataManagement/Master/NewInterview';
 import AdminDMUsers from '@/components/Admin/DataManagement/Master/Users';
 import AdminDMNewUser from '@/components/Admin/DataManagement/Master/NewUser';
 import AdminDMCompanyMaturityLevels from '@/components/Admin/DataManagement/Reference/CompanyMaturityLevels';
@@ -232,6 +233,12 @@ const router = new Router({
       name: 'AdminDMInterview',
       component: AdminDMInterview,
       props: true,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/admin/data-management/master/new-interview',
+      name: 'AdminDMNewInterview',
+      component: AdminDMNewInterview,
       meta: { authRequired: true },
     },
     {

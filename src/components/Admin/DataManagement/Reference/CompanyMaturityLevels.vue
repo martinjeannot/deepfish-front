@@ -18,8 +18,8 @@
   import DataManagementNavigation from '../Navigation';
 
   export default {
+    name: 'DataManagementCompanyMaturityLevels',
     components: { DataManagementNavigation },
-    name: 'data-management-company-maturity-levels',
     data: () => ({
       headers: [
         { text: 'Company maturity level', value: 'l10nKey' },

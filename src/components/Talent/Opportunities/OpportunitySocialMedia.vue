@@ -51,7 +51,7 @@
   export default {
     name: 'TalentOpportunitySocialMedia',
     props: ['company'],
-    date: () => ({}),
+    data: () => ({}),
   };
 </script>
 

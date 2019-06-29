@@ -116,7 +116,7 @@
   };
 
   export default {
-    name: 'employer-sign-up',
+    name: 'EmployerSignUp',
     data: () => ({
       rules,
       activeTabIndex: 0,

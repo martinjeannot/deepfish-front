@@ -22,7 +22,7 @@
   import { mapGetters } from 'vuex';
 
   export default {
-    name: 'synchronized-checkbox-list',
+    name: 'SynchronizedCheckboxList',
     props: [
       'conditions',
       'title',

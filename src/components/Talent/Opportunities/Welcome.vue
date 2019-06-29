@@ -158,7 +158,7 @@
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
-    name: 'talent-opportunities-welcome',
+    name: 'TalentOpportunitiesWelcome',
     data: () => ({}),
     computed: {
       ...mapGetters([

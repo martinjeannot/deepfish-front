@@ -19,7 +19,7 @@
   import { mapGetters } from 'vuex';
 
   export default {
-    name: 'typeform-requirement',
+    name: 'TypeformRequirement',
     data: () => ({
       jobTypes: [],
       seniorities: [],

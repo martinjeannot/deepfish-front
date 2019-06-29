@@ -4,33 +4,46 @@
       <data-management-navigation></data-management-navigation>
     </v-flex>
     <v-flex xs10>
-      <v-card>
-        <v-card-title>
-          <v-spacer></v-spacer>
-          <v-text-field label="Search..." v-model="search" @blur="getEmployers" append-icon="search" single-line
-                        hide-details></v-text-field>
-        </v-card-title>
-        <v-data-table :items="employers" :headers="headers" :pagination.sync="pagination" :total-items="totalItems"
-                      :loading="loading">
-          <template slot="items" slot-scope="props">
-            <td>{{ props.item.lastName }}</td>
-            <td>{{ props.item.firstName }}</td>
-            <td>{{ props.item.username }}</td>
-            <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
-            <td>{{ props.item.lastSignedInAt | formatDate('LLL') }}</td>
-            <td>
-              <router-link :to="{ name: 'AdminDMCompany', params: {id: props.item.company.id} }">
-                {{ props.item.company.name }}
-              </router-link>
-            </td>
-            <td class="justify-center layout">
-              <v-btn icon color="primary" :to="{ name: 'AdminDMEmployer', params: {id: props.item.id} }">
-                <v-icon>visibility</v-icon>
-              </v-btn>
-            </td>
-          </template>
-        </v-data-table>
-      </v-card>
+      <v-layout wrap>
+        <v-flex xs6 offset-xs3 class="pb-3">
+          <v-card>
+            <search-box
+              v-model="searchInput"
+              @search="getEmployers"
+              class="pa-3"
+            ></search-box>
+          </v-card>
+        </v-flex>
+        <v-flex xs12>
+          <v-card>
+            <v-data-table
+              :headers="headers"
+              :items="employers"
+              :loading="loading"
+              :pagination.sync="pagination"
+              :total-items="totalItems"
+            >
+              <template slot="items" slot-scope="props">
+                <td>{{ props.item.lastName }}</td>
+                <td>{{ props.item.firstName }}</td>
+                <td>{{ props.item.username }}</td>
+                <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
+                <td>{{ props.item.lastSignedInAt | formatDate('LLL') }}</td>
+                <td>
+                  <router-link :to="{ name: 'AdminDMCompany', params: {id: props.item.company.id} }">
+                    {{ props.item.company.name }}
+                  </router-link>
+                </td>
+                <td class="justify-center layout">
+                  <v-btn icon color="primary" :to="{ name: 'AdminDMEmployer', params: {id: props.item.id} }">
+                    <v-icon>visibility</v-icon>
+                  </v-btn>
+                </td>
+              </template>
+            </v-data-table>
+          </v-card>
+        </v-flex>
+      </v-layout>
     </v-flex>
   </v-layout>
 </template>
@@ -38,10 +51,14 @@
 <script>
   import { mapGetters, mapActions } from 'vuex';
   import DataManagementNavigation from '../Navigation';
+  import SearchBox from '../../Utilities/SearchBox';
 
   export default {
-    name: 'data-management-employers',
-    components: { DataManagementNavigation },
+    name: 'DataManagementEmployers',
+    components: {
+      DataManagementNavigation,
+      SearchBox,
+    },
     data: () => ({
       employers: [],
       headers: [
@@ -58,13 +75,16 @@
         sortBy: 'createdAt',
         descending: true,
       },
-      search: '',
+      searchInput: '',
     }),
     computed: {
       ...mapGetters([
         'api',
         'loading',
       ]),
+      encodedSearchInput() {
+        return encodeURIComponent(this.searchInput);
+      },
     },
     watch: {
       pagination: {
@@ -83,11 +103,11 @@
       getEmployers() {
         this.prepareForApiConsumption();
         let path = '/employers';
-        path += this.search ? '/search/findByUsernameContainingOrFirstNameContainingOrLastNameContainingOrCompanyNameContainingOrPhoneNumberContainingAllIgnoreCase' : '';
+        path += this.searchInput ? '/search/findByUsernameContainingOrFirstNameContainingOrLastNameContainingOrCompanyNameContainingOrPhoneNumberContainingAllIgnoreCase' : '';
         let queryString = 'projection=default';
         queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';
-        queryString += this.search ? `&username=${this.search}&firstName=${this.search}&lastName=${this.search}&companyName=${this.search}&phoneNumber=${this.search}` : '';
+        queryString += this.searchInput ? `&username=${this.encodedSearchInput}&firstName=${this.encodedSearchInput}&lastName=${this.encodedSearchInput}&companyName=${this.encodedSearchInput}&phoneNumber=${this.encodedSearchInput}` : '';
         this
           .api(`${path}?${queryString}`)
           .then((response) => {

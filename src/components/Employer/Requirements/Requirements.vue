@@ -72,7 +72,7 @@
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
-    name: 'employer-requirements',
+    name: 'EmployerRequirements',
     data: () => ({
       requirements: [],
     }),

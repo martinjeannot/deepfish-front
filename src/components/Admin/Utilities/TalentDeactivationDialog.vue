@@ -71,7 +71,7 @@
   };
 
   export default {
-    name: 'admin-talent-deactivation-dialog',
+    name: 'AdminTalentDeactivationDialog',
     props: ['value', 'talent'],
     data: () => ({
       rules,

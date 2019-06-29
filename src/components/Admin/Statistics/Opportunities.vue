@@ -56,7 +56,7 @@
   import StatisticsNavigation from './Navigation';
 
   export default {
-    name: 'statistics-opportunities',
+    name: 'StatisticsOpportunities',
     components: { StatisticsNavigation },
     data: () => ({
       createdAtAfter: moment()

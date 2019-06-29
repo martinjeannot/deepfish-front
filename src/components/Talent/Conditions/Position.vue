@@ -53,7 +53,7 @@
     components: {
       SynchronizedCheckboxList,
     },
-    name: 'conditions-position',
+    name: 'ConditionsPosition',
     data: () => ({
       valid: false,
       conditions: null,

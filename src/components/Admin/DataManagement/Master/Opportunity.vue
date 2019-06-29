@@ -93,7 +93,7 @@
   import OpportunityTimeline from '../../../Opportunity/OpportunityTimeline';
 
   export default {
-    name: 'data-management-opportunity',
+    name: 'DataManagementOpportunity',
     components: { DataManagementNavigation, OpportunityTimeline },
     props: ['id'],
     data: () => ({

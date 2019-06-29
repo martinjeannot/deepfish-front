@@ -55,7 +55,7 @@
   };
 
   export default {
-    name: 'admin-profile',
+    name: 'AdminProfile',
     data: () => ({
       rules,
       valid: false,

@@ -250,7 +250,7 @@
   ];
 
   export default {
-    name: 'admin-search',
+    name: 'AdminSearch',
     components: {
       AdminOpportunitySendingDialog,
     },

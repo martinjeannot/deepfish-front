@@ -1,7 +1,7 @@
 import { Line } from 'vue-chartjs';
 
 export default {
-  name: 'line-chart',
+  name: 'LineChart',
   extends: Line,
   props: ['data', 'options'],
   mounted() {

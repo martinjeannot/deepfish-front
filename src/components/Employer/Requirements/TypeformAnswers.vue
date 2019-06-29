@@ -10,7 +10,7 @@
 
 <script>
   export default {
-    name: 'typeform-answers',
+    name: 'TypeformAnswers',
     props: ['typeform'],
     data: () => ({}),
     computed: {

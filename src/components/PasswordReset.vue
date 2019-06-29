@@ -44,7 +44,7 @@
   };
 
   export default {
-    name: 'password-reset',
+    name: 'PasswordReset',
     data: () => ({
       rules,
       valid: false,

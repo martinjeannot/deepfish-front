@@ -98,7 +98,7 @@
   import DataManagementNavigation from '../Navigation';
 
   export default {
-    name: 'data-management-employer',
+    name: 'DataManagementEmployer',
     components: { DataManagementNavigation },
     props: ['id'],
     data: () => ({

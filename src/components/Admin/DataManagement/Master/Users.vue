@@ -28,7 +28,7 @@
   import DataManagementNavigation from '../Navigation';
 
   export default {
-    name: 'data-management-users',
+    name: 'DataManagementUsers',
     components: { DataManagementNavigation },
     data: () => ({
       users: [],

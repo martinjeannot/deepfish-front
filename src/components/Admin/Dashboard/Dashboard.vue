@@ -81,7 +81,7 @@
   import ReportingCard from './ReportingCard';
 
   export default {
-    name: 'admin-dashboard',
+    name: 'AdminDashboard',
     components: {
       ReportingCard,
     },

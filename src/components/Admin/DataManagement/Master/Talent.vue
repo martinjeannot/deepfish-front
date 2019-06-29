@@ -448,7 +448,7 @@
   };
 
   export default {
-    name: 'talent',
+    name: 'DataManagementTalent',
     components: {
       DataManagementNavigation,
       AdminOpportunitySendingDialog,
