@@ -12,7 +12,7 @@
             </v-layout>
           </v-container>
         </v-img>
-        <v-card-title primary-title>
+        <v-card-title primary-title style="height: 93px">
           <v-flex xs12 class="text-xs-center">
             <div class="headline">
               <span class="font-weight-bold">20%</span>
@@ -20,7 +20,7 @@
               <span class="font-weight-bold">salaire fixe</span>
               *
             </div>
-            <span class="grey--text text--darken-2">Paiement en 3 tiers **</span>
+            <span class="grey--text text--darken-2">Paiement au démarrage</span>
           </v-flex>
         </v-card-title>
         <v-card-text>
@@ -48,15 +48,12 @@
           <v-flex xs12 class="grey--text text--darken-2">
             * salaire fixe annuel hors variable
           </v-flex>
-          <v-flex xs12 class="grey--text text--darken-2">
-            ** 1/3 à l'accord de recrutement, 1/3 au démarrage, 1/3 à validation des 4 mois d'essai
-          </v-flex>
         </v-card-text>
       </v-card>
     </v-flex>
     <v-flex xs12 sm5 md4
             :class="[{'pl-2': $vuetify.breakpoint.smAndUp}]">
-      <v-card>
+      <v-card height="100%">
         <v-img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" height="200px">
           <v-container fill-height fluid>
             <v-layout fill-height>
@@ -66,7 +63,7 @@
             </v-layout>
           </v-container>
         </v-img>
-        <v-card-title primary-title>
+        <v-card-title primary-title style="height: 93px">
           <v-flex xs12 class="text-xs-center">
             <div class="headline">
               <span class="font-weight-bold">2%/mois</span>
@@ -77,8 +74,8 @@
             <span class="grey--text text--darken-2">Pendant 12 mois</span>
           </v-flex>
         </v-card-title>
-        <v-card-text>
-          <v-flex xs12 class="text-xs-center pb-3">
+        <v-card-text style="height: calc(100% - 200px - 93px)">
+          <v-flex xs12 class="text-xs-center pb-3" style="height: calc(100% - 21px)">
             <div class="pa-2 headline">
               Profils qualifiés
               <v-icon color="success">done</v-icon>
@@ -93,17 +90,9 @@
               Intéressés pour vous rejoindre
               <v-icon color="success">done</v-icon>
             </div>
-            <v-divider></v-divider>
-            <div class="pa-2 headline">
-              Garantie de remplacement durant les 4 premiers mois d'essai
-              <v-icon color="success">done</v-icon>
-            </div>
           </v-flex>
           <v-flex xs12 class="grey--text text--darken-2">
             * salaire fixe annuel hors variable
-          </v-flex>
-          <v-flex xs12 class="white--text">
-            ** 1/3 à l'accord de recrutement, 1/3 au démarrage, 1/3 à validation des 4 mois d'essai
           </v-flex>
         </v-card-text>
       </v-card>
