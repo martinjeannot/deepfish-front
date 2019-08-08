@@ -196,7 +196,15 @@
         }
       },
       onInternshipChange() {
-        this.$emit('update:fixedSalaryValid', this.conditions.internship);
+        // manual fixed salary input validation
+        // we can't use vuetify validation because rules props has not yet been updated
+        if (!this.conditions.internship
+          && this.$refs.fixedSalaryInput.lazyValue < 10000
+        ) {
+          this.$emit('update:fixedSalaryValid', false);
+        } else {
+          this.$emit('update:fixedSalaryValid', true);
+        }
         return this.saveConditions();
       },
       saveConditions() {
