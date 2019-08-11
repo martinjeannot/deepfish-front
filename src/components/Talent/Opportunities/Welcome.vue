@@ -1,5 +1,9 @@
 <template>
   <v-layout wrap>
+    <talent-referral-dialog
+      :value.sync="talentReferralDialog"
+      :talent="user"
+    ></talent-referral-dialog>
     <v-flex v-if="alertComponent" xs12 sm8 offset-sm2 class="pb-3">
       <base-alert :type="alertComponent.type" :message="alertComponent.message"
                   @dismissed="onAlertComponentDismissed"></base-alert>
@@ -143,9 +147,8 @@
 
     <v-flex xs12 class="text-xs-center">
       <v-btn
-        href="https://deepfish.typeform.com/to/Ppmd7e"
-        target="_blank"
         color="primary"
+        @click.native.stop="talentReferralDialog = true"
       >
         Parrainer un collègue commercial
       </v-btn>
@@ -156,12 +159,19 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
+  import TalentReferralDialog from '../Utilities/ReferralDialog';
 
   export default {
     name: 'TalentOpportunitiesWelcome',
-    data: () => ({}),
+    components: {
+      TalentReferralDialog,
+    },
+    data: () => ({
+      talentReferralDialog: false,
+    }),
     computed: {
       ...mapGetters([
+        'user',
         'alertComponent',
       ]),
     },
