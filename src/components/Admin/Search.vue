@@ -37,7 +37,7 @@
           </v-card>
         </v-expansion-panel-content>
         <v-expansion-panel-content>
-          <div slot="header">Job types</div>
+          <div slot="header">Job type</div>
           <v-card>
             <v-card-text>
               <v-checkbox v-for="jobType in jobTypes"
@@ -50,7 +50,7 @@
           </v-card>
         </v-expansion-panel-content>
         <v-expansion-panel-content>
-          <div slot="header">Commodity types</div>
+          <div slot="header">Commodity type</div>
           <v-card>
             <v-card-text>
               <v-checkbox v-for="commodityType in commodityTypes"
@@ -63,7 +63,7 @@
           </v-card>
         </v-expansion-panel-content>
         <v-expansion-panel-content>
-          <div slot="header">Task types</div>
+          <div slot="header">Task type</div>
           <v-card>
             <v-card-text>
               <ternary-checkbox v-for="taskType in taskTypes"
@@ -77,7 +77,33 @@
           </v-card>
         </v-expansion-panel-content>
         <v-expansion-panel-content>
-          <div slot="header">Locations</div>
+          <div slot="header">Industry type</div>
+          <v-card>
+            <v-card-text>
+              <v-checkbox v-for="industryType in industryTypes"
+                          :key="industryType.id"
+                          :value="industryType.id"
+                          :label="industryType.l10nKey"
+                          v-model="criteria.industryTypes"
+              ></v-checkbox>
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+        <v-expansion-panel-content>
+          <div slot="header">Client industry type</div>
+          <v-card>
+            <v-card-text>
+              <v-checkbox v-for="clientIndustryType in clientIndustryTypes"
+                          :key="clientIndustryType.id"
+                          :value="clientIndustryType.id"
+                          :label="clientIndustryType.l10nKey"
+                          v-model="criteria.clientIndustryTypes"
+              ></v-checkbox>
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+        <v-expansion-panel-content>
+          <div slot="header">Location</div>
           <v-card>
             <v-card-text>
               <ternary-checkbox v-for="fixedLocation in fixedLocations"
@@ -266,6 +292,8 @@
       jobTypes: [],
       commodityTypes: [],
       taskTypes: [],
+      industryTypes: [],
+      clientIndustryTypes: [],
       fixedLocations: [],
       talentMaturityLevels,
       // CRITERIA
@@ -277,6 +305,8 @@
         commodityTypes: [],
         taskTypes: [],
         taskTypesNotIn: [],
+        industryTypes: [],
+        clientIndustryTypes: [],
         fixedLocations: [],
         fixedLocationsNotIn: [],
         minFixedSalary: null,
@@ -382,6 +412,24 @@
             talentQueryString += `${taskType}`;
           });
         }
+        // Industry types
+        if (this.criteria.industryTypes.length) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += 'conditions.industryTypes=';
+          this.criteria.industryTypes.forEach((industryType, index) => {
+            talentQueryString += index ? ',' : '';
+            talentQueryString += `${industryType}`;
+          });
+        }
+        // Client industry types
+        if (this.criteria.clientIndustryTypes.length) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += 'conditions.clientIndustryTypes=';
+          this.criteria.clientIndustryTypes.forEach((clientIndustryType, index) => {
+            talentQueryString += index ? ',' : '';
+            talentQueryString += `${clientIndustryType}`;
+          });
+        }
         // Fixed locations
         if (this.criteria.fixedLocations.length) {
           talentQueryString += talentQueryString ? '&' : '';
@@ -465,6 +513,8 @@
         this.api('/jobTypes'),
         this.api('/commodityTypes'),
         this.api('/taskTypes'),
+        this.api('/industryTypes'),
+        this.api('/clientIndustryTypes'),
         this.api('/fixedLocations?enabled=true'),
       ])
         .then(([
@@ -472,6 +522,8 @@
                  jobTypesResponse,
                  commodityTypesResponse,
                  taskTypesResponse,
+                 industryTypesResponse,
+                 clientIndustryTypesResponse,
                  fixedLocationsResponse,
                ]) => {
           // reference data
@@ -480,6 +532,8 @@
           this.jobTypes = jobTypesResponse.data._embedded.jobTypes;
           this.commodityTypes = commodityTypesResponse.data._embedded.commodityTypes;
           this.taskTypes = taskTypesResponse.data._embedded.taskTypes;
+          this.industryTypes = industryTypesResponse.data._embedded.industryTypes;
+          this.clientIndustryTypes = clientIndustryTypesResponse.data._embedded.clientIndustryTypes;
           this.fixedLocations = fixedLocationsResponse.data._embedded.fixedLocations;
         })
         .finally(() => this.clearLoading(true));
