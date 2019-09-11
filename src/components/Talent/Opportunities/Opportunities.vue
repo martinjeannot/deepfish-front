@@ -265,6 +265,9 @@
           this.pendingOpportunities = response.data._embedded.opportunities
             .filter(opportunity => opportunity.talentStatus === 'PENDING' && opportunity.requirement.status === 'OPEN');
           this.menuBadges.opportunities = this.pendingOpportunities.length;
+          // FIXME opportunities are considered accepted only if the associated requirement is OPEN
+          // This implies that talent accepting an opport after another one which requirement has
+          // been closed will be asked for qualification again !
           this.acceptedOpportunities = response.data._embedded.opportunities
             .filter(opportunity => opportunity.talentStatus === 'ACCEPTED' && opportunity.requirement.status === 'OPEN')
             .sort((opport1, opport2) => {

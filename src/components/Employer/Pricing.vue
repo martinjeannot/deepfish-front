@@ -36,7 +36,7 @@
             </div>
             <v-divider></v-divider>
             <div class="pa-2 headline">
-              Intéressés pour vous rejoindre
+              Intéressés pour rejoindre votre ESN
               <v-icon color="success">done</v-icon>
             </div>
             <v-divider></v-divider>
@@ -87,7 +87,12 @@
             </div>
             <v-divider></v-divider>
             <div class="pa-2 headline">
-              Intéressés pour vous rejoindre
+              Intéressés pour rejoindre votre ESN
+              <v-icon color="success">done</v-icon>
+            </div>
+            <v-divider></v-divider>
+            <div class="pa-2 headline">
+              Arrêt de la facturation si départ prématuré du commercial
               <v-icon color="success">done</v-icon>
             </div>
           </v-flex>

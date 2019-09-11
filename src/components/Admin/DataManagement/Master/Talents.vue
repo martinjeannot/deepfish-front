@@ -91,7 +91,7 @@
         'loading',
       ]),
       encodedSearchInput() {
-        return encodeURIComponent(this.searchInput);
+        return encodeURIComponent(this.searchInput.trim());
       },
     },
     watch: {

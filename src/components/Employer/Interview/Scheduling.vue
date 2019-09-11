@@ -54,13 +54,14 @@
             </v-flex>
             <v-flex xs12 sm4 v-for="(slotNumber, slotIndex) in numberOfSlots" :key="'slot-' + slotNumber"
                     :class="[{'py-1': $vuetify.breakpoint.xsOnly}, {'px-2': $vuetify.breakpoint.smAndUp}]">
-              <v-select
+              <time-select
                 v-if="slotIndex < selectedDateTimes.length"
-                :items="times"
                 :value="selectedTimes[slotIndex]"
-                @change="onSelectedTimesChange(slotIndex, $event)"
                 :label="selectedDateTimes[slotIndex].format('dddd D MMMM YYYY')"
-              ></v-select>
+                :date-time="selectedDateTimes[slotIndex]"
+                :unavailable-slots="unavailableSlots"
+                @change="onSelectedTimesChange(slotIndex, $event)"
+              ></time-select>
               <v-flex v-else xs12 class="text-xs-center v-text-field placeholder">
                 Créneau(x) restant(s) à choisir : {{ numberOfSlots - selectedDateTimes.length }}
               </v-flex>
@@ -113,6 +114,7 @@
 <script>
   import moment from 'moment';
   import { mapGetters, mapActions, mapState } from 'vuex';
+  import TimeSelect from './TimeSelect';
 
   const interviewDurations = [
     { text: '30 min', value: 30 },
@@ -122,7 +124,13 @@
 
   export default {
     name: 'EmployerInterviewScheduling',
-    props: ['talentId', 'opportunityId'],
+    components: {
+      TimeSelect,
+    },
+    props: [
+      'talentId',
+      'opportunityId',
+    ],
     data: () => ({
       talent: null,
       interviewDurations,
@@ -134,6 +142,7 @@
       selectedDateTimes: [],
       datePickerDateFormat: 'YYYY-MM-DD',
       confirmationDialog: false,
+      unavailableSlots: [],
     }),
     computed: {
       ...mapGetters([
@@ -150,14 +159,6 @@
       interviewFormats() {
         return this.$store.state.interviewFormats.map(
           ({ value, text }) => ({ value, text: `${text.charAt(0).toUpperCase()}${text.slice(1)}` }));
-      },
-      times() {
-        const startHour = 8;
-        const endHour = 20;
-        const times = Array
-          .from({ length: (endHour - startHour) + 1 }, (x, i) => `0${i + startHour}`.slice(-2))
-          .map(hour => ['00', '30'].map(minutes => `${hour}:${minutes}`));
-        return [].concat(...times); // flatten times
       },
       selectedDates: {
         get() {
@@ -228,9 +229,16 @@
     created() {
       this.location = this.user.phoneNumber;
       this.prepareForApiConsumption(true);
-      this.api(`/talents/${this.talentId}?projection=employer`)
-        .then((talentResponse) => {
+      return Promise
+        .all([
+          this.api(`/talents/${this.talentId}?projection=employer`),
+          this.api(`/itw/availability/unavailable-slots?employer-id=${this.user.id}&talent-id=${this.talentId}`),
+        ]).then(([
+                   talentResponse,
+                   unavailableSlotsResponse,
+                 ]) => {
           this.talent = talentResponse.data;
+          this.unavailableSlots = unavailableSlotsResponse.data;
         })
         .catch(() => this.setErrorAfterApiConsumption())
         .finally(() => this.clearLoading(true));
