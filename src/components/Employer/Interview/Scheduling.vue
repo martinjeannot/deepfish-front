@@ -28,7 +28,7 @@
         <v-card-text>
           <v-layout row wrap>
             <v-flex xs12 sm4 :class="{'px-2': $vuetify.breakpoint.smAndUp}">
-              <v-select :items="interviewFormats" v-model="format" label="Type"></v-select>
+              <v-select :items="interviewFormats" v-model="format" label="Type" @change="onFormatChange"></v-select>
             </v-flex>
             <v-flex xs12 sm4 :class="{'px-2': $vuetify.breakpoint.smAndUp}">
               <v-select :items="interviewDurations" v-model="duration" label="Durée"></v-select>
@@ -137,6 +137,8 @@
       duration: 30,
       format: 'PHONE',
       location: '',
+      defaultPhoneLocation: '',
+      defaultInPersonLocation: '',
       numberOfSlots: 3,
       min: moment().add('1', 'days'),
       selectedDateTimes: [],
@@ -225,9 +227,18 @@
       onSelectedTimesChange(slotIndex, value) {
         this.$set(this.selectedDateTimes, slotIndex, moment(`${this.selectedDates[slotIndex]} ${value}`));
       },
+      onFormatChange(format) {
+        if (format === 'IN_PERSON') {
+          this.location = this.defaultInPersonLocation;
+        } else if (format === 'PHONE') {
+          this.location = this.defaultPhoneLocation;
+        }
+      },
     },
     created() {
-      this.location = this.user.phoneNumber;
+      this.defaultPhoneLocation = this.user.phoneNumber;
+      this.defaultInPersonLocation = this.user.company.headquartersAddress;
+      this.location = this.defaultPhoneLocation; // default format is PHONE
       this.prepareForApiConsumption(true);
       return Promise
         .all([
