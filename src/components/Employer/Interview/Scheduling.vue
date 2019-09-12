@@ -52,6 +52,15 @@
               <v-date-picker v-model="selectedDates" multiple
                              :min="min.format(datePickerDateFormat)"></v-date-picker>
             </v-flex>
+            <v-flex xs12 class="pb-2">
+              <v-alert
+                :value="true"
+                type="info"
+                outline
+              >
+                Pour maximiser les chances que le talent soit disponible, nous vous proposons de choisir vos créneaux sur <strong>3 jours différents</strong>.
+              </v-alert>
+            </v-flex>
             <v-flex xs12 sm4 v-for="(slotNumber, slotIndex) in numberOfSlots" :key="'slot-' + slotNumber"
                     :class="[{'py-1': $vuetify.breakpoint.xsOnly}, {'px-2': $vuetify.breakpoint.smAndUp}]">
               <time-select
