@@ -37,6 +37,7 @@ import TalentProfile from '@/components/Talent/Profile';
 import TalentConditions from '@/components/Talent/Conditions';
 import TalentOpportunities from '@/components/Talent/Opportunities/Opportunities';
 import TalentOpportunity from '@/components/Talent/Opportunities/Opportunity';
+import TalentReferral from '@/components/Talent/Referral/Page';
 import store from '../store';
 import NavGuards from './nav-guards';
 
@@ -354,6 +355,12 @@ const router = new Router({
       name: 'TalentOpportunity',
       component: TalentOpportunity,
       props: true,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/talent/referral',
+      name: 'TalentReferral',
+      component: TalentReferral,
       meta: { authRequired: true },
     },
   ],

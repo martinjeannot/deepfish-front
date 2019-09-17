@@ -201,6 +201,12 @@
                 route: { name: 'TalentOpportunities' },
               },
               {
+                key: 'referral',
+                icon: 'how_to_reg',
+                title: 'Parrainage',
+                route: { name: 'TalentReferral' },
+              },
+              {
                 key: 'profile',
                 icon: 'account_circle',
                 title: 'Profil',

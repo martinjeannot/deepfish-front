@@ -2,7 +2,6 @@
   <v-layout wrap>
     <talent-referral-dialog
       :value.sync="talentReferralDialog"
-      :talent="user"
     ></talent-referral-dialog>
     <v-flex v-if="alertComponent" xs12 sm8 offset-sm2 class="pb-3">
       <base-alert :type="alertComponent.type" :message="alertComponent.message"
@@ -159,7 +158,7 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
-  import TalentReferralDialog from '../Utilities/ReferralDialog';
+  import TalentReferralDialog from '../Referral/Dialog';
 
   export default {
     name: 'TalentOpportunitiesWelcome',
