@@ -49,8 +49,13 @@
               <h6 class="title">Veuillez choisir 3 créneaux à proposer au talent</h6>
             </v-flex>
             <v-flex xs12 class="text-xs-center my-3">
-              <v-date-picker v-model="selectedDates" multiple
-                             :min="min.format(datePickerDateFormat)"></v-date-picker>
+              <v-date-picker
+                v-model="selectedDates"
+                multiple
+                :min="min.format(datePickerDateFormat)"
+                :locale="browserLanguage"
+                :first-day-of-week="getLocaleFirstDayOfWeek(browserLanguage)"
+              ></v-date-picker>
             </v-flex>
             <v-flex xs12 class="pb-2">
               <v-alert
@@ -199,6 +204,9 @@
         return [...this.selectedDateTimes]
           .sort((firstDateTime, secondDateTime) => firstDateTime.diff(secondDateTime));
       },
+      browserLanguage() {
+        return (navigator.languages && navigator.languages.length) ? navigator.languages[0] : navigator.userLanguage || navigator.language || navigator.browserLanguage || 'en';
+      },
     },
     methods: {
       ...mapActions([
@@ -242,6 +250,14 @@
         } else if (format === 'PHONE') {
           this.location = this.defaultPhoneLocation;
         }
+      },
+      getLocaleFirstDayOfWeek(locale) {
+        if (locale) {
+          if (locale.startsWith('fr')) {
+            return 1;
+          }
+        }
+        return 0;
       },
     },
     created() {
