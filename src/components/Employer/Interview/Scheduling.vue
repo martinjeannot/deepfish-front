@@ -55,6 +55,7 @@
                 :min="min.format(datePickerDateFormat)"
                 :locale="browserLanguage"
                 :first-day-of-week="getLocaleFirstDayOfWeek(browserLanguage)"
+                :allowed-dates="allowedDates"
               ></v-date-picker>
             </v-flex>
             <v-flex xs12 class="pb-2">
@@ -259,6 +260,7 @@
         }
         return 0;
       },
+      allowedDates: val => ![0, 6].includes(new Date(val).getDay()),
     },
     created() {
       this.defaultPhoneLocation = this.user.phoneNumber;
