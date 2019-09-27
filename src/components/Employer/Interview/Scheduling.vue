@@ -53,8 +53,8 @@
                 v-model="selectedDates"
                 multiple
                 :min="min.format(datePickerDateFormat)"
-                :locale="browserLanguage"
-                :first-day-of-week="getLocaleFirstDayOfWeek(browserLanguage)"
+                :locale="locale"
+                :first-day-of-week="localeFirstDayOfWeek"
                 :allowed-dates="allowedDates"
               ></v-date-picker>
             </v-flex>
@@ -168,6 +168,8 @@
         'initialLoading',
         'loading',
         'alertComponent',
+        'locale',
+        'localeFirstDayOfWeek',
         'interviewFormat',
       ]),
       ...mapState([
@@ -204,9 +206,6 @@
       sortedSelectedDateTimes() {
         return [...this.selectedDateTimes]
           .sort((firstDateTime, secondDateTime) => firstDateTime.diff(secondDateTime));
-      },
-      browserLanguage() {
-        return (navigator.languages && navigator.languages.length) ? navigator.languages[0] : navigator.userLanguage || navigator.language || navigator.browserLanguage || 'en';
       },
     },
     methods: {
@@ -251,14 +250,6 @@
         } else if (format === 'PHONE') {
           this.location = this.defaultPhoneLocation;
         }
-      },
-      getLocaleFirstDayOfWeek(locale) {
-        if (locale) {
-          if (locale.startsWith('fr')) {
-            return 1;
-          }
-        }
-        return 0;
       },
       allowedDates: val => ![0, 6].includes(new Date(val).getDay()),
     },
