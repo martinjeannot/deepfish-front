@@ -28,7 +28,7 @@
         <v-card-text>
           <v-layout row wrap>
             <v-flex xs12 sm4 :class="{'px-2': $vuetify.breakpoint.smAndUp}">
-              <v-select :items="interviewFormats" v-model="format" label="Type"></v-select>
+              <v-select :items="interviewFormats" v-model="format" label="Type" @change="onFormatChange"></v-select>
             </v-flex>
             <v-flex xs12 sm4 :class="{'px-2': $vuetify.breakpoint.smAndUp}">
               <v-select :items="interviewDurations" v-model="duration" label="Durée"></v-select>
@@ -49,8 +49,23 @@
               <h6 class="title">Veuillez choisir 3 créneaux à proposer au talent</h6>
             </v-flex>
             <v-flex xs12 class="text-xs-center my-3">
-              <v-date-picker v-model="selectedDates" multiple
-                             :min="min.format(datePickerDateFormat)"></v-date-picker>
+              <v-date-picker
+                v-model="selectedDates"
+                multiple
+                :min="min.format(datePickerDateFormat)"
+                :locale="locale"
+                :first-day-of-week="localeFirstDayOfWeek"
+                :allowed-dates="allowedDates"
+              ></v-date-picker>
+            </v-flex>
+            <v-flex xs12 class="pb-2">
+              <v-alert
+                :value="true"
+                type="info"
+                outline
+              >
+                Pour maximiser les chances que le talent soit disponible, nous vous proposons de choisir vos créneaux sur <strong>3 jours différents</strong>.
+              </v-alert>
             </v-flex>
             <v-flex xs12 sm4 v-for="(slotNumber, slotIndex) in numberOfSlots" :key="'slot-' + slotNumber"
                     :class="[{'py-1': $vuetify.breakpoint.xsOnly}, {'px-2': $vuetify.breakpoint.smAndUp}]">
@@ -137,6 +152,8 @@
       duration: 30,
       format: 'PHONE',
       location: '',
+      defaultPhoneLocation: '',
+      defaultInPersonLocation: '',
       numberOfSlots: 3,
       min: moment().add('1', 'days'),
       selectedDateTimes: [],
@@ -151,6 +168,8 @@
         'initialLoading',
         'loading',
         'alertComponent',
+        'locale',
+        'localeFirstDayOfWeek',
         'interviewFormat',
       ]),
       ...mapState([
@@ -225,9 +244,19 @@
       onSelectedTimesChange(slotIndex, value) {
         this.$set(this.selectedDateTimes, slotIndex, moment(`${this.selectedDates[slotIndex]} ${value}`));
       },
+      onFormatChange(format) {
+        if (format === 'IN_PERSON') {
+          this.location = this.defaultInPersonLocation;
+        } else if (format === 'PHONE') {
+          this.location = this.defaultPhoneLocation;
+        }
+      },
+      allowedDates: val => ![0, 6].includes(new Date(val).getDay()),
     },
     created() {
-      this.location = this.user.phoneNumber;
+      this.defaultPhoneLocation = this.user.phoneNumber;
+      this.defaultInPersonLocation = this.user.company.headquartersAddress;
+      this.location = this.defaultPhoneLocation; // default format is PHONE
       this.prepareForApiConsumption(true);
       return Promise
         .all([

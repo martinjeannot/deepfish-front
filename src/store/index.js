@@ -14,6 +14,7 @@ export default new Vuex.Store({
     authTokenRefreshSubscribers: [],
     authProcessCompleted: false,
     user: null,
+    locale: 'fr',
     api: axios.create({
       baseURL: process.env.DEEPFISH_BACK_BASE_URL,
     }),
@@ -275,6 +276,7 @@ export default new Vuex.Store({
     saveOpportunityData({ getters }, { opportunity, previousState }) {
       const opportunityData = Object.assign({}, opportunity);
       // linked refs deletion
+      delete opportunityData.creator;
       delete opportunityData.talent;
       delete opportunityData.requirement;
       delete opportunityData.company;
@@ -282,6 +284,7 @@ export default new Vuex.Store({
       if (previousState) {
         opportunityData.previousState = previousState;
         // linked refs deletion
+        delete opportunityData.previousState.creator;
         delete opportunityData.previousState.talent;
         delete opportunityData.previousState.requirement;
         delete opportunityData.previousState.company;
@@ -495,6 +498,18 @@ export default new Vuex.Store({
     },
     user(state) {
       return state.user;
+    },
+    locale(state) {
+      if (state.locale) {
+        return state.locale;
+      }
+      return (navigator.languages && navigator.languages.length) ? navigator.languages[0] : navigator.userLanguage || navigator.language || navigator.browserLanguage || 'en';
+    },
+    localeFirstDayOfWeek(state, getters) {
+      if (getters.locale.startsWith('fr')) {
+        return 1;
+      }
+      return 0;
     },
     isUserAuthenticated(state, getters) {
       return state.authProcessCompleted && getters.user !== null && getters.user !== undefined;
