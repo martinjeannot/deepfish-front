@@ -17,7 +17,7 @@
             :disabled="loading"
           ></v-text-field>
         </v-flex>
-        <div class="subheading font-weight-bold">Combien gères-tu de consultants et/ou de projets ?</div>
+        <div class="subheading font-weight-bold">Combien as-tu placé/recruté de consultants ?</div>
         <v-flex xs12 sm4 md3>
           <v-text-field
             type="number"
@@ -27,6 +27,7 @@
             :disabled="loading"
           ></v-text-field>
         </v-flex>
+        <div class="subheading font-weight-bold">Combien gères-tu de projets ?</div>
         <v-flex xs12 sm4 md3>
           <v-text-field
             type="number"

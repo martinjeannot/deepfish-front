@@ -15,7 +15,7 @@
       ></synchronized-checkbox-list>
       <synchronized-checkbox-list
         :conditions="conditions"
-        title="Quels types de ventes acceptes-tu ?"
+        title="Quels types de prestations acceptes-tu ?"
         :referenceDomainObjects="commodityTypes"
         associationResourceName="commodityTypes"
         class="mb-5"
