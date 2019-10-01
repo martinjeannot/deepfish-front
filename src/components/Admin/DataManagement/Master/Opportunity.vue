@@ -144,6 +144,13 @@
                         ></v-date-picker>
                       </v-menu>
                     </v-flex>
+                    <v-flex xs12 class="pb-3">
+                      <v-textarea
+                        v-model="opportunity.trialPeriodTerminationReason"
+                        label="Trial period termination reason"
+                        @change="saveOpportunity(opportunity)"
+                      ></v-textarea>
+                    </v-flex>
                   </v-layout>
                 </v-card-text>
               </v-card>
@@ -247,7 +254,7 @@
         this.prepareForApiConsumption();
         return this
           .saveOpportunityData({ opportunity })
-          .then(() => this.showSnackbar(['OK', 'success']))
+          .then(() => this.showSnackbar(['Opportunity saved', 'success']))
           .catch(() => this.showSnackbar(['Error', 'error']))
           .finally(() => this.clearLoading());
       },
