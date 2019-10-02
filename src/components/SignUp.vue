@@ -10,19 +10,19 @@
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
           <v-tabs v-model="activeTabIndex" fixed-tabs grow hide-slider>
-            <v-tab :class="{ 'grey lighten-3': activeTabIndex != 0 }" :ripple="false">Commercial</v-tab>
-            <v-tab :class="{ 'grey lighten-3': activeTabIndex != 1 }" :ripple="false">Recruteur</v-tab>
+            <v-tab :class="{ 'grey lighten-3': activeTabIndex != 0 }" :ripple="false">Candidat</v-tab>
+            <v-tab :class="{ 'grey lighten-3': activeTabIndex != 1 }" :ripple="false">Entreprise</v-tab>
             <v-tab-item>
               <v-card>
                 <v-card-text>
                   <v-layout wrap>
                     <v-flex xs12 class="text-xs-center">
-                      <h2>Inscription en tant que Commercial via LinkedIn</h2>
+                      <h2>Inscription en tant que candidat via LinkedIn</h2>
                     </v-flex>
                     <v-flex xs12 class="text-xs-center">
                       <v-btn color="info" :href="signUpLinkedInAuthEndpoint"
                              :disabled="loading" :loading="loading" @click="prepareForApiConsumption()"
-                             v-html="'S\'inscrire en tant que commercial'" large>
+                             v-html="'S\'inscrire en tant que candidat'" large>
                       </v-btn>
                     </v-flex>
                     <v-flex xs12 class="text-xs-center pt-2 grey--text text--darken-2">
@@ -49,7 +49,7 @@
                 <v-card-text>
                   <v-layout row>
                     <v-flex xs12 class="text-xs-center">
-                      <h2>Inscription en tant que RECRUTEUR</h2>
+                      <h2>Inscription en tant que recruteur</h2>
                     </v-flex>
                   </v-layout>
                   <v-form v-model="valid" ref="form" @submit.prevent="submitSignUpForm">
