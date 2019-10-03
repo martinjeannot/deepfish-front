@@ -4,46 +4,46 @@
 // but there has to be a better way to override it
 $material-light := {
   status-bar: {
-    regular: #E0E0E0,
-    lights-out: rgba(#fff, .7)
+    regular: $grey.lighten-2,
+    lights-out: rgba($shades.white, .7)
   },
-  app-bar: #F5F5F5,
+  app-bar: $grey.lighten-4,
   background: linear-gradient(210.7deg, $blue.lighten-5 0%, $blue.lighten-1 100%),
   cards: #FFFFFF,
   chips: {
     background: $grey.lighten-2,
-    color: rgba(#000, .87)
+    color: rgba($shades.black, .87)
   },
-  dividers: rgba(#000, .12),
+  dividers: rgba($shades.black, .12),
   text: {
-    theme: #fff,
-    primary: rgba(#000, .87),
-    secondary: rgba(#000, .54),
-    disabled: rgba(#000, .38),
+    theme: $shades.white,
+    primary: rgba($shades.black, .87),
+    secondary: rgba($shades.black, .54),
+    disabled: rgba($shades.black, .38),
     link: $blue.darken-2,
     link-hover: $grey.darken-3
   },
   icons: {
-    active: rgba(#000, .54),
-    inactive: rgba(#000, .38)
+    active: rgba($shades.black, .54),
+    inactive: rgba($shades.black, .38)
   },
   inputs: {
-    box: rgba(#000, .04),
-    solo-inverted: rgba(#000, .16),
-    solo-inverted-focused: #424242,
-    solo-inverted-focused-text: #fff
+    box: rgba($shades.black, .04),
+    solo-inverted: rgba($shades.black, .16),
+    solo-inverted-focused: $grey.darken-3,
+    solo-inverted-focused-text: $shades.white
   },
   buttons: {
-    disabled: rgba(#000, .26),
-    focused: rgba(#000, .12),
-    focused-alt: rgba(#fff, .6),
+    disabled: rgba($shades.black, .26),
+    focused: rgba($shades.black, .12),
+    focused-alt: rgba($shades.white, .6),
     pressed: rgba(#999, .4)
   },
   expansion-panels: {
-    focus: #EEEEEE
+    focus: $grey.lighten-3
   },
   list-tile: {
-    hover: rgba(#000, .04)
+    hover: rgba($shades.black, .04)
   },
   selection-controls: {
     thumb: {
@@ -51,48 +51,57 @@ $material-light := {
       disabled: $grey.lighten-1
     },
     track: {
-      inactive: rgba(#000, .38),
-      disabled: rgba(#000, .12)
+      inactive: rgba($shades.black, .38),
+      disabled: rgba($shades.black, .12)
     }
   },
   slider: {
-    active: rgba(#000, .38),
-    inactive: rgba(#000, .26),
-    disabled: rgba(#000, .26),
-    discrete: #000
+    active: rgba($shades.black, .38),
+    inactive: rgba($shades.black, .26),
+    disabled: rgba($shades.black, .26),
+    discrete: $shades.black
   },
   tabs: {
-    active: rgba(#000, .87)
+    active: rgba($shades.black, .87)
   },
   text-fields: {
-    box: rgba(#000, .06),
-    box-hover: rgba(#000, .12)
+    box: rgba($shades.black, .06),
+    box-hover: rgba($shades.black, .12)
   },
-  input-bottom-line: rgba(#000, .42),
+  input-bottom-line: rgba($shades.black, .42),
   stepper: {
-    active: rgba(#fff, 1),
-    completed: rgba(#000, 0.87),
-    hover: rgba(#000, 0.54)
+    active: rgba($shades.white, 1),
+    completed: rgba($shades.black, 0.87),
+    hover: rgba($shades.black, 0.54)
   },
   table: {
     active: $grey.lighten-4
     hover: $grey.lighten-3
   },
   picker: {
-    body: #fff,
+    body: $shades.white,
     clock: $grey.lighten-2,
     indeterminateTime: $grey.lighten-1,
     title: $grey.lighten-2
   },
-  bg-color: #fff
-  fg-color: #000
-  text-color: #000
+  bg-color: $shades.white
+  fg-color: $shades.black
+  text-color: $shades.black
   primary-text-percent: .87
   secondary-text-percent: .54
   disabledORhints-text-percent: .38
   divider-percent: .12
   active-icon-percent: .54
   inactive-icon-percent: .38
+  calendar: {
+    background-color: #fff
+    outside-background-color: #f7f7f7
+    line-color: #e0e0e0
+    interval-color: $grey.darken-3
+    interval-line-color: $grey.lighten-2
+    text-color: #000
+    past-color: rgba(#000, .38)
+  }
 }
 
 @import '~vuetify/src/stylus/main'
