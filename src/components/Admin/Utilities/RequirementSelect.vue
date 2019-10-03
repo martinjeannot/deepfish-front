@@ -7,6 +7,7 @@
     clearable
     hide-details
     item-text="company.name"
+    item-value="id"
     :items="requirements"
     label="Requirement"
     :loading="loading"
