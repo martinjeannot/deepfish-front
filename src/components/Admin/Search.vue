@@ -228,7 +228,9 @@
                          color="light-blue darken-3">
                     <v-icon>fab fa-linkedin</v-icon>
                   </v-btn>
-                  <span v-if="props.item.fullProfile && props.item.fullProfile.jobs">
+                  <span
+                    v-if="props.item.fullProfile && props.item.fullProfile.jobs && props.item.fullProfile && props.item.fullProfile.jobs.length"
+                  >
                     {{ props.item.fullProfile.jobs[0].jobTitle }}
                     <span class="font-weight-bold">at</span>
                     {{ props.item.fullProfile.jobs[0].companyName }}
