@@ -34,8 +34,8 @@
         icon="work"
         color="orange"
         entity-name="Requirements"
-        :weekly-statistics="weeklyTalentAcquisitionStatistics"
-        :monthly-statistics="monthlyTalentAcquisitionStatistics"
+        :weekly-statistics="weeklyRequirementsStatistics"
+        :monthly-statistics="monthlyRequirementsStatistics"
       ></reporting-card>
     </v-flex>
 
@@ -82,7 +82,7 @@
     >
       <reporting-card
         title="Employer accepted talents"
-        icon="supervisor_account"
+        icon="how_to_reg"
         color="blue"
         entity-name="Talents"
         :weekly-statistics="weeklyEmployerAcceptedOpportunitiesStatistics"
@@ -122,6 +122,8 @@
     data: () => ({
       weeklyTalentAcquisitionStatistics: [],
       monthlyTalentAcquisitionStatistics: [],
+      weeklyRequirementsStatistics: [],
+      monthlyRequirementsStatistics: [],
       weeklyOpportunitiesStatistics: [],
       monthlyOpportunitiesStatistics: [],
       weeklyTalentAcceptedOpportunitiesStatistics: [],
@@ -150,6 +152,8 @@
       return Promise.all([
         this.api(`/talents/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week`),
         this.api(`/talents/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month`),
+        this.api(`/requirements/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week`),
+        this.api(`/requirements/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month`),
         this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week`),
         this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month`),
         this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&talent-status=ACCEPTED`),
@@ -160,6 +164,8 @@
         .then(([
                  weeklyTalentAcquisitionStatisticsResponse,
                  monthlyTalentAcquisitionStatisticsResponse,
+                 weeklyRequirementsStatisticsResponse,
+                 monthlyRequirementsStatisticsResponse,
                  weeklyOpportunitiesStatisticsResponse,
                  monthlyOpportunitiesStatisticsResponse,
                  weeklyTalentAcceptedOpportunitiesStatisticsResponse,
@@ -169,6 +175,8 @@
                ]) => {
           this.weeklyTalentAcquisitionStatistics = weeklyTalentAcquisitionStatisticsResponse.data;
           this.monthlyTalentAcquisitionStatistics = monthlyTalentAcquisitionStatisticsResponse.data;
+          this.weeklyRequirementsStatistics = weeklyRequirementsStatisticsResponse.data;
+          this.monthlyRequirementsStatistics = monthlyRequirementsStatisticsResponse.data;
           this.weeklyOpportunitiesStatistics = weeklyOpportunitiesStatisticsResponse.data;
           this.monthlyOpportunitiesStatistics = monthlyOpportunitiesStatisticsResponse.data;
           this.weeklyTalentAcceptedOpportunitiesStatistics =
