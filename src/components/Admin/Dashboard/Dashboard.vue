@@ -102,8 +102,8 @@
         icon="event"
         color="purple"
         entity-name="Interviews"
-        :weekly-statistics="weeklyEmployerAcceptedOpportunitiesStatistics"
-        :monthly-statistics="monthlyEmployerAcceptedOpportunitiesStatistics"
+        :weekly-statistics="weeklyConfirmedInterviewsStatistics"
+        :monthly-statistics="monthlyConfirmedInterviewsStatistics"
       ></reporting-card>
     </v-flex>
   </v-layout>
@@ -130,6 +130,8 @@
       monthlyTalentAcceptedOpportunitiesStatistics: [],
       weeklyEmployerAcceptedOpportunitiesStatistics: [],
       monthlyEmployerAcceptedOpportunitiesStatistics: [],
+      weeklyConfirmedInterviewsStatistics: [],
+      monthlyConfirmedInterviewsStatistics: [],
     }),
     computed: {
       ...mapGetters([
@@ -160,6 +162,8 @@
         this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&talent-status=ACCEPTED`),
         this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&employer-status=ACCEPTED`),
         this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&employer-status=ACCEPTED`),
+        this.api(`/interviews/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&status=CONFIRMED`),
+        this.api(`/interviews/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&status=CONFIRMED`),
       ])
         .then(([
                  weeklyTalentAcquisitionStatisticsResponse,
@@ -172,6 +176,8 @@
                  monthlyTalentAcceptedOpportunitiesStatisticsResponse,
                  weeklyEmployerAcceptedOpportunitiesStatisticsResponse,
                  monthlyEmployerAcceptedOpportunitiesStatisticsResponse,
+                 weeklyConfirmedInterviewsStatisticsResponse,
+                 monthlyConfirmedInterviewsStatisticsResponse,
                ]) => {
           this.weeklyTalentAcquisitionStatistics = weeklyTalentAcquisitionStatisticsResponse.data;
           this.monthlyTalentAcquisitionStatistics = monthlyTalentAcquisitionStatisticsResponse.data;
@@ -187,6 +193,9 @@
             weeklyEmployerAcceptedOpportunitiesStatisticsResponse.data;
           this.monthlyEmployerAcceptedOpportunitiesStatistics =
             monthlyEmployerAcceptedOpportunitiesStatisticsResponse.data;
+          this.weeklyConfirmedInterviewsStatistics = weeklyConfirmedInterviewsStatisticsResponse.data;
+          this.monthlyConfirmedInterviewsStatistics =
+            monthlyConfirmedInterviewsStatisticsResponse.data;
         })
         .catch(() => this.showSnackbar(['Error', 'error']))
         .finally(() => this.clearLoading(true));
