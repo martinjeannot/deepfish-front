@@ -1,14 +1,20 @@
 <template>
   <v-timeline>
-    <v-timeline-item v-for="(item, i) in items" :key="i" :color="item.color" :icon="item.icon" fill-dot>
+    <v-timeline-item
+      v-for="(event, i) in events"
+      :key="i"
+      :color="event.color"
+      :icon="event.icon"
+      fill-dot
+    >
       <div slot="opposite">
-        {{ item.date | formatDate('LLL') }}<br/>
-        <span v-if="item.durationFromPreviousEvent" class="font-italic">
-          {{ item.durationFromPreviousEvent }} later
+        {{ event.date | formatDate('LLL') }}<br/>
+        <span v-if="event.durationFromPreviousEvent" class="font-italic">
+          {{ event.durationFromPreviousEvent }} later
         </span>
       </div>
       <v-card>
-        <v-card-text v-html="item.text">
+        <v-card-text v-html="event.text">
         </v-card-text>
       </v-card>
     </v-timeline-item>
@@ -27,47 +33,65 @@
       ...mapState([
         'getOpportunityStatusColor',
       ]),
-      items() {
-        const items = [];
-        items.push({
+      events() {
+        let events = [];
+        // add all events in chronological order to ease sorting
+        events.push({
           date: this.opportunity.createdAt,
-          text: `${this.opportunity.creator.firstName} sent this opportunity to ${this.opportunity.talent.firstName} ${this.opportunity.talent.lastName.toUpperCase()}`,
+          text: `Opportunity sent to ${this.opportunity.talent.firstName} ${this.opportunity.talent.lastName.toUpperCase()}`,
           color: this.getOpportunityStatusColor('PENDING'),
-          icon: this.getOpportunityStatusIcon('PENDING'),
+          icon: 'send',
         });
+        if (this.opportunity.seenByTalentAt) {
+          events.push({
+            date: this.opportunity.seenByTalentAt,
+            text: `Seen by ${this.opportunity.talent.firstName}`,
+            color: 'primary',
+            icon: 'done_all',
+          });
+        }
         if (this.opportunity.talentRespondedAt) {
-          items.push({
+          events.push({
             date: this.opportunity.talentRespondedAt,
             text: `${this.opportunity.talent.firstName} responded : ${this.opportunity.talentStatus}
             ${this.opportunity.talentDeclinationReason ? `<br/><span class="font-italic">${this.opportunity.talentDeclinationReason}</span>` : ''}`,
             color: this.getOpportunityStatusColor(this.opportunity.talentStatus),
             icon: this.getOpportunityStatusIcon(this.opportunity.talentStatus),
-            durationFromPreviousEvent: moment(this.opportunity.talentRespondedAt)
-              .from(this.opportunity.createdAt, true),
           });
         }
         if (this.opportunity.forwardedAt) {
-          items.push({
+          events.push({
             date: this.opportunity.forwardedAt,
             text: `${this.opportunity.talent.firstName} was sent to ${this.opportunity.company.name}`,
             color: this.getOpportunityStatusColor('PENDING'),
-            icon: this.getOpportunityStatusIcon('PENDING'),
-            durationFromPreviousEvent: moment(this.opportunity.forwardedAt)
-              .from(this.opportunity.talentRespondedAt, true),
+            icon: 'forward',
           });
         }
-        if (this.opportunity.employerRespondedAt) {
-          items.push({
-            date: this.opportunity.employerRespondedAt,
-            text: `${this.opportunity.company.name} responded : ${this.opportunity.employerStatus}
+        if (this.opportunity.employerAcceptedAt) {
+          events.push({
+            date: this.opportunity.employerAcceptedAt,
+            text: `${this.opportunity.company.name} ACCEPTED ${this.opportunity.talent.firstName}`,
+            color: this.getOpportunityStatusColor('ACCEPTED'),
+            icon: this.getOpportunityStatusIcon('ACCEPTED'),
+          });
+        }
+        if (this.opportunity.employerDeclinedAt) {
+          events.push({
+            date: this.opportunity.employerDeclinedAt,
+            text: `${this.opportunity.company.name} DECLINED ${this.opportunity.talent.firstName}
             ${this.opportunity.employerDeclinationReason ? `<br/><span class="font-italic">${this.opportunity.employerDeclinationReason}</span>` : ''}`,
-            color: this.getOpportunityStatusColor(this.opportunity.employerStatus),
-            icon: this.getOpportunityStatusIcon(this.opportunity.employerStatus),
-            durationFromPreviousEvent: moment(this.opportunity.employerRespondedAt)
-              .from(this.opportunity.forwardedAt, true),
+            color: this.getOpportunityStatusColor('DECLINED'),
+            icon: this.getOpportunityStatusIcon('DECLINED'),
           });
         }
-        return items;
+        // sort events chronologically
+        // eslint-disable-next-line no-nested-ternary
+        events.sort((a, b) => ((a.date > b.date) ? 1 : (b.date > a.date) ? -1 : 0));
+        events = events.map((event, i) => (i ? {
+          ...event,
+          durationFromPreviousEvent: moment(event.date).from(events[i - 1].date, true),
+        } : event));
+        return events;
       },
     },
     methods: {
