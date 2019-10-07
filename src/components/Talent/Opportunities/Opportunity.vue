@@ -5,6 +5,10 @@
     </v-flex>
   </v-layout>
   <v-layout v-else wrap>
+    <opportunity-tracker
+      :opportunity="opportunity"
+    ></opportunity-tracker>
+
     <v-flex xs12 v-if="alertComponent">
       <base-alert
         :type="alertComponent.type"
@@ -129,6 +133,7 @@
   import OpportunityInterviews from './OpportunityInterviews';
   import OpportunitySocialMedia from './OpportunitySocialMedia';
   import OpportunityMap from './OpportunityMap';
+  import OpportunityTracker from './OpportunityTracker';
 
   const rules = {
     required: value => !!value || 'This field is required',
@@ -144,6 +149,7 @@
       OpportunityInterviews,
       OpportunitySocialMedia,
       OpportunityMap,
+      OpportunityTracker,
     },
     props: ['id'],
     data: () => ({
@@ -171,10 +177,6 @@
           .api(`/opportunities/${opportunityId}?projection=talent`)
           .then((response) => {
             this.opportunity = response.data;
-            // TODO REMOVE
-            // this.opportunity.company.coverImageUrl = 'https://cdn.welcometothejungle.co/uploads/website_organization/cover_image/wttj_fr/small_fr-certinergy.jpg';
-            // this.opportunity.company.logoURL = 'https://deepfish-static.s3.amazonaws.com/companies/11c74751-4e24-4268-bf7d-01c2927c9e6a/logo.png';
-            // this.opportunity.company.topImageUrl = 'https://cdn.welcometothejungle.co/uploads/image/file/8974/154902/small_b1b03f9b-094b-44b4-8a8e-aa413cee32e7.jpg';
           })
           .catch(() => this.setErrorAfterApiConsumption());
       },
