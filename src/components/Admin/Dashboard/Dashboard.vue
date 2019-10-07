@@ -73,7 +73,7 @@
       ></reporting-card>
     </v-flex>
 
-    <!-- Employer accepted opportunities reporting card -->
+    <!-- Employer accepted talents reporting card -->
     <v-flex
       xs12
       sm6
@@ -85,12 +85,12 @@
         icon="how_to_reg"
         color="blue"
         entity-name="Talents"
-        :weekly-statistics="weeklyEmployerAcceptedOpportunitiesStatistics"
-        :monthly-statistics="monthlyEmployerAcceptedOpportunitiesStatistics"
+        :weekly-statistics="weeklyEmployerAcceptedTalentsStatistics"
+        :monthly-statistics="monthlyEmployerAcceptedTalentsStatistics"
       ></reporting-card>
     </v-flex>
 
-    <!-- Interviews reporting card -->
+    <!-- Confirmed interviews reporting card -->
     <v-flex
       xs12
       sm6
@@ -98,7 +98,7 @@
       :class="['pb-3', {'pl-2': $vuetify.breakpoint.smAndUp}]"
     >
       <reporting-card
-        title="Interviews"
+        title="Confirmed interviews"
         icon="event"
         color="purple"
         entity-name="Interviews"
@@ -128,8 +128,8 @@
       monthlyOpportunitiesStatistics: [],
       weeklyTalentAcceptedOpportunitiesStatistics: [],
       monthlyTalentAcceptedOpportunitiesStatistics: [],
-      weeklyEmployerAcceptedOpportunitiesStatistics: [],
-      monthlyEmployerAcceptedOpportunitiesStatistics: [],
+      weeklyEmployerAcceptedTalentsStatistics: [],
+      monthlyEmployerAcceptedTalentsStatistics: [],
       weeklyConfirmedInterviewsStatistics: [],
       monthlyConfirmedInterviewsStatistics: [],
     }),
@@ -158,10 +158,10 @@
         this.api(`/requirements/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month`),
         this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week`),
         this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&talent-status=ACCEPTED`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&talent-status=ACCEPTED`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&employer-status=ACCEPTED`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&employer-status=ACCEPTED`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&event-field=talent_responded_at&talent-status=ACCEPTED`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&event-field=talent_responded_at&talent-status=ACCEPTED`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&event-field=employer_accepted_at`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&event-field=employer_accepted_at`),
         this.api(`/interviews/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&status=CONFIRMED`),
         this.api(`/interviews/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&status=CONFIRMED`),
       ])
@@ -174,8 +174,8 @@
                  monthlyOpportunitiesStatisticsResponse,
                  weeklyTalentAcceptedOpportunitiesStatisticsResponse,
                  monthlyTalentAcceptedOpportunitiesStatisticsResponse,
-                 weeklyEmployerAcceptedOpportunitiesStatisticsResponse,
-                 monthlyEmployerAcceptedOpportunitiesStatisticsResponse,
+                 weeklyEmployerAcceptedTalentsStatisticsResponse,
+                 monthlyEmployerAcceptedTalentsStatisticsResponse,
                  weeklyConfirmedInterviewsStatisticsResponse,
                  monthlyConfirmedInterviewsStatisticsResponse,
                ]) => {
@@ -189,10 +189,10 @@
             weeklyTalentAcceptedOpportunitiesStatisticsResponse.data;
           this.monthlyTalentAcceptedOpportunitiesStatistics =
             monthlyTalentAcceptedOpportunitiesStatisticsResponse.data;
-          this.weeklyEmployerAcceptedOpportunitiesStatistics =
-            weeklyEmployerAcceptedOpportunitiesStatisticsResponse.data;
-          this.monthlyEmployerAcceptedOpportunitiesStatistics =
-            monthlyEmployerAcceptedOpportunitiesStatisticsResponse.data;
+          this.weeklyEmployerAcceptedTalentsStatistics =
+            weeklyEmployerAcceptedTalentsStatisticsResponse.data;
+          this.monthlyEmployerAcceptedTalentsStatistics =
+            monthlyEmployerAcceptedTalentsStatisticsResponse.data;
           this.weeklyConfirmedInterviewsStatistics = weeklyConfirmedInterviewsStatisticsResponse.data;
           this.monthlyConfirmedInterviewsStatistics =
             monthlyConfirmedInterviewsStatisticsResponse.data;
