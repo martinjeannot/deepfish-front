@@ -21,13 +21,11 @@
       </div>
     </template>
     <template #item="{ item }">
-      <v-list-tile>
-        <v-list-tile-content>
-          <v-list-tile-title>
-            <span style="font-weight: bold">{{ item.company.name }}</span> : {{ item.name }}
-          </v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
+      <v-list-tile-content>
+        <v-list-tile-title>
+          <span style="font-weight: bold">{{ item.company.name }}</span> : {{ item.name }}
+        </v-list-tile-title>
+      </v-list-tile-content>
     </template>
   </v-autocomplete>
 </template>
