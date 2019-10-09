@@ -31,6 +31,7 @@
 </template>
 
 <script>
+  import { debounce } from 'lodash';
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
@@ -58,8 +59,8 @@
     },
     watch: {
       searchInput(value) {
-        if (value) {
-          return this.searchRequirements(value);
+        if (value && value.length >= 2) {
+          return this.debouncedSearchRequirements(value);
         }
         return null;
       },
@@ -80,6 +81,9 @@
             this.loading = false;
           });
       },
+    },
+    created() {
+      this.debouncedSearchRequirements = debounce(this.searchRequirements, 600);
     },
   };
 </script>
