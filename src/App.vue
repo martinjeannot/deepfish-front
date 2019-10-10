@@ -146,12 +146,12 @@
                 title: 'Data Management',
                 route: { name: 'AdminDMTalents' },
               },
-              {
-                key: 'statistics',
-                icon: 'timeline',
-                title: 'Statistics',
-                route: { name: 'AdminStatisticsOpportunities' },
-              },
+              /* {
+               key: 'statistics',
+               icon: 'timeline',
+               title: 'Statistics',
+               route: { name: 'AdminStatisticsOpportunities' },
+               }, */
               {
                 key: 'profile',
                 icon: 'account_circle',
