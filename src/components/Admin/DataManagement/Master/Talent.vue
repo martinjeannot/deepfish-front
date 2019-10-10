@@ -25,7 +25,7 @@
             <v-flex xs4 class="pr-3">
               <v-container class="elevation-1" style="background-color: white">
                 <v-layout wrap>
-                  <v-flex xs12 class="text-xs-center">
+                  <v-flex xs12 class="text-xs-center pb-2">
                     <v-avatar size="140">
                       <v-img
                         :src="talent.profilePictureUrl"
@@ -34,8 +34,13 @@
                       ></v-img>
                     </v-avatar>
                   </v-flex>
-                  <v-flex xs12 class="text-xs-center">
-                    <h2>{{ talent.firstName }} {{ talent.lastName.toUpperCase() }}</h2>
+                  <v-flex xs12 class="text-xs-center d-inline-flex">
+                    <h2 ref="nameTitle">{{ talent.firstName }} {{ talent.lastName.toUpperCase() }}</h2>
+                    <v-icon
+                      @click="copyNameTitleToClipboard"
+                    >
+                      file_copy
+                    </v-icon>
                   </v-flex>
                   <v-flex xs12 class="text-xs-center">
                     <h4>{{ talent.fullProfile ? talent.fullProfile.general.headline : 'N/A' }}</h4>
@@ -624,6 +629,22 @@
           })
           .catch(() => this.showSnackbar(['Error while retrieving opportunities', 'error']))
           .finally(() => this.clearLoading());
+      },
+      copyNameTitleToClipboard() {
+        this.selectText(this.$refs.nameTitle);
+        document.execCommand('copy');
+      },
+      selectText(element) {
+        if (document.selection) { // IE
+          const range = document.body.createTextRange();
+          range.moveToElementText(element);
+          range.select();
+        } else if (window.getSelection) {
+          const range = document.createRange();
+          range.selectNodeContents(element);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+        }
       },
       fetchInitialData() {
         this.prepareForApiConsumption(true);
