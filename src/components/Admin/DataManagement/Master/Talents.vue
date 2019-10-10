@@ -91,7 +91,7 @@
         'loading',
       ]),
       encodedSearchInput() {
-        return encodeURIComponent(this.searchInput.trim());
+        return encodeURIComponent(this.searchInput.trim().split(/[, ]+/).join(' and '));
       },
     },
     watch: {
@@ -110,16 +110,20 @@
       ]),
       getTalents() {
         this.prepareForApiConsumption();
-        let path = '/talents';
-        path += this.searchInput ? '/search/findByEmailContainingOrLastNameContainingOrFirstNameContainingOrPhoneNumberContainingAllIgnoreCase' : '';
         let queryString = '';
-        queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
+        // Search input
+        if (this.searchInput) {
+          queryString += queryString ? '&' : '';
+          queryString += `searchQuery=${this.encodedSearchInput}`;
+        }
+        queryString += queryString ? '&' : '';
+        queryString += `page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';
-        queryString += this.searchInput ? `&email=${this.encodedSearchInput}&lastName=${this.encodedSearchInput}&firstName=${this.encodedSearchInput}&phoneNumber=${this.encodedSearchInput}` : '';
+        // API consumption
         this
-          .api(`${path}?${queryString}`)
+          .api(`/queryableTalents?${queryString}`)
           .then((response) => {
-            this.talents = response.data._embedded.talents;
+            this.talents = response.data._embedded.queryableTalents;
             this.totalItems = response.data.page.totalElements;
           })
           .catch(() => this.showSnackbar(['Error', 'error']))
