@@ -79,7 +79,7 @@
                         <template #activator="{ on }">
                           <v-text-field
                             v-model="opportunity.dealClosedOn"
-                            clearable
+                            :clearable="!opportunity.talentStartedOn"
                             hint="Date de signature, oral agreement, etc"
                             label="Deal closed on"
                             persistent-hint
@@ -93,6 +93,7 @@
                           v-model="opportunity.dealClosedOn"
                           :first-day-of-week="localeFirstDayOfWeek"
                           :locale="locale"
+                          :max="opportunity.talentStartedOn"
                           no-title
                           @input="$refs.dealClosedOnMenu.save(opportunity.dealClosedOn); saveOpportunity(opportunity)"
                         ></v-date-picker>
@@ -125,7 +126,8 @@
                         <template #activator="{ on }">
                           <v-text-field
                             v-model="opportunity.talentStartedOn"
-                            clearable
+                            :clearable="!opportunity.trialPeriodTerminatedOn"
+                            :disabled="!opportunity.dealClosedOn"
                             hint="Date de démarrage du talent chez le client"
                             label="Talent started on"
                             persistent-hint
@@ -139,6 +141,8 @@
                           v-model="opportunity.talentStartedOn"
                           :first-day-of-week="localeFirstDayOfWeek"
                           :locale="locale"
+                          :max="opportunity.trialPeriodTerminatedOn"
+                          :min="opportunity.dealClosedOn"
                           no-title
                           @input="$refs.talentStartedOnMenu.save(opportunity.talentStartedOn); saveOpportunity(opportunity)"
                         ></v-date-picker>
@@ -161,6 +165,7 @@
                           <v-text-field
                             v-model="opportunity.trialPeriodTerminatedOn"
                             clearable
+                            :disabled="!opportunity.talentStartedOn"
                             hint="Date de rupture de la période d'essai par le client/talent"
                             label="Trial period terminated on"
                             persistent-hint
@@ -174,6 +179,7 @@
                           v-model="opportunity.trialPeriodTerminatedOn"
                           :first-day-of-week="localeFirstDayOfWeek"
                           :locale="locale"
+                          :min="opportunity.talentStartedOn"
                           no-title
                           @input="$refs.trialPeriodTerminatedOnMenu.save(opportunity.trialPeriodTerminatedOn); saveOpportunity(opportunity)"
                         ></v-date-picker>
@@ -182,6 +188,7 @@
                     <v-flex xs12 class="pb-3">
                       <v-textarea
                         v-model="opportunity.trialPeriodTerminationReason"
+                        :disabled="!opportunity.trialPeriodTerminatedOn"
                         label="Trial period termination reason"
                         @change="saveOpportunity(opportunity)"
                       ></v-textarea>
