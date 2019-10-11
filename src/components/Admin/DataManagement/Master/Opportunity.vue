@@ -65,6 +65,52 @@
                     </v-flex>
                     <v-flex xs8 class="pb-3 pr-2">
                       <v-menu
+                        ref="dealClosedOnMenu"
+                        v-model="dealClosedOnMenu"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        :return-value.sync="opportunity.dealClosedOn"
+                        lazy
+                        transition="scale-transition"
+                        offset-y
+                        full-width
+                        min-width="290px"
+                      >
+                        <template #activator="{ on }">
+                          <v-text-field
+                            v-model="opportunity.dealClosedOn"
+                            clearable
+                            hint="Date de signature, oral agreement, etc"
+                            label="Deal closed on"
+                            persistent-hint
+                            prepend-icon="event"
+                            readonly
+                            v-on="on"
+                            @click:clear="clearDealClosedOn"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          v-model="opportunity.dealClosedOn"
+                          :first-day-of-week="localeFirstDayOfWeek"
+                          :locale="locale"
+                          no-title
+                          @input="$refs.dealClosedOnMenu.save(opportunity.dealClosedOn); saveOpportunity(opportunity)"
+                        ></v-date-picker>
+                      </v-menu>
+                    </v-flex>
+                    <v-flex xs4 class="pb-3 pl-2">
+                      <v-text-field
+                        ref="baseSalaryInput"
+                        v-model="opportunity.baseSalary"
+                        label="Base salary"
+                        prefix="K€"
+                        :rules="[rules.positive, rules.maxValue]"
+                        type="number"
+                        @change="saveBaseSalary"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs12 class="pb-3">
+                      <v-menu
                         ref="talentStartedOnMenu"
                         v-model="talentStartedOnMenu"
                         :close-on-content-click="false"
@@ -97,17 +143,6 @@
                           @input="$refs.talentStartedOnMenu.save(opportunity.talentStartedOn); saveOpportunity(opportunity)"
                         ></v-date-picker>
                       </v-menu>
-                    </v-flex>
-                    <v-flex xs4 class="pb-3 pl-2">
-                      <v-text-field
-                        ref="baseSalaryInput"
-                        v-model="opportunity.baseSalary"
-                        label="Base salary"
-                        prefix="K€"
-                        :rules="[rules.positive, rules.maxValue]"
-                        type="number"
-                        @change="saveBaseSalary"
-                      ></v-text-field>
                     </v-flex>
                     <v-flex xs12 class="pb-3">
                       <v-menu
@@ -211,6 +246,7 @@
     data: () => ({
       rules,
       opportunity: null,
+      dealClosedOnMenu: false,
       talentStartedOnMenu: false,
       trialPeriodTerminatedOnMenu: false,
     }),
@@ -236,6 +272,10 @@
         'setErrorAfterApiConsumption',
         'onAlertComponentDismissed',
       ]),
+      clearDealClosedOn() {
+        this.opportunity.dealClosedOn = null;
+        return this.saveOpportunity(this.opportunity);
+      },
       clearTalentStartedOn() {
         this.opportunity.talentStartedOn = null;
         return this.saveOpportunity(this.opportunity);
