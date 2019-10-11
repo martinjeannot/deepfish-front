@@ -8,40 +8,83 @@
         <v-card-text>
           <v-layout wrap>
             <v-flex xs4>
-              <v-menu ref="createdAtAfterMenu" v-model="createdAtAfterMenu" :close-on-content-click="false"
-                      :nudge-right="40" :return-value.sync="createdAtAfter" lazy transition="scale-transition" offset-y
-                      full-width min-width="290px">
+              <v-menu
+                ref="createdAtAfterMenu"
+                v-model="createdAtAfterMenu"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                :return-value.sync="createdAtAfter"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
                 <template #activator="{ on }">
-                  <v-text-field v-model="createdAtAfter" label="Created at after" prepend-icon="event" readonly
-                                v-on="on"></v-text-field>
+                  <v-text-field
+                    v-model="createdAtAfter"
+                    label="Created at after"
+                    prepend-icon="event"
+                    readonly
+                    v-on="on"
+                  ></v-text-field>
                 </template>
-                <v-date-picker v-model="createdAtAfter"
-                               @input="$refs.createdAtAfterMenu.save(createdAtAfter); getStatistics()"></v-date-picker>
+                <v-date-picker
+                  v-model="createdAtAfter"
+                  @input="$refs.createdAtAfterMenu.save(createdAtAfter); getStatistics()"
+                ></v-date-picker>
               </v-menu>
             </v-flex>
             <v-flex xs4>
-              <v-menu ref="createdAtBeforeMenu" v-model="createdAtBeforeMenu" :close-on-content-click="false"
-                      :nudge-right="40" :return-value.sync="createdAtBefore" lazy transition="scale-transition"
-                      offset-y full-width min-width="290px">
+              <v-menu
+                ref="createdAtBeforeMenu"
+                v-model="createdAtBeforeMenu"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                :return-value.sync="createdAtBefore"
+                lazy
+                transition="scale-transition"
+                offset-y
+                full-width
+                min-width="290px"
+              >
                 <template #activator="{ on }">
-                  <v-text-field v-model="createdAtBefore" label="Created at before" prepend-icon="event" readonly
-                                v-on="on"></v-text-field>
+                  <v-text-field
+                    v-model="createdAtBefore"
+                    label="Created at before"
+                    prepend-icon="event"
+                    readonly
+                    v-on="on"
+                  ></v-text-field>
                 </template>
-                <v-date-picker v-model="createdAtBefore"
-                               @input="$refs.createdAtBeforeMenu.save(createdAtBefore); getStatistics()"></v-date-picker>
+                <v-date-picker
+                  v-model="createdAtBefore"
+                  @input="$refs.createdAtBeforeMenu.save(createdAtBefore); getStatistics()"
+                ></v-date-picker>
               </v-menu>
             </v-flex>
             <v-flex xs4 class="pl-3">
-              <v-select :items="['day', 'week', 'month', 'year']" v-model="groupBy" label="Group by"
-                        @change="getStatistics"></v-select>
+              <v-select
+                v-model="groupBy"
+                :items="['day', 'week', 'month', 'year']"
+                label="Group by"
+                @change="getStatistics"
+              ></v-select>
             </v-flex>
             <v-flex xs12 v-if="loading">
               <v-flex xs12 class="text-xs-center">
-                <v-progress-circular indeterminate color="primary" :size="70"></v-progress-circular>
+                <v-progress-circular
+                  indeterminate
+                  color="primary"
+                  :size="70"
+                ></v-progress-circular>
               </v-flex>
             </v-flex>
             <v-flex xs12 v-else>
-              <line-chart :data="chartData" :height="180"></line-chart>
+              <line-chart
+                :data="chartData"
+                :height="180"
+              ></line-chart>
             </v-flex>
           </v-layout>
         </v-card-text>

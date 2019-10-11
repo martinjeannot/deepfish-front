@@ -6,6 +6,7 @@
     label="Search"
     single-line
     @click:append-outer="search"
+    @keyup.enter="search"
   ></v-text-field>
 </template>
 

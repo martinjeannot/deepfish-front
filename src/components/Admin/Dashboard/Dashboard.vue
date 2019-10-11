@@ -14,15 +14,15 @@
     >
       <reporting-card
         title="Talent acquisition"
-        icon="people"
-        color="blue"
+        icon="group_add"
+        color="red"
         entity-name="Talents"
         :weekly-statistics="weeklyTalentAcquisitionStatistics"
         :monthly-statistics="monthlyTalentAcquisitionStatistics"
       ></reporting-card>
     </v-flex>
 
-    <!-- Sent opportunities reporting card -->
+    <!-- Requirements reporting card -->
     <v-flex
       xs12
       sm6
@@ -30,9 +30,26 @@
       :class="['pb-3', {'pl-2': $vuetify.breakpoint.smAndUp}]"
     >
       <reporting-card
+        title="Requirements"
+        icon="work"
+        color="orange"
+        entity-name="Requirements"
+        :weekly-statistics="weeklyRequirementsStatistics"
+        :monthly-statistics="monthlyRequirementsStatistics"
+      ></reporting-card>
+    </v-flex>
+
+    <!-- Sent opportunities reporting card -->
+    <v-flex
+      xs12
+      sm6
+      xl5 offset-xl1
+      :class="['pb-3', {'pr-2': $vuetify.breakpoint.smAndUp}]"
+    >
+      <reporting-card
         title="Sent opportunities"
         icon="assignment"
-        color="orange"
+        color="amber lighten-1"
         entity-name="Opportunities"
         :weekly-statistics="weeklyOpportunitiesStatistics"
         :monthly-statistics="monthlyOpportunitiesStatistics"
@@ -43,20 +60,37 @@
     <v-flex
       xs12
       sm6
-      xl5 offset-xl1
-      :class="['pb-3', {'pr-2': $vuetify.breakpoint.smAndUp}]"
+      xl5
+      :class="['pb-3', {'pl-2': $vuetify.breakpoint.smAndUp}]"
     >
       <reporting-card
         title="Talent accepted opportunities"
-        icon="assignment"
-        color="light-green"
+        icon="assignment_turned_in"
+        color="green"
         entity-name="Opportunities"
         :weekly-statistics="weeklyTalentAcceptedOpportunitiesStatistics"
         :monthly-statistics="monthlyTalentAcceptedOpportunitiesStatistics"
       ></reporting-card>
     </v-flex>
 
-    <!-- Employer accepted opportunities reporting card -->
+    <!-- Employer accepted talents reporting card -->
+    <v-flex
+      xs12
+      sm6
+      xl5 offset-xl1
+      :class="['pb-3', {'pr-2': $vuetify.breakpoint.smAndUp}]"
+    >
+      <reporting-card
+        title="Employer accepted talents"
+        icon="how_to_reg"
+        color="blue"
+        entity-name="Talents"
+        :weekly-statistics="weeklyEmployerAcceptedTalentsStatistics"
+        :monthly-statistics="monthlyEmployerAcceptedTalentsStatistics"
+      ></reporting-card>
+    </v-flex>
+
+    <!-- Confirmed interviews reporting card -->
     <v-flex
       xs12
       sm6
@@ -64,12 +98,12 @@
       :class="['pb-3', {'pl-2': $vuetify.breakpoint.smAndUp}]"
     >
       <reporting-card
-        title="Employer accepted talents"
+        title="Confirmed interviews"
         icon="event"
-        color="green"
-        entity-name="Talents"
-        :weekly-statistics="weeklyEmployerAcceptedOpportunitiesStatistics"
-        :monthly-statistics="monthlyEmployerAcceptedOpportunitiesStatistics"
+        color="purple"
+        entity-name="Interviews"
+        :weekly-statistics="weeklyConfirmedInterviewsStatistics"
+        :monthly-statistics="monthlyConfirmedInterviewsStatistics"
       ></reporting-card>
     </v-flex>
   </v-layout>
@@ -88,12 +122,16 @@
     data: () => ({
       weeklyTalentAcquisitionStatistics: [],
       monthlyTalentAcquisitionStatistics: [],
+      weeklyRequirementsStatistics: [],
+      monthlyRequirementsStatistics: [],
       weeklyOpportunitiesStatistics: [],
       monthlyOpportunitiesStatistics: [],
       weeklyTalentAcceptedOpportunitiesStatistics: [],
       monthlyTalentAcceptedOpportunitiesStatistics: [],
-      weeklyEmployerAcceptedOpportunitiesStatistics: [],
-      monthlyEmployerAcceptedOpportunitiesStatistics: [],
+      weeklyEmployerAcceptedTalentsStatistics: [],
+      monthlyEmployerAcceptedTalentsStatistics: [],
+      weeklyConfirmedInterviewsStatistics: [],
+      monthlyConfirmedInterviewsStatistics: [],
     }),
     computed: {
       ...mapGetters([
@@ -111,40 +149,53 @@
     created() {
       this.prepareForApiConsumption(true);
       const now = moment().format('YYYY-MM-DD');
-      const startOfWeek3MonthsAgo = moment().subtract(3, 'months').startOf('isoWeek').format('YYYY-MM-DD');
-      const startOfMonth4MonthsAgo = moment().subtract(4, 'months').startOf('month').format('YYYY-MM-DD');
+      const startOfWeek4WeeksAgo = moment().subtract(4, 'weeks').startOf('isoWeek').format('YYYY-MM-DD');
+      const startOfMonth12MonthsAgo = moment().subtract(12, 'months').startOf('month').format('YYYY-MM-DD');
       return Promise.all([
-        this.api(`/talents/statistics?created-at-after=${startOfWeek3MonthsAgo}&created-at-before=${now}&group-by=week`),
-        this.api(`/talents/statistics?created-at-after=${startOfMonth4MonthsAgo}&created-at-before=${now}&group-by=month`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfWeek3MonthsAgo}&created-at-before=${now}&group-by=week`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfMonth4MonthsAgo}&created-at-before=${now}&group-by=month`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfWeek3MonthsAgo}&created-at-before=${now}&group-by=week&talent-status=ACCEPTED`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfMonth4MonthsAgo}&created-at-before=${now}&group-by=month&talent-status=ACCEPTED`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfWeek3MonthsAgo}&created-at-before=${now}&group-by=week&employer-status=ACCEPTED`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfMonth4MonthsAgo}&created-at-before=${now}&group-by=month&employer-status=ACCEPTED`),
+        this.api(`/talents/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week`),
+        this.api(`/talents/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month`),
+        this.api(`/requirements/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week`),
+        this.api(`/requirements/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&event-field=talent_responded_at&talent-status=ACCEPTED`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&event-field=talent_responded_at&talent-status=ACCEPTED`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&event-field=employer_accepted_at`),
+        this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&event-field=employer_accepted_at`),
+        this.api(`/interviews/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&status=CONFIRMED`),
+        this.api(`/interviews/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&status=CONFIRMED`),
       ])
         .then(([
                  weeklyTalentAcquisitionStatisticsResponse,
                  monthlyTalentAcquisitionStatisticsResponse,
+                 weeklyRequirementsStatisticsResponse,
+                 monthlyRequirementsStatisticsResponse,
                  weeklyOpportunitiesStatisticsResponse,
                  monthlyOpportunitiesStatisticsResponse,
                  weeklyTalentAcceptedOpportunitiesStatisticsResponse,
                  monthlyTalentAcceptedOpportunitiesStatisticsResponse,
-                 weeklyEmployerAcceptedOpportunitiesStatisticsResponse,
-                 monthlyEmployerAcceptedOpportunitiesStatisticsResponse,
+                 weeklyEmployerAcceptedTalentsStatisticsResponse,
+                 monthlyEmployerAcceptedTalentsStatisticsResponse,
+                 weeklyConfirmedInterviewsStatisticsResponse,
+                 monthlyConfirmedInterviewsStatisticsResponse,
                ]) => {
           this.weeklyTalentAcquisitionStatistics = weeklyTalentAcquisitionStatisticsResponse.data;
           this.monthlyTalentAcquisitionStatistics = monthlyTalentAcquisitionStatisticsResponse.data;
+          this.weeklyRequirementsStatistics = weeklyRequirementsStatisticsResponse.data;
+          this.monthlyRequirementsStatistics = monthlyRequirementsStatisticsResponse.data;
           this.weeklyOpportunitiesStatistics = weeklyOpportunitiesStatisticsResponse.data;
           this.monthlyOpportunitiesStatistics = monthlyOpportunitiesStatisticsResponse.data;
           this.weeklyTalentAcceptedOpportunitiesStatistics =
             weeklyTalentAcceptedOpportunitiesStatisticsResponse.data;
           this.monthlyTalentAcceptedOpportunitiesStatistics =
             monthlyTalentAcceptedOpportunitiesStatisticsResponse.data;
-          this.weeklyEmployerAcceptedOpportunitiesStatistics =
-            weeklyEmployerAcceptedOpportunitiesStatisticsResponse.data;
-          this.monthlyEmployerAcceptedOpportunitiesStatistics =
-            monthlyEmployerAcceptedOpportunitiesStatisticsResponse.data;
+          this.weeklyEmployerAcceptedTalentsStatistics =
+            weeklyEmployerAcceptedTalentsStatisticsResponse.data;
+          this.monthlyEmployerAcceptedTalentsStatistics =
+            monthlyEmployerAcceptedTalentsStatisticsResponse.data;
+          this.weeklyConfirmedInterviewsStatistics = weeklyConfirmedInterviewsStatisticsResponse.data;
+          this.monthlyConfirmedInterviewsStatistics =
+            monthlyConfirmedInterviewsStatisticsResponse.data;
         })
         .catch(() => this.showSnackbar(['Error', 'error']))
         .finally(() => this.clearLoading(true));

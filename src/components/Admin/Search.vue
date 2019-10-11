@@ -21,6 +21,13 @@
           </v-flex>
         </v-card-title>
       </v-card>
+      <v-card>
+        <v-card-title>
+          <requirement-select
+            v-model="criteria.requirementNotIn"
+          ></requirement-select>
+        </v-card-title>
+      </v-card>
       <v-expansion-panel>
         <v-expansion-panel-content>
           <div slot="header">Company maturity level</div>
@@ -270,6 +277,7 @@
 <script>
   import { mapGetters, mapActions, mapState } from 'vuex';
   import AdminOpportunitySendingDialog from './Utilities/OpportunitySendingDialog';
+  import RequirementSelect from './Utilities/RequirementSelect';
 
   const talentMaturityLevels = [
     { key: 'CLEAR_WATER', label: 'Clear water' },
@@ -281,6 +289,7 @@
     name: 'AdminSearch',
     components: {
       AdminOpportunitySendingDialog,
+      RequirementSelect,
     },
     data: () => ({
       talents: [],
@@ -301,6 +310,7 @@
       // CRITERIA
       criteria: {
         searchQuery: null,
+        requirementNotIn: null,
         companyMaturityLevels: [],
         companyMaturityLevelsNotIn: [],
         jobTypes: [],
@@ -361,6 +371,11 @@
         if (this.criteria.searchQuery) {
           talentQueryString += talentQueryString ? '&' : '';
           talentQueryString += `searchQuery=${encodeURIComponent(this.criteria.searchQuery)}`;
+        }
+        // Requirements criterion
+        if (this.criteria.requirementNotIn) {
+          talentQueryString += talentQueryString ? '&' : '';
+          talentQueryString += `requirementIdsNotIn=${this.criteria.requirementNotIn.id}`;
         }
         // Company maturity levels criterion
         if (this.criteria.companyMaturityLevels.length) {

@@ -7,6 +7,7 @@
     clearable
     hide-details
     item-text="company.name"
+    item-value="id"
     :items="requirements"
     label="Requirement"
     :loading="loading"
@@ -20,18 +21,17 @@
       </div>
     </template>
     <template #item="{ item }">
-      <v-list-tile>
-        <v-list-tile-content>
-          <v-list-tile-title>
-            <span style="font-weight: bold">{{ item.company.name }}</span> : {{ item.name }}
-          </v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
+      <v-list-tile-content>
+        <v-list-tile-title>
+          <span style="font-weight: bold">{{ item.company.name }}</span> : {{ item.name }}
+        </v-list-tile-title>
+      </v-list-tile-content>
     </template>
   </v-autocomplete>
 </template>
 
 <script>
+  import { debounce } from 'lodash';
   import { mapGetters, mapActions } from 'vuex';
 
   export default {
@@ -59,8 +59,8 @@
     },
     watch: {
       searchInput(value) {
-        if (value) {
-          return this.searchRequirements(value);
+        if (value && value.length >= 2) {
+          return this.debouncedSearchRequirements(value);
         }
         return null;
       },
@@ -81,6 +81,9 @@
             this.loading = false;
           });
       },
+    },
+    created() {
+      this.debouncedSearchRequirements = debounce(this.searchRequirements, 600);
     },
   };
 </script>
