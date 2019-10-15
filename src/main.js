@@ -8,6 +8,7 @@ import 'vuetify/dist/vuetify.css';
 import VueAnalytics from 'vue-analytics';
 import vue2Dropzone from 'vue2-dropzone';
 import 'vue2-dropzone/dist/vue2Dropzone.min.css';
+import HighchartsVue from 'highcharts-vue';
 
 import App from './App';
 import router from './router';
@@ -41,6 +42,7 @@ Vue.use(VueAnalytics, {
     sendHitTask: isProduction,
   },
 });
+Vue.use(HighchartsVue);
 
 Vue.component('base-alert', BaseAlert);
 Vue.component('ternary-checkbox', TernaryCheckbox);
