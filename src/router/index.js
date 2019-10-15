@@ -23,8 +23,8 @@ import AdminDMUsers from '@/components/Admin/DataManagement/Master/Users';
 import AdminDMNewUser from '@/components/Admin/DataManagement/Master/NewUser';
 import AdminDMCompanyMaturityLevels from '@/components/Admin/DataManagement/Reference/CompanyMaturityLevels';
 import AdminDMUtms from '@/components/Admin/DataManagement/Reference/Utms';
-import AdminStatisticsOpportunities from '@/components/Admin/Statistics/Opportunities';
 import AdminStatisticsTalentAcquisition from '@/components/Admin/Statistics/TalentAcquisition';
+import AdminStatisticsOpportunities from '@/components/Admin/Statistics/Opportunities';
 import EmployerProfile from '@/components/Employer/Profile';
 import EmployerRequirements from '@/components/Employer/Requirements/Requirements';
 import EmployerRequirement from '@/components/Employer/Requirements/Requirement';
@@ -269,15 +269,15 @@ const router = new Router({
     },
     // Statistics
     {
-      path: '/admin/statistics/opportunities',
-      name: 'AdminStatisticsOpportunities',
-      component: AdminStatisticsOpportunities,
-      meta: { authRequired: true },
-    },
-    {
       path: '/admin/statistics/talent-acquisition',
       name: 'AdminStatisticsTalentAcquisition',
       component: AdminStatisticsTalentAcquisition,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/admin/statistics/opportunities',
+      name: 'AdminStatisticsOpportunities',
+      component: AdminStatisticsOpportunities,
       meta: { authRequired: true },
     },
     // EMPLOYER ====================================================================================
