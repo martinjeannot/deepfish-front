@@ -24,6 +24,7 @@ import AdminDMNewUser from '@/components/Admin/DataManagement/Master/NewUser';
 import AdminDMCompanyMaturityLevels from '@/components/Admin/DataManagement/Reference/CompanyMaturityLevels';
 import AdminDMUtms from '@/components/Admin/DataManagement/Reference/Utms';
 import AdminStatisticsTalentAcquisition from '@/components/Admin/Statistics/TalentAcquisition';
+import AdminRequirementStatistics from '@/components/Admin/Statistics/RequirementStatistics';
 import AdminStatisticsOpportunities from '@/components/Admin/Statistics/Opportunities';
 import EmployerProfile from '@/components/Employer/Profile';
 import EmployerRequirements from '@/components/Employer/Requirements/Requirements';
@@ -272,6 +273,12 @@ const router = new Router({
       path: '/admin/statistics/talent-acquisition',
       name: 'AdminStatisticsTalentAcquisition',
       component: AdminStatisticsTalentAcquisition,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/admin/statistics/requirements',
+      name: 'AdminRequirementStatistics',
+      component: AdminRequirementStatistics,
       meta: { authRequired: true },
     },
     {

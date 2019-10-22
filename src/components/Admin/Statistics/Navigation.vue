@@ -28,6 +28,12 @@
           color: 'red',
           route: { name: 'AdminStatisticsTalentAcquisition' },
         },
+        {
+          title: 'Requirements',
+          icon: 'work',
+          color: 'orange',
+          route: { name: 'AdminRequirementStatistics' },
+        },
         { title: 'Opportunities', icon: 'dashboard', route: { name: 'AdminStatisticsOpportunities' } },
       ],
     }),
