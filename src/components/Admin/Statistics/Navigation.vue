@@ -26,10 +26,10 @@
           title: 'Talent acquisition',
           icon: 'group_add',
           color: 'red',
-          route: { name: 'AdminStatisticsTalentAcquisition' },
+          route: { name: 'AdminTalentAcquisitionStatistics' },
         },
         {
-          title: 'Requirements',
+          title: 'Requirement',
           icon: 'work',
           color: 'orange',
           route: { name: 'AdminRequirementStatistics' },
