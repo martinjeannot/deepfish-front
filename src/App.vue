@@ -150,7 +150,7 @@
                 key: 'statistics',
                 icon: 'timeline',
                 title: 'Statistics',
-                route: { name: 'AdminStatisticsOpportunities' },
+                route: { name: 'AdminOpportunityStatistics' },
               },
               {
                 key: 'profile',

@@ -34,13 +34,13 @@
   import DateRangeSelector from './DateRangeSelector';
 
   export default {
-    name: 'TalentAcquisitionStatistics',
+    name: 'OpportunityStatistics',
     components: {
       StatisticsNavigation,
       DateRangeSelector,
     },
     data: () => ({
-      newTalentsStatistics: [],
+      sentOpportunitiesStatistics: [],
       startDate: moment()
         .subtract(1, 'years')
         .format('YYYY-MM-DD'),
@@ -58,20 +58,20 @@
       chartOptions() {
         return {
           title: {
-            text: 'Talent acquisition',
+            text: 'Opportunities',
           },
           xAxis: {
             type: 'datetime',
           },
           yAxis: {
             title: {
-              text: 'Talents',
+              text: 'Opportunities',
             },
           },
           series: [
             {
-              name: 'New talents',
-              data: this.newTalentsStatistics
+              name: 'Sent opportunities',
+              data: this.sentOpportunitiesStatistics
                 .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
             },
           ],
@@ -85,20 +85,20 @@
       ]),
       getStatistics() {
         this.prepareForApiConsumption();
-        const newTalentsQuery = `start-date=${this.startDate}&end-date=${this.endDate}&group-by=${this.groupBy}`;
+        const sentOpportunitiesQuery = `start-date=${this.startDate}&end-date=${this.endDate}&group-by=${this.groupBy}`;
         return Promise.all([
-          this.api(`/talents/statistics?${newTalentsQuery}`),
+          this.api(`/opportunities/statistics?${sentOpportunitiesQuery}`),
         ])
           .then(([
-                   newTalentsResponse,
+                   sentOpportunitiesResponse,
                  ]) => {
-            this.newTalentsStatistics = newTalentsResponse.data;
+            this.sentOpportunitiesStatistics = sentOpportunitiesResponse.data;
           })
           .finally(() => this.clearLoading());
       },
     },
     created() {
-      this.getStatistics();
+      return this.getStatistics();
     },
   };
 </script>

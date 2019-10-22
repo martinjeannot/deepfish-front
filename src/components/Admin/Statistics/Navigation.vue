@@ -34,7 +34,12 @@
           color: 'orange',
           route: { name: 'AdminRequirementStatistics' },
         },
-        { title: 'Opportunities', icon: 'dashboard', route: { name: 'AdminStatisticsOpportunities' } },
+        {
+          title: 'Opportunity',
+          icon: 'assignment',
+          color: 'amber lighten-1',
+          route: { name: 'AdminOpportunityStatistics' },
+        },
       ],
     }),
   };

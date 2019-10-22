@@ -71,7 +71,8 @@
           series: [
             {
               name: 'New requirements',
-              data: this.newRequirementsStatistics.map(point => [this.parseDate(point[0]), point[1]]),
+              data: this.newRequirementsStatistics
+                .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
             },
           ],
         };
