@@ -152,18 +152,18 @@
       const startOfWeek4WeeksAgo = moment().subtract(4, 'weeks').startOf('isoWeek').format('YYYY-MM-DD');
       const startOfMonth12MonthsAgo = moment().subtract(12, 'months').startOf('month').format('YYYY-MM-DD');
       return Promise.all([
-        this.api(`/talents/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week`),
-        this.api(`/talents/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month`),
-        this.api(`/requirements/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week`),
-        this.api(`/requirements/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&event-field=talent_responded_at&talent-status=ACCEPTED`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&event-field=talent_responded_at&talent-status=ACCEPTED`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&event-field=employer_accepted_at`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&event-field=employer_accepted_at`),
-        this.api(`/interviews/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&status=CONFIRMED`),
-        this.api(`/interviews/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&status=CONFIRMED`),
+        this.api(`/talents/statistics?start-date=${startOfWeek4WeeksAgo}&end-date=${now}&group-by=week`),
+        this.api(`/talents/statistics?start-date=${startOfMonth12MonthsAgo}&end-date=${now}&group-by=month`),
+        this.api(`/requirements/statistics?start-date=${startOfWeek4WeeksAgo}&end-date=${now}&group-by=week`),
+        this.api(`/requirements/statistics?start-date=${startOfMonth12MonthsAgo}&end-date=${now}&group-by=month`),
+        this.api(`/opportunities/statistics?start-date=${startOfWeek4WeeksAgo}&end-date=${now}&group-by=week`),
+        this.api(`/opportunities/statistics?start-date=${startOfMonth12MonthsAgo}&end-date=${now}&group-by=month`),
+        this.api(`/opportunities/statistics?start-date=${startOfWeek4WeeksAgo}&end-date=${now}&group-by=week&event-field=talentRespondedAt&talent-status=ACCEPTED`),
+        this.api(`/opportunities/statistics?start-date=${startOfMonth12MonthsAgo}&end-date=${now}&group-by=month&event-field=talentRespondedAt&talent-status=ACCEPTED`),
+        this.api(`/opportunities/statistics?start-date=${startOfWeek4WeeksAgo}&end-date=${now}&group-by=week&event-field=employerAcceptedAt`),
+        this.api(`/opportunities/statistics?start-date=${startOfMonth12MonthsAgo}&end-date=${now}&group-by=month&event-field=employerAcceptedAt`),
+        this.api(`/interviews/statistics?start-date=${startOfWeek4WeeksAgo}&end-date=${now}&group-by=week&status=CONFIRMED`),
+        this.api(`/interviews/statistics?start-date=${startOfMonth12MonthsAgo}&end-date=${now}&group-by=month&status=CONFIRMED`),
       ])
         .then(([
                  weeklyTalentAcquisitionStatisticsResponse,
