@@ -149,6 +149,17 @@ export default new Vuex.Store({
       { text: 'B', value: 2 },
       { text: 'C', value: 3 },
     ],
+    // UTILS ====================================
+    parseDate(dateString, groupBy) {
+      if (groupBy === 'week') {
+        return moment()
+          .startOf('isoWeek')
+          .isoWeekYear(dateString.split('-')[0])
+          .isoWeek(dateString.split('-')[1])
+          .valueOf();
+      }
+      return Date.parse(dateString);
+    },
   },
   mutations: {
     [types.SET_APP_CREATED](state, appCreated) {
