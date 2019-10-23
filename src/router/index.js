@@ -25,10 +25,10 @@ import AdminDMCompanyMaturityLevels from '@/components/Admin/DataManagement/Refe
 import AdminDMUtms from '@/components/Admin/DataManagement/Reference/Utms';
 import AdminTalentAcquisitionStatistics from '@/components/Admin/Statistics/TalentAcquisitionStatistics';
 import AdminRequirementStatistics from '@/components/Admin/Statistics/RequirementStatistics';
-import AdminOpportunityStatistics from '@/components/Admin/Statistics/OpportunityStatistics';
+import AdminOpportunitySendingStatistics from '@/components/Admin/Statistics/OpportunitySendingStatistics';
 import AdminTalentResponseStatistics from '@/components/Admin/Statistics/TalentResponseStatistics';
 import AdminEmployerResponseStatistics from '@/components/Admin/Statistics/EmployerResponseStatistics';
-import AdminInterviewStatistics from '@/components/Admin/Statistics/InterviewStatistics';
+import AdminInterviewConfirmationStatistics from '@/components/Admin/Statistics/InterviewConfirmationStatistics';
 import EmployerProfile from '@/components/Employer/Profile';
 import EmployerRequirements from '@/components/Employer/Requirements/Requirements';
 import EmployerRequirement from '@/components/Employer/Requirements/Requirement';
@@ -285,9 +285,9 @@ const router = new Router({
       meta: { authRequired: true },
     },
     {
-      path: '/admin/statistics/opportunity',
-      name: 'AdminOpportunityStatistics',
-      component: AdminOpportunityStatistics,
+      path: '/admin/statistics/opportunity-sending',
+      name: 'AdminOpportunitySendingStatistics',
+      component: AdminOpportunitySendingStatistics,
       meta: { authRequired: true },
     },
     {
@@ -303,9 +303,9 @@ const router = new Router({
       meta: { authRequired: true },
     },
     {
-      path: '/admin/statistics/interview',
-      name: 'AdminInterviewStatistics',
-      component: AdminInterviewStatistics,
+      path: '/admin/statistics/interview-confirmation',
+      name: 'AdminInterviewConfirmationStatistics',
+      component: AdminInterviewConfirmationStatistics,
       meta: { authRequired: true },
     },
     // EMPLOYER ====================================================================================

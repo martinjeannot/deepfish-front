@@ -34,14 +34,14 @@
   import DateRangeSelector from './DateRangeSelector';
 
   export default {
-    name: 'InterviewStatistics',
+    name: 'InterviewConfirmationStatistics',
     components: {
       StatisticsNavigation,
       DateRangeSelector,
     },
     data: () => ({
-      confirmedPhoneInterviewsStatistics: [],
-      confirmedInPersonInterviewsStatistics: [],
+      phoneInterviewConfirmationStatistics: [],
+      inPersonInterviewConfirmationStatistics: [],
       startDate: moment()
         .subtract(1, 'years')
         .format('YYYY-MM-DD'),
@@ -61,19 +61,19 @@
           series: [
             {
               color: '#9C27B0',
-              data: this.confirmedPhoneInterviewsStatistics
+              data: this.phoneInterviewConfirmationStatistics
                 .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
               name: 'Confirmed phone interviews',
             },
             {
               color: '#673AB7',
-              data: this.confirmedInPersonInterviewsStatistics
+              data: this.inPersonInterviewConfirmationStatistics
                 .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
               name: 'Confirmed in person interviews',
             },
           ],
           title: {
-            text: 'Interviews',
+            text: 'Interview Confirmation',
           },
           xAxis: {
             type: 'datetime',
@@ -81,7 +81,7 @@
           yAxis: {
             allowDecimals: false,
             title: {
-              text: 'Interviews',
+              text: 'Confirmed interviews',
             },
           },
         };
@@ -94,18 +94,18 @@
       ]),
       getStatistics() {
         this.prepareForApiConsumption();
-        const confirmedPhoneInterviewsQuery = `start-date=${this.startDate}&end-date=${this.endDate}&group-by=${this.groupBy}&status=CONFIRMED&format=PHONE`;
-        const confirmedInPersonInterviewsQuery = `start-date=${this.startDate}&end-date=${this.endDate}&group-by=${this.groupBy}&status=CONFIRMED&format=IN_PERSON`;
+        const phoneInterviewConfirmationQuery = `start-date=${this.startDate}&end-date=${this.endDate}&group-by=${this.groupBy}&status=CONFIRMED&format=PHONE`;
+        const inPersonInterviewConfirmationQuery = `start-date=${this.startDate}&end-date=${this.endDate}&group-by=${this.groupBy}&status=CONFIRMED&format=IN_PERSON`;
         return Promise.all([
-          this.api(`/interviews/statistics?${confirmedPhoneInterviewsQuery}`),
-          this.api(`/interviews/statistics?${confirmedInPersonInterviewsQuery}`),
+          this.api(`/interviews/statistics?${phoneInterviewConfirmationQuery}`),
+          this.api(`/interviews/statistics?${inPersonInterviewConfirmationQuery}`),
         ])
           .then(([
-                   confirmedPhoneInterviewsResponse,
-                   confirmedInPersonInterviewsResponse,
+                   phoneInterviewConfirmationResponse,
+                   inPersonInterviewConfirmationResponse,
                  ]) => {
-            this.confirmedPhoneInterviewsStatistics = confirmedPhoneInterviewsResponse.data;
-            this.confirmedInPersonInterviewsStatistics = confirmedInPersonInterviewsResponse.data;
+            this.phoneInterviewConfirmationStatistics = phoneInterviewConfirmationResponse.data;
+            this.inPersonInterviewConfirmationStatistics = inPersonInterviewConfirmationResponse.data;
           })
           .finally(() => this.clearLoading());
       },

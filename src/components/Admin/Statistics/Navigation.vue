@@ -35,10 +35,10 @@
           route: { name: 'AdminRequirementStatistics' },
         },
         {
-          title: 'Opportunity',
+          title: 'Opportunity sending',
           icon: 'assignment',
           color: 'amber lighten-1',
-          route: { name: 'AdminOpportunityStatistics' },
+          route: { name: 'AdminOpportunitySendingStatistics' },
         },
         {
           title: 'Talent response',
@@ -53,10 +53,10 @@
           route: { name: 'AdminEmployerResponseStatistics' },
         },
         {
-          title: 'Interview',
+          title: 'Interview confirmation',
           icon: 'event',
           color: 'purple',
-          route: { name: 'AdminInterviewStatistics' },
+          route: { name: 'AdminInterviewConfirmationStatistics' },
         },
       ],
     }),

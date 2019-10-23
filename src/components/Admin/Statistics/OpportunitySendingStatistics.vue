@@ -34,13 +34,13 @@
   import DateRangeSelector from './DateRangeSelector';
 
   export default {
-    name: 'OpportunityStatistics',
+    name: 'OpportunitySendingStatistics',
     components: {
       StatisticsNavigation,
       DateRangeSelector,
     },
     data: () => ({
-      sentOpportunitiesStatistics: [],
+      opportunitySendingStatistics: [],
       startDate: moment()
         .subtract(1, 'years')
         .format('YYYY-MM-DD'),
@@ -60,13 +60,13 @@
           series: [
             {
               color: '#FFCA28',
-              data: this.sentOpportunitiesStatistics
+              data: this.opportunitySendingStatistics
                 .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
               name: 'Sent opportunities',
             },
           ],
           title: {
-            text: 'Opportunities',
+            text: 'Opportunity Sending',
           },
           xAxis: {
             type: 'datetime',
@@ -87,14 +87,14 @@
       ]),
       getStatistics() {
         this.prepareForApiConsumption();
-        const sentOpportunitiesQuery = `start-date=${this.startDate}&end-date=${this.endDate}&group-by=${this.groupBy}`;
+        const opportunitySendingQuery = `start-date=${this.startDate}&end-date=${this.endDate}&group-by=${this.groupBy}`;
         return Promise.all([
-          this.api(`/opportunities/statistics?${sentOpportunitiesQuery}`),
+          this.api(`/opportunities/statistics?${opportunitySendingQuery}`),
         ])
           .then(([
-                   sentOpportunitiesResponse,
+                   opportunitySendingResponse,
                  ]) => {
-            this.sentOpportunitiesStatistics = sentOpportunitiesResponse.data;
+            this.opportunitySendingStatistics = opportunitySendingResponse.data;
           })
           .finally(() => this.clearLoading());
       },

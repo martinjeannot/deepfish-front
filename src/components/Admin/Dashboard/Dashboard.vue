@@ -49,11 +49,11 @@
       :class="['pb-3', {'pr-2': $vuetify.breakpoint.smAndUp}]"
     >
       <reporting-card
-        title="Sent opportunities"
+        title="Opportunity sending"
         icon="assignment"
         color="amber lighten-1"
         entity-name="Opportunities"
-        statistics-route-name="AdminOpportunityStatistics"
+        statistics-route-name="AdminOpportunitySendingStatistics"
         :weekly-statistics="weeklyOpportunitiesStatistics"
         :monthly-statistics="monthlyOpportunitiesStatistics"
       ></reporting-card>
@@ -103,11 +103,11 @@
       :class="['pb-3', {'pl-2': $vuetify.breakpoint.smAndUp}]"
     >
       <reporting-card
-        title="Confirmed interviews"
+        title="Interview confirmation"
         icon="event"
         color="purple"
         entity-name="Interviews"
-        statistics-route-name="AdminInterviewStatistics"
+        statistics-route-name="AdminInterviewConfirmationStatistics"
         :weekly-statistics="weeklyConfirmedInterviewsStatistics"
         :monthly-statistics="monthlyConfirmedInterviewsStatistics"
       ></reporting-card>
