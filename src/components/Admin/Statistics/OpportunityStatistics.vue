@@ -57,6 +57,14 @@
       ]),
       chartOptions() {
         return {
+          series: [
+            {
+              color: '#FFCA28',
+              data: this.sentOpportunitiesStatistics
+                .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
+              name: 'Sent opportunities',
+            },
+          ],
           title: {
             text: 'Opportunities',
           },
@@ -64,18 +72,11 @@
             type: 'datetime',
           },
           yAxis: {
+            allowDecimals: false,
             title: {
               text: 'Opportunities',
             },
           },
-          series: [
-            {
-              name: 'Sent opportunities',
-              data: this.sentOpportunitiesStatistics
-                .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
-              color: '#FFCA28',
-            },
-          ],
         };
       },
     },

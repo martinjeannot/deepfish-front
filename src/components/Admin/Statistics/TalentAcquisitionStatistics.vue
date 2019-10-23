@@ -57,6 +57,14 @@
       ]),
       chartOptions() {
         return {
+          series: [
+            {
+              color: '#F44336',
+              data: this.newTalentsStatistics
+                .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
+              name: 'New talents',
+            },
+          ],
           title: {
             text: 'Talent acquisition',
           },
@@ -64,18 +72,11 @@
             type: 'datetime',
           },
           yAxis: {
+            allowDecimals: false,
             title: {
               text: 'Talents',
             },
           },
-          series: [
-            {
-              name: 'New talents',
-              data: this.newTalentsStatistics
-                .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
-              color: '#F44336',
-            },
-          ],
         };
       },
     },

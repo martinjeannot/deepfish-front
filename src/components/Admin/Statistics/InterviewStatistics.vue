@@ -58,6 +58,20 @@
       ]),
       chartOptions() {
         return {
+          series: [
+            {
+              color: '#9C27B0',
+              data: this.confirmedPhoneInterviewsStatistics
+                .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
+              name: 'Confirmed phone interviews',
+            },
+            {
+              color: '#673AB7',
+              data: this.confirmedInPersonInterviewsStatistics
+                .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
+              name: 'Confirmed in person interviews',
+            },
+          ],
           title: {
             text: 'Interviews',
           },
@@ -65,24 +79,11 @@
             type: 'datetime',
           },
           yAxis: {
+            allowDecimals: false,
             title: {
               text: 'Interviews',
             },
           },
-          series: [
-            {
-              name: 'Confirmed phone interviews',
-              data: this.confirmedPhoneInterviewsStatistics
-                .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
-              color: '#9C27B0',
-            },
-            {
-              name: 'Confirmed in person interviews',
-              data: this.confirmedInPersonInterviewsStatistics
-                .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
-              color: '#673AB7',
-            },
-          ],
         };
       },
     },

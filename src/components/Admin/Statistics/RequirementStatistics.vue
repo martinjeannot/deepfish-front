@@ -57,6 +57,14 @@
       ]),
       chartOptions() {
         return {
+          series: [
+            {
+              color: '#FF9800',
+              data: this.newRequirementsStatistics
+                .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
+              name: 'New requirements',
+            },
+          ],
           title: {
             text: 'Requirements',
           },
@@ -64,18 +72,11 @@
             type: 'datetime',
           },
           yAxis: {
+            allowDecimals: false,
             title: {
               text: 'Requirements',
             },
           },
-          series: [
-            {
-              name: 'New requirements',
-              data: this.newRequirementsStatistics
-                .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
-              color: '#FF9800',
-            },
-          ],
         };
       },
     },
