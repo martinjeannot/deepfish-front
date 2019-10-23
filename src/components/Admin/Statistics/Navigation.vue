@@ -47,6 +47,12 @@
           route: { name: 'AdminTalentResponseStatistics' },
         },
         {
+          title: 'Employer response',
+          icon: 'how_to_reg',
+          color: 'blue',
+          route: { name: 'AdminEmployerResponseStatistics' },
+        },
+        {
           title: 'Interview',
           icon: 'event',
           color: 'purple',

@@ -89,7 +89,7 @@
         icon="how_to_reg"
         color="blue"
         entity-name="Talents"
-        statistics-route-name="AdminOpportunityStatistics"
+        statistics-route-name="AdminEmployerResponseStatistics"
         :weekly-statistics="weeklyEmployerAcceptedTalentsStatistics"
         :monthly-statistics="monthlyEmployerAcceptedTalentsStatistics"
       ></reporting-card>
