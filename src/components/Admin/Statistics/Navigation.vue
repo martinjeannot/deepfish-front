@@ -40,6 +40,12 @@
           color: 'amber lighten-1',
           route: { name: 'AdminOpportunityStatistics' },
         },
+        {
+          title: 'Interview',
+          icon: 'event',
+          color: 'purple',
+          route: { name: 'AdminInterviewStatistics' },
+        },
       ],
     }),
   };
