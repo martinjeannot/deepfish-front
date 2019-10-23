@@ -17,6 +17,7 @@
         icon="group_add"
         color="red"
         entity-name="Talents"
+        statistics-route-name="AdminTalentAcquisitionStatistics"
         :weekly-statistics="weeklyTalentAcquisitionStatistics"
         :monthly-statistics="monthlyTalentAcquisitionStatistics"
       ></reporting-card>
@@ -34,6 +35,7 @@
         icon="work"
         color="orange"
         entity-name="Requirements"
+        statistics-route-name="AdminRequirementStatistics"
         :weekly-statistics="weeklyRequirementsStatistics"
         :monthly-statistics="monthlyRequirementsStatistics"
       ></reporting-card>
@@ -51,6 +53,7 @@
         icon="assignment"
         color="amber lighten-1"
         entity-name="Opportunities"
+        statistics-route-name="AdminOpportunityStatistics"
         :weekly-statistics="weeklyOpportunitiesStatistics"
         :monthly-statistics="monthlyOpportunitiesStatistics"
       ></reporting-card>
@@ -68,6 +71,7 @@
         icon="assignment_turned_in"
         color="green"
         entity-name="Opportunities"
+        statistics-route-name="AdminOpportunityStatistics"
         :weekly-statistics="weeklyTalentAcceptedOpportunitiesStatistics"
         :monthly-statistics="monthlyTalentAcceptedOpportunitiesStatistics"
       ></reporting-card>
@@ -85,6 +89,7 @@
         icon="how_to_reg"
         color="blue"
         entity-name="Talents"
+        statistics-route-name="AdminOpportunityStatistics"
         :weekly-statistics="weeklyEmployerAcceptedTalentsStatistics"
         :monthly-statistics="monthlyEmployerAcceptedTalentsStatistics"
       ></reporting-card>
@@ -102,6 +107,7 @@
         icon="event"
         color="purple"
         entity-name="Interviews"
+        statistics-route-name="AdminInterviewStatistics"
         :weekly-statistics="weeklyConfirmedInterviewsStatistics"
         :monthly-statistics="monthlyConfirmedInterviewsStatistics"
       ></reporting-card>
