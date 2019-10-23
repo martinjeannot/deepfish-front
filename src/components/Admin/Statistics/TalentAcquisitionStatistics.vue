@@ -73,6 +73,7 @@
               name: 'New talents',
               data: this.newTalentsStatistics
                 .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
+              color: '#F44336',
             },
           ],
         };

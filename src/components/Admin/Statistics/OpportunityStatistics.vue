@@ -73,6 +73,7 @@
               name: 'Sent opportunities',
               data: this.sentOpportunitiesStatistics
                 .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
+              color: '#FFCA28',
             },
           ],
         };
