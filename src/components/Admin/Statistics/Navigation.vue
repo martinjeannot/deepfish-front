@@ -41,6 +41,12 @@
           route: { name: 'AdminOpportunityStatistics' },
         },
         {
+          title: 'Talent response',
+          icon: 'assignment_turned_in',
+          color: 'green',
+          route: { name: 'AdminTalentResponseStatistics' },
+        },
+        {
           title: 'Interview',
           icon: 'event',
           color: 'purple',

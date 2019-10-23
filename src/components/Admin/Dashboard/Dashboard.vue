@@ -71,7 +71,7 @@
         icon="assignment_turned_in"
         color="green"
         entity-name="Opportunities"
-        statistics-route-name="AdminOpportunityStatistics"
+        statistics-route-name="AdminTalentResponseStatistics"
         :weekly-statistics="weeklyTalentAcceptedOpportunitiesStatistics"
         :monthly-statistics="monthlyTalentAcceptedOpportunitiesStatistics"
       ></reporting-card>
