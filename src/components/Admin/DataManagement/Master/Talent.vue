@@ -34,10 +34,12 @@
                       ></v-img>
                     </v-avatar>
                   </v-flex>
-                  <v-flex xs12 class="text-xs-center d-inline-flex">
+                  <v-flex xs10 class="text-xs-center">
                     <h2 ref="nameTitle">{{ talent.firstName }} {{ talent.lastName.toUpperCase() }}</h2>
+                  </v-flex>
+                  <v-flex xs2 class="text-xs-left">
                     <v-icon
-                      @click="copyNameTitleToClipboard"
+                      @click="copyElementToClipboard($refs.nameTitle)"
                     >
                       file_copy
                     </v-icon>
@@ -101,11 +103,16 @@
                       @change="saveQualification"
                     ></v-checkbox>
                   </v-flex>
-                  <v-flex xs12>
-                    <p>
-                      <v-icon>email</v-icon>
-                      {{ talent.email }}
-                    </p>
+                  <v-flex xs10 class="pb-3">
+                    <v-icon>email</v-icon>
+                    <span ref="talentMail">{{ talent.email }}</span>
+                  </v-flex>
+                  <v-flex xs2 class="pb-3 text-xs-left">
+                    <v-icon
+                      @click="copyElementToClipboard($refs.talentMail)"
+                    >
+                      file_copy
+                    </v-icon>
                   </v-flex>
                   <v-flex xs12>
                     <p>
@@ -229,8 +236,8 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs4>
-                          <h3>Fixed salary</h3>
-                          {{ talent.conditions.fixedSalary }} €
+                          <h3>Can start on</h3>
+                          {{ talent.conditions.canStartOn | formatDate('LL') }}
                         </v-flex>
                         <v-flex xs4>
                           <v-chip
@@ -241,8 +248,8 @@
                           </v-chip>
                         </v-flex>
                         <v-flex xs4>
-                          <h3>Can start on</h3>
-                          {{ talent.conditions.canStartOn | formatDate('LL') }}
+                          <h3>Fixed salary</h3>
+                          {{ talent.conditions.fixedSalary }} €
                         </v-flex>
                         <v-flex xs12>
                           <h3>Company maturity levels</h3>
@@ -486,18 +493,19 @@
     }),
     props: ['id'],
     computed: {
+      ...mapState([
+        'getTalentMaturityLevel',
+        'getOpportunityStatusColor',
+        'getTalentLinkedInProfileUrl',
+        'getLabelFromCompanyMaturityLevelL10nKey',
+      ]),
       ...mapGetters([
         'api',
         'loading',
         'initialLoading',
         'alertComponent',
         'talentRankingReferenceData',
-      ]),
-      ...mapState([
-        'getTalentMaturityLevel',
-        'getOpportunityStatusColor',
-        'getTalentLinkedInProfileUrl',
-        'getLabelFromCompanyMaturityLevelL10nKey',
+        'copyElementToClipboard',
       ]),
       profileCompletion() {
         const profileCompletion = { value: 100, items: [] };
@@ -629,22 +637,6 @@
           })
           .catch(() => this.showSnackbar(['Error while retrieving opportunities', 'error']))
           .finally(() => this.clearLoading());
-      },
-      copyNameTitleToClipboard() {
-        this.selectText(this.$refs.nameTitle);
-        document.execCommand('copy');
-      },
-      selectText(element) {
-        if (document.selection) { // IE
-          const range = document.body.createTextRange();
-          range.moveToElementText(element);
-          range.select();
-        } else if (window.getSelection) {
-          const range = document.createRange();
-          range.selectNodeContents(element);
-          window.getSelection().removeAllRanges();
-          window.getSelection().addRange(range);
-        }
       },
       fetchInitialData() {
         this.prepareForApiConsumption(true);

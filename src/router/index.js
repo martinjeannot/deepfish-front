@@ -23,8 +23,13 @@ import AdminDMUsers from '@/components/Admin/DataManagement/Master/Users';
 import AdminDMNewUser from '@/components/Admin/DataManagement/Master/NewUser';
 import AdminDMCompanyMaturityLevels from '@/components/Admin/DataManagement/Reference/CompanyMaturityLevels';
 import AdminDMUtms from '@/components/Admin/DataManagement/Reference/Utms';
-import AdminStatisticsOpportunities from '@/components/Admin/Statistics/Opportunities';
-import AdminStatisticsTalentAcquisition from '@/components/Admin/Statistics/TalentAcquisition';
+import AdminTalentAcquisitionStatistics from '@/components/Admin/Statistics/TalentAcquisitionStatistics';
+import AdminRequirementStatistics from '@/components/Admin/Statistics/RequirementStatistics';
+import AdminOpportunitySendingStatistics from '@/components/Admin/Statistics/OpportunitySendingStatistics';
+import AdminTalentResponseStatistics from '@/components/Admin/Statistics/TalentResponseStatistics';
+import AdminEmployerResponseStatistics from '@/components/Admin/Statistics/EmployerResponseStatistics';
+import AdminInterviewConfirmationStatistics from '@/components/Admin/Statistics/InterviewConfirmationStatistics';
+import AdminClosingStatistics from '@/components/Admin/Statistics/ClosingStatistics';
 import EmployerProfile from '@/components/Employer/Profile';
 import EmployerRequirements from '@/components/Employer/Requirements/Requirements';
 import EmployerRequirement from '@/components/Employer/Requirements/Requirement';
@@ -269,15 +274,45 @@ const router = new Router({
     },
     // Statistics
     {
-      path: '/admin/statistics/opportunities',
-      name: 'AdminStatisticsOpportunities',
-      component: AdminStatisticsOpportunities,
+      path: '/admin/statistics/talent-acquisition',
+      name: 'AdminTalentAcquisitionStatistics',
+      component: AdminTalentAcquisitionStatistics,
       meta: { authRequired: true },
     },
     {
-      path: '/admin/statistics/talent-acquisition',
-      name: 'AdminStatisticsTalentAcquisition',
-      component: AdminStatisticsTalentAcquisition,
+      path: '/admin/statistics/requirement',
+      name: 'AdminRequirementStatistics',
+      component: AdminRequirementStatistics,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/admin/statistics/opportunity-sending',
+      name: 'AdminOpportunitySendingStatistics',
+      component: AdminOpportunitySendingStatistics,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/admin/statistics/talent-response',
+      name: 'AdminTalentResponseStatistics',
+      component: AdminTalentResponseStatistics,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/admin/statistics/employer-response',
+      name: 'AdminEmployerResponseStatistics',
+      component: AdminEmployerResponseStatistics,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/admin/statistics/interview-confirmation',
+      name: 'AdminInterviewConfirmationStatistics',
+      component: AdminInterviewConfirmationStatistics,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/admin/statistics/closing',
+      name: 'AdminClosingStatistics',
+      component: AdminClosingStatistics,
       meta: { authRequired: true },
     },
     // EMPLOYER ====================================================================================

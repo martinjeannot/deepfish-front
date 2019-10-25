@@ -36,6 +36,9 @@
       >
         {{ title }}
       </div>
+      <v-btn flat icon :color="color" :to="{ name: statisticsRouteName }">
+        <v-icon>arrow_forward</v-icon>
+      </v-btn>
     </v-card-title>
 
     <v-card-text>
@@ -80,6 +83,7 @@
       'entityName',
       'weeklyStatistics',
       'monthlyStatistics',
+      'statisticsRouteName',
     ],
     data: () => ({
       trendLinePadding: 8,

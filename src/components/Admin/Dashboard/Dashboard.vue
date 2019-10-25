@@ -17,6 +17,7 @@
         icon="group_add"
         color="red"
         entity-name="Talents"
+        statistics-route-name="AdminTalentAcquisitionStatistics"
         :weekly-statistics="weeklyTalentAcquisitionStatistics"
         :monthly-statistics="monthlyTalentAcquisitionStatistics"
       ></reporting-card>
@@ -34,6 +35,7 @@
         icon="work"
         color="orange"
         entity-name="Requirements"
+        statistics-route-name="AdminRequirementStatistics"
         :weekly-statistics="weeklyRequirementsStatistics"
         :monthly-statistics="monthlyRequirementsStatistics"
       ></reporting-card>
@@ -47,10 +49,11 @@
       :class="['pb-3', {'pr-2': $vuetify.breakpoint.smAndUp}]"
     >
       <reporting-card
-        title="Sent opportunities"
+        title="Opportunity sending"
         icon="assignment"
         color="amber lighten-1"
         entity-name="Opportunities"
+        statistics-route-name="AdminOpportunitySendingStatistics"
         :weekly-statistics="weeklyOpportunitiesStatistics"
         :monthly-statistics="monthlyOpportunitiesStatistics"
       ></reporting-card>
@@ -68,6 +71,7 @@
         icon="assignment_turned_in"
         color="green"
         entity-name="Opportunities"
+        statistics-route-name="AdminTalentResponseStatistics"
         :weekly-statistics="weeklyTalentAcceptedOpportunitiesStatistics"
         :monthly-statistics="monthlyTalentAcceptedOpportunitiesStatistics"
       ></reporting-card>
@@ -85,6 +89,7 @@
         icon="how_to_reg"
         color="blue"
         entity-name="Talents"
+        statistics-route-name="AdminEmployerResponseStatistics"
         :weekly-statistics="weeklyEmployerAcceptedTalentsStatistics"
         :monthly-statistics="monthlyEmployerAcceptedTalentsStatistics"
       ></reporting-card>
@@ -98,10 +103,11 @@
       :class="['pb-3', {'pl-2': $vuetify.breakpoint.smAndUp}]"
     >
       <reporting-card
-        title="Confirmed interviews"
+        title="Interview confirmation"
         icon="event"
         color="purple"
         entity-name="Interviews"
+        statistics-route-name="AdminInterviewConfirmationStatistics"
         :weekly-statistics="weeklyConfirmedInterviewsStatistics"
         :monthly-statistics="monthlyConfirmedInterviewsStatistics"
       ></reporting-card>
@@ -152,18 +158,18 @@
       const startOfWeek4WeeksAgo = moment().subtract(4, 'weeks').startOf('isoWeek').format('YYYY-MM-DD');
       const startOfMonth12MonthsAgo = moment().subtract(12, 'months').startOf('month').format('YYYY-MM-DD');
       return Promise.all([
-        this.api(`/talents/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week`),
-        this.api(`/talents/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month`),
-        this.api(`/requirements/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week`),
-        this.api(`/requirements/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&event-field=talent_responded_at&talent-status=ACCEPTED`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&event-field=talent_responded_at&talent-status=ACCEPTED`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&event-field=employer_accepted_at`),
-        this.api(`/opportunities/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&event-field=employer_accepted_at`),
-        this.api(`/interviews/statistics?created-at-after=${startOfWeek4WeeksAgo}&created-at-before=${now}&group-by=week&status=CONFIRMED`),
-        this.api(`/interviews/statistics?created-at-after=${startOfMonth12MonthsAgo}&created-at-before=${now}&group-by=month&status=CONFIRMED`),
+        this.api(`/talents/statistics?start-date=${startOfWeek4WeeksAgo}&end-date=${now}&group-by=week`),
+        this.api(`/talents/statistics?start-date=${startOfMonth12MonthsAgo}&end-date=${now}&group-by=month`),
+        this.api(`/requirements/statistics?start-date=${startOfWeek4WeeksAgo}&end-date=${now}&group-by=week`),
+        this.api(`/requirements/statistics?start-date=${startOfMonth12MonthsAgo}&end-date=${now}&group-by=month`),
+        this.api(`/opportunities/statistics?start-date=${startOfWeek4WeeksAgo}&end-date=${now}&group-by=week`),
+        this.api(`/opportunities/statistics?start-date=${startOfMonth12MonthsAgo}&end-date=${now}&group-by=month`),
+        this.api(`/opportunities/statistics?start-date=${startOfWeek4WeeksAgo}&end-date=${now}&group-by=week&event-field=talentRespondedAt&talent-status=ACCEPTED`),
+        this.api(`/opportunities/statistics?start-date=${startOfMonth12MonthsAgo}&end-date=${now}&group-by=month&event-field=talentRespondedAt&talent-status=ACCEPTED`),
+        this.api(`/opportunities/statistics?start-date=${startOfWeek4WeeksAgo}&end-date=${now}&group-by=week&event-field=employerAcceptedAt`),
+        this.api(`/opportunities/statistics?start-date=${startOfMonth12MonthsAgo}&end-date=${now}&group-by=month&event-field=employerAcceptedAt`),
+        this.api(`/interviews/statistics?start-date=${startOfWeek4WeeksAgo}&end-date=${now}&group-by=week&status=CONFIRMED`),
+        this.api(`/interviews/statistics?start-date=${startOfMonth12MonthsAgo}&end-date=${now}&group-by=month&status=CONFIRMED`),
       ])
         .then(([
                  weeklyTalentAcquisitionStatisticsResponse,

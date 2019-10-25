@@ -91,7 +91,7 @@
         'loading',
       ]),
       encodedSearchInput() {
-        return encodeURIComponent(this.searchInput.trim().split(/[, ]+/).join(' and '));
+        return encodeURIComponent(this.searchInput.trim().split(/[, ]+/).join(' or '));
       },
     },
     watch: {

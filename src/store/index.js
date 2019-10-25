@@ -149,6 +149,29 @@ export default new Vuex.Store({
       { text: 'B', value: 2 },
       { text: 'C', value: 3 },
     ],
+    // UTILS ====================================
+    parseDate(dateString, groupBy) {
+      if (groupBy === 'week') {
+        return moment()
+          .startOf('isoWeek')
+          .isoWeekYear(dateString.split('-')[0])
+          .isoWeek(dateString.split('-')[1])
+          .valueOf();
+      }
+      return Date.parse(dateString);
+    },
+    selectText(element) {
+      if (document.selection) { // IE
+        const range = document.body.createTextRange();
+        range.moveToElementText(element);
+        range.select();
+      } else if (window.getSelection) {
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+      }
+    },
   },
   mutations: {
     [types.SET_APP_CREATED](state, appCreated) {
@@ -534,6 +557,13 @@ export default new Vuex.Store({
     // REFERENCE DATA
     talentRankingReferenceData(state) {
       return state.talentRankingReferenceData;
+    },
+    // UTILS
+    copyElementToClipboard(state) {
+      return (elementRef) => {
+        state.selectText(elementRef);
+        document.execCommand('copy');
+      };
     },
   },
 });
