@@ -29,6 +29,7 @@ import AdminOpportunitySendingStatistics from '@/components/Admin/Statistics/Opp
 import AdminTalentResponseStatistics from '@/components/Admin/Statistics/TalentResponseStatistics';
 import AdminEmployerResponseStatistics from '@/components/Admin/Statistics/EmployerResponseStatistics';
 import AdminInterviewConfirmationStatistics from '@/components/Admin/Statistics/InterviewConfirmationStatistics';
+import AdminClosingStatistics from '@/components/Admin/Statistics/ClosingStatistics';
 import EmployerProfile from '@/components/Employer/Profile';
 import EmployerRequirements from '@/components/Employer/Requirements/Requirements';
 import EmployerRequirement from '@/components/Employer/Requirements/Requirement';
@@ -306,6 +307,12 @@ const router = new Router({
       path: '/admin/statistics/interview-confirmation',
       name: 'AdminInterviewConfirmationStatistics',
       component: AdminInterviewConfirmationStatistics,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/admin/statistics/closing',
+      name: 'AdminClosingStatistics',
+      component: AdminClosingStatistics,
       meta: { authRequired: true },
     },
     // EMPLOYER ====================================================================================

@@ -58,6 +58,12 @@
           color: 'purple',
           route: { name: 'AdminInterviewConfirmationStatistics' },
         },
+        {
+          title: 'Closing',
+          icon: 'stars',
+          color: 'black',
+          route: { name: 'AdminClosingStatistics' },
+        },
       ],
     }),
   };
