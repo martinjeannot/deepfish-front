@@ -39,7 +39,7 @@
                   </v-flex>
                   <v-flex xs2 class="text-xs-left">
                     <v-icon
-                      @click="copyElementToClipboard('nameTitle')"
+                      @click="copyElementToClipboard($refs.nameTitle)"
                     >
                       file_copy
                     </v-icon>
@@ -109,7 +109,7 @@
                   </v-flex>
                   <v-flex xs2 class="pb-3 text-xs-left">
                     <v-icon
-                      @click="copyElementToClipboard('talentMail')"
+                      @click="copyElementToClipboard($refs.talentMail)"
                     >
                       file_copy
                     </v-icon>
@@ -493,18 +493,19 @@
     }),
     props: ['id'],
     computed: {
+      ...mapState([
+        'getTalentMaturityLevel',
+        'getOpportunityStatusColor',
+        'getTalentLinkedInProfileUrl',
+        'getLabelFromCompanyMaturityLevelL10nKey',
+      ]),
       ...mapGetters([
         'api',
         'loading',
         'initialLoading',
         'alertComponent',
         'talentRankingReferenceData',
-      ]),
-      ...mapState([
-        'getTalentMaturityLevel',
-        'getOpportunityStatusColor',
-        'getTalentLinkedInProfileUrl',
-        'getLabelFromCompanyMaturityLevelL10nKey',
+        'copyElementToClipboard',
       ]),
       profileCompletion() {
         const profileCompletion = { value: 100, items: [] };
@@ -636,22 +637,6 @@
           })
           .catch(() => this.showSnackbar(['Error while retrieving opportunities', 'error']))
           .finally(() => this.clearLoading());
-      },
-      copyElementToClipboard(elementRef) {
-        this.selectText(this.$refs[elementRef]);
-        document.execCommand('copy');
-      },
-      selectText(element) {
-        if (document.selection) { // IE
-          const range = document.body.createTextRange();
-          range.moveToElementText(element);
-          range.select();
-        } else if (window.getSelection) {
-          const range = document.createRange();
-          range.selectNodeContents(element);
-          window.getSelection().removeAllRanges();
-          window.getSelection().addRange(range);
-        }
       },
       fetchInitialData() {
         this.prepareForApiConsumption(true);

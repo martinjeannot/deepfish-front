@@ -19,38 +19,47 @@
             <v-flex xs4 class="pr-3">
               <v-card>
                 <v-card-text>
-                  <v-flex xs12 class="text-xs-center">
-                    <h2>{{ employer.firstName }} {{ employer.lastName.toUpperCase() }}</h2>
-                  </v-flex>
-                  <v-flex xs12 class="text-xs-center mb-3">
-                    <h4>
-                      <router-link :to="{ name: 'AdminDMCompany', params: {id: employer.company.id} }">
-                        {{ employer.company.name }}
-                      </router-link>
-                    </h4>
-                  </v-flex>
-                  <v-flex xs12 class="mb-3">
-                    <span style="font-weight: bold">Registration</span> : {{
-                    employer.createdAt | formatDate('LLL') }}
-                  </v-flex>
-                  <v-flex xs12 class="mb-3">
-                    <span style="font-weight: bold">Last Sign-in</span> : {{
-                    employer.lastSignedInAt | formatDate('LLL')
-                    }}
-                  </v-flex>
-                  <v-flex xs12 class="mb-3">
-                    <v-icon>email</v-icon>
-                    {{ employer.username }}
-                  </v-flex>
-                  <v-flex xs12>
-                    <p>
-                      <v-icon>phone</v-icon>
-                      {{ employer.phoneNumber }}
-                    </p>
-                  </v-flex>
-                  <v-flex xs12 class="text-xs-center">
-                    <v-btn @click="signInAs(employer.username)" dark>Sign in as</v-btn>
-                  </v-flex>
+                  <v-layout wrap>
+                    <v-flex xs12 class="text-xs-center">
+                      <h2>{{ employer.firstName }} {{ employer.lastName.toUpperCase() }}</h2>
+                    </v-flex>
+                    <v-flex xs12 class="text-xs-center mb-3">
+                      <h4>
+                        <router-link :to="{ name: 'AdminDMCompany', params: {id: employer.company.id} }">
+                          {{ employer.company.name }}
+                        </router-link>
+                      </h4>
+                    </v-flex>
+                    <v-flex xs12 class="mb-3">
+                      <span style="font-weight: bold">Registration</span> : {{
+                      employer.createdAt | formatDate('LLL') }}
+                    </v-flex>
+                    <v-flex xs12 class="mb-3">
+                      <span style="font-weight: bold">Last Sign-in</span> : {{
+                      employer.lastSignedInAt | formatDate('LLL')
+                      }}
+                    </v-flex>
+                    <v-flex xs10 class="pb-3">
+                      <v-icon>email</v-icon>
+                      <span ref="employerUsername">{{ employer.username }}</span>
+                    </v-flex>
+                    <v-flex xs2 class="pb-3 text-xs-left">
+                      <v-icon
+                        @click="copyElementToClipboard($refs.employerUsername)"
+                      >
+                        file_copy
+                      </v-icon>
+                    </v-flex>
+                    <v-flex xs12>
+                      <p>
+                        <v-icon>phone</v-icon>
+                        {{ employer.phoneNumber }}
+                      </p>
+                    </v-flex>
+                    <v-flex xs12 class="text-xs-center">
+                      <v-btn @click="signInAs(employer.username)" dark>Sign in as</v-btn>
+                    </v-flex>
+                  </v-layout>
                 </v-card-text>
               </v-card>
             </v-flex>
@@ -111,7 +120,13 @@
       ],
     }),
     computed: {
-      ...mapGetters(['api', 'initialLoading', 'loading', 'alertComponent']),
+      ...mapGetters([
+        'api',
+        'initialLoading',
+        'loading',
+        'alertComponent',
+        'copyElementToClipboard',
+      ]),
     },
     methods: {
       ...mapActions([
