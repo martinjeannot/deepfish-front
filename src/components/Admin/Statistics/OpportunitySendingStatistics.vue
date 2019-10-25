@@ -41,6 +41,7 @@
     },
     data: () => ({
       opportunitySendingStatistics: [],
+      opportunityViewStatistics: [],
       startDate: moment()
         .subtract(1, 'years')
         .format('YYYY-MM-DD'),
@@ -63,6 +64,12 @@
               data: this.opportunitySendingStatistics
                 .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
               name: 'Sent opportunities',
+            },
+            {
+              color: '#FFA726',
+              data: this.opportunityViewStatistics
+                .map(point => [this.parseDate(point[0], this.groupBy), point[1]]),
+              name: 'Opportunity views',
             },
           ],
           title: {
@@ -88,13 +95,17 @@
       getStatistics() {
         this.prepareForApiConsumption();
         const opportunitySendingQuery = `start-date=${this.startDate}&end-date=${this.endDate}&group-by=${this.groupBy}`;
+        const opportunityViewQuery = `start-date=${this.startDate}&end-date=${this.endDate}&group-by=${this.groupBy}&event-field=seenByTalentAt`;
         return Promise.all([
           this.api(`/opportunities/statistics?${opportunitySendingQuery}`),
+          this.api(`/opportunities/statistics?${opportunityViewQuery}`),
         ])
           .then(([
                    opportunitySendingResponse,
+                   opportunityViewResponse,
                  ]) => {
             this.opportunitySendingStatistics = opportunitySendingResponse.data;
+            this.opportunityViewStatistics = opportunityViewResponse.data;
           })
           .finally(() => this.clearLoading());
       },

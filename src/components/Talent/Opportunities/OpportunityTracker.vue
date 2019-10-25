@@ -21,7 +21,7 @@
       ]),
     },
     created() {
-      if (!this.opportunity.seenByTalentAt && this.isUserTalent) {
+      if (this.isUserTalent && !this.opportunity.seenByTalentAt) {
         this.opportunity.seenByTalentAt = moment.utc();
         return this.saveOpportunityData({ opportunity: this.opportunity });
       }
