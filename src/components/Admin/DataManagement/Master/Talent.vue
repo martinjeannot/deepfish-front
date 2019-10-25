@@ -34,10 +34,12 @@
                       ></v-img>
                     </v-avatar>
                   </v-flex>
-                  <v-flex xs12 class="text-xs-center d-inline-flex">
+                  <v-flex xs10 class="text-xs-center">
                     <h2 ref="nameTitle">{{ talent.firstName }} {{ talent.lastName.toUpperCase() }}</h2>
+                  </v-flex>
+                  <v-flex xs2 class="text-xs-left">
                     <v-icon
-                      @click="copyNameTitleToClipboard"
+                      @click="copyElementToClipboard('nameTitle')"
                     >
                       file_copy
                     </v-icon>
@@ -101,11 +103,16 @@
                       @change="saveQualification"
                     ></v-checkbox>
                   </v-flex>
-                  <v-flex xs12>
-                    <p>
-                      <v-icon>email</v-icon>
-                      {{ talent.email }}
-                    </p>
+                  <v-flex xs10 class="pb-3">
+                    <v-icon>email</v-icon>
+                    <span ref="talentMail">{{ talent.email }}</span>
+                  </v-flex>
+                  <v-flex xs2 class="pb-3 text-xs-left">
+                    <v-icon
+                      @click="copyElementToClipboard('talentMail')"
+                    >
+                      file_copy
+                    </v-icon>
                   </v-flex>
                   <v-flex xs12>
                     <p>
@@ -630,8 +637,8 @@
           .catch(() => this.showSnackbar(['Error while retrieving opportunities', 'error']))
           .finally(() => this.clearLoading());
       },
-      copyNameTitleToClipboard() {
-        this.selectText(this.$refs.nameTitle);
+      copyElementToClipboard(elementRef) {
+        this.selectText(this.$refs[elementRef]);
         document.execCommand('copy');
       },
       selectText(element) {
