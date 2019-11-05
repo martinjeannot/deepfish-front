@@ -1,32 +1,48 @@
 <template>
   <v-card class="w-100 h-100">
-    <google-map-loader
+    <google-maps-loader
       :map-options="mapOptions"
     >
-    </google-map-loader>
+      <template slot-scope="{ google, map }">
+        <google-maps-marker
+          :google="google"
+          :map="map"
+          :marker="marker"
+        ></google-maps-marker>
+      </template>
+    </google-maps-loader>
   </v-card>
 </template>
 
 <script>
   import { mapGetters } from 'vuex';
-  import GoogleMapLoader from '@/components/Utilities/GoogleMapLoader';
+  import GoogleMapsLoader from '@/components/Utilities/GoogleMapsLoader';
+  import GoogleMapsMarker from '@/components/Utilities/GoogleMapsMarker';
 
   export default {
     name: 'TalentOpportunityMap',
     components: {
-      GoogleMapLoader,
+      GoogleMapsLoader,
+      GoogleMapsMarker,
     },
     props: {
       opportunity: Object,
     },
-    data: () => ({}),
+    data: () => ({
+      marker: {
+        position: {
+          lat: -34.01,
+          lng: 151.01,
+        },
+      },
+    }),
     computed: {
       ...mapGetters([
-        'googleMapSettings',
+        'googleMapsSettings',
       ]),
       mapOptions() {
         return {
-          ...this.googleMapSettings,
+          ...this.googleMapsSettings,
           center: {
             lat: -34,
             lng: 151,
