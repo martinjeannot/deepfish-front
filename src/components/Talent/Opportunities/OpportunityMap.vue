@@ -1,39 +1,48 @@
 <template>
-  <v-card class="full-height-centered">
-    <v-card-text>
-      <v-layout wrap class="text-xs-center">
-        <v-flex xs12 class="caption grey--text text--darken-2">
-          LIEU DE TRAVAIL
-        </v-flex>
-        <v-flex xs1 align-self-center class="hidden-sm-and-up">
-          <v-icon>location_on</v-icon>
-        </v-flex>
-        <v-flex xs11 sm12 class="pb-2 white--text">
-          <v-icon class="hidden-xs-only">location_on</v-icon>
-          <a
-            :href="`http://maps.google.com/?q=${opportunity.company.headquartersAddress}`"
-            target="_blank"
-          >
-            {{ opportunity.company.headquartersAddress }}
-          </a>
-        </v-flex>
-      </v-layout>
-    </v-card-text>
+  <v-card class="w-100 h-100">
+    <google-map-loader
+      :map-options="mapOptions"
+    >
+    </google-map-loader>
   </v-card>
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+  import GoogleMapLoader from '@/components/Utilities/GoogleMapLoader';
+
   export default {
     name: 'TalentOpportunityMap',
-    props: ['opportunity'],
-    date: () => ({}),
+    components: {
+      GoogleMapLoader,
+    },
+    props: {
+      opportunity: Object,
+    },
+    data: () => ({}),
+    computed: {
+      ...mapGetters([
+        'googleMapSettings',
+      ]),
+      mapOptions() {
+        return {
+          ...this.googleMapSettings,
+          center: {
+            lat: -34,
+            lng: 151,
+          },
+        };
+      },
+    },
   };
 </script>
 
 <style scoped>
-  .full-height-centered {
+  .w-100 {
+    width: 100%;
+  }
+
+  .h-100 {
     height: 100%;
-    display: flex;
-    align-items: center;
   }
 </style>
