@@ -72,8 +72,9 @@
     <v-flex
       xs12 sm7
       :class="['pb-3', {'pr-3': $vuetify.breakpoint.smAndUp}]"
+      :style="[$vuetify.breakpoint.smAndUp ? {'min-height': '25rem'} : '']"
     >
-      <v-card>
+      <v-card class="h-100">
         <v-card-text>
           <div
             v-html="opportunity.company.description"
@@ -92,7 +93,10 @@
           :company="opportunity.company"
         ></opportunity-social-media>
       </v-flex>
-      <v-flex xs12 style="height: calc(100% - 96px)">
+      <v-flex
+        xs12
+        :style="[$vuetify.breakpoint.smAndUp ? {height: 'calc(100% - 96px)'} : {height: '20rem'}]"
+      >
         <opportunity-map
           :opportunity="opportunity"
         ></opportunity-map>
@@ -191,5 +195,7 @@
 </script>
 
 <style scoped>
-
+  .h-100 {
+    height: 100%;
+  }
 </style>

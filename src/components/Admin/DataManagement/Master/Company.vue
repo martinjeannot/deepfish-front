@@ -82,6 +82,7 @@
                               v-model="company.headquartersAddress"
                               label="Headquarters address"
                               placeholder="42 Avenue des Champs-Élysées, 75008 Paris"
+                              @change="resetCompanyHeadquartersGeocode(company)"
                             ></v-text-field>
                           </v-flex>
                           <v-flex xs12 sm6 class="pr-2">
@@ -287,6 +288,9 @@
           .then(() => this.showSnackbar(['Success', 'success']))
           .catch(() => this.showSnackbar(['Error', 'error']))
           .finally(() => this.clearLoading());
+      },
+      resetCompanyHeadquartersGeocode(company) {
+        company.headquartersGeocode = null;
       },
     },
     created() {

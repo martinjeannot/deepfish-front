@@ -40,6 +40,9 @@ export default new Vuex.Store({
       const queryString = Object.keys(queryParams).map(k => `${k}=${encodeURIComponent(queryParams[k])}`).join('&');
       return `https://www.linkedin.com/oauth/v2/authorization?${queryString}`;
     },
+    googleMapsSettings: {
+      zoom: 15,
+    },
     getTalentMaturityLevel(maturityLevel) {
       switch (maturityLevel) {
         case 'CLEAR_WATER':
@@ -518,6 +521,9 @@ export default new Vuex.Store({
     },
     linkedInAuthEndpoint(state) {
       return origin => state.getLinkedInAuthEndpoint(origin);
+    },
+    googleMapsSettings(state) {
+      return state.googleMapsSettings;
     },
     user(state) {
       return state.user;
