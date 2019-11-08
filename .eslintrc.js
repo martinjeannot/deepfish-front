@@ -51,6 +51,7 @@ module.exports = {
         'opportunity',
         'talent',
         'interview',
+        'company',
       ],
     }],
     // no-underscore-dangle override
