@@ -2,8 +2,8 @@
 module.exports = {
   NODE_ENV: '"production"',
   DEEPFISH_BACK_BASE_URL: 'location.protocol + "//staging-api.deepfish.co"',
+  GOOGLE_MAPS_API_KEY: '"AIzaSyCwAZWUbhEequrGxxUUWzla_MQ_kK7CHBg"',
   LINKEDIN_CLIENT_ID: '"77w79kdr6gql2h"',
-  GOOGLE_MAPS_API_KEY: '"AIzaSyC5PIuf12_Hv1Kp106e7lRFDL9qEO1DbCI"',
   REQUIREMENT_CREATION_TYPEFORM_URL: '"https://deepfish.typeform.com/to/zO6LFY?employer="',
   REQUIREMENT_CALENDLY_URL: '"https://calendly.com/deepfish/_requirement_staging"',
   TALENT_CALENDLY_URL: '"https://calendly.com/deepfish/_talent_staging"',
