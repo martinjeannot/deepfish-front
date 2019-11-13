@@ -152,7 +152,7 @@
                   <v-tab>Conditions</v-tab>
                   <v-tab>Qualification</v-tab>
                   <v-tab>Opportunities</v-tab>
-                  <v-tab>Notes</v-tab>
+                  <v-tab>Suivi</v-tab>
                   <v-tab-item>
                     <v-container>
                       <v-layout row wrap>
@@ -302,6 +302,31 @@
                     <v-container>
                       <v-layout row wrap>
                         <v-flex xs12>
+                          <v-textarea
+                            v-model="talent.qualification.notes"
+                            label="Qualification notes"
+                            prepend-inner-icon="lock"
+                            rows="25"
+                          ></v-textarea>
+                          <div class="text-xs-right">
+                            <v-btn icon fab small color="primary" @click="saveQualification">
+                              <v-icon>done</v-icon>
+                            </v-btn>
+                          </div>
+                        </v-flex>
+                        <v-flex xs12>
+                          <v-textarea
+                            v-model="talent.qualification.recommendation"
+                            label="Recommendation"
+                            rows="10"
+                          ></v-textarea>
+                          <div class="text-xs-right">
+                            <v-btn icon fab small color="primary" @click="saveQualification">
+                              <v-icon>done</v-icon>
+                            </v-btn>
+                          </div>
+                        </v-flex>
+                        <v-flex xs12>
                           <v-select
                             :items="talentRankingReferenceData"
                             v-model="talent.qualification.ranking"
@@ -332,15 +357,6 @@
                             label="Technical skills rating"
                             @input="saveQualification"
                           ></v-select>
-                        </v-flex>
-                        <v-flex xs12>
-                          <h4>Recommendation</h4>
-                          <v-textarea v-model="talent.qualification.recommendation" rows="9"></v-textarea>
-                          <div class="text-xs-right">
-                            <v-btn icon fab small color="primary" @click="saveQualification">
-                              <v-icon>done</v-icon>
-                            </v-btn>
-                          </div>
                         </v-flex>
                       </v-layout>
                     </v-container>
@@ -422,8 +438,8 @@
                       <v-layout row wrap>
                         <v-flex xs12>
                           <v-textarea
-                            v-model="talent.notes"
-                            label="Notes"
+                            v-model="talent.followUp"
+                            label="Suivi"
                             prepend-inner-icon="lock"
                             rows="25"
                           ></v-textarea>
