@@ -106,7 +106,7 @@ ${this.opportunity.company.headquartersGeocode.formattedAddress.split(',').join(
 
   .company-address-overlay {
     position: absolute;
-    z-index: 100;
+    z-index: 3;
     background-color: rgba(0, 0, 0, 0.6);
     color: white;
     top: 1rem;
