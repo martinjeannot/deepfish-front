@@ -41,6 +41,8 @@ export default new Vuex.Store({
       return `https://www.linkedin.com/oauth/v2/authorization?${queryString}`;
     },
     googleMapsSettings: {
+      mapTypeControl: false,
+      streetViewControl: false,
       zoom: 15,
     },
     getTalentMaturityLevel(maturityLevel) {

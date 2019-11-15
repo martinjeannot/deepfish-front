@@ -1,5 +1,11 @@
 <template>
   <v-card class="w-100 h-100 full-height-centered">
+    <div
+      v-if="opportunity.company.headquartersGeocode"
+      class="company-address-overlay"
+      v-html="companyAddressLink"
+    >
+    </div>
     <google-maps-loader
       v-if="opportunity.company.headquartersGeocode"
       :map-options="mapOptions"
@@ -70,6 +76,15 @@
           },
         };
       },
+      companyAddressLink() {
+        return `<a
+href="http://maps.google.com/?q=${this.opportunity.company.headquartersGeocode.formattedAddress}"
+target="_blank"
+style="color: white"
+>
+${this.opportunity.company.headquartersGeocode.formattedAddress.split(',').join('<br/>')}
+</a>`;
+      },
     },
   };
 </script>
@@ -87,5 +102,15 @@
     height: 100%;
     display: flex;
     align-items: center;
+  }
+
+  .company-address-overlay {
+    position: absolute;
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    top: 1rem;
+    left: 1rem;
+    padding: 1rem;
   }
 </style>
