@@ -166,13 +166,13 @@
       activateTalent(talent) {
         talent.previousState = Object.assign({}, talent);
         talent.active = true;
-        talent.notes = `[${moment().format('DD/MM/YYYY')}] Le talent s'est réactivé\n\n${talent.notes}`;
+        talent.followUp = `${talent.followUp.trim()}\n\n[${moment().format('DD/MM/YYYY')}] Le talent s'est réactivé`;
         this.saveProfile(talent, false);
       },
       deactivateTalent(talent) {
         talent.previousState = Object.assign({}, talent);
         talent.active = false;
-        talent.notes = `[${moment().format('DD/MM/YYYY')}] Le talent s'est désactivé : ${talent.deactivationReason}\n\n${talent.notes}`;
+        talent.followUp = `${talent.followUp.trim()}\n\n[${moment().format('DD/MM/YYYY')}] Le talent s'est désactivé : ${talent.deactivationReason}`;
         this.saveProfile(talent, false)
           .then(() => {
             talent.deactivationReason = null;
