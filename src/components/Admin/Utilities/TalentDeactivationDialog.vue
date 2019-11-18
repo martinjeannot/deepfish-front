@@ -110,7 +110,7 @@
           const comment = `[${moment().format('ll')} - ${this.user.firstName}] talent désactivé \
 ${this.talent.reactivatedOn ? `(reactivated on ${moment(this.talent.reactivatedOn).format('ll')}) ` : ''}\
 => ${deactivationReason.trim()}`;
-          talent.notes = `${talent.notes.trim()}\n\n${comment.trim()}`;
+          talent.followUp = `${talent.followUp.trim()}\n\n${comment.trim()}`;
           return this
             .saveTalentData(talent)
             .then(() => {
