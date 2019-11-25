@@ -450,7 +450,9 @@ export default new Vuex.Store({
             .filter(opportunity => opportunity.talentStatus === 'PENDING').length;
           opportunitiesResponse.data._embedded.opportunities.forEach((opportunity) => {
             if (opportunity.talentStatus === 'ACCEPTED'
-              && opportunity.interviews.some(interview => interview.talentResponseStatus === 'NEEDS_ACTION')) {
+              && opportunity.interviews.some(
+                interview => moment().utcOffset(interview.startTimeZone).isBefore(interview.startAt)
+                && interview.talentResponseStatus === 'NEEDS_ACTION')) {
               opportunitiesBadge += 1;
             }
           });
