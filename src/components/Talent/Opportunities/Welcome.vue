@@ -24,15 +24,13 @@
               1
             </v-chip>
           </v-flex>
-          <v-flex xs12 class="text-xs-center">
-            <v-progress-circular
+          <v-flex xs12 class="text-xs-center py-2">
+            <v-icon
               color="primary"
-              indeterminate
-              :rotate="360"
-              :size="80"
+              :size="61"
             >
-              <span class="caption">Matching en cours</span>
-            </v-progress-circular>
+              search
+            </v-icon>
           </v-flex>
           <v-flex xs12 class="text-xs-center font-weight-bold pb-2">
             Nous sélectionnons les meilleures opportunités
