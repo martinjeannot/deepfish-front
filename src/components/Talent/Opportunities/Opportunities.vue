@@ -209,6 +209,7 @@
 </template>
 
 <script>
+  import moment from 'moment';
   import { mapGetters, mapState, mapActions } from 'vuex';
   import TalentOpportunitiesWelcome from './Welcome';
 
@@ -283,7 +284,9 @@
               return -1;
             });
           this.acceptedOpportunities.forEach((opportunity) => {
-            if (opportunity.interviews.some(interview => interview.talentResponseStatus === 'NEEDS_ACTION')) {
+            if (opportunity.interviews.some(
+                interview => moment().utcOffset(interview.startTimeZone).isBefore(interview.startAt)
+                && interview.talentResponseStatus === 'NEEDS_ACTION')) {
               opportunity.badged = true;
               this.menuBadges.opportunities += 1;
             }
