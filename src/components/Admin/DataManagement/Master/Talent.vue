@@ -86,8 +86,7 @@
                   </v-flex>
                   <v-flex xs12 class="pt-2">
                     <p>
-                      <span style="font-weight: bold">Registration</span> : {{ talent.createdAt | formatDate('LLL')
-                      }}
+                      <span style="font-weight: bold">Registration</span> : {{ talent.createdAt | formatDate('LLL') }}
                     </p>
                   </v-flex>
                   <v-flex xs12>
@@ -102,6 +101,13 @@
                       label="Talent qualifié"
                       @change="saveQualification"
                     ></v-checkbox>
+                  </v-flex>
+                  <v-flex xs12 class="pb-3">
+                    <user-select
+                      v-model="talent.talentAdvocate"
+                      label="Talent advocate"
+                      @input="saveProfile"
+                    ></user-select>
                   </v-flex>
                   <v-flex xs10 class="pb-3">
                     <v-icon>email</v-icon>
@@ -464,6 +470,7 @@
 
 <script>
   import { mapGetters, mapActions, mapState } from 'vuex';
+  import UserSelect from '@/components/Utilities/UserSelect';
   import DataManagementNavigation from '../Navigation';
   import AdminOpportunitySendingDialog from '../../Utilities/OpportunitySendingDialog';
   import AdminTalentDeactivationDialog from '../../Utilities/TalentDeactivationDialog';
@@ -484,6 +491,7 @@
       TalentProfileExperienceTimeline,
       TalentProfileEducationTimeline,
       TalentProfileSkill,
+      UserSelect,
     },
     data: () => ({
       rules,
@@ -665,21 +673,29 @@
                  ]) => {
             this.talent = talentResponse.data;
             this.linkedinPublicProfileUrlEdit = !this.talent.linkedinPublicProfileUrl;
-            return Promise.all([
+            const promises = [
               this.api(`${this.talent._links.conditions.href}?projection=default`),
               this.api(this.talent._links.qualification.href),
               this.getOpportunitiesPromise(),
-            ]);
+            ];
+            if (this.talent.hasTalentAdvocate) {
+              promises.push(this.api(`${this.talent._links.talentAdvocate.href}`));
+            }
+            return Promise.all(promises);
           })
           .then(([
                    conditionsResponse,
                    qualificationResponse,
                    opportunitiesResponse,
+                   talentAdvocateResponse,
                  ]) => {
             this.talent.conditions = conditionsResponse.data;
             this.talent.qualification = qualificationResponse.data;
             this.talent.opportunities = opportunitiesResponse.data._embedded.opportunities;
             this.opportunityTable.totalItems = opportunitiesResponse.data.page.totalElements;
+            if (this.talent.hasTalentAdvocate) {
+              this.talent.talentAdvocate = talentAdvocateResponse.data._links.self.href;
+            }
           })
           .catch(() => this.setErrorAfterApiConsumption())
           .finally(() => this.clearLoading(true));
