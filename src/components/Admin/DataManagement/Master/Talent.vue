@@ -679,7 +679,7 @@
               this.getOpportunitiesPromise(),
             ];
             if (this.talent.hasTalentAdvocate) {
-              promises.push(this.api(`${this.talent._links.talentAdvocate.href}`));
+              promises.push(this.api(this.talent._links.talentAdvocate.href));
             }
             return Promise.all(promises);
           })
