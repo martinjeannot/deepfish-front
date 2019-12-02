@@ -33,7 +33,7 @@
                     <company-status-select
                       v-model="company.status"
                       label="Status"
-                      @input="saveCompany(company)"
+                      @input="updateCompanyStatus"
                     ></company-status-select>
                   </v-flex>
                   <v-flex xs12 class="mb-3">
@@ -248,6 +248,7 @@
 </template>
 
 <script>
+  import moment from 'moment';
   import { mapGetters, mapActions } from 'vuex';
   import CompanyStatusSelect from '@/components/Utilities/CompanyStatusSelect';
   import DataManagementNavigation from '../Navigation';
@@ -302,6 +303,13 @@
       },
       resetCompanyHeadquartersGeocode(company) {
         company.headquartersGeocode = null;
+      },
+      updateCompanyStatus(companyStatus) {
+        this.company.status = companyStatus;
+        if (!this.company.validatedAt && companyStatus === 'VALIDATED') {
+          this.company.validatedAt = moment.utc();
+        }
+        return this.saveCompany(this.company);
       },
     },
     created() {
