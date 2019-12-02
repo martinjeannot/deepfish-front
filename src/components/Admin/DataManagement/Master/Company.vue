@@ -29,6 +29,13 @@
                     <span style="font-weight: bold">Registration</span> : {{
                     company.createdAt | formatDate('LLL') }}
                   </v-flex>
+                  <v-flex xs12>
+                    <company-status-select
+                      v-model="company.status"
+                      label="Status"
+                      @input="saveCompany(company)"
+                    ></company-status-select>
+                  </v-flex>
                   <v-flex xs12 class="mb-3">
                     <span style="font-weight: bold">Employers :</span>
                     <v-list>
@@ -242,6 +249,7 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
+  import CompanyStatusSelect from '@/components/Utilities/CompanyStatusSelect';
   import DataManagementNavigation from '../Navigation';
 
   const rules = {
@@ -250,7 +258,10 @@
 
   export default {
     name: 'DataManagementCompany',
-    components: { DataManagementNavigation },
+    components: {
+      DataManagementNavigation,
+      CompanyStatusSelect,
+    },
     props: ['id'],
     data: () => ({
       rules,
