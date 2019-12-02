@@ -324,6 +324,8 @@ export default new Vuex.Store({
       const companyData = Object.assign({}, company);
       // linked refs deletion
       delete companyData.employers;
+      // nested maps deletion (to avoid merging of "values" arrays especially)
+      delete companyData.headquartersGeocode;
       return getters.api.patch(company._links.self.href, companyData);
     },
     saveRequirementData({ getters }, requirement) {
