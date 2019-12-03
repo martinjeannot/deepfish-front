@@ -7,11 +7,14 @@
       <client-executive></client-executive>
     </v-flex>
     <v-flex xs9>
+      <v-flex xs12 class="pl-4">
+        <h6 class="title">{{ totalItems }} profils</h6>
+      </v-flex>
       <v-container fluid grid-list-md>
         <v-data-iterator
+          :hide-actions="true"
           :items="talents"
-          :pagination.sync="pagination"
-          :rows-per-page-items="rowsPerPageItems"
+          :total-items="totalItems"
           content-tag="v-layout"
           row
           wrap
@@ -45,8 +48,7 @@
     data: () => ({
       talents: [],
       totalItems: 0,
-      pagination: {},
-      rowsPerPageItems: [4, 8, 12],
+      // pagination: {},
     }),
     computed: {
       ...mapGetters([
@@ -80,6 +82,8 @@
         if (criteria.baseSalary[1] && criteria.baseSalary[1] < 120) {
           talentQueryString += `&maxBaseSalary=${criteria.baseSalary[1] * 1000}`;
         }
+        // Pagination
+        talentQueryString += '&size=99';
         // API consumption
         this
           .api(`/employerQueryableTalents?${talentQueryString}`)
