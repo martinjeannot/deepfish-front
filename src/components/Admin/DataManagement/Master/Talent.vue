@@ -98,9 +98,18 @@
                   <v-flex xs12>
                     <v-checkbox
                       v-model="talent.qualification.hasBeenQualified"
+                      :hide-details="true"
                       label="Talent qualifié"
                       @change="saveQualification"
                     ></v-checkbox>
+                  </v-flex>
+                  <v-flex xs12 class="pb-3">
+                    <v-switch
+                      v-model="talent.online"
+                      :hide-details="true"
+                      label="En ligne"
+                      @change="updateOnline"
+                    ></v-switch>
                   </v-flex>
                   <v-flex xs12 class="pb-3">
                     <user-select
@@ -469,6 +478,7 @@
 </template>
 
 <script>
+  import moment from 'moment';
   import { mapGetters, mapActions, mapState } from 'vuex';
   import UserSelect from '@/components/Utilities/UserSelect';
   import DataManagementNavigation from '../Navigation';
@@ -604,6 +614,13 @@
           .then(() => {
             this.linkedinPublicProfileUrlEdit = !this.talent.linkedinPublicProfileUrl;
           });
+      },
+      updateOnline(online) {
+        this.talent.online = online;
+        if (online) {
+          this.talent.onlinedAt = moment.utc();
+        }
+        return this.saveProfile();
       },
       saveProfile() {
         return this.saveTalentData(this.talent)
