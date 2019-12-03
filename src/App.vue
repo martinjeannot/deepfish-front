@@ -162,6 +162,12 @@
           } else if (this.isUserEmployer) {
             menuItems = [
               {
+                key: 'search',
+                icon: 'search',
+                title: 'Recherche',
+                route: { name: 'EmployerSearch' },
+              },
+              {
                 key: 'requirements',
                 icon: 'work',
                 title: 'Besoins',

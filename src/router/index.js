@@ -31,6 +31,7 @@ import AdminEmployerResponseStatistics from '@/components/Admin/Statistics/Emplo
 import AdminInterviewConfirmationStatistics from '@/components/Admin/Statistics/InterviewConfirmationStatistics';
 import AdminClosingStatistics from '@/components/Admin/Statistics/ClosingStatistics';
 import EmployerProfile from '@/components/Employer/Profile';
+import EmployerSearch from '@/components/Employer/Search/Search';
 import EmployerRequirements from '@/components/Employer/Requirements/Requirements';
 import EmployerRequirement from '@/components/Employer/Requirements/Requirement';
 import EmployerTypeformRequirement from '@/components/Employer/Requirements/TypeformRequirement';
@@ -320,6 +321,12 @@ const router = new Router({
       path: '/employer/profile',
       name: 'EmployerProfile',
       component: EmployerProfile,
+      meta: { authRequired: true },
+    },
+    {
+      path: '/employer/search',
+      name: 'EmployerSearch',
+      component: EmployerSearch,
       meta: { authRequired: true },
     },
     {
