@@ -84,6 +84,8 @@
         }
         // Pagination
         talentQueryString += '&size=99';
+        // Sorting
+        talentQueryString += '&sort=onlinedAt,desc';
         // API consumption
         this
           .api(`/employerQueryableTalents?${talentQueryString}`)
