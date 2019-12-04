@@ -42,6 +42,12 @@
               :max="120"
             ></v-range-slider>
           </v-flex>
+          <v-flex xs12>
+            <v-checkbox
+              v-model="criteria.sales.internship"
+              label="Stage/Alternance"
+            ></v-checkbox>
+          </v-flex>
           <v-flex xs12 class="text-xs-center">
             <v-btn color="primary" @click="launchSearch(criteria.sales)">
               Rechercher
@@ -75,6 +81,12 @@
               :max="120"
             ></v-range-slider>
           </v-flex>
+          <v-flex xs12>
+            <v-checkbox
+              v-model="criteria.hr.internship"
+              label="Stage/Alternance"
+            ></v-checkbox>
+          </v-flex>
           <v-flex xs12 class="text-xs-center">
             <v-btn color="primary" @click="launchSearch(criteria.hr)">
               Rechercher
@@ -96,11 +108,13 @@
           jobFunction: 'SALES',
           experience: [0, 30],
           baseSalary: [0, 120],
+          internship: false,
         },
         hr: {
           jobFunction: 'HUMAN_RESOURCES',
           experience: [0, 30],
           baseSalary: [0, 120],
+          internship: false,
         },
       },
     }),

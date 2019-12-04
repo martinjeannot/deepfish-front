@@ -88,6 +88,8 @@
         if (criteria.baseSalary[1] && criteria.baseSalary[1] < 120) {
           talentQueryString += `&maxBaseSalary=${criteria.baseSalary[1] * 1000}`;
         }
+        // Internship
+        talentQueryString += `&conditions.internship=${criteria.internship}`;
         // Pagination
         talentQueryString += '&size=99';
         // Sorting
