@@ -106,6 +106,7 @@
                   <v-flex xs12 class="pb-3">
                     <v-switch
                       v-model="talent.online"
+                      :disabled="!talent.hasTalentAdvocate"
                       :hide-details="true"
                       label="En ligne"
                       @change="updateOnline"
@@ -624,7 +625,13 @@
       },
       saveProfile() {
         return this.saveTalentData(this.talent)
-          .then(() => this.showSnackbar(['OK', 'success']))
+          .then(() => {
+            if (!this.talent.hasTalentAdvocate && this.talent.talentAdvocate) {
+              // manually update the value (allowing to put the talent online)
+              this.talent.hasTalentAdvocate = true;
+            }
+            this.showSnackbar(['OK', 'success']);
+          })
           .catch(() => {
             this.showSnackbar(['Error', 'error']);
             this.fetchInitialData();
@@ -681,7 +688,7 @@
       },
       fetchInitialData() {
         this.prepareForApiConsumption(true);
-        Promise
+        return Promise
           .all([
             this.api(`/talents/${this.id}`),
           ])
