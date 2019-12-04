@@ -1,10 +1,14 @@
 <template>
   <v-layout>
     <v-flex xs3>
-      <search-criteria
-        @search="search"
-      ></search-criteria>
-      <client-executive></client-executive>
+      <div class="pb-5">
+        <search-criteria
+          @search="search"
+        ></search-criteria>
+      </div>
+      <client-executive
+        :client-executive="user.clientExecutive"
+      ></client-executive>
     </v-flex>
     <v-flex xs9>
       <v-flex xs12 class="pl-4">
