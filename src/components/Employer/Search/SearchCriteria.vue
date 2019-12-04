@@ -24,7 +24,7 @@
               et {{ criteria.sales.experience[1] === 30 ? '30+' : criteria.sales.experience[1] }} ans)
             </div>
           </v-flex>
-          <v-flex xs12>
+          <v-flex xs12 class="px-4">
             <v-range-slider
               v-model="criteria.sales.experience"
               :max="30"
@@ -36,10 +36,11 @@
               et {{ criteria.sales.baseSalary[1] === 120 ? '120+' : criteria.sales.baseSalary[1] }} k€)
             </div>
           </v-flex>
-          <v-flex xs12>
+          <v-flex xs12 class="px-4">
             <v-range-slider
               v-model="criteria.sales.baseSalary"
               :max="120"
+              :step="2"
             ></v-range-slider>
           </v-flex>
           <v-flex xs12>
@@ -49,7 +50,11 @@
             ></v-checkbox>
           </v-flex>
           <v-flex xs12 class="text-xs-center">
-            <v-btn color="primary" @click="launchSearch(criteria.sales)">
+            <v-btn
+              color="primary"
+              :loading="loading"
+              @click="launchSearch(criteria.sales)"
+            >
               Rechercher
             </v-btn>
           </v-flex>
@@ -63,7 +68,7 @@
               et {{ criteria.hr.experience[1] === 30 ? '30+' : criteria.hr.experience[1] }} ans)
             </div>
           </v-flex>
-          <v-flex xs12>
+          <v-flex xs12 class="px-4">
             <v-range-slider
               v-model="criteria.hr.experience"
               :max="30"
@@ -75,10 +80,11 @@
               et {{ criteria.hr.baseSalary[1] === 120 ? '120+' : criteria.hr.baseSalary[1] }} k€)
             </div>
           </v-flex>
-          <v-flex xs12>
+          <v-flex xs12 class="px-4">
             <v-range-slider
               v-model="criteria.hr.baseSalary"
               :max="120"
+              :step="2"
             ></v-range-slider>
           </v-flex>
           <v-flex xs12>
@@ -88,7 +94,11 @@
             ></v-checkbox>
           </v-flex>
           <v-flex xs12 class="text-xs-center">
-            <v-btn color="primary" @click="launchSearch(criteria.hr)">
+            <v-btn
+              color="primary"
+              :loading="loading"
+              @click="launchSearch(criteria.hr)"
+            >
               Rechercher
             </v-btn>
           </v-flex>
@@ -99,6 +109,8 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+
   export default {
     name: 'EmployerSearchCriteria',
     data: () => ({
@@ -118,6 +130,11 @@
         },
       },
     }),
+    computed: {
+      ...mapGetters([
+        'loading',
+      ]),
+    },
     methods: {
       launchSearch(criteria) {
         this.$emit('search', criteria);

@@ -95,7 +95,7 @@
         // Sorting
         talentQueryString += '&sort=onlinedAt,desc';
         // API consumption
-        this
+        return this
           .api(`/employerQueryableTalents?${talentQueryString}`)
           .then((response) => {
             this.talents = response.data._embedded.employerQueryableTalents;
