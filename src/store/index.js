@@ -57,6 +57,10 @@ export default new Vuex.Store({
           return 'N/A';
       }
     },
+    jobFunctions: [
+      'SALES',
+      'HUMAN_RESOURCES',
+    ],
     getOpportunityStatusColor(status) {
       switch (status) {
         case 'ACCEPTED':

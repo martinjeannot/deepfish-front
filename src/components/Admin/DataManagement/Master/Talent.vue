@@ -95,7 +95,14 @@
                       }}
                     </p>
                   </v-flex>
-                  <v-flex xs12>
+                  <v-flex xs12 class="pb-2">
+                    <user-select
+                      v-model="talent.talentAdvocate"
+                      label="Talent advocate"
+                      @input="saveProfile"
+                    ></user-select>
+                  </v-flex>
+                  <v-flex xs12 class="pb-1">
                     <v-checkbox
                       v-model="talent.qualification.hasBeenQualified"
                       :hide-details="true"
@@ -103,7 +110,7 @@
                       @change="saveQualification"
                     ></v-checkbox>
                   </v-flex>
-                  <v-flex xs12 class="pb-3">
+                  <v-flex xs12 class="pb-1">
                     <v-switch
                       v-model="talent.online"
                       :disabled="!talent.hasTalentAdvocate"
@@ -113,11 +120,12 @@
                     ></v-switch>
                   </v-flex>
                   <v-flex xs12 class="pb-3">
-                    <user-select
-                      v-model="talent.talentAdvocate"
-                      label="Talent advocate"
-                      @input="saveProfile"
-                    ></user-select>
+                    <v-select
+                      v-model="talent.jobFunction"
+                      :hide-details="true"
+                      :items="jobFunctions"
+                      @change="saveProfile"
+                    ></v-select>
                   </v-flex>
                   <v-flex xs10 class="pb-3">
                     <v-icon>email</v-icon>
@@ -533,6 +541,7 @@
         'getOpportunityStatusColor',
         'getTalentLinkedInProfileUrl',
         'getLabelFromCompanyMaturityLevelL10nKey',
+        'jobFunctions',
       ]),
       ...mapGetters([
         'api',
