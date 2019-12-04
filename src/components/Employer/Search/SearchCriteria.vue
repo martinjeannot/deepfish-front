@@ -93,10 +93,12 @@
       activeTab: 0,
       criteria: {
         sales: {
+          jobFunction: 'SALES',
           experience: [0, 30],
           baseSalary: [0, 120],
         },
         hr: {
+          jobFunction: 'HUMAN_RESOURCES',
           experience: [0, 30],
           baseSalary: [0, 120],
         },

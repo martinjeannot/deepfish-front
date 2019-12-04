@@ -72,6 +72,8 @@
       search(criteria) {
         this.prepareForApiConsumption();
         let talentQueryString = 'projection=default';
+        // Job function
+        talentQueryString += `&jobFunction=${criteria.jobFunction}`;
         // Experience
         if (criteria.experience[0]) {
           talentQueryString += `&minExperience=${criteria.experience[0]}`;
