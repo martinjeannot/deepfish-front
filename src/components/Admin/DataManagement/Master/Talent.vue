@@ -490,12 +490,12 @@
   import moment from 'moment';
   import { mapGetters, mapActions, mapState } from 'vuex';
   import UserSelect from '@/components/Utilities/UserSelect';
+  import TalentProfileExperienceTimeline from '@/components/Common/Talent/ExperienceTimeline';
+  import TalentProfileEducationTimeline from '@/components/Common/Talent/EducationTimeline';
+  import TalentProfileSkill from '@/components/Common/Talent/Skill';
   import DataManagementNavigation from '../Navigation';
   import AdminOpportunitySendingDialog from '../../Utilities/OpportunitySendingDialog';
   import AdminTalentDeactivationDialog from '../../Utilities/TalentDeactivationDialog';
-  import TalentProfileExperienceTimeline from '../../../Talent/Profile/ExperienceTimeline';
-  import TalentProfileEducationTimeline from '../../../Talent/Profile/EducationTimeline';
-  import TalentProfileSkill from '../../../Talent/Profile/Skill';
 
   const rules = {
     required: value => !!value || 'This field is required',
