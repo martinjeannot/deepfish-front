@@ -90,6 +90,13 @@
         }
         // Internship
         talentQueryString += `&conditions.internship=${criteria.internship}`;
+        // Fixed locations
+        if (criteria.fixedLocations.length) {
+          talentQueryString += '&conditions.fixedLocations=';
+          criteria.fixedLocations.forEach((fixedLocation, index) => {
+            talentQueryString += `${index ? ',' : ''}${fixedLocation}`;
+          });
+        }
         // Pagination
         talentQueryString += '&size=99';
         // Sorting

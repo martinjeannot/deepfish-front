@@ -49,6 +49,16 @@
               label="Stage/Alternance"
             ></v-checkbox>
           </v-flex>
+          <v-flex xs12>
+            <v-select
+              v-model="criteria.sales.fixedLocations"
+              item-text="l10nKey"
+              item-value="id"
+              :items="fixedLocations"
+              label="Localisations"
+              :multiple="true"
+            ></v-select>
+          </v-flex>
           <v-flex xs12 class="text-xs-center">
             <v-btn
               color="primary"
@@ -93,6 +103,16 @@
               label="Stage/Alternance"
             ></v-checkbox>
           </v-flex>
+          <v-flex xs12>
+            <v-select
+              v-model="criteria.hr.fixedLocations"
+              item-text="l10nKey"
+              item-value="id"
+              :items="fixedLocations"
+              label="Localisations"
+              :multiple="true"
+            ></v-select>
+          </v-flex>
           <v-flex xs12 class="text-xs-center">
             <v-btn
               color="primary"
@@ -109,36 +129,59 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
 
   export default {
     name: 'EmployerSearchCriteria',
     data: () => ({
       activeTab: 0,
+      fixedLocations: [],
       criteria: {
         sales: {
           jobFunction: 'SALES',
           experience: [0, 30],
           baseSalary: [0, 120],
           internship: false,
+          fixedLocations: [],
         },
         hr: {
           jobFunction: 'HUMAN_RESOURCES',
           experience: [0, 30],
           baseSalary: [0, 120],
           internship: false,
+          fixedLocations: [],
         },
       },
     }),
     computed: {
       ...mapGetters([
+        'api',
         'loading',
       ]),
     },
     methods: {
+      ...mapActions([
+        'prepareForApiConsumption',
+        'clearLoading',
+        'showSnackbar',
+      ]),
       launchSearch(criteria) {
         this.$emit('search', criteria);
       },
+    },
+    created() {
+      this.prepareForApiConsumption(true);
+      return Promise
+        .all([
+          this.api('/fixedLocations?enabled=true'),
+        ])
+        .then(([
+                 fixedLocationsResponse,
+               ]) => {
+          this.fixedLocations = fixedLocationsResponse.data._embedded.fixedLocations;
+        })
+        .catch(() => this.showSnackbar(['Error', 'error']))
+        .finally(() => this.clearLoading(true));
     },
   };
 </script>
