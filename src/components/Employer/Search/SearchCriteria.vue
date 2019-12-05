@@ -179,6 +179,10 @@
                  fixedLocationsResponse,
                ]) => {
           this.fixedLocations = fixedLocationsResponse.data._embedded.fixedLocations;
+          // fixed locations criterion defaults to Paris
+          const paris = this.fixedLocations.find(fixedLocation => fixedLocation.l10nKey === 'Paris');
+          this.criteria.sales.fixedLocations.push(paris.id);
+          this.criteria.hr.fixedLocations.push(paris.id);
         })
         .catch(() => this.showSnackbar(['Error', 'error']))
         .finally(() => this.clearLoading(true));
