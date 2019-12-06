@@ -1,5 +1,12 @@
 <template>
-  <v-card>
+  <v-card
+    @click="talentDialog = true"
+  >
+    <employer-talent
+      v-if="talentDialog"
+      :value.sync="talentDialog"
+      :id="talent.id"
+    ></employer-talent>
     <v-card-text>
       <v-layout wrap>
         <v-flex xs4>
@@ -29,7 +36,7 @@
         </v-flex>
         <v-flex xs6>
           <div class="text-xs-center subheading grey--text text--darken-2">
-            Salaire indicatif
+            Salaire fixe
           </div>
           <div class="text-xs-center title">
             {{ baseSalary }} k€
@@ -49,18 +56,25 @@
 </template>
 
 <script>
+  import EmployerTalent from '@/components/Employer/Talent/Talent';
+
   export default {
     name: 'EmployerSearchTalentOverview',
+    components: {
+      EmployerTalent,
+    },
     props: {
       talent: Object,
     },
-    data: () => ({}),
+    data: () => ({
+      talentDialog: false,
+    }),
     computed: {
       profilePictureUrl() {
         if (this.talent.profilePictureUrl && !this.talent.profilePictureUrl.includes('media.licdn.com')) {
           return this.talent.profilePictureUrl;
         }
-        return 'static/img/avatar.png';
+        return '/static/img/avatar.png';
       },
       baseSalary() {
         return Math.round(this.talent.baseSalary / 1000);
