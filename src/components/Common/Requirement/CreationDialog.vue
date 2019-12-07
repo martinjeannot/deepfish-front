@@ -27,6 +27,7 @@
             <v-text-field
               v-model="newRequirement.name"
               label="Intitulé du poste"
+              :rules="[rules.required]"
             ></v-text-field>
           </v-flex>
         </v-card-text>
@@ -35,6 +36,8 @@
             <v-btn
               type="submit"
               color="primary"
+              :disabled="!creationFormValid"
+              :loading="loading"
             >
               créer
             </v-btn>
@@ -48,6 +51,10 @@
 <script>
   import { mapGetters, mapActions, mapState } from 'vuex';
 
+  const rules = {
+    required: value => !!value || 'This field is required',
+  };
+
   export default {
     name: 'RequirementCreationDialog',
     props: {
@@ -55,6 +62,7 @@
       companyId: String,
     },
     data: () => ({
+      rules,
       creationFormValid: false,
       newRequirement: {
         version: 2,
@@ -99,10 +107,15 @@
           .then(() => {
             this.dialog = false;
             this.showSnackbar(['Nouveau poste créé', 'success']);
+            this.resetNewRequirement();
             this.$emit('refresh-requirements');
           })
           .catch(() => this.showSnackbar(['Erreur', 'error']))
           .finally(() => this.clearLoading());
+      },
+      resetNewRequirement() {
+        this.newRequirement.name = '';
+        this.newRequirement.jobFunction = 'SALES';
       },
     },
   };
