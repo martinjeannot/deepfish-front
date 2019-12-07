@@ -1,5 +1,10 @@
 <template>
   <v-layout>
+    <requirement-creation-dialog
+      :value.sync="requirementCreationDialog"
+      :company-id="id"
+      @refresh-requirements="refreshRequirements"
+    ></requirement-creation-dialog>
     <v-flex xs2 class="pr-3">
       <data-management-navigation></data-management-navigation>
     </v-flex>
@@ -47,6 +52,14 @@
                         </v-list-tile-content>
                       </v-list-tile>
                     </v-list>
+                  </v-flex>
+                  <v-flex xs12 class="text-xs-center">
+                    <v-btn
+                      color="primary"
+                      @click="requirementCreationDialog = true"
+                    >
+                      nouveau poste
+                    </v-btn>
                   </v-flex>
                 </v-card-text>
               </v-card>
@@ -251,6 +264,7 @@
   import moment from 'moment';
   import { mapGetters, mapActions } from 'vuex';
   import CompanyStatusSelect from '@/components/Utilities/CompanyStatusSelect';
+  import RequirementCreationDialog from '@/components/Common/Requirement/CreationDialog';
   import DataManagementNavigation from '../Navigation';
 
   const rules = {
@@ -262,6 +276,7 @@
     components: {
       DataManagementNavigation,
       CompanyStatusSelect,
+      RequirementCreationDialog,
     },
     props: ['id'],
     data: () => ({
@@ -274,6 +289,7 @@
         { text: 'Name', value: 'name' },
         { text: 'Actions', value: 'id', sortable: false },
       ],
+      requirementCreationDialog: false,
     }),
     computed: {
       ...mapGetters([
@@ -310,6 +326,14 @@
           this.company.validatedAt = moment.utc();
         }
         return this.saveCompany(this.company);
+      },
+      refreshRequirements() {
+        return this
+          .api(`/requirements?company=${this.id}`)
+          .then((requirementsResponse) => {
+            this.requirements = requirementsResponse.data._embedded.requirements;
+          })
+          .catch(() => this.showSnackbar(['Error', 'error']));
       },
     },
     created() {
