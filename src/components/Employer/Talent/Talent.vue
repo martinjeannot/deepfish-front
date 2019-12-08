@@ -35,11 +35,9 @@
               </v-flex>
             </v-flex>
             <v-flex xs5>
-              <v-card>
-                <v-card-text>
-                  COLONNE OPPORT
-                </v-card-text>
-              </v-card>
+              <opportunity-sending-form
+                :requirements="requirements"
+              ></opportunity-sending-form>
             </v-flex>
           </v-layout>
         </v-layout>
@@ -55,6 +53,7 @@
   import TalentBanner from './TalentBanner';
   import TalentAdvocateSummary from './TalentAdvocateSummary';
   import TalentSelfSummary from './TalentSelfSummary';
+  import OpportunitySendingForm from './OpportunitySendingForm';
 
   export default {
     name: 'EmployerTalent',
@@ -64,6 +63,7 @@
       TalentBanner,
       TalentAdvocateSummary,
       TalentSelfSummary,
+      OpportunitySendingForm,
     },
     props: {
       value: Boolean,
@@ -77,6 +77,7 @@
     computed: {
       ...mapGetters([
         'api',
+        'user',
         'alertComponent',
       ]),
       dialog: {
@@ -110,10 +111,17 @@
       },
       fetchInitialData(onCreated = false) {
         this.prepareForApiConsumption(onCreated);
-        this
-          .api(`/talents/${this.id}?projection=employer`)
-          .then((response) => {
-            this.talent = response.data;
+        const promises = [
+          this.api(`/talents/${this.id}?projection=employer`),
+          this.api(`/requirements?company=${this.user.company.id}&version=2`),
+        ];
+        return Promise
+          .all(promises)
+          .then((responses) => {
+            const [talentResponse, requirementsResponse] = responses;
+            this.talent = talentResponse.data;
+            this.requirements = requirementsResponse.data._embedded.requirements
+              .filter(requirement => requirement.jobFunction === this.talent.jobFunction);
           })
           .catch(() => this.setErrorAfterApiConsumption())
           .finally(() => this.clearLoading(onCreated));
