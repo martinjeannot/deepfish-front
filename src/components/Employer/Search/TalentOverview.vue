@@ -6,6 +6,7 @@
       v-if="talentDialog"
       :value.sync="talentDialog"
       :id="talent.id"
+      @opportunity-sent="onOpportunitySent"
     ></employer-talent>
     <v-card-text>
       <v-layout wrap>
@@ -56,6 +57,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import EmployerTalent from '@/components/Employer/Talent/Talent';
 
   export default {
@@ -78,6 +80,14 @@
       },
       baseSalary() {
         return Math.round(this.talent.baseSalary / 1000);
+      },
+    },
+    methods: {
+      ...mapActions([
+        'showSnackbar',
+      ]),
+      onOpportunitySent() {
+        this.showSnackbar(['Offre envoyée', 'success']);
       },
     },
   };

@@ -36,7 +36,12 @@
             </v-flex>
             <v-flex xs5>
               <opportunity-sending-form
+                :loading="loading"
                 :requirements="requirements"
+                :talent="talent"
+                @prepare-for-api-consumption="prepareForApiConsumption(false)"
+                @clear-loading="clearLoading(false)"
+                @opportunity-sent="onOpportunitySent"
               ></opportunity-sending-form>
             </v-flex>
           </v-layout>
@@ -95,6 +100,10 @@
         'setErrorAfterApiConsumption',
         'onAlertComponentDismissed',
       ]),
+      onOpportunitySent(opportunity) {
+        this.dialog = false;
+        this.$emit('opportunity-sent', opportunity);
+      },
       prepareForApiConsumption(onCreated = false) {
         if (onCreated) {
           this.initialLoading = true;

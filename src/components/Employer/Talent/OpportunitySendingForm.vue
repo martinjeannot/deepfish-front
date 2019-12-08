@@ -11,7 +11,7 @@
             prepend-icon="work"
             :return-object="true"
             :rules="[rules.required]"
-            @change="updateOpportunityName"
+            @change="onRequirementChange"
           ></v-select>
         </v-card-text>
       </v-card>
@@ -80,6 +80,7 @@
         :block="true"
         color="primary"
         :disabled="!opportunityFormValid || !baseSalaryRangeValid"
+        :loading="loading"
       >
         envoyer mon offre
       </v-btn>
@@ -88,6 +89,8 @@
 </template>
 
 <script>
+  import { mapGetters, mapActions } from 'vuex';
+
   const rules = {
     required: value => !!value || 'Champ obligatoire',
     positive: value => value > 0 || 'La valeur doit être supérieure à 0',
@@ -97,12 +100,17 @@
   export default {
     name: 'OpportunitySendingForm',
     props: {
+      loading: Boolean,
+      talent: Object,
       requirements: Array,
     },
     data: () => ({
       rules,
       opportunityFormValid: false,
       opportunity: {
+        employer: null,
+        talent: null,
+        requirement: null,
         name: '',
         baseSalaryFrom: null,
         baseSalaryTo: null,
@@ -111,16 +119,34 @@
       selectedRequirement: null,
     }),
     computed: {
+      ...mapGetters([
+        'api',
+        'user',
+      ]),
       baseSalaryRangeValid() {
-        return this.opportunity.baseSalaryFrom < this.opportunity.baseSalaryTo;
+        return parseFloat(this.opportunity.baseSalaryFrom) <
+          parseFloat(this.opportunity.baseSalaryTo);
       },
     },
     methods: {
+      ...mapActions([
+        'showSnackbar',
+      ]),
       sendOpportunity() {
-        // TODO
+        this.$emit('prepare-for-api-consumption');
+        this.opportunity.employer = this.user._links.self.href;
+        this.opportunity.talent = this.talent._links.self.href;
+        this.api
+          .post('/opportunities', this.opportunity)
+          .then((response) => {
+            this.$emit('opportunity-sent', response.data);
+          })
+          .catch(() => this.showSnackbar(['Erreur', 'error']))
+          .finally(() => this.$emit('clear-loading'));
       },
-      updateOpportunityName(selectedRequirement) {
+      onRequirementChange(selectedRequirement) {
         if (selectedRequirement) {
+          this.opportunity.requirement = selectedRequirement._links.self.href;
           this.opportunity.name = selectedRequirement.name;
         }
       },
