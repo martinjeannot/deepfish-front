@@ -1,5 +1,32 @@
 <template>
-  <v-layout>
+  <v-layout
+    v-if="user.company.status !== 'VALIDATED'"
+  >
+    <v-flex xs12 sm8 offset-sm2 md6 offset-md3>
+      <v-alert
+        :value="true"
+        type="info"
+        class="mb-5"
+      >
+        Votre entreprise doit être validée par Deepfish avant de pouvoir accéder à nos candidats
+      </v-alert>
+      <v-card>
+        <v-card-text>
+          <div class="pb-3 body-2">Veuillez choisir un créneau d'échange</div>
+          <div class="text-xs-center">
+            <v-btn
+              color="primary"
+              href="https://calendly.com/deepfish/req"
+              target="_blank"
+            >
+              Choisir un créneau d'échange
+            </v-btn>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-flex>
+  </v-layout>
+  <v-layout v-else>
     <v-flex xs3>
       <div class="pb-5">
         <search-criteria
