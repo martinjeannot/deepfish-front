@@ -72,6 +72,8 @@
       search(criteria) {
         this.prepareForApiConsumption();
         let talentQueryString = 'projection=default';
+        // Current employer
+        talentQueryString += `&employerId=${this.user.id}`;
         // Job function
         talentQueryString += `&jobFunction=${criteria.jobFunction}`;
         // Experience
