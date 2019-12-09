@@ -54,6 +54,7 @@
             <v-flex xs12 sm6 md4 lg3>
               <talent-overview
                 :talent="item"
+                @opportunity-sent="onOpportunitySent"
               ></talent-overview>
             </v-flex>
           </template>
@@ -79,6 +80,7 @@
     data: () => ({
       talents: [],
       totalItems: 0,
+      lastSearchCriteria: null,
       // pagination: {},
     }),
     computed: {
@@ -96,8 +98,13 @@
         'clearLoading',
         'showSnackbar',
       ]),
+      onOpportunitySent() {
+        this.showSnackbar(['Offre envoyée', 'success']);
+        return this.search(this.lastSearchCriteria);
+      },
       search(criteria) {
         this.prepareForApiConsumption();
+        this.lastSearchCriteria = criteria;
         let talentQueryString = 'projection=default';
         // Current employer
         talentQueryString += `&employerId=${this.user.id}`;
