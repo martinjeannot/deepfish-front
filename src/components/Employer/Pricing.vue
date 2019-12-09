@@ -3,57 +3,6 @@
     <v-flex xs12 sm5 offset-sm1 md4 offset-md2
             :class="[{'pb-3': $vuetify.breakpoint.xsOnly}, {'pr-2': $vuetify.breakpoint.smAndUp}]">
       <v-card>
-        <v-img src="https://cdn.vuetifyjs.com/images/cards/road.jpg" height="200px">
-          <v-container fill-height fluid>
-            <v-layout fill-height>
-              <v-flex xs12>
-                <span class="headline">Le plus simple</span>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-img>
-        <v-card-title primary-title style="height: 93px">
-          <v-flex xs12 class="text-xs-center">
-            <div class="headline">
-              <span class="font-weight-bold">20%</span>
-              du
-              <span class="font-weight-bold">salaire fixe</span>
-              *
-            </div>
-            <span class="grey--text text--darken-2">Paiement au démarrage</span>
-          </v-flex>
-        </v-card-title>
-        <v-card-text>
-          <v-flex xs12 class="text-xs-center pb-3">
-            <div class="pa-2 headline">
-              Profils qualifiés
-              <v-icon color="success">done</v-icon>
-            </div>
-            <v-divider></v-divider>
-            <div class="pa-2 headline">
-              Profils à l'écoute
-              <v-icon color="success">done</v-icon>
-            </div>
-            <v-divider></v-divider>
-            <div class="pa-2 headline">
-              Intéressés pour rejoindre votre ESN
-              <v-icon color="success">done</v-icon>
-            </div>
-            <v-divider></v-divider>
-            <div class="pa-2 headline">
-              Garantie de remplacement durant les 4 premiers mois d'essai
-              <v-icon color="success">done</v-icon>
-            </div>
-          </v-flex>
-          <v-flex xs12 class="grey--text text--darken-2">
-            * salaire fixe annuel hors variable
-          </v-flex>
-        </v-card-text>
-      </v-card>
-    </v-flex>
-    <v-flex xs12 sm5 md4
-            :class="[{'pl-2': $vuetify.breakpoint.smAndUp}]">
-      <v-card height="100%">
         <v-img src="https://cdn.vuetifyjs.com/images/cards/docks.jpg" height="200px">
           <v-container fill-height fluid>
             <v-layout fill-height>
@@ -82,17 +31,68 @@
             </div>
             <v-divider></v-divider>
             <div class="pa-2 headline">
-              Profils à l'écoute
+              Tous en recherche
               <v-icon color="success">done</v-icon>
             </div>
             <v-divider></v-divider>
             <div class="pa-2 headline">
-              Intéressés pour rejoindre votre ESN
+              Qui vous répondent
               <v-icon color="success">done</v-icon>
             </div>
             <v-divider></v-divider>
             <div class="pa-2 headline">
               Arrêt de la facturation si départ prématuré du commercial
+              <v-icon color="success">done</v-icon>
+            </div>
+          </v-flex>
+          <v-flex xs12 class="grey--text text--darken-2">
+            * salaire fixe annuel hors variable
+          </v-flex>
+        </v-card-text>
+      </v-card>
+    </v-flex>
+    <v-flex xs12 sm5 md4
+            :class="[{'pl-2': $vuetify.breakpoint.smAndUp}]">
+      <v-card height="100%">
+        <v-img src="https://cdn.vuetifyjs.com/images/cards/road.jpg" height="200px">
+          <v-container fill-height fluid>
+            <v-layout fill-height>
+              <v-flex xs12>
+                <span class="headline">Le plus simple</span>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-img>
+        <v-card-title primary-title style="height: 93px">
+          <v-flex xs12 class="text-xs-center">
+            <div class="headline">
+              <span class="font-weight-bold">20%</span>
+              du
+              <span class="font-weight-bold">salaire fixe</span>
+              *
+            </div>
+            <span class="grey--text text--darken-2">Paiement au démarrage</span>
+          </v-flex>
+        </v-card-title>
+        <v-card-text>
+          <v-flex xs12 class="text-xs-center pb-3">
+            <div class="pa-2 headline">
+              Profils qualifiés
+              <v-icon color="success">done</v-icon>
+            </div>
+            <v-divider></v-divider>
+            <div class="pa-2 headline">
+              Tous en recherche
+              <v-icon color="success">done</v-icon>
+            </div>
+            <v-divider></v-divider>
+            <div class="pa-2 headline">
+              Qui vous répondent
+              <v-icon color="success">done</v-icon>
+            </div>
+            <v-divider></v-divider>
+            <div class="pa-2 headline">
+              Remplacement gratuit durant les 4 premiers mois d'essai
               <v-icon color="success">done</v-icon>
             </div>
           </v-flex>

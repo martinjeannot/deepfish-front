@@ -167,22 +167,22 @@
                 title: 'Recherche',
                 route: { name: 'EmployerSearch' },
               },
-              {
-                key: 'requirements',
-                icon: 'work',
-                title: 'Besoins',
-                route: { name: 'EmployerRequirements' },
-              },
+              /* {
+               key: 'requirements',
+               icon: 'work',
+               title: 'Besoins',
+               route: { name: 'EmployerRequirements' },
+               }, */
               {
                 key: 'talents',
                 icon: 'people',
-                title: 'Talents',
+                title: 'Mes talents',
                 route: { name: 'EmployerTalents' },
               },
               {
                 key: 'profile',
                 icon: 'account_circle',
-                title: 'Profil',
+                title: 'Mon profil',
                 route: { name: 'EmployerProfile' },
               },
               {
