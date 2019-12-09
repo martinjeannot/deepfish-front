@@ -183,6 +183,7 @@
           const paris = this.fixedLocations.find(fixedLocation => fixedLocation.l10nKey === 'Paris');
           this.criteria.sales.fixedLocations.push(paris.id);
           this.criteria.hr.fixedLocations.push(paris.id);
+          return this.$emit('search', this.criteria.sales);
         })
         .catch(() => this.showSnackbar(['Error', 'error']))
         .finally(() => this.clearLoading(true));
