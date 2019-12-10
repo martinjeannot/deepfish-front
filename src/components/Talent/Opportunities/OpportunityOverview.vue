@@ -1,6 +1,6 @@
 <template>
   <v-card
-    :to="{name: 'TalentOpportunity', params: {id: opportunity.id}}"
+    :to="isDismissed ? null : {name: 'TalentOpportunity', params: {id: opportunity.id}}"
   >
     <v-card-text>
       <v-layout wrap>
@@ -46,6 +46,11 @@
       opportunity: Object,
     },
     computed: {
+      isDismissed() {
+        return this.opportunity.requirement.status === 'CLOSED'
+          || this.opportunity.talentStatus === 'DECLINED'
+          || this.opportunity.employerStatus === 'DECLINED';
+      },
       companyLogoUrl() {
         if (this.opportunity.company.logoURL) {
           return this.opportunity.company.logoURL;
@@ -60,9 +65,15 @@
         return this.opportunity.pitch;
       },
       badged() {
+        if (this.opportunity.requirement.status === 'CLOSED') {
+          return false;
+        }
         return !!(this.opportunity.badged || this.opportunity.talentStatus === 'PENDING');
       },
       chipText() {
+        if (this.opportunity.requirement.status === 'CLOSED') {
+          return 'Plus d\'actualité';
+        }
         if (this.opportunity.talentStatus === 'DECLINED') {
           return 'Refusé';
         }
@@ -78,7 +89,8 @@
         return 'N/A';
       },
       chipColor() {
-        if (this.opportunity.talentStatus === 'DECLINED'
+        if (this.opportunity.requirement.status === 'CLOSED'
+          || this.opportunity.talentStatus === 'DECLINED'
           || this.opportunity.employerStatus === 'DECLINED') {
           return 'grey lighten-2';
         }
@@ -91,7 +103,8 @@
         return 'grey lighten-2';
       },
       chipOutline() {
-        return this.opportunity.talentStatus === 'PENDING';
+        return this.opportunity.requirement.status === 'OPEN'
+          && this.opportunity.talentStatus === 'PENDING';
       },
     },
     data: () => ({}),
