@@ -309,6 +309,7 @@ export default new Vuex.Store({
       const opportunityData = Object.assign({}, opportunity);
       // linked refs deletion
       delete opportunityData.creator;
+      delete opportunityData.employer;
       delete opportunityData.talent;
       delete opportunityData.requirement;
       delete opportunityData.company;
@@ -317,6 +318,7 @@ export default new Vuex.Store({
         opportunityData.previousState = previousState;
         // linked refs deletion
         delete opportunityData.previousState.creator;
+        delete opportunityData.previousState.employer;
         delete opportunityData.previousState.talent;
         delete opportunityData.previousState.requirement;
         delete opportunityData.previousState.company;

@@ -131,6 +131,7 @@
         this.prepareForApiConsumption();
         const previousState = Object.assign({}, opportunity);
         opportunity.talentStatus = 'ACCEPTED';
+        opportunity.employerStatus = 'PENDING'; // auto-forward
         return this
           .saveOpportunity(opportunity, previousState)
           .then(() => {
