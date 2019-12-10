@@ -25,7 +25,7 @@
                   <v-flex v-if="requirement.typeform" xs12>
                     <typeform-answers :typeform="requirement.typeform"></typeform-answers>
                   </v-flex>
-                  <v-flex v-else xs12 class="mb-3">
+                  <v-flex v-else-if="requirement.version === 1" xs12 class="mb-3">
                     Since the <span style="font-weight: bold">{{ requirement.createdAt | formatDate('LLL') }}</span>
                     <router-link :to="{ name: 'AdminDMCompany', params: {id: requirement.company.id} }">
                       {{ requirement.company.name }}
@@ -37,6 +37,15 @@
                     <span style="font-weight: bold">{{ requirement.location }}</span>
                     for a max fixed salary of
                     <span style="font-weight: bold">{{ requirement.fixedSalary }} €</span>
+                  </v-flex>
+                  <v-flex v-else xs12 class="mb-3">
+                    <div>Created at : {{ requirement.createdAt | formatDate('LLL') }}</div>
+                    <div class="text-xs-center">
+                      Company :
+                      <router-link :to="{ name: 'AdminDMCompany', params: {id: requirement.company.id} }">
+                        {{ requirement.company.name }}
+                      </router-link>
+                    </div>
                   </v-flex>
                   <v-flex xs12>
                     <h3 class="text-xs-center">Sent opportunities : {{ opportunitiesCounts.total }}</h3>
