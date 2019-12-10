@@ -68,7 +68,7 @@
             v-model="opportunity.pitch"
             :auto-grow="true"
             label="Message"
-            rows="15"
+            rows="7"
             :rules="[rules.required]"
           ></v-textarea>
         </v-card-text>
