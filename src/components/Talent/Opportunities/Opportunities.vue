@@ -1,6 +1,6 @@
 <template>
   <v-layout v-if="initialLoading">
-    <v-flex xs12 class="text-xs-center">
+    <v-flex xs12 class="pt-5 text-xs-center">
       <v-progress-circular indeterminate color="primary" :size="70"></v-progress-circular>
     </v-flex>
   </v-layout>
@@ -14,68 +14,81 @@
                     @dismissed="onAlertComponentDismissed"></base-alert>
       </v-flex>
     </v-layout>
-    <v-flex xs12>
-      <h2>Mes offres en attente</h2>
-      <v-container fluid grid-list-md>
-        <v-data-iterator
-          :items="pendingOpportunities"
-          :hide-actions="true"
-          content-tag="v-layout" row wrap
-        >
-          <v-flex xs12 slot="item" slot-scope="props">
-            <opportunity-overview
-              :opportunity="props.item"
-            ></opportunity-overview>
-          </v-flex>
-          <v-flex xs12 slot="no-data">
-            <v-alert v-if="totalItems" type="success" :value="true">
-              Tout est OK, aucune offre en attente
-            </v-alert>
-            <v-alert v-else type="info" :value="true">
-              Tu n'as pas encore reçu d'offre
-            </v-alert>
-          </v-flex>
-        </v-data-iterator>
-      </v-container>
+    <v-flex xs8>
+      <v-flex xs12>
+        <h2>Mes offres en attente</h2>
+        <v-container fluid grid-list-md>
+          <v-data-iterator
+            :items="pendingOpportunities"
+            :hide-actions="true"
+            content-tag="v-layout" row wrap
+          >
+            <v-flex xs12 slot="item" slot-scope="props">
+              <opportunity-overview
+                :opportunity="props.item"
+              ></opportunity-overview>
+            </v-flex>
+            <v-flex xs12 slot="no-data">
+              <v-alert v-if="totalItems" type="success" :value="true">
+                Tout est OK, aucune offre en attente
+              </v-alert>
+              <v-alert v-else type="info" :value="true">
+                Tu n'as pas encore reçu d'offre
+              </v-alert>
+            </v-flex>
+          </v-data-iterator>
+        </v-container>
+      </v-flex>
+      <v-flex xs12>
+        <h2>Mes offres en cours</h2>
+        <v-container fluid grid-list-md>
+          <v-data-iterator
+            :items="inProcessOpportunities"
+            :hide-actions="true"
+            content-tag="v-layout" row wrap
+          >
+            <v-flex slot="item" slot-scope="props" xs12>
+              <opportunity-overview
+                :opportunity="props.item"
+              ></opportunity-overview>
+            </v-flex>
+            <v-flex xs12 slot="no-data">
+              <v-alert type="info" :value="true">
+                Tu n'as pas encore d'offres en cours
+              </v-alert>
+            </v-flex>
+          </v-data-iterator>
+        </v-container>
+      </v-flex>
+      <v-flex xs12>
+        <h2>Mes offres archivées</h2>
+        <v-container fluid grid-list-md>
+          <v-data-iterator
+            :items="dismissedOpportunities"
+            :hide-actions="true"
+            content-tag="v-layout" row wrap
+          >
+            <v-flex slot="item" slot-scope="props" xs12>
+              <opportunity-overview
+                :opportunity="props.item"
+              ></opportunity-overview>
+            </v-flex>
+            <v-flex xs12 slot="no-data">
+              <v-alert type="info" :value="true">
+                Tu n'as pas encore d'offres archivées
+              </v-alert>
+            </v-flex>
+          </v-data-iterator>
+        </v-container>
+      </v-flex>
     </v-flex>
-    <v-flex xs12>
-      <h2>Mes offres en cours</h2>
-      <v-container fluid grid-list-md>
-        <v-data-iterator
-          :items="inProcessOpportunities"
-          :hide-actions="true"
-          content-tag="v-layout" row wrap
-        >
-          <v-flex slot="item" slot-scope="props" xs12>
-            <opportunity-overview
-              :opportunity="props.item"
-            ></opportunity-overview>
-          </v-flex>
-          <v-flex xs12 slot="no-data">
-            <v-alert type="info" :value="true">
-              Tu n'as pas encore d'offres en cours
-            </v-alert>
-          </v-flex>
-        </v-data-iterator>
-      </v-container>
-    </v-flex>
-    <v-flex xs12>
-      <h2>Mes offres archivées</h2>
-      <v-container fluid grid-list-md>
-        <v-data-iterator content-tag="v-layout" row wrap :items="dismissedOpportunities"
-                         :hide-actions="true">
-          <v-flex slot="item" slot-scope="props" xs12>
-            <opportunity-overview
-              :opportunity="props.item"
-            ></opportunity-overview>
-          </v-flex>
-          <v-flex xs12 slot="no-data">
-            <v-alert type="info" :value="true">
-              Tu n'as pas encore d'offres archivées
-            </v-alert>
-          </v-flex>
-        </v-data-iterator>
-      </v-container>
+    <v-flex
+      xs4
+      :class="['pt-5', 'pl-3', {'fixed': $vuetify.breakpoint.smAndUp}]"
+    >
+      <talent-advocate
+        :talent-advocate="user.talentAdvocate"
+      ></talent-advocate>
     </v-flex>
   </v-layout>
 </template>
@@ -83,12 +96,14 @@
 <script>
   import moment from 'moment';
   import { mapGetters, mapState, mapActions } from 'vuex';
+  import TalentAdvocate from '@/components/Talent/TalentAdvocate';
   import TalentOpportunitiesWelcome from './Welcome';
   import OpportunityOverview from './OpportunityOverview';
 
   export default {
     name: 'TalentOpportunities',
     components: {
+      TalentAdvocate,
       TalentOpportunitiesWelcome,
       OpportunityOverview,
     },
@@ -170,5 +185,10 @@
   .blurred-text {
     -webkit-filter: blur(4px);
     filter: blur(4px);
+  }
+
+  .fixed {
+    position: fixed;
+    right: 24px;
   }
 </style>

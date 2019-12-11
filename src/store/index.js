@@ -447,7 +447,7 @@ export default new Vuex.Store({
       }
       // TALENT
       return getters
-        .api(`/talents/${accessToken.user_id}`)
+        .api(`/talents/${accessToken.user_id}?projection=default`)
         .then((response) => {
           commit(types.SET_USER, response.data);
           // get pending opportunities for menu badge
