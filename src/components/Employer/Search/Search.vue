@@ -106,6 +106,8 @@
         this.prepareForApiConsumption();
         this.lastSearchCriteria = criteria;
         let talentQueryString = 'projection=default';
+        // Current company
+        talentQueryString += `&companyId=${this.user.company.id}`;
         // Current employer
         talentQueryString += `&employerId=${this.user.id}`;
         // Job function
