@@ -110,7 +110,7 @@
                       @change="saveQualification"
                     ></v-checkbox>
                   </v-flex>
-                  <v-flex xs12 class="pb-1">
+                  <v-flex xs12 class="pb-3">
                     <v-switch
                       v-model="talent.online"
                       :disabled="!talent.hasTalentAdvocate"
@@ -124,6 +124,7 @@
                       v-model="talent.jobFunction"
                       :hide-details="true"
                       :items="jobFunctions"
+                      label="Job function"
                       @change="saveProfile"
                     ></v-select>
                   </v-flex>
@@ -175,6 +176,7 @@
                   <v-tab>LKD profile</v-tab>
                   <v-tab>Conditions</v-tab>
                   <v-tab>Qualification</v-tab>
+                  <v-tab>Privacy</v-tab>
                   <v-tab>Opportunities</v-tab>
                   <v-tab>Suivi</v-tab>
                   <v-tab-item>
@@ -386,6 +388,30 @@
                     </v-container>
                   </v-tab-item>
                   <v-tab-item>
+                    <v-container>
+                      <v-layout wrap>
+                        <v-flex xs12 class="pb-3 text-xs-center title">
+                          COMPANY BLACK LIST
+                        </v-flex>
+                        <v-flex xs6 class="pr-2">
+                          <company-blacklist-select
+                            v-model="companyBlacklist"
+                            :association-resource-url="talent.conditions._links.companyBlacklist.href"
+                          ></company-blacklist-select>
+                        </v-flex>
+                        <v-flex xs6 class="pt-2 pl-2">
+                          <div
+                            v-for="company in companyBlacklist"
+                            :key="company.id + '-companyBlacklist'"
+                            class="py-1 text-xs-center body-2"
+                          >
+                            {{ company.name }}
+                          </div>
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
+                  </v-tab-item>
+                  <v-tab-item>
                     <v-flex xs12>
                       <v-btn color="info" @click.native.stop="opportunityDialog = true">
                         <v-icon>send</v-icon>
@@ -493,6 +519,7 @@
   import TalentProfileExperienceTimeline from '@/components/Common/Talent/ExperienceTimeline';
   import TalentProfileEducationTimeline from '@/components/Common/Talent/EducationTimeline';
   import TalentProfileSkill from '@/components/Common/Talent/Skill';
+  import CompanyBlacklistSelect from '@/components/Admin/Utilities/CompanyBlacklistSelect';
   import DataManagementNavigation from '../Navigation';
   import AdminOpportunitySendingDialog from '../../Utilities/OpportunitySendingDialog';
   import AdminTalentDeactivationDialog from '../../Utilities/TalentDeactivationDialog';
@@ -510,11 +537,13 @@
       TalentProfileExperienceTimeline,
       TalentProfileEducationTimeline,
       TalentProfileSkill,
+      CompanyBlacklistSelect,
       UserSelect,
     },
     data: () => ({
       rules,
       talent: null,
+      companyBlacklist: [],
       opportunityDialog: false,
       deactivationDialog: false,
       opportunityTable: {
@@ -723,6 +752,7 @@
                    talentAdvocateResponse,
                  ]) => {
             this.talent.conditions = conditionsResponse.data;
+            this.companyBlacklist = this.talent.conditions.companyBlacklist;
             this.talent.qualification = qualificationResponse.data;
             this.talent.opportunities = opportunitiesResponse.data._embedded.opportunities;
             this.opportunityTable.totalItems = opportunitiesResponse.data.page.totalElements;
