@@ -65,13 +65,13 @@
       <v-card>
         <v-card-title>
           <v-flex xs12 class="title">
-            Pour améliorer le matching
+            Refus de l'offre
           </v-flex>
         </v-card-title>
         <v-form v-model="declinationFormValid" @submit.prevent="decline(opportunity, declinationReason)">
           <v-card-text>
             <v-flex xs12 class="subheading grey--text text--darken-2">
-              Explique-nous la raison de ton refus en quelques mots :
+              Écris-ici un message simple et courtois pour le recruteur qui a pris le temps de te faire une offre :
               <v-textarea
                 v-model="declinationReason"
                 rows="7"
