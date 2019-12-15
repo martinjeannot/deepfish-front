@@ -19,8 +19,13 @@
             - Salaire fixe proposé :
             <span class="body-2">{{ opportunity.baseSalaryFrom}}k€ à {{ opportunity.baseSalaryTo }}k€</span>
           </v-flex>
-          <v-flex xs12>
+          <v-flex v-if="opportunity.employerStatus !== 'DECLINED'" xs12>
+            <div class="body-2">Message du recruteur</div>
             {{ pitchExtract }}
+          </v-flex>
+          <v-flex v-else xs12>
+            <div class="body-2">Message du recruteur</div>
+            {{ opportunity.employerDeclinationReason }}
           </v-flex>
         </v-flex>
         <v-flex xs12 sm6 md4 class="text-xs-center" pt-3>

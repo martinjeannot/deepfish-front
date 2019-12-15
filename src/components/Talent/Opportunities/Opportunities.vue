@@ -8,13 +8,11 @@
     v-else-if="!totalItems"
   ></talent-opportunities-welcome>
   <v-layout v-else row wrap>
-    <v-layout v-if="alertComponent">
-      <v-flex xs12 sm6 offset-sm3>
+    <v-flex xs8>
+      <v-flex v-if="alertComponent" xs12 class="px-4">
         <base-alert :type="alertComponent.type" :message="alertComponent.message"
                     @dismissed="onAlertComponentDismissed"></base-alert>
       </v-flex>
-    </v-layout>
-    <v-flex xs8>
       <v-flex xs12>
         <h2>Mes offres en attente</h2>
         <v-container fluid grid-list-md>
