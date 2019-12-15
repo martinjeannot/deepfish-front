@@ -148,8 +148,31 @@
         if (selectedRequirement) {
           this.opportunity.requirement = selectedRequirement._links.self.href;
           this.opportunity.name = selectedRequirement.name;
+          this.populatePitch(selectedRequirement);
         }
       },
+      populatePitch(selectedRequirement) {
+        if (!selectedRequirement) {
+          return;
+        }
+        this.$emit('prepare-for-api-consumption');
+        this.api(`/opportunities?requirement=${selectedRequirement.id}&sort=createdAt,desc&size=1`)
+          .then((response) => {
+            if (response.data._embedded.opportunities.length) {
+              this.opportunity.pitch = response.data._embedded.opportunities[0].pitch;
+            } else {
+              this.opportunity.pitch = '';
+            }
+          })
+          .catch(() => this.showSnackbar(['Erreur', 'error']))
+          .finally(() => this.$emit('clear-loading'));
+      },
+    },
+    created() {
+      if (this.requirements.length) {
+        this.selectedRequirement = this.requirements[0];
+        this.populatePitch(this.requirements[0]);
+      }
     },
   };
 </script>
