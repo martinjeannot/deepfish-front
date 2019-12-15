@@ -171,7 +171,7 @@
     created() {
       if (this.requirements.length) {
         this.selectedRequirement = this.requirements[0];
-        this.populatePitch(this.requirements[0]);
+        this.onRequirementChange(this.requirements[0]);
       }
     },
   };
