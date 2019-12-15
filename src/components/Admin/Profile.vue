@@ -27,6 +27,10 @@
                               readonly required></v-text-field>
               </v-flex>
               <v-flex xs12>
+                <v-text-field label="Numéro mobile" v-model="admin.phoneNumber" :rules="[rules.required]"
+                              required></v-text-field>
+              </v-flex>
+              <v-flex xs12>
                 <v-text-field :type="passwordShown ? 'text' : 'password'" label="Nouveau mot de passe"
                               v-model="admin.password" :rules="[rules.passwordLength]"
                               hint="At least 8 characters"

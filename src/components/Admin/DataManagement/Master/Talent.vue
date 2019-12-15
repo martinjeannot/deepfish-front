@@ -261,11 +261,15 @@
                   <v-tab-item>
                     <v-container>
                       <v-layout row wrap>
-                        <v-flex xs4>
+                        <v-flex xs3>
                           <h3>Can start on</h3>
                           {{ talent.conditions.canStartOn | formatDate('LL') }}
                         </v-flex>
-                        <v-flex xs4>
+                        <v-flex xs3>
+                          <h3>Available from</h3>
+                          {{ talent.conditions.availableFrom }}
+                        </v-flex>
+                        <v-flex xs3>
                           <v-chip
                             v-if="talent.conditions.internship"
                             color="warning"
@@ -273,7 +277,7 @@
                             Internship
                           </v-chip>
                         </v-flex>
-                        <v-flex xs4>
+                        <v-flex xs3>
                           <h3>Fixed salary</h3>
                           {{ talent.conditions.fixedSalary }} €
                         </v-flex>

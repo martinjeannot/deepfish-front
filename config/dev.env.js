@@ -4,8 +4,8 @@ const prodEnv = require('./prod.env');
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  // DEEPFISH_BACK_BASE_URL: 'location.protocol + "//localhost:8080"',
-  DEEPFISH_BACK_BASE_URL: 'location.protocol + "//dev-api.deepfish.co"',
+  DEEPFISH_BACK_BASE_URL: 'location.protocol + "//localhost:8080"',
+  // DEEPFISH_BACK_BASE_URL: 'location.protocol + "//dev-api.deepfish.co"',
   GOOGLE_MAPS_API_KEY: '"AIzaSyC5PIuf12_Hv1Kp106e7lRFDL9qEO1DbCI"',
   LINKEDIN_CLIENT_ID: '"77w79kdr6gql2h"',
   REQUIREMENT_CREATION_TYPEFORM_URL: '"https://deepfish.typeform.com/to/EdFzYD?employer="',
