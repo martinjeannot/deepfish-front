@@ -37,17 +37,17 @@
           class="subheading"
           style="font-weight: bold"
         >
-          Quand souhaites-tu recevoir tes premières opportunités ?
+          Quand souhaites-tu commencer un nouveau job ?
         </span>
       </v-flex>
       <v-flex xs12 class="mb-2">
         <v-date-picker
-          v-model="conditions.canStartOn"
+          v-model="conditions.availableFrom"
           locale="fr-fr"
-          :first-day-of-week="1"
           :min="minDate.format(datePickerDateFormat)"
-          @input="saveConditions"
           :readonly="subLoading"
+          type="month"
+          @input="saveConditions"
         ></v-date-picker>
       </v-flex>
       <v-flex xs12 class="mb-2">

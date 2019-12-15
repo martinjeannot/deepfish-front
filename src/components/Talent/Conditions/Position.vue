@@ -6,6 +6,7 @@
   </v-layout>
   <v-layout v-else>
     <v-flex xs12>
+      <!--
       <synchronized-checkbox-list
         :conditions="conditions"
         title="Quels types d'entreprises acceptes-tu ?"
@@ -20,6 +21,7 @@
         associationResourceName="commodityTypes"
         class="mb-5"
       ></synchronized-checkbox-list>
+      -->
       <synchronized-checkbox-list
         :conditions="conditions"
         title="Quelles missions acceptes-tu ?"
@@ -27,6 +29,7 @@
         associationResourceName="taskTypes"
         class="mb-5"
       ></synchronized-checkbox-list>
+      <!--
       <synchronized-checkbox-list
         :conditions="conditions"
         title="Quels types de spécialisation acceptes-tu ?"
@@ -41,6 +44,7 @@
         associationResourceName="clientIndustryTypes"
         class="mb-5"
       ></synchronized-checkbox-list>
+      -->
     </v-flex>
   </v-layout>
 </template>
