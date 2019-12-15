@@ -123,11 +123,7 @@ const router = new Router({
         if (store.getters.isUserAdmin) {
           next('/admin');
         } else if (store.getters.isUserEmployer) {
-          if (store.getters.user.requirements.length) {
-            next('/employer/talents');
-          } else {
-            next({ name: 'EmployerRequirements' });
-          }
+          next({ name: 'EmployerSearch' });
         } else if (store.getters.isUserTalent) {
           if (store.getters.user.phoneNumber !== 'null') {
             next('/talent/opportunities');
