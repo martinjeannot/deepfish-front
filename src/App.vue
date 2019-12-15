@@ -203,7 +203,7 @@
               {
                 key: 'opportunities',
                 icon: 'assignment',
-                title: 'Opportunités',
+                title: 'Mes offres',
                 route: { name: 'TalentOpportunities' },
               },
               {
