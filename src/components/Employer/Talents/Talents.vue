@@ -17,14 +17,19 @@
                 label="Poste"
                 item-text="name"
                 :items="requirements"
+                :return-object="true"
+                @change="getTalents"
               ></v-select>
             </v-flex>
             <v-flex
               xs12 sm5 offset-sm2 md4 offset-md2 lg3 offset-lg2
             >
               <v-select
+                v-model="status"
                 label="Statut"
                 :items="statuses"
+                :return-object="true"
+                @change="getTalents"
               ></v-select>
             </v-flex>
           </v-layout>
@@ -134,8 +139,14 @@
       getTalents() {
         this.prepareForApiConsumption();
         let request = `/opportunities?projection=employer&version=2&employer.company=${this.user.company.id}&requirement.status=OPEN`;
-        if (this.requirement) {
+        if (this.requirement && this.requirement.id) {
           request += `&requirement=${this.requirement.id}`;
+        }
+        if (this.status && this.status.value.talentStatus) {
+          request += `&talentStatus=${this.status.value.talentStatus}`;
+        }
+        if (this.status && this.status.value.employerStatus) {
+          request += `&employerStatus=${this.status.value.employerStatus}`;
         }
         return this
           .api(request)
@@ -152,9 +163,10 @@
     created() {
       this.prepareForApiConsumption(true);
       return this
-        .api(`/requirements?version=2&company=${this.user.company.id}&sort=createdAt,desc`)
+        .api(`/requirements?version=2&company=${this.user.company.id}&status=OPEN&sort=createdAt,desc`)
         .then((response) => {
           this.requirements = response.data._embedded.requirements;
+          this.requirements.unshift({ name: 'Tous les postes', id: null });
           return this.getTalents();
         })
         .catch(() => this.showSnackbar(['Erreur', 'error']))
