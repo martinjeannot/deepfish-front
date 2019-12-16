@@ -89,7 +89,7 @@
                         </v-btn>
                       </v-flex>
                       <v-flex xs12 class="mt-2 text-xs-center">
-                        En cliquant, j'accepte les <a href="https://www.deepfish.co/tos" target="_blank">CGU</a>
+                        En cliquant, j'accepte les <a href="https://www.deepfish.co/cgu/cgu.pdf" target="_blank">CGU</a>
                       </v-flex>
                       <v-flex xs12 class="text-xs-center">
                         <router-link :to="{ name: 'SignIn', query: { employer: null } }">Déjà inscrit ?</router-link>

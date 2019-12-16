@@ -78,7 +78,7 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text class="py-2">
-          <a href="https://www.deepfish.co/tos" target="_blank" style="color: white">CGU</a> &mdash;
+          <a href="https://www.deepfish.co/cgu/cgu.pdf" target="_blank" style="color: white">CGU</a> &mdash;
           Copyright &copy; {{ new Date().getFullYear() }} &mdash; <strong>Deepfish</strong>
         </v-card-text>
       </v-card>
