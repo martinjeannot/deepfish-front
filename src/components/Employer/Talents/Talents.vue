@@ -5,7 +5,7 @@
     </v-flex>
   </v-layout>
   <v-layout v-else wrap>
-    <v-flex xs12>
+    <v-flex xs8>
       <v-card>
         <v-card-text>
           <v-layout wrap>
@@ -35,8 +35,6 @@
           </v-layout>
         </v-card-text>
       </v-card>
-    </v-flex>
-    <v-flex xs12>
       <v-data-iterator
         :items="opportunities"
         :hide-actions="true"
@@ -58,17 +56,28 @@
         </template>
       </v-data-iterator>
     </v-flex>
+    <v-flex
+      xs4
+      :class="['pt-5', 'pl-3', {'fixed': $vuetify.breakpoint.smAndUp}]"
+    >
+      <client-executive
+        v-if="user.clientExecutive"
+        :client-executive="user.clientExecutive"
+      ></client-executive>
+    </v-flex>
   </v-layout>
 </template>
 
 <script>
   import { mapGetters, mapActions, mapState } from 'vuex';
+  import ClientExecutive from '@/components/Employer/ClientExecutive';
   import Talent from './Talent';
 
   export default {
     name: 'EmployerTalents',
     components: {
       Talent,
+      ClientExecutive,
     },
     data: () => ({
       requirements: [],
@@ -176,5 +185,8 @@
 </script>
 
 <style scoped>
-
+  .fixed {
+    position: fixed;
+    right: 12px;
+  }
 </style>
