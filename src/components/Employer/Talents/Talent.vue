@@ -52,6 +52,12 @@
               Voir le profil complet
             </a>
           </div>
+          <div v-if="opportunity.talentStatus === 'ACCEPTED'">
+            Ce talent a accepté votre offre le {{ opportunity.talentRespondedAt | formatDate('LL') }}
+          </div>
+          <div v-else-if="opportunity.talentStatus === 'DECLINED'">
+            Ce talent a refusé votre offre le {{ opportunity.talentRespondedAt | formatDate('LL') }}
+          </div>
         </v-flex>
         <v-flex
           v-if="isTalentPending || isTalentInProcess"
