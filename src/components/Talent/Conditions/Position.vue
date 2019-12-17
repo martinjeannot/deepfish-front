@@ -6,6 +6,13 @@
   </v-layout>
   <v-layout v-else>
     <v-flex xs12>
+      <synchronized-checkbox-list
+        :conditions="conditions"
+        title="Quels jobs acceptes-tu ?"
+        :referenceDomainObjects="jobTypes"
+        associationResourceName="jobTypes"
+        class="mb-5"
+      ></synchronized-checkbox-list>
       <!--
       <synchronized-checkbox-list
         :conditions="conditions"
@@ -61,6 +68,7 @@
     data: () => ({
       valid: false,
       conditions: null,
+      jobTypes: [],
       companyMaturityLevels: [],
       commodityTypes: [],
       taskTypes: [],
@@ -87,27 +95,31 @@
       return Promise
         .all([
           this.api(`${this.user._links.conditions.href}?projection=default`),
-          this.api('/companyMaturityLevels?sort=orderIndex,asc'),
-          this.api('/commodityTypes?sort=orderIndex,asc'),
+          this.api('/jobTypes?sort=orderIndex,asc'),
+          // this.api('/companyMaturityLevels?sort=orderIndex,asc'),
+          // this.api('/commodityTypes?sort=orderIndex,asc'),
           this.api('/taskTypes?sort=orderIndex,asc'),
-          this.api('/industryTypes?sort=orderIndex,asc'),
-          this.api('/clientIndustryTypes?sort=orderIndex,asc'),
+          // this.api('/industryTypes?sort=orderIndex,asc'),
+          // this.api('/clientIndustryTypes?sort=orderIndex,asc'),
         ])
         .then(([
                  conditionsResponse,
-                 companyMaturityLevelsResponse,
-                 commodityTypesResponse,
+                 jobTypesResponse,
+                 // companyMaturityLevelsResponse,
+                 // commodityTypesResponse,
                  taskTypesResponse,
-                 industryTypesResponse,
-                 clientIndustryTypesResponse,
+                 // industryTypesResponse,
+                 // clientIndustryTypesResponse,
                ]) => {
           this.conditions = conditionsResponse.data;
-          this.companyMaturityLevels =
-            companyMaturityLevelsResponse.data._embedded.companyMaturityLevels;
-          this.commodityTypes = commodityTypesResponse.data._embedded.commodityTypes;
+          this.jobTypes = jobTypesResponse.data._embedded.jobTypes;
+          // this.companyMaturityLevels =
+          // companyMaturityLevelsResponse.data._embedded.companyMaturityLevels;
+          // this.commodityTypes = commodityTypesResponse.data._embedded.commodityTypes;
           this.taskTypes = taskTypesResponse.data._embedded.taskTypes;
-          this.industryTypes = industryTypesResponse.data._embedded.industryTypes;
-          this.clientIndustryTypes = clientIndustryTypesResponse.data._embedded.clientIndustryTypes;
+          // this.industryTypes = industryTypesResponse.data._embedded.industryTypes;
+          // this.clientIndustryTypes =
+          // clientIndustryTypesResponse.data._embedded.clientIndustryTypes;
         })
         .catch((/* error */) => {
           this.$store.dispatch('setErrorAfterApiConsumption');
