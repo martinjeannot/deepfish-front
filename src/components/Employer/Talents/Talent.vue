@@ -26,6 +26,12 @@
             chez
             {{ talent.fullProfile.jobs[0].companyName }}
           </div>
+          <div>
+            Expérience : {{ talent.yearsOfExperience }} ans / Salaire fixe : {{ baseSalary }} k€
+          </div>
+          <div>
+            Votre proposition : {{ opportunity.baseSalaryFrom }} k€ - {{ opportunity.baseSalaryTo }} k€
+          </div>
           <v-chip
             :color="statusChipColor"
             text-color="white"
@@ -158,6 +164,9 @@
       },
       linkedInProfileUrl() {
         return this.getTalentLinkedInProfileUrl(this.talent);
+      },
+      baseSalary() {
+        return Math.round(this.talent.conditions.fixedSalary / 1000);
       },
       statusChipText() {
         if (this.isTalentContacted) {
