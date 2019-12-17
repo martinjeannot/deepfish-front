@@ -11,8 +11,9 @@
         >
           <v-avatar size="50">
             <v-img
-              :src="profilePictureUrl"
               alt="picture"
+              lazy-src="/static/img/avatar.png"
+              :src="profilePictureUrl"
             ></v-img>
           </v-avatar>
         </v-flex>
@@ -64,7 +65,7 @@
     data: () => ({}),
     computed: {
       profilePictureUrl() {
-        return 'static/img/avatar.png';
+        return `${process.env.DEEPFISH_STATIC_BASE_URL}/users/${this.clientExecutive.id}/profile-picture.jpeg`;
       },
     },
   };
