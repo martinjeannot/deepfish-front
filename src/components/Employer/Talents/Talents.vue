@@ -157,6 +157,7 @@
         if (this.status && this.status.value.employerStatus) {
           request += `&employerStatus=${this.status.value.employerStatus}`;
         }
+        request += '&sort=talentStatus&sort=createdAt,desc';
         return this
           .api(request)
           .then((response) => {
