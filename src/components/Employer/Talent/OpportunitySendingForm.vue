@@ -68,6 +68,7 @@
             v-model="opportunity.pitch"
             :auto-grow="true"
             label="Message"
+            placeholder="Précisez le poste, les missions et les détails de votre offre"
             rows="7"
             :rules="[rules.required]"
           ></v-textarea>
