@@ -1,5 +1,6 @@
 <template>
   <v-card
+    height="100%"
     @click="talentDialog = true"
   >
     <employer-talent
@@ -8,29 +9,33 @@
       :id="talent.id"
       @opportunity-sent="onOpportunitySent"
     ></employer-talent>
-    <v-card-text>
-      <v-layout wrap>
+    <v-card-text
+      class="h-100"
+    >
+      <v-layout wrap class="h-100">
         <v-flex xs4>
           <v-avatar size="50">
             <v-img
-              :src="profilePictureUrl"
               alt="picture"
+              lazy-src="/static/img/avatar.png"
+              :src="profilePictureUrl"
             ></v-img>
           </v-avatar>
         </v-flex>
         <v-flex xs8>
           <v-layout wrap>
             <v-flex xs12>
-              <span class="font-weight-bold">{{ talent.firstName }}</span>
+              <span class="title">{{ talent.firstName }}</span>
             </v-flex>
             <v-flex xs12>
-              BizDev dans une super ESN
+              <span v-if="talent.fullProfile && talent.fullProfile.jobs.length">
+                <span class="body-2">{{ talent.fullProfile.jobs[0].jobTitle }}</span>
+                chez
+                {{ talent.fullProfile.jobs[0].companyName }}
+              </span>
+              <span v-else class="font-italic grey--text">Info non disponible</span>
             </v-flex>
           </v-layout>
-        </v-flex>
-        <v-flex xs12>
-          <v-icon>school</v-icon>
-          Très fort à l'école
         </v-flex>
         <v-flex xs12>
           <v-divider></v-divider>
@@ -94,5 +99,7 @@
 </script>
 
 <style scoped>
-
+  .h-100 {
+    height: 100%;
+  }
 </style>
