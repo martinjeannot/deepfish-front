@@ -67,7 +67,7 @@
             Ton profil est rendu visible pour les recruteurs
           </v-flex>
           <v-flex xs12 class="text-xs-center grey--text text--darken-2">
-            Tu vas recevoir plusieurs offres détaillées en direct des recruteurs
+            Tu vas recevoir plusieurs offres détaillées en direct des recruteurs. Ton profil reste invisible de ton employeur actuel et de tes ex-employeurs
           </v-flex>
         </v-card-text>
       </v-card>

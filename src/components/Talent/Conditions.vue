@@ -16,9 +16,9 @@
         <v-stepper-content step="2">
           <conditions-wishes :fixed-salary-valid.sync="fixedSalaryValid"></conditions-wishes>
           <v-alert :value="!fixedSalaryValid" type="info">
-            Nous avons besoin de tes
+            Les recruteurs doivent connaître tes
             <v-btn small @click="scrollToTop">prétentions salariales</v-btn>
-            pour t'envoyer des opportunités qui les respectent
+            pour pouvoir te faire une offre
           </v-alert>
           <v-btn flat @click.native="currentStep--">Précédent</v-btn>
           <v-btn color="primary" @click.native="currentStep++" :disabled="!fixedSalaryValid">Suivant</v-btn>
