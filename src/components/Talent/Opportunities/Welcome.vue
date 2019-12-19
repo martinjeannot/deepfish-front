@@ -29,21 +29,15 @@
               color="primary"
               :size="61"
             >
-              search
+              perm_phone_msg
             </v-icon>
           </v-flex>
           <v-flex xs12 class="text-xs-center font-weight-bold pb-2">
-            Nous sélectionnons les meilleures opportunités
+            Nous échangeons sur ton parcours
           </v-flex>
           <v-flex xs12 class="text-xs-center grey--text text--darken-2">
-            Notre algorithme de matching ainsi que nos équipes travaillent dès à présent pour te proposer les meilleures opportunités
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <span v-on="on"><a>respectant tes conditions.</a></span>
-              </template>
-              <span>Tu peux mettre à jour tes conditions à tout moment et t'assurer de recevoir les opportunités qui te correspondent le mieux</span>
-            </v-tooltip>
-            Le matching peut prendre plusieurs heures, tu recevras un email de notification à chaque nouvelle opportunité reçue.
+            Nous allons réaliser un rapide entretien téléphonique pour mettre en avant ton profil auprès des recruteurs de la plateforme.
+            <a target="_blank" href="https://calendly.com/deepfish/tal">Choisis un créneau ici</a>
           </v-flex>
         </v-card-text>
       </v-card>
@@ -66,15 +60,14 @@
               color="primary"
               :size="61"
             >
-              assignment
+              visibility
             </v-icon>
           </v-flex>
           <v-flex xs12 class="text-xs-center font-weight-bold pb-2">
-            Tu choisis tes opportunités
+            Ton profil est rendu visible pour les recruteurs
           </v-flex>
           <v-flex xs12 class="text-xs-center grey--text text--darken-2">
-            Tu acceptes ou non chaque opportunité en découvrant les détails sur l'entreprise et le poste.
-            Tes raisons de refus, accessibles uniquement à Deepfish, nous permettent d'augmenter la pertinence des opportunités que tu recevras par la suite !
+            Tu vas recevoir plusieurs offres détaillées en direct des recruteurs. Ton profil reste invisible de ton employeur actuel et de tes ex-employeurs
           </v-flex>
         </v-card-text>
       </v-card>
@@ -97,15 +90,14 @@
               color="primary"
               :size="61"
             >
-              perm_phone_msg
+              assignment_turned_in
             </v-icon>
           </v-flex>
           <v-flex xs12 class="text-xs-center font-weight-bold pb-2">
-            Tu échanges avec nous
+            Tu acceptes les offres intéressantes
           </v-flex>
           <v-flex xs12 class="text-xs-center grey--text text--darken-2">
-            Lors de l'acceptation de ta première opportunité, tu choisis un créneau d'échange de 15 min avec Deepfish.
-            Cet échange a pour but de valider tes attentes et de mettre en avant ton profil.
+            Tu acceptes les offres qui t'intéressent pour échanger avec le recruteur
           </v-flex>
         </v-card-text>
       </v-card>
@@ -135,8 +127,7 @@
             Tu échanges avec l'entreprise
           </v-flex>
           <v-flex xs12 class="text-xs-center grey--text text--darken-2">
-            Les recruteurs des opportunités que tu as acceptées te proposent des créneaux d'échange directement via la plateforme.
-            Il ne te reste qu'à choisir parmi les créneaux proposés.
+            Les recruteurs te proposent 3 créneaux d'échange via la plateforme, tu valides celui qui te convient le mieux
           </v-flex>
         </v-card-text>
       </v-card>
@@ -181,7 +172,7 @@
     created() {
       this.setAlertComponent({
         type: 'success',
-        message: 'Félicitations, ton inscription est terminée !',
+        message: 'Ton inscription est terminée ! Ton profil reste confidentiel tant qu\'il n\'a pas été validé par notre équipe.',
       });
     },
   };

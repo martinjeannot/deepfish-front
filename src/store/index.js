@@ -57,6 +57,10 @@ export default new Vuex.Store({
           return 'N/A';
       }
     },
+    jobFunctions: [
+      'SALES',
+      'HUMAN_RESOURCES',
+    ],
     getOpportunityStatusColor(status) {
       switch (status) {
         case 'ACCEPTED':
@@ -305,6 +309,7 @@ export default new Vuex.Store({
       const opportunityData = Object.assign({}, opportunity);
       // linked refs deletion
       delete opportunityData.creator;
+      delete opportunityData.employer;
       delete opportunityData.talent;
       delete opportunityData.requirement;
       delete opportunityData.company;
@@ -313,6 +318,7 @@ export default new Vuex.Store({
         opportunityData.previousState = previousState;
         // linked refs deletion
         delete opportunityData.previousState.creator;
+        delete opportunityData.previousState.employer;
         delete opportunityData.previousState.talent;
         delete opportunityData.previousState.requirement;
         delete opportunityData.previousState.company;
@@ -324,6 +330,8 @@ export default new Vuex.Store({
       const companyData = Object.assign({}, company);
       // linked refs deletion
       delete companyData.employers;
+      // nested maps deletion (to avoid merging of "values" arrays especially)
+      delete companyData.headquartersGeocode;
       return getters.api.patch(company._links.self.href, companyData);
     },
     saveRequirementData({ getters }, requirement) {
@@ -439,7 +447,7 @@ export default new Vuex.Store({
       }
       // TALENT
       return getters
-        .api(`/talents/${accessToken.user_id}`)
+        .api(`/talents/${accessToken.user_id}?projection=default`)
         .then((response) => {
           commit(types.SET_USER, response.data);
           // get pending opportunities for menu badge

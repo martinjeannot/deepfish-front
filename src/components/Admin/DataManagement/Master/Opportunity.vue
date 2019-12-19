@@ -54,7 +54,7 @@
                         {{ opportunity.talent.firstName }} {{ opportunity.talent.lastName.toUpperCase() }}
                       </router-link>
                     </v-flex>
-                    <v-flex xs12 class="pb-3">
+                    <v-flex v-if="opportunity.version === 1" xs12 class="pb-3">
                       <span style="font-weight: bold">Sent by</span> :
                       {{ opportunity.creator.firstName }} {{ opportunity.creator.lastName }}
                     </v-flex>

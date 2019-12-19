@@ -1,5 +1,10 @@
 <template>
   <v-layout>
+    <requirement-creation-dialog
+      :value.sync="requirementCreationDialog"
+      :company-id="id"
+      @refresh-requirements="refreshRequirements"
+    ></requirement-creation-dialog>
     <v-flex xs2 class="pr-3">
       <data-management-navigation></data-management-navigation>
     </v-flex>
@@ -29,6 +34,13 @@
                     <span style="font-weight: bold">Registration</span> : {{
                     company.createdAt | formatDate('LLL') }}
                   </v-flex>
+                  <v-flex xs12>
+                    <company-status-select
+                      v-model="company.status"
+                      label="Status"
+                      @input="updateCompanyStatus"
+                    ></company-status-select>
+                  </v-flex>
                   <v-flex xs12 class="mb-3">
                     <span style="font-weight: bold">Employers :</span>
                     <v-list>
@@ -40,6 +52,14 @@
                         </v-list-tile-content>
                       </v-list-tile>
                     </v-list>
+                  </v-flex>
+                  <v-flex xs12 class="text-xs-center">
+                    <v-btn
+                      color="primary"
+                      @click="requirementCreationDialog = true"
+                    >
+                      nouveau poste
+                    </v-btn>
                   </v-flex>
                 </v-card-text>
               </v-card>
@@ -241,7 +261,10 @@
 </template>
 
 <script>
+  import moment from 'moment';
   import { mapGetters, mapActions } from 'vuex';
+  import CompanyStatusSelect from '@/components/Utilities/CompanyStatusSelect';
+  import RequirementCreationDialog from '@/components/Common/Requirement/CreationDialog';
   import DataManagementNavigation from '../Navigation';
 
   const rules = {
@@ -250,7 +273,11 @@
 
   export default {
     name: 'DataManagementCompany',
-    components: { DataManagementNavigation },
+    components: {
+      DataManagementNavigation,
+      CompanyStatusSelect,
+      RequirementCreationDialog,
+    },
     props: ['id'],
     data: () => ({
       rules,
@@ -262,6 +289,7 @@
         { text: 'Name', value: 'name' },
         { text: 'Actions', value: 'id', sortable: false },
       ],
+      requirementCreationDialog: false,
     }),
     computed: {
       ...mapGetters([
@@ -291,6 +319,21 @@
       },
       resetCompanyHeadquartersGeocode(company) {
         company.headquartersGeocode = null;
+      },
+      updateCompanyStatus(companyStatus) {
+        this.company.status = companyStatus;
+        if (!this.company.validatedAt && companyStatus === 'VALIDATED') {
+          this.company.validatedAt = moment.utc();
+        }
+        return this.saveCompany(this.company);
+      },
+      refreshRequirements() {
+        return this
+          .api(`/requirements?company=${this.id}`)
+          .then((requirementsResponse) => {
+            this.requirements = requirementsResponse.data._embedded.requirements;
+          })
+          .catch(() => this.showSnackbar(['Error', 'error']));
       },
     },
     created() {

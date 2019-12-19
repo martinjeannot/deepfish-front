@@ -10,7 +10,7 @@
         :rules="step1Rules"
         step="1"
       >
-        Opportunité
+        Offre
         <small v-if="currentStep === 1">
           <v-icon small>location_on</v-icon>
           Vous êtes ici
@@ -26,19 +26,8 @@
         :rules="step2Rules"
         step="2"
       >
-        Validation
-        <small v-if="currentStep === 2">
-          <v-icon small>location_on</v-icon>
-          Vous êtes ici
-        </small>
-      </v-stepper-step>
-      <v-divider></v-divider>
-      <v-stepper-step
-        :editable="true"
-        step="3"
-      >
         Entretiens
-        <small v-if="currentStep === 3">
+        <small v-if="currentStep === 2">
           <v-icon small>location_on</v-icon>
           Vous êtes ici
         </small>
@@ -47,42 +36,35 @@
     <v-stepper-items>
       <v-stepper-content step="1">
         <div v-if="opportunity.talentStatus === 'PENDING'">
-          Cette opportunité est <span class="font-weight-bold">en attente de réponse</span> de ta part
+          Cette offre est <span class="font-weight-bold">en attente de réponse</span> de ta part
         </div>
         <div v-else-if="opportunity.talentStatus === 'ACCEPTED'">
-          Tu as <span class="success--text">accepté</span> cette opportunité
+          Tu as <span class="success--text">accepté</span> cette offre
         </div>
         <div v-else-if="opportunity.talentStatus === 'DECLINED'">
-          Tu as <span class="error--text">refusé</span> cette opportunité
+          Tu as <span class="error--text">refusé</span> cette offre
         </div>
       </v-stepper-content>
 
       <v-stepper-content step="2">
         <div v-if="opportunity.talentStatus !== 'ACCEPTED'">
-          Après acceptation de l'opportunité, Deepfish échangera avec toi afin de mettre en avant ton profil pour le recruteur
-        </div>
-        <div v-else>
-          <div v-if="opportunity.employerStatus === null">
-            Ton profil est en cours de validation par Deepfish
-          </div>
-          <div v-else-if="opportunity.employerStatus === 'PENDING'">
-            Ton profil est en cours de validation par le recruteur
-          </div>
           <div v-if="opportunity.employerStatus === 'ACCEPTED'">
-            Le recruteur a <span class="success--text">accepté</span> ton profil !
+            Tu peux désormais choisir parmi les créneaux proposés et passer les entretiens avec le recruteur
           </div>
-          <div v-if="opportunity.employerStatus === 'DECLINED'">
-            Le recruteur a <span class="error--text">décliné</span> ton profil
+          <div v-else>
+            Après acceptation de son offre, le recruteur reviendra vers toi pour te proposer des créneaux d'entretiens
           </div>
-        </div>
-      </v-stepper-content>
-
-      <v-stepper-content step="3">
-        <div v-if="opportunity.employerStatus !== 'ACCEPTED'">
-          Après validation de ton profil par le recruteur, tu pourras choisir un créneau d'échange avec lui parmi 3 propositions de sa part
         </div>
         <div v-else>
-          Tu peux désormais choisir parmi les créneaux proposés et passer les entretiens avec le recruteur
+          <div v-if="opportunity.employerStatus === 'PENDING'">
+            Le recruteur va revenir vers toi pour te proposer des créneaux d'entretiens
+          </div>
+          <div v-else-if="opportunity.employerStatus === 'ACCEPTED'">
+            Tu peux désormais choisir parmi les créneaux proposés et passer les entretiens avec le recruteur
+          </div>
+          <div v-else-if="opportunity.employerStatus === 'DECLINED'">
+            Le recruteur n'a pas souhaité donné suite
+          </div>
         </div>
       </v-stepper-content>
     </v-stepper-items>
@@ -92,18 +74,16 @@
 <script>
   export default{
     name: 'TalentOpportunityStatus',
-    props: ['opportunity'],
+    props: {
+      opportunity: Object,
+    },
     data: () => ({}),
     computed: {
       currentStep() {
         if (this.opportunity.talentStatus !== 'ACCEPTED') {
           return 1;
-        } else if (this.opportunity.employerStatus !== 'ACCEPTED') {
-          return 2;
-        } else if (this.opportunity.employerStatus === 'ACCEPTED') {
-          return 3;
         }
-        return 0;
+        return 2;
       },
       step1Color() {
         switch (this.opportunity.talentStatus) {

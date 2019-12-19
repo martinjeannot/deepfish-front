@@ -86,8 +86,7 @@
                   </v-flex>
                   <v-flex xs12 class="pt-2">
                     <p>
-                      <span style="font-weight: bold">Registration</span> : {{ talent.createdAt | formatDate('LLL')
-                      }}
+                      <span style="font-weight: bold">Registration</span> : {{ talent.createdAt | formatDate('LLL') }}
                     </p>
                   </v-flex>
                   <v-flex xs12>
@@ -96,12 +95,38 @@
                       }}
                     </p>
                   </v-flex>
-                  <v-flex xs12>
+                  <v-flex xs12 class="pb-2">
+                    <user-select
+                      v-model="talent.talentAdvocate"
+                      label="Talent advocate"
+                      @input="saveProfile"
+                    ></user-select>
+                  </v-flex>
+                  <v-flex xs12 class="pb-1">
                     <v-checkbox
                       v-model="talent.qualification.hasBeenQualified"
+                      :hide-details="true"
                       label="Talent qualifié"
                       @change="saveQualification"
                     ></v-checkbox>
+                  </v-flex>
+                  <v-flex xs12 class="pb-3">
+                    <v-switch
+                      v-model="talent.online"
+                      :disabled="!talent.hasTalentAdvocate"
+                      :hide-details="true"
+                      label="En ligne"
+                      @change="updateOnline"
+                    ></v-switch>
+                  </v-flex>
+                  <v-flex xs12 class="pb-3">
+                    <v-select
+                      v-model="talent.jobFunction"
+                      :hide-details="true"
+                      :items="jobFunctions"
+                      label="Job function"
+                      @change="saveProfile"
+                    ></v-select>
                   </v-flex>
                   <v-flex xs10 class="pb-3">
                     <v-icon>email</v-icon>
@@ -151,6 +176,7 @@
                   <v-tab>LKD profile</v-tab>
                   <v-tab>Conditions</v-tab>
                   <v-tab>Qualification</v-tab>
+                  <v-tab>Privacy</v-tab>
                   <v-tab>Opportunities</v-tab>
                   <v-tab>Suivi</v-tab>
                   <v-tab-item>
@@ -235,11 +261,15 @@
                   <v-tab-item>
                     <v-container>
                       <v-layout row wrap>
-                        <v-flex xs4>
+                        <v-flex xs3>
                           <h3>Can start on</h3>
                           {{ talent.conditions.canStartOn | formatDate('LL') }}
                         </v-flex>
-                        <v-flex xs4>
+                        <v-flex xs3>
+                          <h3>Available from</h3>
+                          {{ talent.conditions.availableFrom }}
+                        </v-flex>
+                        <v-flex xs3>
                           <v-chip
                             v-if="talent.conditions.internship"
                             color="warning"
@@ -247,7 +277,7 @@
                             Internship
                           </v-chip>
                         </v-flex>
-                        <v-flex xs4>
+                        <v-flex xs3>
                           <h3>Fixed salary</h3>
                           {{ talent.conditions.fixedSalary }} €
                         </v-flex>
@@ -362,6 +392,30 @@
                     </v-container>
                   </v-tab-item>
                   <v-tab-item>
+                    <v-container>
+                      <v-layout wrap>
+                        <v-flex xs12 class="pb-3 text-xs-center title">
+                          COMPANY BLACK LIST
+                        </v-flex>
+                        <v-flex xs6 class="pr-2">
+                          <company-blacklist-select
+                            v-model="companyBlacklist"
+                            :association-resource-url="talent.conditions._links.companyBlacklist.href"
+                          ></company-blacklist-select>
+                        </v-flex>
+                        <v-flex xs6 class="pt-2 pl-2">
+                          <div
+                            v-for="company in companyBlacklist"
+                            :key="company.id + '-companyBlacklist'"
+                            class="py-1 text-xs-center body-2"
+                          >
+                            {{ company.name }}
+                          </div>
+                        </v-flex>
+                      </v-layout>
+                    </v-container>
+                  </v-tab-item>
+                  <v-tab-item>
                     <v-flex xs12>
                       <v-btn color="info" @click.native.stop="opportunityDialog = true">
                         <v-icon>send</v-icon>
@@ -463,13 +517,16 @@
 </template>
 
 <script>
+  import moment from 'moment';
   import { mapGetters, mapActions, mapState } from 'vuex';
+  import UserSelect from '@/components/Utilities/UserSelect';
+  import TalentProfileExperienceTimeline from '@/components/Common/Talent/ExperienceTimeline';
+  import TalentProfileEducationTimeline from '@/components/Common/Talent/EducationTimeline';
+  import TalentProfileSkill from '@/components/Common/Talent/Skill';
+  import CompanyBlacklistSelect from '@/components/Admin/Utilities/CompanyBlacklistSelect';
   import DataManagementNavigation from '../Navigation';
   import AdminOpportunitySendingDialog from '../../Utilities/OpportunitySendingDialog';
   import AdminTalentDeactivationDialog from '../../Utilities/TalentDeactivationDialog';
-  import TalentProfileExperienceTimeline from '../../../Talent/Profile/ExperienceTimeline';
-  import TalentProfileEducationTimeline from '../../../Talent/Profile/EducationTimeline';
-  import TalentProfileSkill from '../../../Talent/Profile/Skill';
 
   const rules = {
     required: value => !!value || 'This field is required',
@@ -484,10 +541,13 @@
       TalentProfileExperienceTimeline,
       TalentProfileEducationTimeline,
       TalentProfileSkill,
+      CompanyBlacklistSelect,
+      UserSelect,
     },
     data: () => ({
       rules,
       talent: null,
+      companyBlacklist: [],
       opportunityDialog: false,
       deactivationDialog: false,
       opportunityTable: {
@@ -514,6 +574,7 @@
         'getOpportunityStatusColor',
         'getTalentLinkedInProfileUrl',
         'getLabelFromCompanyMaturityLevelL10nKey',
+        'jobFunctions',
       ]),
       ...mapGetters([
         'api',
@@ -597,9 +658,22 @@
             this.linkedinPublicProfileUrlEdit = !this.talent.linkedinPublicProfileUrl;
           });
       },
+      updateOnline(online) {
+        this.talent.online = online;
+        if (online) {
+          this.talent.onlinedAt = moment.utc();
+        }
+        return this.saveProfile();
+      },
       saveProfile() {
         return this.saveTalentData(this.talent)
-          .then(() => this.showSnackbar(['OK', 'success']))
+          .then(() => {
+            if (!this.talent.hasTalentAdvocate && this.talent.talentAdvocate) {
+              // manually update the value (allowing to put the talent online)
+              this.talent.hasTalentAdvocate = true;
+            }
+            this.showSnackbar(['OK', 'success']);
+          })
           .catch(() => {
             this.showSnackbar(['Error', 'error']);
             this.fetchInitialData();
@@ -656,7 +730,7 @@
       },
       fetchInitialData() {
         this.prepareForApiConsumption(true);
-        Promise
+        return Promise
           .all([
             this.api(`/talents/${this.id}`),
           ])
@@ -665,21 +739,30 @@
                  ]) => {
             this.talent = talentResponse.data;
             this.linkedinPublicProfileUrlEdit = !this.talent.linkedinPublicProfileUrl;
-            return Promise.all([
+            const promises = [
               this.api(`${this.talent._links.conditions.href}?projection=default`),
               this.api(this.talent._links.qualification.href),
               this.getOpportunitiesPromise(),
-            ]);
+            ];
+            if (this.talent.hasTalentAdvocate) {
+              promises.push(this.api(this.talent._links.talentAdvocate.href));
+            }
+            return Promise.all(promises);
           })
           .then(([
                    conditionsResponse,
                    qualificationResponse,
                    opportunitiesResponse,
+                   talentAdvocateResponse,
                  ]) => {
             this.talent.conditions = conditionsResponse.data;
+            this.companyBlacklist = this.talent.conditions.companyBlacklist;
             this.talent.qualification = qualificationResponse.data;
             this.talent.opportunities = opportunitiesResponse.data._embedded.opportunities;
             this.opportunityTable.totalItems = opportunitiesResponse.data.page.totalElements;
+            if (this.talent.hasTalentAdvocate) {
+              this.talent.talentAdvocate = talentAdvocateResponse.data._links.self.href;
+            }
           })
           .catch(() => this.setErrorAfterApiConsumption())
           .finally(() => this.clearLoading(true));

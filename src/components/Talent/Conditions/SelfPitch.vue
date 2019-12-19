@@ -17,6 +17,7 @@
             :disabled="loading"
           ></v-text-field>
         </v-flex>
+        <!--
         <div class="subheading font-weight-bold">Combien as-tu placé/recruté de consultants ?</div>
         <v-flex xs12 sm4 md3>
           <v-text-field
@@ -37,6 +38,7 @@
             :disabled="loading"
           ></v-text-field>
         </v-flex>
+        -->
         <v-flex xs12>
           <div class="subheading font-weight-bold">Mets-toi en valeur en quelques mots (visible par le recruteur) :
           </div>
@@ -45,9 +47,7 @@
         <v-flex xs12>
           <v-textarea
             v-model="talent.selfPitch"
-            rows="9"
-            :rules="[rules.maxLength]"
-            :counter="1000"
+            rows="15"
             :readonly="loading"
           ></v-textarea>
         </v-flex>

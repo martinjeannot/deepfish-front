@@ -54,6 +54,9 @@
                 {{ props.item.employerStatus }}
               </span>
                 </td>
+                <td>
+                  V{{ props.item.version }}
+                </td>
                 <td class="justify-center layout">
                   <v-btn icon color="primary" :to="{ name: 'AdminDMOpportunity', params: {id: props.item.id} }">
                     <v-icon>visibility</v-icon>
@@ -92,6 +95,7 @@
         { text: 'Talent', value: 'talent.lastName', sortable: false },
         { text: 'Talent status', value: 'talentStatus' },
         { text: 'Employer status', value: 'employerStatus' },
+        { text: 'Version', value: 'version' },
         { text: 'Actions', value: 'id', sortable: false },
       ],
       totalItems: 0,

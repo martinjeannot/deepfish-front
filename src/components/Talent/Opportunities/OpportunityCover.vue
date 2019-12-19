@@ -24,6 +24,11 @@
               {{ opportunity.company.name }}
             </h4>
           </v-flex>
+          <v-flex xs12 class="pb-2 white--text">
+            <span class="title">{{ opportunity.name }}</span> -
+            <span class="subheading">Salaire fixe proposé :</span>
+            <span class="title">{{ opportunity.baseSalaryFrom }}k€ à {{ opportunity.baseSalaryTo }}k€</span>
+          </v-flex>
           <v-flex xs1 align-self-center class="hidden-sm-and-up">
             <v-icon dark small>location_on</v-icon>
           </v-flex>

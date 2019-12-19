@@ -187,7 +187,7 @@
               response.data.phoneNumber = '';
               this.setAlertComponent({
                 type: 'success',
-                message: 'Bienvenue chez Deepfish ! Après avoir complété ton profil, tu pourras remplir tes conditions qui nous permettront de t\'envoyer les meilleurs opportunités qui matcheront avec !',
+                message: 'Bienvenue chez Deepfish ! Après avoir complété ton profil, nous échangerons rapidement pour comprendre ton parcours et mettre en avant ton profil',
               });
             } else {
               this.hasBeenSuccessfullySubmittedOnce = true;

@@ -78,7 +78,7 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text class="py-2">
-          <a href="https://www.deepfish.co/tos" target="_blank" style="color: white">CGU</a> &mdash;
+          <a href="https://www.deepfish.co/cgu/cgu.pdf" target="_blank" style="color: white">CGU</a> &mdash;
           Copyright &copy; {{ new Date().getFullYear() }} &mdash; <strong>Deepfish</strong>
         </v-card-text>
       </v-card>
@@ -162,21 +162,27 @@
           } else if (this.isUserEmployer) {
             menuItems = [
               {
-                key: 'requirements',
-                icon: 'work',
-                title: 'Besoins',
-                route: { name: 'EmployerRequirements' },
+                key: 'search',
+                icon: 'search',
+                title: 'Recherche',
+                route: { name: 'EmployerSearch' },
               },
+              /* {
+               key: 'requirements',
+               icon: 'work',
+               title: 'Besoins',
+               route: { name: 'EmployerRequirements' },
+               }, */
               {
                 key: 'talents',
                 icon: 'people',
-                title: 'Talents',
+                title: 'Mes talents',
                 route: { name: 'EmployerTalents' },
               },
               {
                 key: 'profile',
                 icon: 'account_circle',
-                title: 'Profil',
+                title: 'Mon profil',
                 route: { name: 'EmployerProfile' },
               },
               {
@@ -197,7 +203,7 @@
               {
                 key: 'opportunities',
                 icon: 'assignment',
-                title: 'Opportunités',
+                title: 'Mes offres',
                 route: { name: 'TalentOpportunities' },
               },
               {

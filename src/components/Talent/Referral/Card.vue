@@ -29,7 +29,7 @@
         <v-textarea
           v-model="message"
           label="Message"
-          rows="11"
+          rows="13"
           :rules="[rules.required]"
         ></v-textarea>
       </v-card-text>
@@ -99,7 +99,8 @@
         this.message =
           `Hello !
 
-Je t'invite à rejoindre la plateforme de recrutement Deepfish pour recevoir des opportunités de job (Ingé d'affaires, Business Manager, Respo d'agence) parmi une centaine d'ESN, à tes conditions et en toute discrétion :)
+Je t'invite à rejoindre la plateforme de recrutement Deepfish pour trouver ton prochain job en seulement quelques semaines. Tu reçois des offres détaillées en direct des recruteurs parmi plus de 120 ESN !
+Des jobs de commerciaux (Ingé d'affaires, Business Manager, Respo d'agence) et RH (chargé de recrutement ou talent acquisition manager)
 
 C'est super pour faire de la veille d'opportunités sans effort et de manière anonyme !
 

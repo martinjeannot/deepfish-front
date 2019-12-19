@@ -39,6 +39,13 @@
                       employer.lastSignedInAt | formatDate('LLL')
                       }}
                     </v-flex>
+                    <v-flex xs12 class="pb-3">
+                      <user-select
+                        v-model="employer.clientExecutive"
+                        label="Client executive"
+                        @input="saveEmployer"
+                      ></user-select>
+                    </v-flex>
                     <v-flex xs10 class="pb-3">
                       <v-icon>email</v-icon>
                       <span ref="employerUsername">{{ employer.username }}</span>
@@ -104,11 +111,15 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
+  import UserSelect from '@/components/Utilities/UserSelect';
   import DataManagementNavigation from '../Navigation';
 
   export default {
     name: 'DataManagementEmployer',
-    components: { DataManagementNavigation },
+    components: {
+      DataManagementNavigation,
+      UserSelect,
+    },
     props: ['id'],
     data: () => ({
       employer: null,
@@ -150,17 +161,33 @@
     },
     created() {
       this.prepareForApiConsumption(true);
-      return Promise.all([
-        this.api(`/employers/${this.id}`),
-        this.api(`/requirements?createdBy=${this.id}`),
-      ])
-        .then(([employerResponse, requirementsResponse]) => {
+      return Promise
+        .all([
+          this.api(`/employers/${this.id}`),
+          this.api(`/requirements?createdBy=${this.id}`),
+        ])
+        .then(([
+                 employerResponse,
+                 requirementsResponse,
+               ]) => {
           this.employer = employerResponse.data;
           this.requirements = requirementsResponse.data._embedded.requirements;
-          return this.api(this.employer._links.company.href);
+          const promises = [
+            this.api(this.employer._links.company.href),
+          ];
+          if (this.employer.hasClientExecutive) {
+            promises.push(this.api(this.employer._links.clientExecutive.href));
+          }
+          return Promise.all(promises);
         })
-        .then((response) => {
-          this.employer.company = response.data;
+        .then(([
+                 companyResponse,
+                 clientExecutiveResponse,
+               ]) => {
+          this.employer.company = companyResponse.data;
+          if (this.employer.hasClientExecutive) {
+            this.employer.clientExecutive = clientExecutiveResponse.data._links.self.href;
+          }
         })
         .catch(() => this.setErrorAfterApiConsumption())
         .finally(() => this.clearLoading(true));

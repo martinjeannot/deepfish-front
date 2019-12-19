@@ -76,8 +76,13 @@
     >
       <v-card class="h-100">
         <v-card-text>
+          <div class="pb-3">
+            <span class="body-2">{{ opportunity.employer.firstName }}</span>
+            de chez
+            <span class="font-italic">{{ opportunity.company.name }}</span>
+          </div>
           <div
-            v-html="opportunity.company.description"
+            v-html="opportunity.pitch"
             v-linkified
             style="white-space: pre-wrap"
           ></div>
@@ -118,7 +123,7 @@
       <v-card style="height: 100%">
         <v-card-text>
           <div
-            v-html="opportunity.pitch"
+            v-html="opportunity.company.description"
             v-linkified
             style="white-space: pre-wrap"
           ></div>
