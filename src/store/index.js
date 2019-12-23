@@ -423,8 +423,8 @@ export default new Vuex.Store({
             commit(types.SET_USER, response.data);
             // check for requirements for redirection and pending talents for menu badge
             return Promise.all([
-              getters.api(`/requirements?company=${getters.user.company.id}`),
-              getters.api(`/opportunities?projection=employer&requirement.company=${getters.user.company.id}&requirement.status=OPEN&employerStatus=PENDING`),
+              getters.api(`/requirements?version=2&company=${getters.user.company.id}`),
+              getters.api(`/opportunities?projection=employer&version=2&requirement.company=${getters.user.company.id}&requirement.status=OPEN&employerStatus=PENDING`),
             ]);
           })
           .then(([
