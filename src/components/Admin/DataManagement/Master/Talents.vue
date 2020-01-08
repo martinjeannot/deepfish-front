@@ -14,6 +14,41 @@
             ></search-box>
           </v-card>
         </v-flex>
+        <v-flex xs6 class="pb-3 pr-2">
+          <v-card>
+            <user-select
+              v-model="selectedUser"
+              label="Talent advocate"
+              class="pa-3"
+              @input="getTalents"
+            ></user-select>
+          </v-card>
+        </v-flex>
+        <v-flex xs6 class="pb-3 pl-2">
+          <v-card>
+            <v-select
+              v-model="selectedOnline"
+              :hide-details="true"
+              :items="[
+                {
+                  text: 'N/A',
+                  value: null
+                },
+                {
+                  text: 'Online',
+                  value: true
+                },
+                {
+                  text: 'Offline',
+                  value: false
+                }
+              ]"
+              label="Online/Offline"
+              class="pa-3"
+              @input="getTalents"
+            ></v-select>
+          </v-card>
+        </v-flex>
         <v-flex xs12>
           <v-card>
             <v-data-table
@@ -58,12 +93,14 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
+  import UserSelect from '@/components/Utilities/UserSelect';
   import DataManagementNavigation from '../Navigation';
   import SearchBox from '../../Utilities/SearchBox';
 
   export default {
     name: 'DataManagementTalents',
     components: {
+      UserSelect,
       DataManagementNavigation,
       SearchBox,
     },
@@ -84,6 +121,8 @@
         descending: true,
       },
       searchInput: '',
+      selectedUser: null,
+      selectedOnline: null,
     }),
     computed: {
       ...mapGetters([
@@ -115,6 +154,17 @@
         if (this.searchInput) {
           queryString += queryString ? '&' : '';
           queryString += `searchQuery=${this.encodedSearchInput}`;
+        }
+        if (this.selectedUser) {
+          queryString += queryString ? '&' : '';
+          const splitSelectedUser = this.selectedUser.split('/');
+          // handle potential trailing slash
+          const selectedUserId = splitSelectedUser.pop() || splitSelectedUser.pop();
+          queryString += `talentAdvocate=${selectedUserId}`;
+        }
+        if (this.selectedOnline !== null) {
+          queryString += queryString ? '&' : '';
+          queryString += `online=${this.selectedOnline}`;
         }
         queryString += queryString ? '&' : '';
         queryString += `page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
