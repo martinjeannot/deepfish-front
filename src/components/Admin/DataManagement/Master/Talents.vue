@@ -17,7 +17,7 @@
         <v-flex xs6 class="pb-3 pr-2">
           <v-card>
             <user-select
-              v-model="selectedUser"
+              v-model="selectedTalentAdvocate"
               label="Talent advocate"
               class="pa-3"
               @input="getTalents"
@@ -121,7 +121,7 @@
         descending: true,
       },
       searchInput: '',
-      selectedUser: null,
+      selectedTalentAdvocate: null,
       selectedOnline: null,
     }),
     computed: {
@@ -155,12 +155,13 @@
           queryString += queryString ? '&' : '';
           queryString += `searchQuery=${this.encodedSearchInput}`;
         }
-        if (this.selectedUser) {
+        if (this.selectedTalentAdvocate) {
           queryString += queryString ? '&' : '';
-          const splitSelectedUser = this.selectedUser.split('/');
+          const splitSelectedTalentAdvocate = this.selectedTalentAdvocate.split('/');
           // handle potential trailing slash
-          const selectedUserId = splitSelectedUser.pop() || splitSelectedUser.pop();
-          queryString += `talentAdvocate=${selectedUserId}`;
+          const selectedTalentAdvocateId = splitSelectedTalentAdvocate.pop()
+            || splitSelectedTalentAdvocate.pop();
+          queryString += `talentAdvocate=${selectedTalentAdvocateId}`;
         }
         if (this.selectedOnline !== null) {
           queryString += queryString ? '&' : '';
