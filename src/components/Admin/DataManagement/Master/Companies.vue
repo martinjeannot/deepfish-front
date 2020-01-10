@@ -26,6 +26,7 @@
               <template slot="items" slot-scope="props">
                 <td>{{ props.item.name }}</td>
                 <td>{{ props.item.createdAt | formatDate('LLL') }}</td>
+                <td>{{ props.item.status }}</td>
                 <td class="justify-center layout">
                   <v-btn icon color="primary" :to="{ name: 'AdminDMCompany', params: {id: props.item.id} }">
                     <v-icon>visibility</v-icon>
@@ -56,6 +57,7 @@
       headers: [
         { text: 'Name', value: 'name' },
         { text: 'Registered at', value: 'createdAt' },
+        { text: 'Status', value: 'status' },
         { text: 'Actions', value: 'name', sortable: false },
       ],
       totalItems: 0,

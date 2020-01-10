@@ -14,6 +14,41 @@
             ></search-box>
           </v-card>
         </v-flex>
+        <v-flex xs6 class="pb-3 pr-2">
+          <v-card>
+            <user-select
+              v-model="selectedClientExecutive"
+              label="Client executive"
+              class="pa-3"
+              @input="getEmployers"
+            ></user-select>
+          </v-card>
+        </v-flex>
+        <v-flex xs6 class="pb-3 pl-2">
+          <v-card>
+            <v-select
+              v-model="selectedCompanyStatus"
+              :hide-details="true"
+              :items="[
+                {
+                  text: 'N/A',
+                  value: null
+                },
+                {
+                  text: 'En attente',
+                  value: 'PENDING'
+                },
+                {
+                  text: 'Validé',
+                  value: 'VALIDATED'
+                }
+              ]"
+              label="Company status"
+              class="pa-3"
+              @input="getEmployers"
+            ></v-select>
+          </v-card>
+        </v-flex>
         <v-flex xs12>
           <v-card>
             <v-data-table
@@ -50,12 +85,14 @@
 
 <script>
   import { mapGetters, mapActions } from 'vuex';
+  import UserSelect from '@/components/Utilities/UserSelect';
   import DataManagementNavigation from '../Navigation';
   import SearchBox from '../../Utilities/SearchBox';
 
   export default {
     name: 'DataManagementEmployers',
     components: {
+      UserSelect,
       DataManagementNavigation,
       SearchBox,
     },
@@ -76,6 +113,8 @@
         descending: true,
       },
       searchInput: '',
+      selectedClientExecutive: null,
+      selectedCompanyStatus: null,
     }),
     computed: {
       ...mapGetters([
@@ -105,6 +144,16 @@
         let path = '/employers';
         path += this.searchInput ? '/search/findByUsernameContainingOrFirstNameContainingOrLastNameContainingOrCompanyNameContainingOrPhoneNumberContainingAllIgnoreCase' : '';
         let queryString = 'projection=default';
+        if (this.selectedClientExecutive) {
+          const splitSelectedClientExecutive = this.selectedClientExecutive.split('/');
+          // handle potential trailing slash
+          const selectedClientExecutiveId = splitSelectedClientExecutive.pop()
+            || splitSelectedClientExecutive.pop();
+          queryString += `&clientExecutive=${selectedClientExecutiveId}`;
+        }
+        if (this.selectedCompanyStatus) {
+          queryString += `&company.status=${this.selectedCompanyStatus}`;
+        }
         queryString += `&page=${this.pagination.page - 1}&size=${this.pagination.rowsPerPage}`;
         queryString += this.pagination.sortBy ? `&sort=${this.pagination.sortBy},${this.pagination.descending ? 'desc' : 'asc'}` : '';
         queryString += this.searchInput ? `&username=${this.encodedSearchInput}&firstName=${this.encodedSearchInput}&lastName=${this.encodedSearchInput}&companyName=${this.encodedSearchInput}&phoneNumber=${this.encodedSearchInput}` : '';
