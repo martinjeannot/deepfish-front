@@ -44,9 +44,9 @@
       >
         <template #item="{ item }">
           <v-flex xs12 class="pt-3">
-            <talent
+            <talent-card
               :opportunity="item"
-            ></talent>
+            ></talent-card>
           </v-flex>
         </template>
         <template #no-data>
@@ -71,12 +71,12 @@
 <script>
   import { mapGetters, mapActions, mapState } from 'vuex';
   import ClientExecutive from '@/components/Employer/ClientExecutive';
-  import Talent from './Talent';
+  import TalentCard from './TalentCard';
 
   export default {
     name: 'EmployerTalents',
     components: {
-      Talent,
+      TalentCard,
       ClientExecutive,
     },
     data: () => ({

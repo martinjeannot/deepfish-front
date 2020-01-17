@@ -16,7 +16,7 @@
           <div class="text-xs-center">
             <v-btn
               color="primary"
-              href="https://calendly.com/deepfish/req"
+              href="https://calendly.com/david-deepfish/req"
               target="_blank"
             >
               Choisir un créneau d'échange
