@@ -44,13 +44,13 @@
             <v-icon>email</v-icon>
             {{ talent.email }}
           </h4>
-          <div v-if="!isPrivacyEnabled && linkedInProfileUrl">
-            <a
-              :href="linkedInProfileUrl"
-              target="_blank"
-            >
-              Voir le profil complet
-            </a>
+          <div>
+            <span class="clickable" @click="talentDialog = true">Voir le profil détaillé</span>
+            <talent-dialog
+              v-if="talentDialog"
+              :value.sync="talentDialog"
+              :id="talent.id"
+            ></talent-dialog>
           </div>
           <div v-if="opportunity.talentStatus === 'ACCEPTED'">
             Ce talent a accepté votre offre le {{ opportunity.talentRespondedAt | formatDate('LL') }}
@@ -134,18 +134,23 @@
 <script>
   import moment from 'moment';
   import { mapGetters, mapActions, mapState } from 'vuex';
+  import TalentDialog from './TalentDialog';
 
   const rules = {
     required: value => !!value || 'This field is required',
   };
 
   export default {
-    name: 'EmployerTalent',
+    name: 'EmployerTalentCard',
+    components: {
+      TalentDialog,
+    },
     props: {
       opportunity: Object,
     },
     data: () => ({
       rules,
+      talentDialog: false,
       declinationDialog: false,
       declinationFormValid: false,
     }),
@@ -300,5 +305,9 @@
 </script>
 
 <style scoped>
-
+  .clickable {
+    cursor: pointer;
+    color: #1976D2;
+    text-decoration: underline;
+  }
 </style>
